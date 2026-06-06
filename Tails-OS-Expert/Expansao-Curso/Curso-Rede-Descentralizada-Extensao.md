@@ -176,10 +176,11 @@ Confirme o fingerprint (espaços podem variar):
 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
 ```
 
-Verifique o AppImage (substitua a versão):
+Verifique o AppImage — **use o `.asc` que veio com o AppImage baixado** (mesmo prefixo de versão; nunca copie um número do tutorial):
 
 ```bash
-gpg --verify feather-2.9.0-AppImage.asc
+gpg --verify feather-*-AppImage.asc
+# ou, se preferir explícito: gpg --verify "$(ls feather-*-AppImage.asc)"
 ```
 
 **OK se:** `gpg: Good signature from "FeatherWallet <dev@featherwallet.org>"`.

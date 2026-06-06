@@ -56,12 +56,16 @@
 
 ## A2 — Sincronizar (obrigatório no 1º envio e quando o saldo parecer velho)
 
+> **Onde clicar (rótulos variam por versão):** no Feather **view-only** (Whonix) → menu da carteira ou **File → Export outputs**. No Feather **completo** (Tails offline) → **Import outputs**, depois **Export key images**. Se o menu não bater com estes nomes, **pare** e consulte a [doc oficial](https://docs.featherwallet.org/guides/offline-tx-signing) — não invente caminho alternativo.
+
 # (Quente/Whonix)  view-only -> exportar OUTPUTS -> arquivo no USB
 # O nome do arquivo e' gerado pelo Feather (varia por versao) — aceite o padrao da UI ou anote o nome antes de mover o USB.
 # (Frio/Tails)     carteira completa -> importar outputs -> exportar KEY IMAGES -> USB
 # (Quente/Whonix)  importar key images -> saldo e gastos ficam corretos
 
 ## A3 — Gastar (montar quente, assinar frio, transmitir quente)
+
+> **Onde clicar:** no Whonix → **Send** (ou criar transação) → **Export unsigned transaction**. No Tails → importar → revisar destino e valor na tela fria → **Sign** → exportar assinada. Menu divergente? Pare e use a [doc oficial](https://docs.featherwallet.org/guides/offline-tx-signing).
 
 # (Quente/Whonix)  monte a tx (destino + valor) -> gera transação NÃO-ASSINADA (arquivo USB)
 # (Frio/Tails)     importe a não-assinada -> CONFIRA destino e valor NA TELA DA FRIA -> assine -> ASSINADA (USB)

@@ -8,7 +8,7 @@
 
 ---
 
-## ✅ Regras de ouro (decore)
+## [REGRA] Regras de ouro (decore)
 
 - **Baixe só de fontes oficiais:** `tails.net`, `getmonero.org`, GitHub da sua rede.
 - **Verifique o PGP** de todo `.deb` — URL e PGP da **mesma** rede, **mesmo** release.
@@ -22,7 +22,7 @@
 
 ---
 
-## 🚨 Golpes — como NÃO cair em roubadas
+## [PERIGO] Golpes — como NÃO cair em roubadas
 
 | Armadilha | Sua defesa |
 |-----------|-----------|
@@ -39,7 +39,7 @@
 
 ---
 
-## 🔎 KYC & swaps (em 30 segundos)
+## [REGRA] KYC & swaps (em 30 segundos)
 
 - **KYC** = verificação de identidade (documento/selfie). Quem busca privacidade evita.
 - **Haveno é no-KYC** por desenho (P2P; identificado só pelo método de pagamento).
@@ -48,13 +48,13 @@
 
 ---
 
-## 💱 Trade seguro (resumo)
+## [OK] Trade seguro (resumo)
 
 - **Comprando** (paga fiat, recebe XMR): pague pelo app, **guarde comprovante**, só então marque "pago"; sumiu? **disputa**.
 - **Vendendo** (recebe fiat, entrega XMR): **só libere** o XMR quando o dinheiro estiver **na sua conta e irreversível** (prefira **PIX**/dinheiro; cuidado com estorno de cartão/PayPal).
 - **Sempre:** tudo dentro do app (escrow multisig + chat); valores pequenos; na dúvida, **disputa** (nunca "por fora"). Detalhes: [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) Cap. 7–9.
 
-## 🔁 Rotina a cada sessão
+## [OK] Rotina a cada sessão
 
 **Tor → admin → abrir Haveno pelo menu → verde.** Dados em `~/Persistent/haveno/Data/`.
 

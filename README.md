@@ -47,7 +47,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](Tails-OS-Expert/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Tails-OS-Expert/Playbooks/Playbooks.md) |
 | **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | — |
 | **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | — |
-| **5** | Feather, seed (+ trades se for negociar) | [Curso Vol II](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| **5** | Feather + seed · **M2:** Caps. 2–3 · **Trade:** Caps. 7–8 | [Vol II — Antes do 1º trade](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
 | **6** | Regras de ouro + golpes (imprimir) | [Folheto](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | — |
 | **7** | Automação pós-verde | [Scripts — ciclo de uso](Tails-OS-Expert/Scripts/README.md) | `haveno-auto` · `backup` · `update` |
 | **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | — |
@@ -56,8 +56,6 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | — |
 | **12** | Cold-signing — **escolha UMA** trilha | **A:** [Feather GUI](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [CLI](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
 
-> **Passo 5:** o Vol II tem 19 capítulos — para **M2** (passo 8+), leia **Caps. 2–3** (seed + Feather). Caps. 7–8 só se for **tradear**.
->
 > **Passo 8:** exige passos **1–4** + Feather ([Vol II Cap. 3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
 
 **Zoom do módulo:** [Tails-OS-Expert/README.md](Tails-OS-Expert/README.md) (passos 1–7) · [Whonix-Online/README.md](Whonix-Online/README.md) (passos 8–12).

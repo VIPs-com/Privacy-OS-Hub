@@ -31,27 +31,27 @@ Livro: [Curso-Tails-OS-Expert.md](Tails-OS-Expert/Curso-Tails-OS-Expert.md) · C
 
 Livro: [Curso-Rede-Descentralizada-Extensao.md](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · Comandos: [Playbooks-Rede-Descentralizada.md](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md)
 
-| Cap. | Título | Trilha README |
-|------|--------|---------------|
-| 1 | [O que é rede descentralizada](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#1-o-que-é-rede-descentralizada-na-prática) | passo **5** |
-| 2 | [Primeira conta + seed](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) | passo **5** — **ler antes do 1º depósito** |
-| 3 | [Feather no Tails](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar) | passo **5** |
-| 4 | [PGP na mão](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#4-pgp-na-mão--quando-o-script-falha-ou-você-quer-conferir) | passo **5** |
-| 5 | [Feather ↔ Haveno](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#5-feather--haveno--fluxo-de-xmr) | passo **5** |
-| 6 | [Primeiro XMR](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#6-conseguir-o-primeiro-xmr-3-caminhos) | passo **5** |
-| 7 | [Trade — comprar](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#7-trade-na-prática--comprar-xmr) | passo **5** |
-| 8 | [Trade — vender](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#8-trade-na-prática--vender-xmr) | passo **5** |
-| 9 | [Disputa](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#9-disputa--passo-a-passo) | passo **5** |
-| 10 | [Multisig 2-de-3 (app vs você)](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) | opcional |
-| 11 | [Métodos de pagamento](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#11-métodos-de-pagamento--riscos-reais) | passo **5** |
-| 12 | [Outra rede Haveno](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#12-outra-rede-haveno-ex-aloha) | opcional |
-| 13 | [Home Lab integrado](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#13-home-lab-integrado--lab-completo) | opcional · [HomeLab scripts](Tails-OS-Expert/Scripts/HomeLab/README.md) |
-| 14 | [Bisq no Tor](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#14-bisq-no-tor--introdução-prática) | opcional |
-| 15 | [Trocador](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#15-trocador--swap-passo-a-passo) | opcional |
-| 16 | [Atomic swaps](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#16-atomic-swaps--eigenwallet-e-basicswap) | opcional |
-| 17 | [Infra Haveno](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#17-infra-haveno--seednode-e-árbitro-panorama) | opcional |
-| 18 | [Atualizar Tails (SO)](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#18-atualizar-o-tails-sistema) | manutenção |
-| 19 | [Links da extensão](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#19-links-da-extensão) | referência |
+| Cap. | Título | Obrigatório? | Trilha README |
+|------|--------|--------------|---------------|
+| 1 | [O que é rede descentralizada](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#1-o-que-é-rede-descentralizada-na-prática) | Contexto | passo **5** |
+| 2 | [Primeira conta + seed](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) | **Sim** — antes do 1º depósito | passo **5** |
+| 3 | [Feather no Tails](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar) | **Sim** (M2 passo 8+) | passo **5** |
+| 4 | [PGP na mão](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#4-pgp-na-mão--quando-o-script-falha-ou-você-quer-conferir) | Se script falhar | passo **5** |
+| 5 | [Feather ↔ Haveno](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#5-feather--haveno--fluxo-de-xmr) | Antes de mover XMR | passo **5** |
+| 6 | [Primeiro XMR](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#6-conseguir-o-primeiro-xmr-3-caminhos) | Se ainda não tem XMR | passo **5** |
+| 7 | [Trade — comprar](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#7-trade-na-prática--comprar-xmr) | **Só se for tradear** | passo **5** |
+| 8 | [Trade — vender](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#8-trade-na-prática--vender-xmr) | **Só se for tradear** | passo **5** |
+| 9 | [Disputa](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#9-disputa--passo-a-passo) | Se precisar | passo **5** |
+| 10 | [Multisig 2-de-3 (app vs você)](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) | Opcional | opcional |
+| 11 | [Métodos de pagamento](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#11-métodos-de-pagamento--riscos-reais) | Antes de tradear | passo **5** |
+| 12 | [Outra rede Haveno](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#12-outra-rede-haveno-ex-aloha) | Opcional | opcional |
+| 13 | [Home Lab integrado](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#13-home-lab-integrado--lab-completo) | Opcional | opcional · [HomeLab scripts](Tails-OS-Expert/Scripts/HomeLab/README.md) |
+| 14 | [Bisq no Tor](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#14-bisq-no-tor--introdução-prática) | Opcional | opcional |
+| 15 | [Trocador](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#15-trocador--swap-passo-a-passo) | Opcional | opcional |
+| 16 | [Atomic swaps](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#16-atomic-swaps--eigenwallet-e-basicswap) | Opcional | opcional |
+| 17 | [Infra Haveno](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#17-infra-haveno--seednode-e-árbitro-panorama) | Opcional | opcional |
+| 18 | [Atualizar Tails (SO)](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#18-atualizar-o-tails-sistema) | Manutenção | manutenção |
+| 19 | [Links da extensão](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#19-links-da-extensão) | Referência | referência |
 
 **Anexo educacional:** [Multisig 2-de-3 criação manual CLI](Tails-OS-Expert/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) · [Playbooks Multisig CLI](Tails-OS-Expert/Expansao-Curso/Playbooks-Multisig-CLI.md)
 

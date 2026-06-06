@@ -153,6 +153,8 @@ flowchart LR
 3. **Não** use imagens de fóruns, Telegram ou links de terceiros.
 4. Conecte o pendrive (8 GB+) e escolha **Instalar**. Aguarde 100%.
 
+O **Tails Installer** verifica a integridade da imagem ao gravar. Para conferência manual (opcional): [verificação de download](https://tails.net/install/download/index.en.html#index3h1) no site oficial.
+
 **Iniciar pelo USB:** deixe o pendrive plugado **antes** de ligar; pressione a tecla de boot ao ligar (Dell/Lenovo/Acer: **F12/F11**; HP: **Esc** depois **F9**; ASUS: **Esc/F8**). Escolha o USB → **Tails**.
 
 **OK se:** aparece a tela **Bem-vindo ao Tails** (cadeado). Se o Windows iniciar normal, o USB não foi escolhido — ajuste a BIOS (desative Fast Boot, ordem de boot USB primeiro).
@@ -312,7 +314,7 @@ Pré-requisitos desta parte (Capítulo 2): Tails no USB, **Tor conectado**, **pe
 
 O projeto **Haveno** (haveno-dex) **não opera rede mainnet** nem distribui instalador para "dinheiro real". Você precisa:
 
-1. Escolher uma **rede Haveno de terceiros** (a turma usa a **Reto**).
+1. Escolher uma **rede Haveno de terceiros** (a turma usa a **RetoSwap**, também chamada Reto).
 2. Obter a **URL direta do `.deb`** dessa rede.
 3. Obter a **impressão digital PGP** (fingerprint) de quem assina o release.
 
@@ -355,7 +357,9 @@ O que este script oficial faz **por dentro**:
 
 > O `.deb` **ainda não** é instalado em `/opt` aqui — isso ocorre na 3.3, ao abrir o Haveno.
 
-No Terminal (Tor conectado + admin desta sessão), **rede Reto**:
+> O comando abaixo usa o método **oficial** do projeto Haveno (`haveno-dex/haveno`, pasta `install_tails`). O `.deb` é **verificado por PGP** dentro do script; você pode abrir `haveno-install.sh` no editor antes de rodar, se quiser inspecionar.
+
+No Terminal (Tor conectado + admin desta sessão), **rede RetoSwap**:
 
 ```bash
 curl -fsSLO https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh \
@@ -618,7 +622,7 @@ sequenceDiagram
 
 > **Ainda não tem XMR?** Para negociar você precisa de um pouco de XMR (o **depósito de segurança** é em XMR). Formas de conseguir o **primeiro**: (a) **comprar XMR com fiat** numa oferta da sua rede que aceite **comprador sem depósito** para valores pequenos (algumas redes permitem); (b) converter outra cripto via **Trocador** no Tor Browser (Capítulo 6) e mandar para a sua **Feather**; (c) comprar uma pequena quantia de um **trader P2P de confiança**. Com XMR na carteira, você opera normalmente.
 
-### 🟢 Comprando XMR (você paga fiat, recebe XMR)
+### [COMPRA] Comprando XMR (você paga fiat, recebe XMR)
 
 1. Escolha uma oferta de **vendedor com boa reputação**; valor **pequeno** no início.
 2. **Tome a oferta** — seu depósito de segurança entra no multisig.
@@ -628,7 +632,7 @@ sequenceDiagram
 
 **Cuidados:** nunca combine "por fora"; toda comunicação no **chat do app**; confira nome e valor; não pague de **conta de terceiros**.
 
-### 🔴 Vendendo XMR (você recebe fiat, entrega XMR) — exige MAIS cuidado
+### [VENDA] Vendendo XMR (você recebe fiat, entrega XMR) — exige MAIS cuidado
 
 O ponto crítico: alguns métodos de pagamento são **reversíveis** (chargeback/estorno). O golpe clássico: o "comprador" paga, você libera o XMR, e **depois ele estorna** o pagamento.
 
@@ -663,6 +667,8 @@ Se a contraparte **some**, paga errado ou recusa sem motivo, **abra disputa** no
 ---
 
 # 6. ECOSSISTEMA MONERO + TAILS (apêndice)
+
+> **APÊNDICE AVANÇADO — não necessário para usar o Haveno.** A "formatura" do curso é o indicador **verde** no Tails (Volume I). Este capítulo é mapa informativo; mão na massa (Feather, trades) está no Volume II.
 
 Informativo. O curso ensina **Haveno no Tails** (P2P via rede de terceiros). A comunidade usa outras ferramentas — registradas aqui para você conhecer. **Mão na massa** (Feather, trades, Trocador, home lab integrado): Volume II [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md).
 

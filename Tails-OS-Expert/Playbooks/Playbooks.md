@@ -74,6 +74,9 @@ sudo echo ok
 
 ### 5A — Rede Reto (turma — pronto)
 
+# Método oficial haveno-dex (install_tails); o .deb é verificado por PGP no script.
+# Opcional: abra haveno-install.sh no editor antes de rodar.
+
 ```bash
 curl -fsSLO https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh \
   && bash haveno-install.sh \
@@ -123,6 +126,7 @@ sudo journalctl -u onion-grater --no-pager | tail -20
 
 ## 7 — Cada boot
 
+# Indicador amarelo 5–20 min na 1ª vez após instalar é normal (sincronização P2P/Monero).
 # USB -> persistência -> + Mais opções (admin) -> Tor -> Aplicações -> Outros -> Haveno
 
 ```bash

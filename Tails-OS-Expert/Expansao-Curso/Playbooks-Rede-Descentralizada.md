@@ -2,7 +2,7 @@
 
 **Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso-Rede-Descentralizada-Extensao.md`](Curso-Rede-Descentralizada-Extensao.md).
 
-**Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7, **mais as seções 9–10 Backup/Atualizar**). Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
+**Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7, **mais as seções 9–10 Backup/Atualizar**). **Faça backup cifrado (Playbooks §9) antes do 1º depósito de XMR.** Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
 
 > Tradear: versão **`1.6.0-reto`+**, confirme retomada nos canais oficiais, **valores pequenos** primeiro.
 
@@ -44,8 +44,9 @@ gpg --import featherwallet.asc
 gpg --list-keys dev@featherwallet.org
 # Fingerprint: 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
 
-gpg --verify feather-2.9.0-AppImage.asc
-# Troque 2.9.0 pela versão baixada. OK: Good signature from FeatherWallet
+# Use o .asc que veio com o AppImage baixado (mesmo prefixo de versão):
+gpg --verify feather-*-AppImage.asc
+# OK: Good signature from FeatherWallet
 ```
 
 ```bash
