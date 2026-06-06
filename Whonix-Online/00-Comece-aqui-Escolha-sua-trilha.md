@@ -1,6 +1,7 @@
 # 00 — Comece aqui — Escolha sua trilha (Cold-Tails-Hot-Whonix)
 
-> 🧭 **PORTEIRO DO MÓDULO 2** — leia isto **antes** de qualquer comando. Depois siga a [trilha numerada no README](README.md#-trilha-do-aluno--siga-nesta-ordem).
+> 🧭 **PORTEIRO DO MÓDULO 2** (passo **8** do hub) — leia **antes** de qualquer comando.
+> **Mapa principal:** [README.md#trilha-linear](../README.md#trilha-linear) · **Travou?** [README.md#travou-aqui](../README.md#travou-aqui)
 
 Você vai montar a **custódia frio↔quente**: a **chave de gasto (seed) fica só no Tails offline** e o **Whonix online** apenas vê o saldo, monta a transação e transmite. Antes de abrir comandos, **escolha UMA trilha** e siga **só ela** do início ao fim.
 

@@ -1,51 +1,42 @@
-# Tails OS Expert — índice do curso
+# Tails OS Expert — Módulo 1
 
-Material ativo do curso **Haveno no Tails OS**. Comece pelo **Volume I**, depois a **Expansão**.
+> **Mapa principal do hub:** [README.md#trilha-linear](../README.md#trilha-linear) (passos **1–7**)
 
-> Voltar à raiz do repositório: [`../README.md`](../README.md)
+Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1 — a ordem oficial está no README da raiz.
+
+## Trilha deste módulo
+
+| Passo hub | O que fazer | Livro | Comandos |
+|:---------:|-------------|-------|----------|
+| **1** | Tails + Tor + persistência | [Curso Cap. 2](Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](Playbooks/Playbooks.md) |
+| **2** | Haveno **verde** | [Curso Cap. 3](Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Playbooks/Playbooks.md) |
+| **3** | Segurança (exploit) | [Curso Cap. 4](Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | — |
+| **4** | Carteira + backup | [Curso Cap. 5](Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | — |
+| **5** | Feather, seed, trades | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | — |
+| **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | `haveno-auto` · `backup` · `update` |
+
+**Próximo módulo:** [Whonix Online (passos 8–12)](../Whonix-Online/README.md) — requer passos 1–5 concluídos.
 
 ## Mapa rápido
 
 | O quê | Onde |
 |-------|------|
-| **Volume I** — Tails + Haveno verde | [Curso-Tails-OS-Expert.md](Curso-Tails-OS-Expert.md) · [Playbooks/Playbooks.md](Playbooks/Playbooks.md) |
-| **Volume II** — trades, Feather, home lab | [Expansao-Curso/](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · [Playbooks-Rede-Descentralizada.md](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| **Folheto** (1 página) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) |
-| **Scripts** | [Scripts/](Scripts/README.md) · [Home Lab](Scripts/HomeLab/README.md) |
+| Volume I | [Curso-Tails-OS-Expert.md](Curso-Tails-OS-Expert.md) · [Playbooks](Playbooks/Playbooks.md) |
+| Volume II | [Expansao-Curso/](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| Índice completo (opcional) | [MANUAL-DO-CURSO.md](../MANUAL-DO-CURSO.md) |
 
-## Estrutura
+## Estrutura da pasta
 
 ```text
 Tails-OS-Expert/
-├── Curso-Tails-OS-Expert.md      ← Volume I (livro)
-├── Folheto-Regras-e-Golpes.md    ← 1 página imprimível
-├── Playbooks/
-│   └── Playbooks.md                ← Volume I (só comandos)
-├── Expansao-Curso/                 ← Volume II
-│   ├── Curso-Rede-Descentralizada-Extensao.md
-│   ├── Multisig-2-de-3-criacao-manual-CLI.md   ← anexo (educacional)
-│   ├── Playbooks-Rede-Descentralizada.md
-│   └── Playbooks-Multisig-CLI.md
-├── Scripts/                        ← Automação Tails + HomeLab/
-└── imagens/                        ← Cartazes e figuras
+├── Curso-Tails-OS-Expert.md      ← Volume I
+├── Folheto-Regras-e-Golpes.md
+├── Playbooks/Playbooks.md
+├── Expansao-Curso/               ← Volume II
+├── Scripts/                      ← Tails + HomeLab/
+└── imagens/
 ```
-
-## 🧭 Trilha do aluno — siga nesta ordem
-
-> **Regra:** livro (teoria) + Playbook (comandos) **em paralelo** no mesmo passo. Não pule o Volume I antes do II.
-
-| Passo | O que fazer | Abrir |
-|:-----:|-------------|-------|
-| **1** | Pendrive → Tails → Haveno **verde** | 📖 [Curso-Tails-OS-Expert.md](Curso-Tails-OS-Expert.md) · ⚡ [Playbooks/Playbooks.md](Playbooks/Playbooks.md) |
-| **2** | Seed, Feather, trades, home lab | 📖 [Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · ⚡ [Playbooks-Rede-Descentralizada.md](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| **3** | Imprimir regras de ouro + golpes | 🖨️ [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) |
-| **4** | Automação pós-verde (`auto` / `backup` / `update`) | 🔧 [Scripts/README.md](Scripts/README.md) |
-| *Opc.* | Nó + mineração no home lab (Debian/Ubuntu) | 🏠 [Scripts/HomeLab/README.md](Scripts/HomeLab/README.md) |
-
-**Objetivo Volume I:** pendrive → Tails → Haveno **verde**.  
-**Objetivo Volume II:** seed, Feather, trades, home lab, ecossistema.
-
-> **Próximo passo recomendado:** [Módulo 2 — Whonix Online](../Whonix-Online/README.md) — lado **online persistente** + custódia **frio↔quente** (a seed nunca toca a rede). Requer Volume I + II concluídos (Haveno verde + Feather no Tails).
 
 ---
 

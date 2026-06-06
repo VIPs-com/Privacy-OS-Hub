@@ -1,82 +1,128 @@
 # Privacy-OS-Hub
 
-Hub de **guias práticos de privacidade** sobre sistemas operacionais anônimos — do pendrive vazio à
-operação real, com Tor, verificação e segurança. Começa pelo **Tails + Haveno** (DEX de Monero) e
-cresce para **Whonix** (lado online) e o baseline **Zero-Trust**.
+Hub de **guias práticos de privacidade** — do pendrive vazio à custódia Monero com Tor, verificação PGP e
+segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `2fa` · `pgp`
 
-> ⚠️ **Uso educacional.** Material para aprender software livre de privacidade (Tails, Tor, Monero,
-> Haveno, Whonix). Não é aconselhamento financeiro. **Instalar ≠ tradear**: tradear é decisão sua, na
-> versão corrigida e com cautela. **Verifique sempre PGP / fontes oficiais.**
+> ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e
+> fontes oficiais.
 
-**Princípios do hub:** [MANIFESTO.md](MANIFESTO.md) — verificação antes de confiança, Cold-Tails/Hot-Whonix
-como trilha principal (baixo custo), não omitir caminhos avançados, responsabilidade sua.
+---
+
+## Comece aqui
+
+**Este README é a única porta de entrada.** Siga a [trilha linear](#trilha-linear) passo a passo — um link
+primário por etapa. No mesmo passo, use a coluna **Comandos** para o Playbook (só terminal).
+
+Perdeu o fio? Vá direto ao [plano de contingência](#travou-aqui). Quer todos os capítulos? Abra o
+[MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) (opcional — novatos podem ignorar).
+
+**Princípios:** [MANIFESTO.md](MANIFESTO.md) · Cold-Tails/Hot-Whonix como trilha principal (baixo custo).
+
+---
+
+## Eu quero…
+
+| Objetivo | Comece no passo | Pasta |
+|----------|-----------------|-------|
+| **Tails + Haveno verde** no pendrive (portable) | [1](#trilha-linear) | `Tails-OS-Expert/` |
+| **Carteira Monero + backup + boas práticas** | [4](#trilha-linear) → [5](#trilha-linear) | `Expansao-Curso/` |
+| **Tradear no Haveno** (com cautela) | [5](#trilha-linear) | `Expansao-Curso/` |
+| **Whonix online + custódia frio↔quente** | [8](#trilha-linear) (requer M1) | `Whonix-Online/` |
+| **Automação** (instalar / backup / atualizar) | [7](#trilha-linear) | `Scripts/` |
+| **Índice capítulo a capítulo** | [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) | raiz |
+
+---
+
+## Trilha linear
+
+Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se” do passo atual for verdadeiro.
+
+> **Regra:** livro = teoria e telas · Playbook = comandos no **mesmo** passo.
+
+| Passo | O que fazer | Livro (abrir) | Comandos |
+|:-----:|-------------|---------------|----------|
+| **1** | Gravar Tails + Tor + persistência | [Curso Vol I — Cap. 2](Tails-OS-Expert/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](Tails-OS-Expert/Playbooks/Playbooks.md) |
+| **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](Tails-OS-Expert/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Tails-OS-Expert/Playbooks/Playbooks.md) |
+| **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | — |
+| **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | — |
+| **5** | Feather, seed, trades (Volume II) | [Curso Vol II](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| **6** | Regras de ouro + golpes (imprimir) | [Folheto](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | — |
+| **7** | Automação pós-verde | [Scripts — ciclo de uso](Tails-OS-Expert/Scripts/README.md) | `haveno-auto` · `backup` · `update` |
+| **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | — |
+| **9** | Backup air-gap (DUAS cópias seed) | [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) | — |
+| **10** | Instalar e verificar Whonix (PGP) | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
+| **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | — |
+| **12** | Cold-signing — **escolha UMA** trilha | **A:** [Feather GUI](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [CLI](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
+
+**Zoom do módulo:** [Tails-OS-Expert/README.md](Tails-OS-Expert/README.md) (passos 1–7) · [Whonix-Online/README.md](Whonix-Online/README.md) (passos 8–12).
+
+---
+
+## Trilhas opcionais
+
+Só depois da trilha principal. **Não misture** com os passos 1–12.
+
+| Trilha | Quando | Abrir | Pré-requisito |
+|--------|--------|-------|---------------|
+| Home Lab (nó + mineração) | Quer infra em Debian/Ubuntu | [Scripts/HomeLab](Tails-OS-Expert/Scripts/HomeLab/README.md) | Passo 5+ |
+| Multisig 2-de-3 manual (educacional) | Entender escrow além do app | [Anexo CLI](Tails-OS-Expert/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) | Vol II Cap. 10 |
+| Hardware wallet (Trezor/Ledger) | Alternativa com custo extra | [Curso M2 §5.6](Whonix-Online/Curso-Whonix-Online.md#56-hardware-wallet-opcional) | Passo 12 |
+| Zero-Trust-Core (baseline) | Cofre, PGP, backup 3-2-1 off-site | [GitHub ZTC](https://github.com/VIPs-com/Zero-Trust-Core) | M1 + idealmente M2 |
+
+---
+
+## Travou aqui?
+
+Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abra dezenas de links soltos.
+
+| Situação | Volte ao passo | Arquivo |
+|----------|----------------|---------|
+| Pendrive / Tor / persistência | **1** | [Curso Cap. 2](Tails-OS-Expert/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) · [Playbooks §1–4](Tails-OS-Expert/Playbooks/Playbooks.md) |
+| Haveno não ficou verde | **2** | [Playbooks §8](Tails-OS-Expert/Playbooks/Playbooks.md) · [Curso Cap. 7 FAQ](Tails-OS-Expert/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) |
+| Dúvida se pode tradear | **3** | [Curso Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) |
+| Seed / backup da carteira | **4** ou **9** | Vol I Cap. 5 · [Playbook backup M2](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| Feather / 1º trade | **5** | [Vol II Cap. 2–3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) |
+| Escolher trilha A ou B | **8** | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
+| Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) · [Playbooks §6](Whonix-Online/Playbooks/Playbooks.md) |
+| Sem nó `.onion` | **11** | [Curso Cap. 4.2](Whonix-Online/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) |
+| Mapa geral do hub | — | **Você está aqui** — [trilha linear](#trilha-linear) |
+
+---
 
 ## Módulos
 
-| # | Módulo | Estado | Abrir |
-|---|--------|--------|-------|
-| 1 | **Tails + Haveno** — do pendrive ao indicador verde; trades P2P, Feather, home lab | ✅ Pronto | [Tails-OS-Expert/](Tails-OS-Expert/README.md) |
-| 2 | **Whonix (online)** — instalar+verificar, Monero via Tor, **Cold-Tails-Hot-Whonix** (custódia frio↔quente) | 🟡 v1 | [Whonix-Online/](Whonix-Online/README.md) |
-| — | **Zero-Trust-Core** — baseline de segurança (**repo separado**, complementar) | ✅ Publicado | [github.com/VIPs-com/Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
+| # | Módulo | Estado | Índice do módulo |
+|---|--------|--------|------------------|
+| 1 | **Tails + Haveno** | ✅ Pronto | [Tails-OS-Expert/](Tails-OS-Expert/README.md) |
+| 2 | **Whonix (online)** | 🟡 v1 | [Whonix-Online/](Whonix-Online/README.md) |
+| — | **Zero-Trust-Core** (repo separado) | ✅ Publicado | [github.com/VIPs-com/Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
 
 ### Arquitetura (visão)
 
-- **Tails (offline / air-gapped)** → geração e **custódia da carteira fria** (assinatura offline) — trilha principal, **sem hardware proprietário obrigatório**.
-- **Whonix (online)** → lado em rede: nó Monero, Feather *watch-only*, operações quentes.
-- **Hardware wallet (Trezor/Ledger)** → alternativa **opcional** (custo extra) — ver Módulo 2 §5.6.
-- **[Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)** → baseline **opcional** (KeePassXC, VeraCrypt, PGP air-gap, SSH, backup 3-2-1-1-0). **Complementa** M1/M2; não substitui a trilha Haveno nem é pré-requisito.
+- **Tails (offline)** → carteira fria, assinatura air-gap — trilha principal, sem hardware proprietário obrigatório.
+- **Whonix (online)** → view-only, nó Monero, operações quentes via Tor.
+- **Haveno** → trades quentes (escrow online); custódia frio/quente no passo 12.
+- **Zero-Trust-Core** → baseline opcional; complementa M1/M2, não substitui.
 
-> Nota: o **trade no Haveno é quente** (o escrow multisig exige o cliente online com a carteira). O split
-> frio/quente brilha na **custódia**; o trade roda no lado online.
-
-## 🧭 Trilha completa do aluno (hub)
-
-```text
-  MÓDULO 1 — Tails + Haveno                    MÓDULO 2 — Whonix (online)
-  ─────────────────────────                    ───────────────────────────
-  1. Volume I (verde)          ───────────►   0. Porteiro (escolha trilha)
-  2. Volume II (Feather/trades)                1. Backup air-gap
-  3. Folheto (imprimir)                        2. Instalar Whonix
-  4. Scripts (pós-verde)                       3. Livro + Playbooks
-                                               4. Trilha A OU B (cold-signing)
-```
-
-### Módulo 1 — [Tails + Haveno](Tails-OS-Expert/README.md) ✅
-
-| Passo | Material | Conteúdo |
-|:-----:|----------|----------|
-| **1** | [Curso-Tails-OS-Expert.md](Tails-OS-Expert/Curso-Tails-OS-Expert.md) + [Playbooks Vol I](Tails-OS-Expert/Playbooks/Playbooks.md) | Pendrive → Tails → Haveno **verde** |
-| **2** | [Expansao-Curso/](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) + [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) | Feather, trades, home lab |
-| **3** | [Folheto-Regras-e-Golpes.md](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | 1 página imprimível |
-| **4** | [Scripts](Tails-OS-Expert/Scripts/README.md) · [Home Lab](Tails-OS-Expert/Scripts/HomeLab/README.md) | Automação + infra (opcional) |
-
-### Módulo 2 — [Whonix (online)](Whonix-Online/README.md) 🟡
-
-Requer **Módulo 1 concluído**.
-
-| Passo | Material | Conteúdo |
-|:-----:|----------|----------|
-| **0** | [00-Comece-aqui-Escolha-sua-trilha.md](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | Mapa + pré-requisitos |
-| **1** | [Playbook-Backup-e-protecao-air-gap.md](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) | DUAS cópias seed offline |
-| **2** | [Instalar-Whonix-passo-a-passo-por-SO.md](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | VirtualBox/KVM + PGP |
-| **3** | [Curso-Whonix-Online.md](Whonix-Online/Curso-Whonix-Online.md) + [Playbooks](Whonix-Online/Playbooks/Playbooks.md) | Teoria + comandos |
-| **4** | **Trilha A** [Feather](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) **ou** **Trilha B** [CLI](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) | Cold-Tails-Hot-Whonix |
+---
 
 ## Baseline opcional — [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)
 
-Repositório **separado** na organização [VIPs-com](https://github.com/VIPs-com). Use **depois** de M1 (e idealmente M2) se quiser endurecer cofres, identidade PGP, backup off-site e SSH além do que este hub já cobre.
+Use **depois** dos passos 1–12 se quiser cofres, PGP air-gap, backup off-site e SSH além deste hub.
 
-| Material | Conteúdo |
-|----------|----------|
-| **Início** | [INICIE AQUI](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/docs/INICIE-AQUI.md) · livro [Zero-Trust-Core-Expert](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/%F0%9F%8E%93%20Zero-Trust-Core-Expert%20-%20Vers%C3%A3o%201.0.md) |
-| **Playbooks** | [playbooks/](https://github.com/VIPs-com/Zero-Trust-Core/tree/main/playbooks) (cofre · PGP · backup) |
-| **Tails / Whonix** | Guias próprios no ZTC — ângulo *baseline*; o **M2 deste hub** foca cold-signing e custódia Monero |
+| Material | Link |
+|----------|------|
+| Início | [INICIE AQUI](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/docs/INICIE-AQUI.md) |
+| Livro | [Zero-Trust-Core-Expert](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/%F0%9F%8E%93%20Zero-Trust-Core-Expert%20-%20Vers%C3%A3o%201.0.md) |
+| Playbooks | [playbooks/](https://github.com/VIPs-com/Zero-Trust-Core/tree/main/playbooks) |
 
-> **Ordem sugerida:** M1 → M2 → ZTC (opcional). Integra bem com [OpenPGP-GPG do Zero ao Expert](https://github.com/VIPs-com/OpenPGP-GPG-do-Zero-ao-Expert).
+> **Ordem sugerida:** passos 1–12 → ZTC (opcional). Integra com [OpenPGP-GPG do Zero ao Expert](https://github.com/VIPs-com/OpenPGP-GPG-do-Zero-ao-Expert).
+
+---
 
 ## Licença
 
 - **Scripts** (`*.sh`, `*.desktop`): **MIT** — [`LICENSE`](LICENSE).
-- **Documentação/conteúdo** (guias, Playbooks, diagramas, cartaz): **CC BY-SA 4.0** — [`LICENSE-DOCS.md`](LICENSE-DOCS.md).
+- **Documentação:** **CC BY-SA 4.0** — [`LICENSE-DOCS.md`](LICENSE-DOCS.md).

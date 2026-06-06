@@ -37,6 +37,8 @@ Este é o **livro** do curso. Tudo está aqui, em capítulos, na ordem. Sem fica
 
 # 1. MAPA DO CURSO (visão geral)
 
+> **Mapa principal do hub (ordem de estudo):** [README.md#trilha-linear](../README.md#trilha-linear) · Índice completo (opcional): [MANUAL-DO-CURSO.md](../MANUAL-DO-CURSO.md)
+
 ## O que você vai conseguir
 
 Sair do **pendrive vazio** e chegar ao **Haveno com indicador verde** dentro do Tails — de forma segura, com Tor, persistência e onion-grater configurados corretamente.
