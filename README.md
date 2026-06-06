@@ -15,7 +15,7 @@ cresce para **Whonix** (lado online) e o baseline **Zero-Trust**.
 | # | Módulo | Estado | Abrir |
 |---|--------|--------|-------|
 | 1 | **Tails + Haveno** — do pendrive ao indicador verde; trades P2P, Feather, home lab | ✅ Pronto | [Tails OS Expert/](Tails%20OS%20Expert/README.md) |
-| 2 | **Whonix (online)** — lado em rede: nó Monero, navegação, *hot wallet* | 🛠️ Planejado | — |
+| 2 | **Whonix (online)** — lado em rede: nó Monero, navegação, *hot wallet* | 🛠️ Em construção | [Whonix-Online/](Whonix-Online/README.md) |
 | — | **Zero-Trust-Core** — baseline de segurança (repo separado) | 🔗 Externo | — |
 
 ### Arquitetura (visão)
