@@ -16,7 +16,7 @@ Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1
 | **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | — |
 | **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | `haveno-auto` · `backup` · `update` |
 
-**Próximo módulo:** [Whonix Online (passos 8–12)](../Whonix-Online/README.md) — requer passos 1–5 concluídos.
+**Próximo módulo:** [Whonix Online (passos 8–12)](../Whonix-Online/README.md) — requer passos 1–4 + Feather (Vol II Cap. 3).
 
 ## Mapa rápido
 

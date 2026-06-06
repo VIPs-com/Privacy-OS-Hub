@@ -29,7 +29,7 @@ Perdeu o fio? Vá direto ao [plano de contingência](#travou-aqui). Quer todos o
 | **Tails + Haveno verde** no pendrive (portable) | [1](#trilha-linear) | `Tails-OS-Expert/` |
 | **Carteira Monero + backup + boas práticas** | [4](#trilha-linear) → [5](#trilha-linear) | `Expansao-Curso/` |
 | **Tradear no Haveno** (com cautela) | [5](#trilha-linear) | `Expansao-Curso/` |
-| **Whonix online + custódia frio↔quente** | [8](#trilha-linear) (requer M1) | `Whonix-Online/` |
+| **Whonix online + custódia frio↔quente** | [8](#trilha-linear) (M1: passos 1–4 + Feather) | `Whonix-Online/` |
 | **Automação** (instalar / backup / atualizar) | [7](#trilha-linear) | `Scripts/` |
 | **Índice capítulo a capítulo** | [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) | raiz |
 
@@ -47,7 +47,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](Tails-OS-Expert/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Tails-OS-Expert/Playbooks/Playbooks.md) |
 | **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | — |
 | **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | — |
-| **5** | Feather, seed, trades (Volume II) | [Curso Vol II](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| **5** | Feather, seed (+ trades se for negociar) | [Curso Vol II](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
 | **6** | Regras de ouro + golpes (imprimir) | [Folheto](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | — |
 | **7** | Automação pós-verde | [Scripts — ciclo de uso](Tails-OS-Expert/Scripts/README.md) | `haveno-auto` · `backup` · `update` |
 | **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | — |
@@ -55,6 +55,10 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **10** | Instalar e verificar Whonix (PGP) | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
 | **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | — |
 | **12** | Cold-signing — **escolha UMA** trilha | **A:** [Feather GUI](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [CLI](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
+
+> **Passo 5:** o Vol II tem 19 capítulos — para **M2** (passo 8+), leia **Caps. 2–3** (seed + Feather). Caps. 7–8 só se for **tradear**.
+>
+> **Passo 8:** exige passos **1–4** + Feather ([Vol II Cap. 3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
 
 **Zoom do módulo:** [Tails-OS-Expert/README.md](Tails-OS-Expert/README.md) (passos 1–7) · [Whonix-Online/README.md](Whonix-Online/README.md) (passos 8–12).
 

@@ -251,6 +251,8 @@ opera em view-only.
 
 > 👉 **Não tem Trezor/Ledger?** Trilha A (Feather air-gap) + [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md) é o seu caminho. Hardware wallet é **opcional** (§5.6).
 
+<a id="56-hardware-wallet-opcional"></a>
+
 ### 5.6 Alternativa opcional: hardware wallet (Trezor/Ledger) + Feather — **custo extra**
 
 As Trilhas A/B são a **trilha principal** deste hub. Uma **carteira de hardware** é uma **alternativa** se
@@ -368,6 +370,8 @@ do **Whonix**:
 
 ---
 
+<a id="6-onde-o-haveno-entra"></a>
+
 ## 6. Onde o Haveno entra (a narrativa frio→quente)
 
 O **Haveno é exceção**: tradear é **quente** (o cliente precisa da carteira durante o **escrow multisig** — não dá para assinar offline um trade ao vivo). A narrativa do hub:
@@ -387,6 +391,8 @@ Na prática:
 **OK se:** você só expõe ao "quente" o valor de cada operação; o restante fica frio; após operar, o excedente volta ao frio.
 
 ---
+
+<a id="7-quando-usar"></a>
 
 ## 7. Quando usar Whonix × Tails × home lab
 

@@ -5,7 +5,7 @@
 Lado **online persistente** do hub: Whonix (Gateway + Workstation via Tor) + custódia **frio↔quente**
 (Tails offline assina, Whonix view-only transmite).
 
-**Pré-requisito:** [Módulo 1](../Tails-OS-Expert/README.md) passos 1–5 — Haveno verde + Feather no Tails.
+**Pré-requisito:** [Módulo 1](../Tails-OS-Expert/README.md) passos **1–4** + **Feather no Tails** ([Vol II Cap. 3](../Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige ter tradeado.
 
 ## Trilha deste módulo
 
