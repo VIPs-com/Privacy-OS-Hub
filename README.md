@@ -19,14 +19,14 @@ como trilha principal (baixo custo), não omitir caminhos avançados, responsabi
 |---|--------|--------|-------|
 | 1 | **Tails + Haveno** — do pendrive ao indicador verde; trades P2P, Feather, home lab | ✅ Pronto | [Tails OS Expert/](Tails%20OS%20Expert/README.md) |
 | 2 | **Whonix (online)** — instalar+verificar, Monero via Tor, **Cold-Tails-Hot-Whonix** (custódia frio↔quente) | 🟡 v1 | [Whonix-Online/](Whonix-Online/README.md) |
-| — | **Zero-Trust-Core** — baseline de segurança (repo separado) | 🔗 Em breve | *Ainda não publicado — acompanhe este repositório.* |
+| — | **Zero-Trust-Core** — baseline de segurança (**repo separado**, complementar) | ✅ Publicado | [github.com/VIPs-com/Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
 
 ### Arquitetura (visão)
 
 - **Tails (offline / air-gapped)** → geração e **custódia da carteira fria** (assinatura offline) — trilha principal, **sem hardware proprietário obrigatório**.
 - **Whonix (online)** → lado em rede: nó Monero, Feather *watch-only*, operações quentes.
 - **Hardware wallet (Trezor/Ledger)** → alternativa **opcional** (custo extra) — ver Módulo 2 §5.6.
-- **Zero-Trust-Core** → baseline comum de segurança ligando os módulos (*repositório ainda não publicado*).
+- **[Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)** → baseline **opcional** (KeePassXC, VeraCrypt, PGP air-gap, SSH, backup 3-2-1-1-0). **Complementa** M1/M2; não substitui a trilha Haveno nem é pré-requisito.
 
 > Nota: o **trade no Haveno é quente** (o escrow multisig exige o cliente online com a carteira). O split
 > frio/quente brilha na **custódia**; o trade roda no lado online.
@@ -53,6 +53,18 @@ Requer **Módulo 1 concluído** (Haveno verde + Feather no Tails + verificação
 | **Playbooks M2** — [Playbooks/Playbooks.md](Whonix-Online/Playbooks/Playbooks.md) | Só comandos + tabela **Travou aqui?** |
 | **Backup air-gap** — [Playbook — Backup…](Whonix-Online/Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) | DUAS cópias seed offline (trilha principal, sem HW obrigatório) |
 | **Trilha A (GUI)** / **Trilha B (CLI)** | Feather view-only ↔ Tails offline · ou `monero-wallet-cli` |
+
+## Baseline opcional — [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)
+
+Repositório **separado** na organização [VIPs-com](https://github.com/VIPs-com). Use **depois** de M1 (e idealmente M2) se quiser endurecer cofres, identidade PGP, backup off-site e SSH além do que este hub já cobre.
+
+| Material | Conteúdo |
+|----------|----------|
+| **Início** | [INICIE AQUI](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/docs/INICIE-AQUI.md) · livro [Zero-Trust-Core-Expert](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/%F0%9F%8E%93%20Zero-Trust-Core-Expert%20-%20Vers%C3%A3o%201.0.md) |
+| **Playbooks** | [playbooks/](https://github.com/VIPs-com/Zero-Trust-Core/tree/main/playbooks) (cofre · PGP · backup) |
+| **Tails / Whonix** | Guias próprios no ZTC — ângulo *baseline*; o **M2 deste hub** foca cold-signing e custódia Monero |
+
+> **Ordem sugerida:** M1 → M2 → ZTC (opcional). Integra bem com [OpenPGP-GPG do Zero ao Expert](https://github.com/VIPs-com/OpenPGP-GPG-do-Zero-ao-Expert).
 
 ## Licença
 

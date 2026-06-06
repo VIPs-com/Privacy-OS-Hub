@@ -37,8 +37,9 @@ no Volume I e no Folheto.
 ## 6. Ecossistema
 
 **Tails offline** guarda o grosso e assina. **Whonix online** vê, monta e transmite. **Haveno** é a ponte para
-trades quentes (escrow multisig automático). **Zero-Trust-Core** ligará o baseline comum quando publicado.
-Auditoria interna (rodadas documentadas) mantém o material vivo a cada release.
+trades quentes (escrow multisig automático). **[Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)**
+(repositório **separado**) oferece baseline opcional — cofre, PGP, backup, SSH — que **complementa** este hub
+sem substituí-lo. Auditoria interna (rodadas documentadas) mantém o material vivo a cada release.
 
 ---
 
