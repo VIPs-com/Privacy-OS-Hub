@@ -12,7 +12,7 @@
 
 - **Baixe só de fontes oficiais:** `tails.net`, `getmonero.org`, GitHub da sua rede.
 - **Verifique o PGP** de todo `.deb` — URL e PGP da **mesma** rede, **mesmo** release.
-- **Use `1.6.0-reto`+** (versão com o fix do exploit de trades).
+- **Use `1.6.0-reto`+** (versão com o fix do exploit de trades) — ou o **release atual** da sua rede; confira em retoswap.com/GitHub antes de instalar.
 - **Instalar ≠ tradear.** Comece com **valores pequenos**.
 - **Seed = seus fundos.** Nunca compartilhe. Anote **offline** (papel/metal) — ritual na criação: Volume II, Cap. 2.
 - **Seed ≠ backup completo** → faça backup da pasta `Data/` (cifrada).

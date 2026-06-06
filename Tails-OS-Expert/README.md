@@ -12,7 +12,7 @@ Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1
 | **2** | Haveno **verde** | [Curso Cap. 3](Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Playbooks/Playbooks.md) |
 | **3** | Segurança (exploit) | [Curso Cap. 4](Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | — |
 | **4** | Carteira + backup | [Curso Cap. 5](Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | — |
-| **5** | Feather + seed · **M2:** Caps. 2–3 · **Trade:** Caps. 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| **5** | Vol II: Feather + seed · **p/ M2 (passo 8):** Caps. 2–3 · **trade (opcional):** 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
 | **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | — |
 | **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | `haveno-auto` · `backup` · `update` |
 

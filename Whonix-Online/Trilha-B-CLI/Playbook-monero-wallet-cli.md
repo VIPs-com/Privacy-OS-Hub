@@ -45,7 +45,10 @@
 
 ## B1 — Criar a view-only (no Whonix/QUENTE)
 
+> A **view key** mostra saldo e histórico — **não** permite gastar. Mesmo assim, trate como dado sensível: **nunca** cole a **spend key** nem a seed na máquina quente.
+
 ```bash
+# O comando PERGUNTA endereço + view key (nao passe na linha de comando).
 # pegue address + viewkey da carteira FRIA, depois:
 monero-wallet-cli --generate-from-view-key NOME-VIEW \
   --daemon-address SEU_NO.onion:18089

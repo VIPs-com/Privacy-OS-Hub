@@ -165,6 +165,8 @@ gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
 
 O fingerprint **`916B8D99…2EEACCDA` não mudou** após a re-certificação (jan/2026) — só o keyring local estava desatualizado.
 
+> **OK se:** após reimportar `derivative.asc`, a verificação da imagem volta a mostrar **`gpg: Good signature`** e o fingerprint **`916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA`** bate com `gpg --fingerprint`.
+
 > **Travou aqui?** Se ainda falhar após reimportar `derivative.asc`, confira o fingerprint com `gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` e reexecute a verificação do §5 do seu SO. Não importe a `.ova` sem **Good signature**.
 
 ---

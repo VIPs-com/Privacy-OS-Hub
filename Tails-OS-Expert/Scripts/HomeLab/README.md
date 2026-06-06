@@ -64,6 +64,7 @@ journalctl -u xmrig -f
   - Todos aceitam hash fixado: `MONEROD_SHA256` / `XMRIG_SHA256` / `P2POOL_SHA256` (este último **pula** o GPG — use só com `DL_URL` próprio).
 - Os serviços rodam num **usuário dedicado `monero`** (sem login), não no seu usuário.
 - O nó **baixa a blockchain pela internet normal** (não pela Tor). O Tor (script 2) só **publica o RPC** com privacidade.
+- **Firewall (opcional):** o `monerod` escuta P2P em `0.0.0.0:18080` (por desenho). O RPC fica em `127.0.0.1`. Em rede doméstica, considere `ufw` na borda — o curso **não** cobre hardening de firewall.
 - **Mineração:** os endereços no P2Pool são **públicos** — use uma **carteira separada** só para minerar, longe da sua carteira do Haveno.
 - Estes scripts mexem em `systemd`, `apt` e `/etc` — **leia antes de rodar** e rode só em máquina que você controla.
 

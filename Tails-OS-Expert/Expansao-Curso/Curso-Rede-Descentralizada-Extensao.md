@@ -611,6 +611,8 @@ Use carteira **só para mineração** — endereços P2Pool são públicos.
 
 > Agregador — **não** é Haveno nem Feather. Volume I, Cap. 9.3 (KYC do parceiro).
 
+> **Antes de enviar qualquer moeda:** o site do Trocador pode ser no-KYC, mas o **parceiro final** que executa o swap pode **congelar** e pedir KYC (AML). Use **valor pequeno** no 1º teste; **não** envie documentos se busca privacidade. Se isso acontecer, veja §15.3.
+
 ## 15.1 Preparação
 
 1. Feather aberta; **Receive** → copie subendereço XMR **novo**.
