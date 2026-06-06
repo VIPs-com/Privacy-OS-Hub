@@ -8,7 +8,7 @@
 | **II (este)** | Este arquivo | **Usar** a rede: carteira, trades, Feather, home lab, ecossistema |
 | **II (comandos)** | [`Playbooks — Rede Descentralizada.md`](Playbooks%20—%20Rede%20Descentralizada.md) | Só comandos do Volume II |
 
-> **Pré-requisito:** Haveno com indicador **verde** (Volume I, Capítulos 2–3). Tails **7.8+**, persistência + Dotfiles, rede **Reto `1.6.0-reto`** (ou outra rede com URL + PGP conferidos).
+> **Pré-requisito:** Haveno com indicador **verde** (Volume I, Caps. 2–3) — e **leia os Caps. 4, 5 e 9** do Vol. I (segurança, seed, golpes) **antes de criar conta ou depositar XMR**. Tails **7.8.1+**, persistência + Dotfiles, rede **Reto `1.6.0-reto`** (ou outra rede com URL + PGP conferidos).
 
 ---
 

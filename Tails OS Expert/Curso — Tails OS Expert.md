@@ -59,7 +59,7 @@ O Tails **não funciona** em celular ou tablet.
 |------------|-----|
 | Entender cada etapa (aula) | Este **livro**, capítulos 2 e 3 |
 | Só os comandos, rápido | **`Playbooks/Playbooks.md`** |
-| Automatizar (instalar/backup/atualizar) | Pasta **`Scripts/`** (leia `Scripts/README.md`) |
+| Automatizar (instalar/backup/atualizar) | Pasta **`Scripts/`** (leia `Scripts/README.md`) — **só após os passos 1–4** |
 | Saber se pode tradear | **Capítulo 4** |
 | Pós-verde (carteira, backup, redes) | **Capítulo 5** |
 | Resolver um erro | **Capítulo 7 (FAQ)** |
@@ -304,7 +304,7 @@ Regra: no Tails, o Monero do Haveno usa **9062**, **não** 9050. Scripts caseiro
 
 Pré-requisitos desta parte (Capítulo 2): Tails no USB, **Tor conectado**, **persistência + Dotfiles**, **senha admin** desta sessão.
 
-> **Atalho:** se quiser pular a digitação, a pasta `Scripts/` faz tudo isto sozinho (veja `Scripts/README.md`). Abaixo é o caminho **manual**, para você entender cada etapa.
+> **Atalho:** se quiser pular a digitação, a pasta `Scripts/` faz tudo isto sozinho — **(1)** copie os scripts para `~/Persistent/` uma vez (ver `Scripts/README.md` → "Ciclo de uso"); **(2)** rode `~/Persistent/haveno-auto.sh`. Abaixo é o caminho **manual**, para você entender cada etapa.
 
 ## 3.1 Antes de instalar — rede de terceiros, URL e PGP
 
@@ -520,6 +520,8 @@ Na interface (após verde):
 
 ## 5.2 Backup (persistência + Data + cifrar)
 
+> **Para a maioria:** use `Scripts/haveno-backup.sh` (cifrado e prático). As opções abaixo são complementares ou alternativas.
+
 | Camada | Como |
 |--------|------|
 | **Pendrive Tails inteiro** | Guia oficial Tails de backup da persistência (link no Capítulo 8) |
@@ -554,7 +556,7 @@ bash haveno-install.sh \
   "FINGERPRINT_DA_MESMA_REDE"
 ```
 
-Automático (faz backup antes): `Scripts/haveno-update.sh` (veja `Scripts/README.md`).
+Automático (faz backup antes): `Scripts/haveno-update.sh` (veja `Scripts/README.md`). **Ao usar o script, o backup é feito automaticamente — você não precisa repetir o passo 1 acima.**
 
 > **Tails (sistema):** atualize pelo **Tails Upgrader** (ao conectar no Tor) ou reinstalação oficial — **nunca** por script. Faça o backup primeiro.
 
@@ -1408,6 +1410,7 @@ Por isso a frase do Capítulo 6: *"o parceiro final pode pedir KYC"* — mesmo o
 ## 9.5 Checklist final do Expert
 
 - [ ] Haveno **verde** no Tails (`loaded filter: haveno`)
+- [ ] (Recomendado) **Scripts instalados** em `~/Persistent/` (`haveno-auto/backup/update` prontos)
 - [ ] **Backup** feito: pasta `Data/` cifrada + **seed** anotada offline (separadas)
 - [ ] Sei **atualizar** com backup antes (`haveno-update.sh`)
 - [ ] Li a tabela de **golpes** (9.2) e entendi **KYC/agregadores** (9.3)

@@ -24,6 +24,25 @@ Teoria e fundamentos: `../Curso — Tails OS Expert.md` (Cap. 6 cobre o Home Lab
 
 > Pré-requisitos (sempre manuais): Tails no USB, **Tor conectado**, **persistência + Dotfiles**, **senha admin** da sessão. Veja Capítulo 2 do livro.
 
+## Ciclo de uso — a ordem dos scripts (comece por aqui)
+
+Faça **uma vez**: copie os scripts para `~/Persistent/` (seção logo abaixo). Depois é só este ciclo:
+
+```mermaid
+flowchart LR
+  I["Instalar 1x (copiar p/ ~/Persistent)"] --> A["haveno-auto.sh ate VERDE"]
+  A --> B["haveno-backup.sh proteger"]
+  B --> U["haveno-update.sh atualizar"]
+  U -. novo release .-> A
+```
+
+| Quando | Rode |
+|--------|------|
+| **1ª vez** (uma vez só) | Copiar scripts → `~/Persistent/` + `chmod +x` (seção abaixo) |
+| **A cada sessão** (após os passos 1–4) | `~/Persistent/haveno-auto.sh` → indicador **verde** |
+| **Antes do 1º depósito / periodicamente** | `~/Persistent/haveno-backup.sh` (cifrado) |
+| **Quando sair release novo** | `~/Persistent/haveno-update.sh` (faz o backup antes) |
+
 ---
 
 ## Instalar os scripts em `~/Persistent` (uma vez)
@@ -42,6 +61,8 @@ chmod +x ~/Persistent/haveno-*.sh
 ```
 
 ### Método B — um comando (não depende do nome da pasta)
+
+> Use o Método B se você **renomeou** a pasta do curso ou o caminho é diferente do padrão. Para a maioria, o **Método A** basta.
 
 ```bash
 find ~/Persistent -type f \( -name 'haveno-auto.sh' -o -name 'haveno-backup.sh' -o -name 'haveno-update.sh' -o -name 'haveno-backup.desktop' \) -exec cp -t ~/Persistent {} +

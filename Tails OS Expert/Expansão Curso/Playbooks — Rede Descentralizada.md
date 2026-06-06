@@ -2,7 +2,7 @@
 
 **Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso — Rede Descentralizada (Extensão).md`](Curso%20—%20Rede%20Descentralizada%20(Extensão).md).
 
-**Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7). Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
+**Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7, **mais as seções 9–10 Backup/Atualizar**). Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
 
 > Tradear: versão **`1.6.0-reto`+**, confirme retomada nos canais oficiais, **valores pequenos** primeiro.
 

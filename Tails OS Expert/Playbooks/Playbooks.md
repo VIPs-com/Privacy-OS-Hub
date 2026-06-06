@@ -10,11 +10,12 @@ Direto ao ponto. Fundamentos e telas: no livro [`../Curso — Tails OS Expert.md
 
 ## Manual ou automático?
 
-Passos **1–4** são sempre manuais. Do **5** em diante:
+Passos **1–4** são sempre manuais. Do **5** em diante, você pode automatizar.
+
+**Antes de automatizar:** copie os scripts para `~/Persistent/` uma vez (ver [`../Scripts/README.md`](../Scripts/README.md) → "Ciclo de uso").
 
 ```bash
 # Automático (depois do passo 4): instala -> abre -> corrige -> verde
-# (instale os scripts antes: ver ../Scripts/README.md)
 ~/Persistent/haveno-auto.sh
 ```
 
@@ -151,7 +152,7 @@ sudo systemctl restart onion-grater
 
 ---
 
-## Backup (pós-verde)
+## 9 — Backup (pós-verde)
 
 ```bash
 ~/Persistent/haveno-backup.sh           # cifrado, em ~/Persistent/Backups
@@ -161,7 +162,7 @@ sudo systemctl restart onion-grater
 
 ---
 
-## Atualizar (backup antes)
+## 10 — Atualizar (backup antes)
 
 ```bash
 # Edite a URL/PGP do novo release e rode:

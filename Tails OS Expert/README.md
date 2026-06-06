@@ -35,7 +35,8 @@ Tails OS Expert/
 | 1 | [Curso — Tails OS Expert.md](Curso%20—%20Tails%20OS%20Expert.md) + [Playbooks/Playbooks.md](Playbooks/Playbooks.md) |
 | 2 | [Expansão Curso/](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md) + [Playbooks — Rede Descentralizada.md](Expansão%20Curso/Playbooks%20—%20Rede%20Descentralizada.md) |
 | 3 | [Folheto — Regras e Golpes.md](Folheto%20—%20Regras%20e%20Golpes.md) (imprimir) |
-| Opcional | [Scripts/](Scripts/README.md) · [Scripts/HomeLab/](Scripts/HomeLab/README.md) |
+| Pós-verde | [Scripts/](Scripts/README.md) — `haveno-auto/backup/update` (ciclo de uso) |
+| Opcional | [Scripts/HomeLab/](Scripts/HomeLab/README.md) — infraestrutura (home lab) |
 
 **Objetivo Volume I:** pendrive → Tails → Haveno **verde**.  
 **Objetivo Volume II:** seed, Feather, trades, home lab, ecossistema.
