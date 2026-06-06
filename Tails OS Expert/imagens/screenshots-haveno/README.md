@@ -26,3 +26,14 @@ como acima. Depois de adicionar, referencie no Volume II com `![legenda](imagens
 
 > Status: **pendente de captura** (precisa do app rodando). Este manifesto torna a contribuição um
 > "encaixe direto" — quem tiver o Haveno verde captura e o curso ganha as telas.
+
+### Enquanto não há print, o aluno deve ver…
+
+- **Cap. 2:** telas **Account → Wallet seed** e **Backup** (exportar pasta `Data/`).
+- **Cap. 5:** **Funds → Receive** com endereço XMR (copie para Feather).
+- **Cap. 7 (comprar):** **Markets → Buy XMR** com lista de ofertas; ao tomar, tela **Take offer** com depósito de segurança e prazo; depois **Mark payment as sent** (só após pagar de verdade).
+- **Cap. 8 (vender):** **Markets → Sell → Create offer**; quando alguém tomar, chat do trade e botão **Confirm payment received** (só após fiat na conta).
+- **Cap. 9:** **Open dispute** no trade travado.
+- **Indicador verde (Vol I):** canto da janela Haveno **verde** = conectado à rede Reto.
+
+Nomes de menu podem variar por versão — confira o texto do capítulo. Se travar, use o [Folheto — Regras e Golpes](../../Folheto%20—%20Regras%20e%20Golpes.md) e Cap. 9.

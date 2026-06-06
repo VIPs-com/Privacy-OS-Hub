@@ -32,12 +32,15 @@ make_multisig 2 <MultisigV1_participante_B> <MultisigV1_participante_C>
 
 ---
 
-## exchange_multisig_keys — cada participante
+## exchange_multisig_keys — cada participante (2 rodadas em 2-de-3)
 
 ```bash
+# Rodada 1:
 exchange_multisig_keys <nova_string_B> <nova_string_C>
-# Repita até todos os 3 participantes concluírem
-# OK se: wallet info mostra multisig 2/3
+# Troque as NOVAS strings de saída — Rodada 2:
+exchange_multisig_keys <string_rodada2_B> <string_rodada2_C>
+# Repita até os 3 participantes concluírem (doc oficial: multisig 2-of-3)
+# OK se: wallet info mostra multisig 2/3 e mesmo endereço nos 3 CLIs
 ```
 
 ---
@@ -59,9 +62,9 @@ transfer <ENDERECO> <VALOR>
 # Gera multisig_monero_tx (nome pode variar)
 
 # Cada co-signatário:
-export_multisig_info
-# Troque os arquivos/strings; depois:
-import_multisig_info <info_do_outro>
+export_multisig_info multisig_info.txt
+# Troque os arquivos; depois:
+import_multisig_info multisig_info_do_outro.txt
 
 # Assinar (quem falta):
 sign_multisig multisig_monero_tx

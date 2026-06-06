@@ -43,7 +43,7 @@ Tails OS Expert/
 **Objetivo Volume I:** pendrive → Tails → Haveno **verde**.  
 **Objetivo Volume II:** seed, Feather, trades, home lab, ecossistema.
 
-> **Próximo passo (opcional):** [Módulo 2 — Whonix Online](../Whonix-Online/README.md) — lado **online persistente** + custódia **frio↔quente** (a seed nunca toca a rede). Requer este módulo concluído.
+> **Próximo passo recomendado:** [Módulo 2 — Whonix Online](../Whonix-Online/README.md) — lado **online persistente** + custódia **frio↔quente** (a seed nunca toca a rede). Requer Volume I + II concluídos (Haveno verde + Feather no Tails).
 
 ---
 

@@ -1,6 +1,8 @@
 # Tails OS Expert — Extensão: Rede Descentralizada (mão na massa)
 
-**Volume II do curso.** Tudo que o livro principal menciona como mapa, conceito ou apêndice — aqui vira **passo a passo**, com telas, comandos e checklists.
+**Volume II do curso.** Tudo que o livro principal menciona como mapa, conceito ou apêndice — aqui vira **passo a passo**, com comandos e checklists.
+
+> **Capturas de tela:** prints da UI Haveno estão **pendentes** (manifesto em [`../imagens/screenshots-haveno/README.md`](../imagens/screenshots-haveno/README.md)). Os passos textuais são suficientes para concluir; cada capítulo de trade avisa o que você deve ver na tela.
 
 | Volume | Arquivo | Foco |
 |--------|---------|------|
@@ -329,6 +331,10 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 
 > **Antes:** Cap. 2 (seed + backup), saldo XMR para depósito de segurança, versão **`1.6.0-reto`+**, trading retomado nos canais oficiais.
 
+> **Primeiro XMR?** O depósito de segurança exige um pouco de XMR na conta Haveno. Se o saldo está zerado, leia o [Cap. 6](#6-conseguir-o-primeiro-xmr-3-caminhos) **antes** de tomar uma oferta.
+
+> **Telas pendentes:** prints em [`../imagens/screenshots-haveno/README.md`](../imagens/screenshots-haveno/README.md). Na UI você deve ver **Markets → Buy**, lista de ofertas e **Take offer** — nomes podem variar por versão.
+
 ## 7.1 Preparar conta de pagamento
 
 1. **Account → Payment accounts → Add new**
@@ -347,8 +353,10 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 | 5 | Veja dados de pagamento | **Só** os mostrados **no app** (nome, banco, PIX) |
 | 6 | Pague o fiat | Pelo método exato; **guarde comprovante** |
 | 7 | **Mark payment as sent** | **Somente depois** de pagar de verdade |
-| 8 | Aguarde | Vendedor confere e **libera XMR** |
+| 8 | Aguarde | Vendedor confere e **libera XMR** — tipicamente **15 min a 2 h** (PIX costuma ser rápido); o app mostra o tempo limite do trade |
 | 9 | Concluído | XMR na carteira Haveno → [sacar para Feather](#52-sacar-xmr-do-haveno-após-comprar) |
+
+> **Se travar na espera:** vendedor offline perto do prazo → **Open dispute** (Cap. 9). Não negocie "por fora" do chat do app.
 
 ## 7.3 Checklist comprador
 
@@ -381,6 +389,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 | 3 | Espere compensação **irreversível** | PIX: após creditar; cartão/PayPal: **evite** |
 | 4 | **Confirm payment received** / assine liberação | Só agora o XMR sai do escrow |
 | 5 | Em dúvida | **Disputa** — nunca "resolve por fora" |
+
+> **Tempo típico:** comprador marca "pagamento enviado" em **minutos a 1 h** após tomar a oferta; você confere o fiat na conta real antes de liberar — **não** confie só no print dele.
 
 ## 8.3 Checklist vendedor
 
@@ -729,4 +739,4 @@ Separado de atualizar o **Haveno** (Volume I, 5.3).
 
 ---
 
-*Tails OS Expert — Extensão Rede Descentralizada · maio/2026 · Tails 7.8+ · Reto `1.6.0-reto` · Comandos Haveno/Tails no Volume I (`../Playbooks/Playbooks.md`).*
+*Tails OS Expert — Extensão Rede Descentralizada · jun/2026 · Tails 7.8.1+ · Reto `1.6.0-reto` · Comandos Haveno/Tails no Volume I (`../Playbooks/Playbooks.md`).*

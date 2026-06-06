@@ -6,13 +6,21 @@
 
 ---
 
-## §1 — Verificar imagem Whonix (resumo Linux)
+## §1 — Verificar imagem Whonix (resumo)
+
+**VirtualBox** (`.ova`):
 
 ```bash
 gpg --import derivative.asc
 gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
 gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 # OK se: Good signature + fingerprint 916B8D99…2EEACCDA
+```
+
+**KVM** (`.libvirt.xz` — troque a extensão nos comandos acima):
+
+```bash
+gpg --verify-options show-notations --verify Whonix-*.libvirt.xz.asc Whonix-*.libvirt.xz
 ```
 
 Windows (Kleopatra) / macOS: ver [`Instalar Whonix — passo a passo por SO.md`](../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §5.
@@ -70,17 +78,20 @@ Playbook — Backup e proteção (air-gap).md
 
 ---
 
-## §6 — Troubleshooting rápido
+## §6 — Travou aqui? (troubleshooting)
 
-| Problema | Ação |
-|----------|------|
-| Gateway sem Tor | Aguarde; reinicie Gateway; confira relógio do host |
-| `EXPKEYSIG` na verificação | Reimporte `derivative.asc` (§1) |
-| VirtualBox: VM não inicia | VT-x/AMD-V na BIOS; desative Hyper-V (Windows) |
-| USB não visto na Workstation | Extension Pack + filtro USB (Instalar §9) |
-| Workstation "sem internet" | Normal se Gateway não conectou ao Tor |
+| Sintoma | O que fazer | Onde |
+|---------|-------------|------|
+| Gateway sem Tor | Aguarde; reinicie Gateway; confira relógio do host | Curso Cap. 3 |
+| `EXPKEYSIG` na verificação | Reimporte `derivative.asc` (§1) | Instalar §5.4 |
+| VirtualBox: VM não inicia | VT-x/AMD-V na BIOS; desative Hyper-V (Windows) | Instalar §3.4 |
+| KVM: redes ausentes | Reimporte conforme guia oficial KVM | Instalar §4.1 |
+| USB não visto na Workstation | Extension Pack + filtro USB | Instalar §9 |
+| Workstation "sem internet" | Normal se Gateway não conectou ao Tor | Curso Cap. 3 |
+| Sem nó `.onion` próprio | Use nó remoto confiável | Curso Cap. 4.2 |
+| Pré-requisitos incompletos | Volte ao porteiro `00` | `00 — Comece aqui…` |
 
-Detalhe: [`Instalar Whonix — passo a passo por SO.md`](../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §4.1.
+Detalhe: [`Instalar Whonix — passo a passo por SO.md`](../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §4.1, §5.4.
 
 ---
 

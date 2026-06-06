@@ -50,12 +50,23 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 
 Faça isto **antes** de abrir qualquer trilha:
 
-- [ ] **Módulo 1 concluído** ([Tails + Haveno](../Tails%20OS%20Expert/README.md)) — você já tem **seed**, carteira **completa no Feather (Tails)** e sabe **verificar binários por PGP**.
+- [ ] Leia e execute [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) — **DUAS cópias** da seed offline + teste de restauração.
+- [ ] **Módulo 1 concluído** ([Tails + Haveno](../Tails%20OS%20Expert/README.md)) — seed, Haveno verde, verificação PGP.
+- [ ] **Feather no Tails** instalado e verificado ([Vol II Cap. 3](../Tails%20OS%20Expert/Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md#3-feather-no-tails--instalar-e-verificar)) — carteira **completa** no lado frio.
 - [ ] **Whonix instalado e verificado** — imagem conferida (fingerprint `916B8D99…2EEACCDA`), Gateway + Workstation atualizados via Tor (Curso Cap. 2–3).
 - [ ] **Whonix só sai por Tor** — a Workstation navega **apenas** através do Gateway.
 - [ ] **Seu nó Monero** acessível por Tor (`.onion:18089`) — ou um nó remoto `.onion` confiável (Curso Cap. 4).
 - [ ] **Um pendrive dedicado** ao trânsito frio↔quente (nada de rede no lado frio, **nunca**).
 - [ ] Você tem em mãos, da carteira **fria**: **endereço primário** (começa com `4`), **secret view key** e **restore height**.
+
+### Travou aqui?
+
+| Situação | Vá para |
+|----------|---------|
+| Falta backup / não sabe proteger a seed | [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) |
+| Whonix não instalado ou verificação falhou | [`Instalar Whonix — passo a passo por SO.md`](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §5.4 |
+| Sem nó Monero `.onion` | [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) Cap. 4.2 (nó remoto) |
+| Não tem Feather no Tails ainda | [Vol II Cap. 3](../Tails%20OS%20Expert/Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md#3-feather-no-tails--instalar-e-verificar) |
 
 ---
 

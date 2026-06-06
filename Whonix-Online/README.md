@@ -21,7 +21,9 @@ proprietário obrigatório): *view-only*, assinar offline pelo **Feather** (Tril
 §5.6 hardware wallet **opcional** (Trezor/Ledger) · Haveno (frio→quente) · quando usar Whonix × Tails × home lab.
 
 > **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../Tails%20OS%20Expert/README.md) concluído.
-> **Status:** v1 (aprofundado) + **Playbooks por trilha** (Feather/CLI) + **instalação por SO**. Pendente: **prints** (capturas de tela).
+> **Sem nó `.onion` próprio?** Use nó remoto confiável — [Curso Cap. 4.2](Curso%20—%20Whonix%20Online.md#42-alternativa--nó-remoto-público-onion).
+> **Status:** auditado **rodada 15** — v1 completo + anti-travamento (`00`, Playbooks §6, install §3.4/§5.4).
+> **Prints pendentes** (PI-1): mitigados por texto em [`imagens/screenshots-whonix/README.md`](imagens/screenshots-whonix/README.md) — "enquanto não há print, o aluno deve ver…".
 > Os comandos exatos de assinatura offline mudam por versão — confirme sempre nas fontes oficiais
 > **antes de mover dinheiro real**, e **comece com valores mínimos**.
 

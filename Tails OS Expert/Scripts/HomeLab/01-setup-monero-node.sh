@@ -101,10 +101,17 @@ b "[4/6] Escrevendo /etc/monerod.conf..."
     echo "prune-blockchain=1"
     echo "sync-pruned-blocks=1"
   fi
+  # p2p-bind-ip=0.0.0.0: necessario para peers na LAN; Tor hidden service expoe so o RPC (script 02)
   echo "p2p-bind-ip=0.0.0.0"
   echo "p2p-bind-port=18080"
   echo "rpc-restricted-bind-ip=127.0.0.1"
   echo "rpc-restricted-bind-port=$RPC_PORT"
+  if [ "$PRUNED" = "0" ]; then
+    # Full node: ZMQ + RPC local para P2Pool (script 03) — pruned nao suporta P2Pool
+    echo "zmq-pub=tcp://127.0.0.1:18083"
+    echo "rpc-bind-ip=127.0.0.1"
+    echo "rpc-bind-port=18081"
+  fi
   echo "no-igd=1"
   echo "out-peers=32"
 } > /etc/monerod.conf

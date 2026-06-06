@@ -30,6 +30,9 @@
 
 ## A — Whonix pronto (pré-requisitos)
 
+# Lado FRIO (Tails): boot **offline** (desconecte Wi-Fi/cabo **antes** de ligar o Tails).
+# Só então abra o Feather com a carteira **completa** — spend key nunca em rede.
+
 # Imagem verificada (fingerprint 916B8D99…2EEACCDA) + Gateway/Workstation atualizados — Curso Cap. 2–3.
 # Feather verificado por PGP (8185E158…CEFBA71C) — Curso Cap. 4.3.
 

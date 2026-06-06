@@ -88,7 +88,7 @@ O Tails **não funciona** em celular ou tablet.
 ```mermaid
 flowchart TB
   subgraph parte1 [Parte I Tails]
-    M0[USB Tails 7.8+]
+    M0[USB Tails 7.8.1+]
     M1[Tor conectado]
     M2[Persistencia Dotfiles + admin]
     M0 --> M1 --> M2
@@ -147,7 +147,7 @@ flowchart LR
 ## 2.2 Gravar o Tails no pendrive
 
 1. Em outro PC, abra **só** o site oficial: `https://tails.net/install/`
-2. Baixe a versão atual (**Tails 7.8+**) e use o **Tails Installer** (Windows/macOS/Linux).
+2. Baixe a versão atual (**Tails 7.8.1+**) e use o **Tails Installer** (Windows/macOS/Linux).
 3. **Não** use imagens de fóruns, Telegram ou links de terceiros.
 4. Conecte o pendrive (8 GB+) e escolha **Instalar**. Aguarde 100%.
 
@@ -1196,7 +1196,7 @@ Comece pelo **`00-verificar-requisitos.sh`** (diz se dá para nó pruned, full e
 
 # 7. FAQ — ERROS POSSÍVEIS APÓS RODAR OS SCRIPTS
 
-> Este FAQ é **focado no que pode acontecer depois de rodar os scripts num Tails 7.8+ real** (ou a instalação manual do Capítulo 3). É um resumo prático — não um dicionário de todos os erros.
+> Este FAQ é **focado no que pode acontecer depois de rodar os scripts num Tails 7.8.1+ real** (ou a instalação manual do Capítulo 3). É um resumo prático — não um dicionário de todos os erros.
 
 Antes de tudo, lembre: **abra o Haveno pelo menu** (ou `exec.sh`), com **Tor conectado** e **senha admin** ativa.
 
@@ -1423,4 +1423,4 @@ Por isso a frase do Capítulo 6: *"o parceiro final pode pedir KYC"* — mesmo o
 
 ---
 
-*Tails OS Expert — Volume I. Tails 7.8+ · scripts `install_tails` (haveno-dex/haveno) · rede Reto `1.6.0-reto`. Revisão: maio/2026. Comandos: `Playbooks/Playbooks.md`; automação: `Scripts/`. Volume II: `Expansão Curso/`.*
+*Tails OS Expert — Volume I. Tails 7.8.1+ · scripts `install_tails` (haveno-dex/haveno) · rede Reto `1.6.0-reto`. Revisão: jun/2026. Comandos: `Playbooks/Playbooks.md`; automação: `Scripts/`. Volume II: `Expansão Curso/`.*

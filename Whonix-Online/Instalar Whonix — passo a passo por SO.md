@@ -70,6 +70,8 @@ Faça a verificação do seu SO na **§5** (Windows / macOS / Linux). **Só pros
 
 Fonte: https://www.whonix.org/wiki/VirtualBox
 
+> **Travou aqui?** VM não inicia → confira VT-x/AMD-V e Hyper-V (tabela acima). Gateway sem Tor → aguarde o ícone **Tor Connection** antes de abrir a Workstation. Mais sintomas: [`Playbooks/Playbooks.md`](Playbooks/Playbooks.md) §6.
+
 ---
 
 ## 4. KVM (Linux, avançado)
@@ -163,6 +165,8 @@ gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
 ```
 
 O fingerprint **`916B8D99…2EEACCDA` não mudou** após a re-certificação (jan/2026) — só o keyring local estava desatualizado.
+
+> **Travou aqui?** Se ainda falhar após reimportar `derivative.asc`, confira o fingerprint com `gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` e reexecute a verificação do §5 do seu SO. Não importe a `.ova` sem **Good signature**.
 
 ---
 

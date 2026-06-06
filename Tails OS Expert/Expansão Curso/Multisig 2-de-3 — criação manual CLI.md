@@ -79,17 +79,25 @@ make_multisig 2 <MultisigV1_do_participante_B> <MultisigV1_do_participante_C>
 
 **OK se:** o CLI confirma criação multisig; cada participante obteve **nova** string de saída.
 
-### Passo D — `exchange_multisig_keys` (cada participante)
+### Passo D — `exchange_multisig_keys` (cada participante — **duas rodadas**)
 
-Cada um troca a **nova** string gerada no passo C e executa:
+Em **2-de-3**, a doc oficial exige **mais de uma rodada** de troca: cada participante executa com as **novas** strings do passo C, troca a saída de novo e repete até **todos** concluírem.
+
+**Rodada 1** — cada participante:
 
 ```text
-exchange_multisig_keys <string_do_B> <string_do_C>
+exchange_multisig_keys <nova_string_do_B> <nova_string_do_C>
 ```
 
-Repita a troca até **todos** terem executado com os dados dos outros.
+**Rodada 2** — troque as **novas** strings geradas na rodada 1 e execute de novo (mesmo comando, dados atualizados):
 
-**OK se:** `wallet info` (ou equivalente) mostra carteira **multisig** com threshold **2/3**; endereço compartilhado igual para os três.
+```text
+exchange_multisig_keys <string_rodada2_B> <string_rodada2_C>
+```
+
+Repita até o CLI indicar que a troca está completa para os três.
+
+**OK se:** `wallet info` (ou equivalente) mostra carteira **multisig** com threshold **2/3**; endereço compartilhado **igual** nos três CLIs.
 
 ---
 
@@ -115,14 +123,14 @@ Envie **teste mínimo** antes do grosso.
    ```
    Gera arquivo `multisig_monero_tx` (nome pode variar).
 
-2. **Exportar** info de assinatura (cada co-signatário necessário):
+2. **Exportar** info de assinatura (cada co-signatário necessário) — **com arquivo de saída**:
    ```text
-   export_multisig_info
+   export_multisig_info multisig_info.txt
    ```
 
-3. **Importar** info dos outros:
+3. **Importar** info dos outros (troque o arquivo por canal seguro):
    ```text
-   import_multisig_info <arquivo_ou_string>
+   import_multisig_info multisig_info_do_outro.txt
    ```
 
 4. **Assinar:**

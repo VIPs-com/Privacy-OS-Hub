@@ -35,7 +35,9 @@
 ## B0 — Whonix pronto (pré-requisitos)
 
 # Imagem verificada (fingerprint 916B8D99…2EEACCDA) + Gateway/Workstation atualizados — Curso Cap. 2–3.
-# monero-wallet-cli verificado por PGP (binaryfate 81AC591F…2A0BDF92) — Curso Cap. 4.3.
+# monero-wallet-cli: verifique o binário com PGP (binaryfate 81AC591F…2A0BDF92) — ver
+# https://www.getmonero.org/resources/user-guides/verification-allos-advanced.html
+# (Cap. 4.3 do livro M2 é sobre Feather, não o CLI)
 
 # OK se: Workstation navega só via Gateway; o daemon remoto responde via Tor.
 
@@ -47,6 +49,7 @@
 # pegue address + viewkey da carteira FRIA, depois:
 monero-wallet-cli --generate-from-view-key NOME-VIEW \
   --daemon-address SEU_NO.onion:18089
+# sem nó próprio: use nó remoto .onion confiável — Curso Cap. 4.2
 ```
 
 ```bash

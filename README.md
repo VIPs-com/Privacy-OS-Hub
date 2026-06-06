@@ -41,6 +41,19 @@ como trilha principal (baixo custo), não omitir caminhos avançados, responsabi
 | **Folheto** — [Regras e Golpes](Tails%20OS%20Expert/Folheto%20—%20Regras%20e%20Golpes.md) | 1 página imprimível (regras de ouro + golpes) |
 | **Scripts** — [Tails](Tails%20OS%20Expert/Scripts/README.md) · [Home Lab](Tails%20OS%20Expert/Scripts/HomeLab/README.md) | Automação (instalar/backup/atualizar) + infraestrutura |
 
+## Módulo 2 — [Whonix (online)](Whonix-Online/README.md)
+
+Requer **Módulo 1 concluído** (Haveno verde + Feather no Tails + verificação PGP).
+
+| Material | Conteúdo |
+|----------|----------|
+| **Porteiro** — [`00 — Comece aqui…`](Whonix-Online/00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md) | Pré-requisitos, backup air-gap, escolha Trilha A ou B |
+| **Livro** — [Curso — Whonix Online.md](Whonix-Online/Curso%20—%20Whonix%20Online.md) | Instalar, Tor, nó Monero, cold-signing, Haveno quente |
+| **Instalação por SO** — [Instalar Whonix…](Whonix-Online/Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) | VirtualBox / KVM + verificação PGP + troubleshooting |
+| **Playbooks M2** — [Playbooks/Playbooks.md](Whonix-Online/Playbooks/Playbooks.md) | Só comandos + tabela **Travou aqui?** |
+| **Backup air-gap** — [Playbook — Backup…](Whonix-Online/Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) | DUAS cópias seed offline (trilha principal, sem HW obrigatório) |
+| **Trilha A (GUI)** / **Trilha B (CLI)** | Feather view-only ↔ Tails offline · ou `monero-wallet-cli` |
+
 ## Licença
 
 - **Scripts** (`*.sh`, `*.desktop`): **MIT** — [`LICENSE`](LICENSE).

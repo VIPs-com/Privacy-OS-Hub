@@ -18,3 +18,13 @@ Depois de adicionar, referencie no guia com `![legenda](imagens/screenshots-whon
 
 > Status: **pendente de captura** (precisa de VirtualBox + download Whonix no host). Este manifesto torna a
 > contribuição um "encaixe direto" — quem instalar captura e o curso ganha as telas.
+
+### Enquanto não há print, o aluno deve ver…
+
+- **Import Appliance:** janela do VirtualBox com o caminho do `.ova` selecionado e botão **Import** habilitado.
+- **Verificação GPG (Linux):** terminal com `gpg: Good signature from "Whonix…"` e fingerprint `916B8D99…2EEACCDA`.
+- **Kleopatra (Windows):** ícone verde / "Signature valid" após **Decrypt/Verify**.
+- **Lista de VMs:** duas entradas — **Whonix-Gateway** e **Whonix-Workstation**.
+- **Gateway no 1º boot:** ícone ou painel **Tor Connection: Connected** antes de usar a Workstation.
+
+Se qualquer passo divergir, use [`Instalar Whonix — passo a passo por SO.md`](../../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §5.4 e [`Playbooks/Playbooks.md`](../../Playbooks/Playbooks.md) §6.
