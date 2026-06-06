@@ -1,0 +1,31 @@
+# --- Repo público = SÓ O CURSO. Camada de manutenção/auditoria fica LOCAL. ---
+# (O Claude Code lê o CLAUDE.md do disco mesmo gitignorado.)
+CLAUDE.md
+.claude/
+Auditoria/
+
+# --- Pasta auxiliar (rascunhos antigos) — NÃO faz parte do repositório ---
+_arquivo/
+
+# --- Arquivos compactados / binários grandes ---
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tar.bz2
+
+# --- Cruft de sistema operacional ---
+Thumbs.db
+desktop.ini
+.DS_Store
+*~
+
+# --- Backups da carteira Haveno (nunca versionar) ---
+*.tar.gz.gpg
+*.sha256
+Backups/
+
+# --- Editores / IDE ---
+.vscode/
+.idea/

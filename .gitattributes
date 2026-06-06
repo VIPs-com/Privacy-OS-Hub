@@ -1,0 +1,13 @@
+# Fim de linha LF (Unix) para scripts — CRLF quebra o shebang no Tails/Linux.
+*.sh        text eol=lf
+*.desktop   text eol=lf
+
+# Texto normalizado para LF no repositório (consistência cross-platform).
+*.md        text eol=lf
+*.txt       text eol=lf
+*.yml       text eol=lf
+*.conf      text eol=lf
+
+# Binários (sem normalização).
+*.png       binary
+*.svg       text eol=lf
