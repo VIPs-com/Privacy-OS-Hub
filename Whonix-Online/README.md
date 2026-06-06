@@ -6,16 +6,19 @@ O **lado em rede** do Privacy-OS-Hub: enquanto o **Tails** (Módulo 1) é o lado
 
 ## 👉 Abra o guia — [Curso — Whonix Online.md](Curso%20—%20Whonix%20Online.md)
 ## 💿 Instalar por SO — [Instalar Whonix — passo a passo por SO.md](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md)
+## ⚡ Só comandos (consolidado) — [Playbooks/Playbooks.md](Playbooks/Playbooks.md)
+## 🔒 Backup air-gap — [Playbook — Backup e proteção (air-gap).md](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md)
 ## 🧭 Antes dos comandos — [00 — Comece aqui — Escolha sua trilha.md](00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md)
-## ⚡ Só comandos (escolha UMA trilha):
+## ⚡ Cold-signing (escolha UMA trilha):
 - ✅ **Trilha A — Feather (GUI, recomendado):** [`Trilha-A-Feather/Playbook — Feather (GUI).md`](Trilha-A-Feather/Playbook%20—%20Feather%20%28GUI%29.md)
 - ⚙️ **Trilha B — `monero-wallet-cli` (avançado):** [`Trilha-B-CLI/Playbook — monero-wallet-cli.md`](Trilha-B-CLI/Playbook%20—%20monero-wallet-cli.md)
 
 Cobre (verificado em fonte oficial): o Whonix e seu **modelo de ameaças** · **instalar e verificar a
 imagem** (fingerprint `916B8D99…2EEACCDA`) · Monero/Feather **via Tor** (conectar ao seu nó do home lab) ·
-**Cold-Tails-Hot-Whonix** — custódia **frio↔quente** detalhada (criar *view-only*, assinar offline pelo
-**Feather** e pelo **`monero-wallet-cli`**) · **§5.6 — hardware wallet (Trezor/Ledger) + Feather**, o
-caminho **recomendado para o grosso** · onde o **Haveno** entra (frio→quente) · quando usar Whonix × Tails × home lab.
+**Cold-Tails-Hot-Whonix** — custódia **frio↔quente** (trilha principal, **baixo custo**, sem hardware
+proprietário obrigatório): *view-only*, assinar offline pelo **Feather** (Trilha A) ou **`monero-wallet-cli`**
+(Trilha B) · [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) ·
+§5.6 hardware wallet **opcional** (Trezor/Ledger) · Haveno (frio→quente) · quando usar Whonix × Tails × home lab.
 
 > **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../Tails%20OS%20Expert/README.md) concluído.
 > **Status:** v1 (aprofundado) + **Playbooks por trilha** (Feather/CLI) + **instalação por SO**. Pendente: **prints** (capturas de tela).

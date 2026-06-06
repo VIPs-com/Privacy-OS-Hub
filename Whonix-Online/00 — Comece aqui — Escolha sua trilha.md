@@ -40,9 +40,9 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 >
 > 💡 **Na dúvida: Trilha A (Feather).**
 >
-> 🔐 **Para o grosso, há um caminho melhor que as duas trilhas:** **hardware wallet (Trezor/Ledger) + Feather** —
-> a chave de gasto **nunca sai do chip**, sem o malabarismo de arquivos das Trilhas A/B. É o **recomendado**
-> para quantias relevantes. Capítulo completo no livro: [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) **§5.6**.
+> 🔐 **Não tem Trezor/Ledger?** Este hub é para você — **Trilha A** é o caminho padrão (baixo custo, controle
+> total). Antes do grosso, leia [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md).
+> Hardware wallet é **opcional** (custo extra): [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) **§5.6**.
 
 ---
 

@@ -210,10 +210,23 @@ journalctl -u xmrig -f
 
 ---
 
+## Multisig manual CLI (anexo — não é necessário para tradear no Haveno)
+
+```text
+# Haveno cria escrow 2-de-3 automaticamente por trade (Cap. 10 do livro).
+# Para multisig Monero manual (educacional / fora do app):
+#   Teoria:  Multisig 2-de-3 — criação manual CLI.md
+#   Comandos: Playbooks — Multisig CLI.md
+# Pratique em stagenet/testnet primeiro.
+```
+
+---
+
 ## Links essenciais (Volume II)
 
 ```text
 Extensão (teoria)     Expansão Curso/Curso — Rede Descentralizada (Extensão).md
+Multisig CLI (anexo)  Multisig 2-de-3 — criação manual CLI.md · Playbooks — Multisig CLI.md
 Volume I (comandos)   ../Playbooks/Playbooks.md
 Volume I (livro)      ../Curso — Tails OS Expert.md
 Feather Tails         https://docs.featherwallet.org/guides/tails

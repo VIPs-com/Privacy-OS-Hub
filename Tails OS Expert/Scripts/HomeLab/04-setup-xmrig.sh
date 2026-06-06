@@ -66,9 +66,10 @@ else
     || { rm -rf "$TMP"; die "Nao importei a chave do xmrig ($XMRIG_SIGNER_FPR)."; }
   gpg --batch --status-fd 1 --verify "$TMP/SHA256SUMS.sig" "$TMP/SHA256SUMS" 2>/dev/null | grep -q "VALIDSIG.*${XMRIG_SIGNER_FPR}" \
     || { rm -rf "$TMP"; die "Assinatura de SHA256SUMS NAO valida com a chave xmrig ($XMRIG_SIGNER_FPR). Abortando."; }
-  grep -qi "$DL_SHA" "$TMP/SHA256SUMS" \
-    || { rm -rf "$TMP"; die "Assinatura OK, mas o hash baixado NAO esta no SHA256SUMS. Abortando."; }
-  g "  OK: assinatura xmrig ($XMRIG_SIGNER_FPR) valida e hash presente em SHA256SUMS."
+  BIN_NAME="$(basename "$DL_URL")"
+  grep -F -- "$DL_SHA" "$TMP/SHA256SUMS" | grep -Fq -- "$BIN_NAME" \
+    || { rm -rf "$TMP"; die "Assinatura OK, mas hash/nome ($BIN_NAME) NAO conferem no SHA256SUMS. Abortando."; }
+  g "  OK: assinatura xmrig ($XMRIG_SIGNER_FPR) valida; hash + nome ($BIN_NAME) conferem em SHA256SUMS."
 fi
 tar -xzf "$TMP/xmrig.tar.gz" -C "$TMP"
 XMRIG_BIN="$(find "$TMP" -type f -name xmrig | head -1)"

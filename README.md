@@ -10,19 +10,23 @@ cresce para **Whonix** (lado online) e o baseline **Zero-Trust**.
 > Haveno, Whonix). Não é aconselhamento financeiro. **Instalar ≠ tradear**: tradear é decisão sua, na
 > versão corrigida e com cautela. **Verifique sempre PGP / fontes oficiais.**
 
+**Princípios do hub:** [MANIFESTO.md](MANIFESTO.md) — verificação antes de confiança, Cold-Tails/Hot-Whonix
+como trilha principal (baixo custo), não omitir caminhos avançados, responsabilidade sua.
+
 ## Módulos
 
 | # | Módulo | Estado | Abrir |
 |---|--------|--------|-------|
 | 1 | **Tails + Haveno** — do pendrive ao indicador verde; trades P2P, Feather, home lab | ✅ Pronto | [Tails OS Expert/](Tails%20OS%20Expert/README.md) |
 | 2 | **Whonix (online)** — instalar+verificar, Monero via Tor, **Cold-Tails-Hot-Whonix** (custódia frio↔quente) | 🟡 v1 | [Whonix-Online/](Whonix-Online/README.md) |
-| — | **Zero-Trust-Core** — baseline de segurança (repo separado) | 🔗 Externo | — |
+| — | **Zero-Trust-Core** — baseline de segurança (repo separado) | 🔗 Em breve | *Ainda não publicado — acompanhe este repositório.* |
 
 ### Arquitetura (visão)
 
-- **Tails (offline / air-gapped)** → geração e **custódia da carteira fria** (assinatura offline).
+- **Tails (offline / air-gapped)** → geração e **custódia da carteira fria** (assinatura offline) — trilha principal, **sem hardware proprietário obrigatório**.
 - **Whonix (online)** → lado em rede: nó Monero, Feather *watch-only*, operações quentes.
-- **Zero-Trust-Core** → baseline comum de segurança ligando os módulos.
+- **Hardware wallet (Trezor/Ledger)** → alternativa **opcional** (custo extra) — ver Módulo 2 §5.6.
+- **Zero-Trust-Core** → baseline comum de segurança ligando os módulos (*repositório ainda não publicado*).
 
 > Nota: o **trade no Haveno é quente** (o escrow multisig exige o cliente online com a carteira). O split
 > frio/quente brilha na **custódia**; o trade roda no lado online.

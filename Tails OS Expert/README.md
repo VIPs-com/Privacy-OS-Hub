@@ -23,7 +23,9 @@ Tails OS Expert/
 │   └── Playbooks.md                ← Volume I (só comandos)
 ├── Expansão Curso/                 ← Volume II
 │   ├── Curso — Rede Descentralizada (Extensão).md
-│   └── Playbooks — Rede Descentralizada.md
+│   ├── Multisig 2-de-3 — criação manual CLI.md   ← anexo (educacional)
+│   ├── Playbooks — Rede Descentralizada.md
+│   └── Playbooks — Multisig CLI.md
 ├── Scripts/                        ← Automação Tails + HomeLab/
 └── imagens/                        ← Cartazes e figuras
 ```
@@ -45,4 +47,4 @@ Tails OS Expert/
 
 ---
 
-*Revisão: jun/2026 · Tails 7.8+ · RetoSwap `1.6.0-reto`*
+*Revisão: jun/2026 · Tails **7.8.1+** · RetoSwap `1.6.0-reto`*

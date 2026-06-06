@@ -55,7 +55,10 @@ command -v curl >/dev/null 2>&1 || { apt-get update -y && apt-get install -y cur
 command -v tar  >/dev/null 2>&1 || { apt-get update -y && apt-get install -y tar bzip2; }
 command -v gpg  >/dev/null 2>&1 || { apt-get update -y && apt-get install -y gnupg; }
 TMP="$(mktemp -d)"
-curl -fSL "$DL_URL" -o "$TMP/monero.tar.bz2" || die "Falha no download ($DL_URL)."
+if ! EFFECTIVE_URL="$(curl -fSL -w '%{url_effective}' "$DL_URL" -o "$TMP/monero.tar.bz2")"; then
+  die "Falha no download ($DL_URL)."
+fi
+BIN_NAME="$(basename "$EFFECTIVE_URL")"
 
 DL_SHA="$(sha256sum "$TMP/monero.tar.bz2" | awk '{print $1}')"
 y "  SHA256 baixado: $DL_SHA"
@@ -74,9 +77,9 @@ else
     || { rm -rf "$TMP"; die "Nao importei a chave binaryfate ($MONERO_SIGNER_FPR). Importe-a e rode de novo, ou passe MONEROD_SHA256."; }
   gpg --batch --status-fd 1 --verify "$TMP/hashes.txt" 2>/dev/null | grep -q "VALIDSIG.*${MONERO_SIGNER_FPR}" \
     || { rm -rf "$TMP"; die "Assinatura de hashes.txt NAO valida com a chave esperada. Abortando."; }
-  grep -qi "$DL_SHA" "$TMP/hashes.txt" \
-    || { rm -rf "$TMP"; die "hashes.txt assinado, mas o hash baixado NAO aparece nele. Binario suspeito — abortando."; }
-  g "  OK: assinatura binaryfate valida e hash presente em hashes.txt."
+  grep -F -- "$DL_SHA" "$TMP/hashes.txt" | grep -Fq -- "$BIN_NAME" \
+    || { rm -rf "$TMP"; die "hashes.txt assinado, mas hash/nome ($BIN_NAME) NAO conferem. Binario suspeito — abortando."; }
+  g "  OK: assinatura binaryfate valida; hash + nome ($BIN_NAME) conferem em hashes.txt."
 fi
 
 b "[3/6] Extraindo e instalando o binario..."

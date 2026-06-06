@@ -54,6 +54,7 @@
 ## A2 — Sincronizar (obrigatório no 1º envio e quando o saldo parecer velho)
 
 # (Quente/Whonix)  view-only -> exportar OUTPUTS -> arquivo no USB
+# O nome do arquivo e' gerado pelo Feather (varia por versao) — aceite o padrao da UI ou anote o nome antes de mover o USB.
 # (Frio/Tails)     carteira completa -> importar outputs -> exportar KEY IMAGES -> USB
 # (Quente/Whonix)  importar key images -> saldo e gastos ficam corretos
 
@@ -79,7 +80,7 @@
 - **Spend key/seed nunca** é digitada, colada ou fotografada numa máquina online. Se acontecer uma vez, a carteira deixou de ser fria → **migre os fundos**.
 - **Haveno é exceção** (quente, escrow ao vivo): leve só o valor do trade ao quente; após operar, saque o excedente para o frio (Curso Cap. 6).
 
-> 💡 Para o **grosso**, considere **hardware wallet + Feather** (a spend key nunca sai do dispositivo, sem malabarismo de arquivos). A própria doc do Monero recomenda — Curso 5.5.
+> 💡 Para o **grosso** sem hardware proprietário: reforce **backups** ([`Playbook — Backup e proteção (air-gap).md`](../Playbook%20—%20Backup%20e%20proteção%20(air-gap).md)). Trezor/Ledger é **opcional** — Curso §5.6.
 
 ---
 

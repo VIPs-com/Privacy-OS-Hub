@@ -10,6 +10,18 @@
 
 > **Pré-requisito:** Haveno com indicador **verde** (Volume I, Caps. 2–3) — e **leia os Caps. 4, 5 e 9** do Vol. I (segurança, seed, golpes) **antes de criar conta ou depositar XMR**. Tails **7.8.1+**, persistência + Dotfiles, rede **Reto `1.6.0-reto`** (ou outra rede com URL + PGP conferidos).
 
+### Antes do 1º trade — leia só isto no Volume II
+
+Não precisa ler os 19 capítulos de uma vez. Para o **primeiro trade com valor pequeno**, siga nesta ordem:
+
+| Ordem | Capítulo | Por quê |
+|-------|----------|---------|
+| 1 | **Cap. 2** — seed na criação | Proteja a carteira **antes** de depositar XMR |
+| 2 | **Cap. 5** — Feather ↔ Haveno | Saber mover XMR entre custódia e Haveno |
+| 3 | **Cap. 7** — comprar XMR (ou Cap. 8 se for vender) | Fluxo do trade passo a passo |
+
+Depois explore Caps. 3–4 (Feather/PGP), 6 (primeiro XMR), 9 (disputa), 11 (pagamentos) e o restante (home lab, ecossistema) conforme necessidade.
+
 ---
 
 ## Sumário
@@ -23,7 +35,7 @@
 7. [Trade na prática — comprar XMR](#7-trade-na-prática--comprar-xmr)
 8. [Trade na prática — vender XMR](#8-trade-na-prática--vender-xmr)
 9. [Disputa — passo a passo](#9-disputa--passo-a-passo)
-10. [Multisig 2-de-3 — o que você faz vs o que o app faz](#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz)
+10. [Multisig 2-de-3 — o que você faz vs o que o app faz](#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) · [Anexo: criação manual CLI](Multisig%202-de-3%20—%20criação%20manual%20CLI.md)
 11. [Métodos de pagamento — riscos reais](#11-métodos-de-pagamento--riscos-reais)
 12. [Outra rede Haveno (ex.: Aloha)](#12-outra-rede-haveno-ex-aloha)
 13. [Home Lab integrado — lab completo](#13-home-lab-integrado--lab-completo)
@@ -181,6 +193,8 @@ chmod +x feather-*.AppImage
 No gerenciador de arquivos: clique direito → **Propriedades** → **Permitir executar como programa**.
 
 Execute: duplo clique ou `./feather-*.AppImage`.
+
+> **AppImage** é um app Linux "tudo-em-um" num único arquivo — não precisa instalar; só dar permissão de execução e rodar. (No Tails, salve-o na persistência.)
 
 ## 3.5 Primeira abertura — carteira Feather
 
@@ -404,11 +418,15 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 | **Haveno (protocolo)** | Cria a carteira multisig 2-de-3 **automaticamente** por trade |
 | **Árbitro** | Terceira chave; assina **só** se houver disputa |
 
-**Você NÃO:**
+**Para trades Haveno, você NÃO precisa:**
 
-- Cria multisig manual no Monero CLI/GUI
-- Escolhe o árbitro por trade (a rede define)
-- Compartilha chaves ou seed com contraparte
+- Criar multisig manual no Monero CLI/GUI — o **app faz isso** por trade
+- Escolher o árbitro por trade (a rede define)
+- Compartilhar chaves ou seed com contraparte
+
+> **Quer aprender ou operar multisig Monero fora do Haveno?** Não omitimos: anexo educacional
+> [`Multisig 2-de-3 — criação manual CLI.md`](Multisig%202-de-3%20—%20criação%20manual%20CLI.md) +
+> [`Playbooks — Multisig CLI.md`](Playbooks%20—%20Multisig%20CLI.md). Use stagenet/testnet para praticar.
 
 **Você SIM:**
 

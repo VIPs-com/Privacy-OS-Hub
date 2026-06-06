@@ -8,6 +8,8 @@
 
 **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../../Tails%20OS%20Expert/README.md) concluído — seed, carteira **completa** no Tails, verificação de binários.
 
+> **Onde rodar:** todos os comandos desta trilha são na **Workstation do Whonix** (máquina quente, view-only) — **não** no Tails e **não** no host. A carteira **fria** que assina fica no **Tails offline** (Feather ou CLI frio, conforme o mapa).
+
 > 🔒 **Regra inegociável:** a **seed / spend key vive só na máquina FRIA (Tails, bootado offline)**. O Whonix é **view-only**: vê saldo, monta, transmite — **nunca** assina.
 
 ---
@@ -106,7 +108,7 @@ submit_transfer
 - **Spend key/seed nunca** é digitada, colada ou fotografada numa máquina online. Se acontecer uma vez, a carteira deixou de ser fria → **migre os fundos**.
 - **Haveno é exceção** (quente, escrow ao vivo): leve só o valor do trade ao quente; após operar, saque o excedente para o frio (Curso Cap. 6).
 
-> 💡 Para o **grosso**, considere **hardware wallet + Feather** (a spend key nunca sai do dispositivo, sem malabarismo de arquivos). A própria doc do Monero recomenda — Curso 5.5.
+> 💡 Para o **grosso** sem hardware proprietário: reforce **backups** ([`Playbook — Backup e proteção (air-gap).md`](../Playbook%20—%20Backup%20e%20proteção%20(air-gap).md)). Trezor/Ledger é **opcional** — Curso §5.6.
 
 ---
 

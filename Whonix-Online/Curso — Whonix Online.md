@@ -18,6 +18,19 @@
 7. [Quando usar Whonix × Tails × home lab](#7-quando-usar)
 8. [Links oficiais](#8-links-oficiais)
 
+### Glossário — termos do frio↔quente (leia antes do Cap. 5)
+
+| Termo | Significado |
+|-------|-------------|
+| **Air-gap** | Máquina **sem rede** (Tails offline) — a spend key nunca toca a internet |
+| **View-only** | Carteira que **vê** saldo e histórico, mas **não gasta** (só tem view key) |
+| **Spend key / seed** | Chave que **autoriza gastos** — vive só na máquina **fria** (Tails offline); hardware wallet é opção (§5.6) |
+| **Secret view key** | Chave de **visualização** — copiada para o Whonix; **não** move fundos sozinha |
+| **Outputs** | Dados de saídas da blockchain que a carteira precisa para montar transações |
+| **Key images** | Prova criptográfica de que outputs não foram gastos duas vezes — sincroniza frio↔quente |
+| **Restore height** | Altura de bloco a partir da qual a carteira começa a sincronizar — **anote na criação** |
+| **Unsigned / signed tx** | Transação **montada** (quente) → **assinada** (fria) → **transmitida** (quente) |
+
 ---
 
 ## 1. O que é o Whonix (e o modelo de ameaças)
@@ -64,6 +77,7 @@ Baixe **só** de **whonix.org** ([Download](https://www.whonix.org/wiki/Download
    - Fingerprint: **`916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA`**
    - Chave pública: https://www.whonix.org/keys/derivative.asc
    - **Confira o fingerprint importando a chave** (`gpg --show-keys derivative.asc` ou `gpg --fingerprint` após importar) — **nunca** apenas copie o número de uma página.
+   - Se aparecer **`EXPKEYSIG`** (chave expirada no keyring antigo), **reimporte** `derivative.asc` da URL acima — o fingerprint `916B8D99…2EEACCDA` **não mudou** após a re-certificação (jan/2026).
 2. **Verifique a assinatura** do arquivo baixado:
    ```bash
    gpg --verify Whonix-*.asc Whonix-*    # precisa dizer: Good signature
@@ -209,15 +223,20 @@ Fonte oficial: [Monero — Offline Transaction Signing](https://docs.getmonero.o
   # quente:  submit_transfer signed_monero_tx
   ```
 
-### 5.5 Aviso honesto — **informe-se antes de custodiar o grosso**
+### 5.5 Qual caminho é o seu? — **air-gap primeiro (trilha do hub)**
 
-A **própria documentação do Monero** diz que o cold storage manual (CLI) é **complexo e com grande margem de erro**, publicado **para fins educacionais** — e que, para muita gente, uma **carteira de hardware** (Trezor/Ledger) usada **dentro do Feather** é **mais simples e mais segura**: a chave de gasto **nunca sai do dispositivo** e você dispensa o malabarismo de arquivos. Considere isto seriamente antes de mover quantias relevantes — **detalhado no §5.6**.
+Este hub ensina **Cold-Tails / Hot-Whonix** como trilha principal: **sem depender de hardware proprietário
+caro**, com **controle total** e **responsabilidade sua**. A spend key vive no Tails offline; o Whonix só
+opera em view-only.
 
 | Caminho | Complexidade | Para quem |
 |---------|--------------|-----------|
-| **Hardware wallet + Feather** | Baixa | Maioria — recomendado para o "grosso" |
-| **Feather frio↔quente (arquivos)** | Média | Quem quer air-gap sem hardware |
-| **monero-wallet-cli frio↔quente** | Alta | Avançado / auditoria |
+| **Feather air-gap** (Trilha A) | Média | **Padrão do hub** — maioria dos alunos, baixo custo |
+| **monero-wallet-cli air-gap** (Trilha B) | Alta | Terminal / auditoria do processo |
+| **Hardware wallet + Feather** (§5.6) | Baixa (operação) | **Opcional** — se já tem ou quer comprar Trezor/Ledger |
+
+> A documentação do Monero também descreve cold storage manual como **complexo e com margem de erro** — por
+> isso exigimos **backups reforçados** e teste com valor mínimo. Checklist: [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md).
 
 > ⚠️ **Perda total por falha de mídia** (o risco que não é golpe nem comando errado): se a **única**
 > cópia da seed/chave de gasto estiver na máquina fria e o **pendrive/persistência do Tails** (amnésico!)
@@ -230,20 +249,28 @@ A **própria documentação do Monero** diz que o cold storage manual (CLI) é *
 - **Restore height** correto — anote-o quando criar a carteira.
 - A **seed/spend key nunca** é digitada, fotografada ou colada numa máquina online. Se isso acontecer uma vez, a carteira deixou de ser fria — **migre os fundos** para uma nova.
 
-> 👉 Para o **grosso**, o caminho **recomendado** não é nenhum dos dois acima — é **hardware wallet + Feather** (§5.6). Leia antes de mover quantias relevantes.
+> 👉 **Não tem Trezor/Ledger?** Trilha A (Feather air-gap) + [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) é o seu caminho. Hardware wallet é **opcional** (§5.6).
 
-### 5.6 Hardware wallet (Trezor/Ledger) + Feather — **o caminho recomendado para o grosso**
+### 5.6 Alternativa opcional: hardware wallet (Trezor/Ledger) + Feather — **custo extra**
 
-As Trilhas A/B protegem a chave **mantendo-a numa máquina fria** (Tails offline). Uma **carteira de
-hardware** resolve o mesmo problema por outro caminho: a **chave de gasto nasce e vive dentro de um chip
-dedicado e nunca sai dele** — nem para o Tails, nem para o Whonix. O dispositivo **assina internamente**;
-o computador só recebe a transação já assinada. É **mais simples** (sem malabarismo de arquivos por USB) e,
-para a maioria, **mais seguro** — é por isso que a própria documentação do Monero o recomenda (§5.5).
+As Trilhas A/B são a **trilha principal** deste hub. Uma **carteira de hardware** é uma **alternativa** se
+você **já possui** ou **decide comprar** dispositivo proprietário: a spend key nasce e vive num chip dedicado
+e **não sai dele**. O computador só recebe a transação já assinada — menos malabarismo de arquivos por USB,
+em troca de confiar no **fabricante + firmware**.
 
-> Isto **não substitui** o conceito frio↔quente — ele **encaixa** nele: a carteira **view-only** continua
-> online no Whonix (vê saldo, monta a tx); o que muda é **quem assina** — agora é o **chip**, não o Tails.
+> Isto **não substitui** o conceito frio↔quente — **encaixa** nele: view-only no Whonix; quem assina é o chip.
 
-#### 5.6.1 O que muda no modelo de segurança (leia com atenção)
+#### 5.6.1 Comparativo rápido (comece pelo §5.5 se não tem hardware)
+
+| Caminho | Complexidade | Raiz de confiança | Para quem |
+|---------|--------------|-------------------|-----------|
+| **Feather air-gap** (Trilha A) | Média | Máquina fria offline | **Padrão do hub** — baixo custo |
+| **`monero-wallet-cli`** (Trilha B) | Alta | Máquina fria offline | Avançado / auditoria |
+| **Hardware wallet + Feather** (§5.6) | Baixa (operação) | Chip + firmware do fabricante | Quem **já tem** ou quer comprar HW |
+
+> **Na dúvida e sem hardware:** Trilha A + backup reforçado. §5.6 só se você **escolher** o caminho proprietário.
+
+#### 5.6.2 O que muda no modelo de segurança (leia com atenção)
 
 Com air-gap (Trilhas A/B), você confia que a **máquina fria nunca tocou a rede**. Com hardware wallet, a
 confiança **se desloca** para o **chip seguro + o firmware do fabricante**. São ameaças diferentes:
@@ -257,7 +284,7 @@ A consequência prática: **você pode conectar o dispositivo a uma máquina onl
 expor a chave — porque ela **não sai do chip**. Isso simplifica muito o dia a dia. Em troca, você assume a
 confiança no **fabricante** e precisa de disciplina nova (comprar de fonte idônea, conferir na tela do device).
 
-#### 5.6.2 Trezor × Ledger para Monero (fatos verificados)
+#### 5.6.3 Trezor × Ledger para Monero (fatos verificados)
 
 | | **Trezor** | **Ledger** |
 |---|-----------|-----------|
@@ -276,7 +303,7 @@ confiança no **fabricante** e precisa de disciplina nova (comprar de fonte idô
 > ser comprometidos apenas com a view key"** — a assinatura exige o dispositivo. É isso que torna seguro deixar
 > a view-only numa máquina online enquanto o gasto fica preso ao chip.
 
-#### 5.6.3 Fluxo no Feather (passo a passo)
+#### 5.6.4 Fluxo no Feather (passo a passo)
 
 **Antes:** inicialize o dispositivo **você mesmo** (PIN + frase de recuperação gerada **no próprio device**)
 e **faça o backup offline dessa frase** (papel/metal, DUAS cópias) — ela é a sua salvaguarda real (5.6.5).
@@ -301,7 +328,7 @@ e **faça o backup offline dessa frase** (papel/metal, DUAS cópias) — ela é 
 **OK se:** o Feather mostra a carteira como **hardware** e o saldo correto; ao gastar, o **device pede
 confirmação na tela** e a transação só sai após você aprovar nele.
 
-#### 5.6.4 No Tails/Whonix na prática (USB)
+#### 5.6.5 No Tails/Whonix na prática (USB)
 
 - **VirtualBox (Whonix):** instale o **Extension Pack** e adicione um **filtro USB** do dispositivo à
   **Workstation** (Settings → USB) para que a VM o enxergue.
@@ -317,7 +344,7 @@ do **Whonix**:
 | **Duplo-frio** | Tails **offline** + dispositivo | Paranoia máxima |
 | **Conveniente** | Dispositivo + **Whonix online** (view-only no mesmo lugar) | Dia a dia — **ainda seguro** (a chave fica no chip) |
 
-#### 5.6.5 Ressalvas que decidem (não pule)
+#### 5.6.6 Ressalvas que decidem (não pule)
 
 - **Backup da frase de recuperação do DISPOSITIVO** — é o que recupera seus fundos se o device sumir/quebrar.
   **DUAS cópias offline** (papel/metal, locais separados), igual à seed do Tails (Módulo 1 §5.2). Sem backup,
@@ -329,14 +356,6 @@ do **Whonix**:
 - **USB é obrigatório para assinar.** Sem o device plugado, você só tem a **view-only** (vê, não gasta).
 - **Confirme sempre destino + valor na tela do device** antes de aprovar.
 - **Teste com valor mínimo** o ciclo inteiro (criar → receber → gastar → confirmar no device) antes do grosso.
-
-#### 5.6.6 Qual caminho é o seu? (atualiza a tabela do §5.5)
-
-| Caminho | Complexidade | Raiz de confiança | Para quem |
-|---------|--------------|-------------------|-----------|
-| **Hardware wallet + Feather** (§5.6) | **Baixa** | Chip + firmware do fabricante | **Maioria — o grosso** |
-| **Feather air-gap** (Trilha A) | Média | Máquina fria offline | Air-gap sem comprar hardware |
-| **`monero-wallet-cli`** (Trilha B) | Alta | Máquina fria offline | Avançado / auditoria |
 
 > **Quando NÃO usar hardware wallet:** se você não confia no fabricante/supply-chain do seu modelo, ou quer
 > uma raiz de confiança 100% software-livre auditável — aí as Trilhas A/B (air-gap) fazem mais sentido.
@@ -377,7 +396,8 @@ Na prática:
 | **Gerar/custodiar** a chave fria e **assinar offline** | **Tails** (Módulo 1, bootado offline) |
 | **Infra 24/7** (nó Monero, mineração) | **Home lab** (Módulo 1, Cap. 6) |
 | **Tradear no Haveno** (quente) | **Tails** (Módulo 1) |
-| **Custodiar o grosso com o mínimo de risco** | **Hardware wallet + Feather** (ver §5.6) |
+| **Custodiar o grosso (baixo custo, air-gap)** | **Tails offline + Trilha A/B** + [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) |
+| **Alternativa com hardware proprietário** | **Hardware wallet + Feather** (opcional — §5.6) |
 
 ---
 

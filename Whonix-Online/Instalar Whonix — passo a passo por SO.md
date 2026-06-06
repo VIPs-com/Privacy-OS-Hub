@@ -4,7 +4,7 @@ Guia prático de **instalação e verificação da imagem**, separado pelo **seu
 
 > 🔒 **Disciplina inegociável:** **baixe → verifique → só então importe**. Imagem **não verificada = não importe**. Mesmo rigor PGP do Módulo 1.
 >
-> 🖼️ **Prints:** as capturas de tela deste guia estão **pendentes** (ver [§9 — manifesto](#9-prints-pendentes-manifesto)). Os passos textuais já são suficientes para concluir.
+> 🖼️ **Prints:** as capturas de tela deste guia estão **pendentes** (ver [§10 — manifesto](#10-prints-pendentes-manifesto)). Os passos textuais já são suficientes para concluir.
 
 ---
 
@@ -58,6 +58,18 @@ Faça a verificação do seu SO na **§5** (Windows / macOS / Linux). **Só pros
 
 # OK se: o Gateway conecta ao Tor; a Workstation abre e navega — e **só** consegue via Gateway.
 
+### 3.4 Troubleshooting VirtualBox
+
+| Sintoma | Causa comum | O que fazer |
+|---------|---------------|-------------|
+| VM não inicia / erro VT-x | Virtualização **desligada** na BIOS | Ative Intel VT-x ou AMD-V; reinicie o host |
+| Windows: "VT-x is not available" | **Hyper-V** / WSL2 / Virtual Machine Platform ocupando VT | Desative temporariamente em *Recursos do Windows* ou use KVM no Linux |
+| Import falha / disco cheio | Pouco espaço no disco do host | Libere ~30 GB+; importe para SSD |
+| Gateway lento / RAM baixa | Host com pouca RAM | Feche apps; aloque 4 GB+ livres; não suba outras VMs pesadas |
+| Workstation sem rede | Gateway ainda não conectou ao Tor | Espere o ícone **Tor Connection** no Gateway antes de usar a Workstation |
+
+Fonte: https://www.whonix.org/wiki/VirtualBox
+
 ---
 
 ## 4. KVM (Linux, avançado)
@@ -72,6 +84,17 @@ Faça a verificação do seu SO na **§5** (Windows / macOS / Linux). **Só pros
 # OK se: as redes virtuais sobem; Gateway conecta ao Tor; Workstation só sai via Gateway.
 
 > Os comandos de import do KVM mudam por versão — **siga o guia oficial KVM** acima como fonte de verdade.
+
+### 4.1 Troubleshooting KVM
+
+| Sintoma | Causa comum | O que fazer |
+|---------|---------------|-------------|
+| Redes `Whonix-Internal` / `Whonix-External` ausentes | Import incompleto | Siga o guia KVM oficial do início — não pule criação de redes |
+| `permission denied` no libvirt | Usuário fora do grupo `libvirt` / `kvm` | `sudo usermod -aG libvirt,kvm $USER` — faça logout/login |
+| Gateway sem Tor | Relógio do host muito errado ou firewall | Confira hora do host; não bloqueie saída Tor na rede do host |
+| `virsh` não lista VMs | Definições não importadas | `virsh list --all`; reimporte conforme wiki KVM |
+
+Fonte: https://www.whonix.org/wiki/KVM
 
 ---
 
@@ -128,6 +151,19 @@ gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 
 > Passos oficiais detalhados por SO: **§8 (Links)** → "Verify the images".
 
+### 5.4 EXPKEYSIG (chave Whonix expirada no keyring)
+
+Se `gpg --verify` mostrar **`EXPKEYSIG`** ou assinatura inválida com chave antiga:
+
+```bash
+curl -fsSL https://www.whonix.org/keys/derivative.asc -o derivative.asc
+gpg --import derivative.asc
+gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
+# Reexecute a verificação da imagem (§5.1 / §5.2 / §5.3)
+```
+
+O fingerprint **`916B8D99…2EEACCDA` não mudou** após a re-certificação (jan/2026) — só o keyring local estava desatualizado.
+
 ---
 
 ## 6. Primeiro boot — atualizar e snapshot
@@ -165,15 +201,35 @@ Com o Whonix pronto e atualizado, volte ao livro (Cap. 4–5) e escolha **uma** 
 
 ---
 
-## 9. Prints pendentes (manifesto)
+## 9. USB passthrough (pendrive frio↔quente e hardware opcional)
 
-Capturas a fazer no host real (ainda **não** incluídas):
+Para as **Trilhas A/B**, o pendrive de trânsito precisa ser visível na **Workstation** (e, se usar hardware wallet opcional, o dispositivo USB também).
 
-- [ ] VirtualBox → **File → Import Appliance** com o `.ova` selecionado.
-- [ ] Kleopatra (**Windows**) → resultado de **Decrypt/Verify** mostrando assinatura válida + fingerprint.
-- [ ] Terminal (**Linux/macOS**) → saída `gpg: Good signature` com o fingerprint `916B8D99…2EEACCDA`.
-- [ ] VirtualBox com **Gateway + Workstation** importados (lista de VMs).
-- [ ] Gateway conectado ao **Tor** (Tor Connection).
+**VirtualBox:**
+
+1. Instale o **VirtualBox Extension Pack** (mesma versão do VirtualBox).
+2. Com a **Whonix-Workstation** desligada: **Settings → USB** → habilite USB 2.0/3.0.
+3. Adicione um **filtro USB** para o pendrive (ou dispositivo) — assim a VM captura o device ao plugar.
+4. Inicie a Workstation **depois** de plugar o pendrive (ou use o ícone USB na barra para anexar).
+
+**KVM:** anexe o dispositivo via `virt-manager` (*USB redirection*) ou política do host — ver guia oficial se o passthrough falhar.
+
+Fonte: https://www.whonix.org/wiki/VirtualBox · https://www.whonix.org/wiki/KVM
+
+> O pendrive de trânsito **nunca** deve ser usado na máquina online com carteira **completa** — só arquivos de outputs/tx entre frio e quente ([`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md)).
+
+---
+
+## 10. Prints pendentes (manifesto)
+
+Capturas a fazer no host real (ainda **não** incluídas). Lista detalhada com nomes de arquivo:
+[`imagens/screenshots-whonix/README.md`](imagens/screenshots-whonix/README.md).
+
+- [ ] `01-vbox-import-appliance.png` — VirtualBox → **File → Import Appliance** com o `.ova` selecionado.
+- [ ] `02-kleopatra-good-signature.png` — Kleopatra (**Windows**) → **Decrypt/Verify** + fingerprint válido.
+- [ ] `03-linux-good-signature.png` — Terminal (**Linux/macOS**) → `gpg: Good signature` com `916B8D99…2EEACCDA`.
+- [ ] `04-vbox-gateway-workstation.png` — VirtualBox com **Gateway + Workstation** importados.
+- [ ] `05-gateway-tor-connected.png` — Gateway com **Tor Connection** conectado.
 
 > Mesmo padrão do manifesto de screenshots do Módulo 1: redija/oculte qualquer dado sensível antes de publicar.
 
