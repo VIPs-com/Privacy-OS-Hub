@@ -11,15 +11,27 @@
 #
 # O que faz:
 #   - Baixa o P2Pool (release mais recente do GitHub) e instala
-#   - VERIFICA o binario contra o checksums oficial do release e ABORTA se nao conferir
+#   - VERIFICA o binario (fail-closed) e ABORTA se nao conferir:
+#       * o P2Pool publica a lista de hashes CLEARSIGNED em 'sha256sums.txt.asc'
+#         (nao ha .txt separado). Por isso a assinatura GPG e' OBRIGATORIA: primeiro
+#         validamos a assinatura do checksums, so depois confiamos no hash de dentro dele.
 #   - Cria o servico systemd 'p2pool' com a sua carteira primaria
+#
+# NOTA DE CONFIANCA (honesta): o P2Pool usa *reproducible builds* e NAO publica uma
+#   fingerprint central tao proeminente quanto binaryfate (Monero) ou xmrig. A chave do
+#   autor (SChernykh) existe em https://p2pool.io/SChernykh.asc e tambem no repositorio
+#   monero-project/gitian.sigs — ambas conferem a fingerprint:
+#       1FCA AB4D 3DC3 310D 16CB  D508 C47F 82B5 4DA8 7ADF
+#   Sem fixar essa fingerprint, a verificacao do .asc e' TOFU sobre HTTPS. Para cadeia de
+#   confianca forte, confirme a chave nas DUAS fontes acima e rode com P2POOL_SIGNER_FPR=...
+#   (a garantia mais forte do P2Pool e' o checksum + rebuild reproducivel).
 #
 # Variaveis (env):
 #   WALLET            (OBRIGATORIO) endereco Monero PRIMARIO (comeca com 4)
 #   MINI              (padrao 1; 1 = sidechain mini, ideal p/ PC domestico)
 #   DL_URL            (opcional) URL .tar.gz do P2Pool linux-x64 (se a auto-deteccao falhar)
-#   P2POOL_SHA256     (opcional) hash esperado p/ comparacao direta (use com DL_URL custom)
-#   P2POOL_SIGNER_FPR (opcional) fingerprint GPG do SChernykh p/ validar sha256sums.txt.asc
+#   P2POOL_SHA256     (opcional) hash esperado p/ comparacao direta (PULA o GPG; use com DL_URL custom)
+#   P2POOL_SIGNER_FPR (opcional) fingerprint GPG do SChernykh; se passado, EXIGE VALIDSIG com ela
 ###############################################################################
 set -euo pipefail
 
@@ -67,18 +79,39 @@ if [ -n "${P2POOL_SHA256:-}" ]; then
   [ "$DL_SHA" = "$P2POOL_SHA256" ] && g "  OK: confere com P2POOL_SHA256 fixado." \
     || { rm -rf "$TMP"; die "Hash NAO confere com P2POOL_SHA256. Abortando."; }
 else
+  # Fingerprint do SChernykh (cross-validada: p2pool.io/SChernykh.asc + monero-project/gitian.sigs).
+  # Usada para BUSCAR a chave no keyserver (fallback) e, se P2POOL_SIGNER_FPR for passado, para EXIGIR a match.
+  SCH_FPR="${P2POOL_SIGNER_FPR:-1FCAAB4D3DC3310D16CBD508C47F82B54DA87ADF}"
+  # Exigimos o checksums ASSINADO (.asc, clearsigned). O P2Pool publica so 'sha256sums.txt.asc'
+  # (sem .txt cru). Forcar .asc impede downgrade silencioso para um checksums nao-assinado.
   SUMS_URL="$(printf '%s' "$REL_JSON" | grep -oE '"browser_download_url": *"[^"]+"' | cut -d'"' -f4 \
-    | grep -iE 'sha256sums(\.txt)?(\.asc)?$' | head -1)"
-  { [ -n "$SUMS_URL" ] && curl -fsSL "$SUMS_URL" -o "$TMP/sums" 2>/dev/null && grep -qi "$DL_SHA" "$TMP/sums"; } \
-    || { rm -rf "$TMP"; die "Hash nao confirmado no checksums oficial (release latest). Se usou DL_URL de outra versao, passe P2POOL_SHA256=<hash>. Abortando."; }
-  g "  OK: hash presente no checksums oficial do release."
-  if [ -n "${P2POOL_SIGNER_FPR:-}" ] && [[ "$SUMS_URL" == *.asc ]]; then
-    command -v gpg >/dev/null 2>&1 || { apt-get update -y && apt-get install -y gnupg; }
-    { gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$P2POOL_SIGNER_FPR" 2>/dev/null \
-      && gpg --batch --status-fd 1 --verify "$TMP/sums" 2>/dev/null | grep -q "VALIDSIG.*${P2POOL_SIGNER_FPR}"; } \
-      && g "  OK: assinatura GPG ($P2POOL_SIGNER_FPR) valida." \
-      || { rm -rf "$TMP"; die "GPG do checksums NAO validou com $P2POOL_SIGNER_FPR. Abortando."; }
+    | grep -iE 'sha256sums(\.txt)?\.asc$' | head -1)"
+  [ -n "$SUMS_URL" ] || { rm -rf "$TMP"; die "Release sem checksums ASSINADO (sha256sums*.asc). Sem assinatura nao da p/ verificar — passe P2POOL_SHA256=<hash> (com DL_URL proprio) ou verifique manualmente. Abortando."; }
+  curl -fsSL "$SUMS_URL" -o "$TMP/sums" 2>/dev/null \
+    || { rm -rf "$TMP"; die "Nao baixei o checksums oficial ($SUMS_URL). Abortando."; }
+
+  # Verificacao GPG OBRIGATORIA (fail-closed): assinatura do checksums ANTES de confiar no hash.
+  command -v gpg >/dev/null 2>&1 || { apt-get update -y && apt-get install -y gnupg; }
+  { curl -fsSL https://p2pool.io/SChernykh.asc -o "$TMP/sch.asc" 2>/dev/null && gpg --batch --import "$TMP/sch.asc" 2>/dev/null; } \
+    || gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$SCH_FPR" 2>/dev/null \
+    || { rm -rf "$TMP"; die "Nao importei a chave do SChernykh (p2pool.io/keyserver) p/ verificar o checksums. Abortando."; }
+  GPG_OUT="$(gpg --batch --status-fd 1 --verify "$TMP/sums" 2>/dev/null || true)"
+  printf '%s' "$GPG_OUT" | grep -q "VALIDSIG" \
+    || { rm -rf "$TMP"; die "Assinatura GPG do checksums NAO valida. Binario suspeito — abortando."; }
+  if [ -n "${P2POOL_SIGNER_FPR:-}" ]; then
+    printf '%s' "$GPG_OUT" | grep -q "VALIDSIG.*${P2POOL_SIGNER_FPR}" \
+      || { rm -rf "$TMP"; die "Assinatura valida, mas NAO com o fingerprint P2POOL_SIGNER_FPR esperado. Abortando."; }
+    g "  OK: assinatura GPG valida e confere com P2POOL_SIGNER_FPR."
+  else
+    y "  OK: assinatura GPG valida (TOFU sobre HTTPS — sem fingerprint fixada)."
+    y "      Para cadeia de confianca forte, confirme a chave do SChernykh e rode com P2POOL_SIGNER_FPR (ver cabecalho)."
   fi
+
+  # So agora confiamos no conteudo: o hash baixado E o nome do arquivo tem de bater no checksums verificado.
+  BIN_NAME="$(basename "$DL_URL")"
+  grep -F -- "$DL_SHA" "$TMP/sums" | grep -Fq -- "$BIN_NAME" \
+    || { rm -rf "$TMP"; die "Hash/nome do binario ($BIN_NAME) NAO confere no checksums assinado. Se usou DL_URL de outra versao, passe P2POOL_SHA256=<hash>. Abortando."; }
+  g "  OK: hash + nome conferem no checksums assinado do release."
 fi
 tar -xzf "$TMP/p2pool.tar.gz" -C "$TMP"
 P2POOL_BIN="$(find "$TMP" -type f -name p2pool | head -1)"
