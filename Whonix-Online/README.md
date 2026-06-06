@@ -1,52 +1,19 @@
-# Módulo 2 — Whonix (online) 🛠️ em construção
+# Módulo 2 — Whonix Online 🟡 v1 (base)
 
-> **Status: esqueleto / roadmap.** Este módulo ainda está sendo escrito. O que está aqui é o **plano**
-> (arquitetura + sumário), **não** um passo a passo completo. Até a versão final, siga as **fontes
-> oficiais** linkadas no fim. O **Módulo 1 (Tails + Haveno) está pronto**:
-> [`../Tails OS Expert/`](../Tails%20OS%20Expert/README.md).
+O **lado em rede** do Privacy-OS-Hub: enquanto o **Tails** (Módulo 1) é o lado **offline / efêmero**
+(carteira fria, assinatura air-gapped), o **Whonix** é o lado **online persistente** — duas VMs
+(**Gateway** roteia tudo por Tor, **Workstation** é onde você trabalha) para nó, *watch-only* e navegação.
 
-## Por que Whonix — e o par com o Tails
+## 👉 Abra o guia — [Curso — Whonix Online.md](Curso%20—%20Whonix%20Online.md)
 
-O **Tails** é **amnésico**, ideal para o lado **offline / efêmero**: gerar e custodiar a **carteira
-fria** e assinar transações *air-gapped*. O **Whonix** é o lado **online persistente** — duas VMs:
-**Gateway** (roteia **tudo** por Tor) e **Workstation** (onde você trabalha) — para o que precisa
-ficar **ligado e em rede**.
+Cobre (v1, verificado em fonte oficial): o que é o Whonix · **instalar e verificar a imagem**
+(fingerprint `916B8D99…2EEACCDA`) · Monero/Feather **via Tor** (conectar ao seu nó do home lab) ·
+o **fluxo frio↔quente** (chave fria no Tails, *watch-only* no Whonix) · quando usar Whonix × Tails × home lab.
 
-```text
-Tails (offline)  ──gera / custodia / assina──►   carteira FRIA (air-gapped)
-       ▲                                              │
-       │  key images / transação assinada             ▼
-Whonix (online)  ──nó Monero · watch-only · navegação (via Tor)──►  rede
-```
-
-> Lembrete do Módulo 1: o **trade no Haveno é quente** (o escrow multisig exige o cliente online com a
-> carteira). O split frio/quente brilha na **custódia**; o trade roda no lado **online**.
-
-## Sumário planejado
-
-1. O que é Whonix (Gateway × Workstation) e modelo de ameaças
-2. Instalar Whonix (host: VirtualBox / KVM / Qubes-Whonix) — com verificação da imagem
-3. Persistência e atualizações (modelo diferente do Tails)
-4. Nó Monero no Whonix **ou** conectar ao nó do home lab (Módulo 1, Cap. 6) via Tor
-5. **Feather watch-only** no Whonix ligado à carteira fria gerada no Tails
-6. Fluxo frio ↔ quente: gerar no Tails → *watch-only* no Whonix → **assinar no Tails**
-7. Navegação e higiene de privacidade (Tor Browser no Whonix)
-8. Tabela de decisão: quando usar **Whonix × Tails × home lab**
-
-## Pré-requisitos (previstos)
-
-- Host com virtualização (≥ 8 GB RAM recomendado), VirtualBox ou KVM.
-- **Módulo 1 concluído** (entender seed, carteira, escrow, verificação de binários).
-- Conforto com máquinas virtuais.
-
-## Fontes oficiais (use até este módulo ficar pronto)
-
-- Whonix: https://www.whonix.org/ · Documentação: https://www.whonix.org/wiki/Documentation
-- Download + verificação: https://www.whonix.org/wiki/Download
-- Monero no Whonix: https://www.whonix.org/wiki/Monero
-- Feather (Tor): https://docs.featherwallet.org/guides/tor-support
-- Guias do Monero (inclui *cold storage* / carteira offline): https://www.getmonero.org/resources/user-guides/
+> **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../Tails%20OS%20Expert/README.md) concluído.
+> **Status:** v1 base. Passo a passo por SO e Playbook de comandos entram nas próximas versões —
+> sempre confirme os passos exatos nas fontes oficiais linkadas no guia.
 
 ---
 
-*Privacy-OS-Hub · Módulo 2 (roadmap). Módulo 1 pronto: [`../Tails OS Expert/`](../Tails%20OS%20Expert/README.md).*
+*Privacy-OS-Hub · Módulo 2. Módulo 1 pronto: [`../Tails OS Expert/`](../Tails%20OS%20Expert/README.md).*
