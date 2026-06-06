@@ -40,6 +40,18 @@ Princípios do hub: [MANIFESTO.md](MANIFESTO.md).
 
 ---
 
+## Já conhece o ecossistema?
+
+Tails, Monero, Tor ou Whonix — **sem hand-holding:** mapa do repo, trilha compacta, opcionais e scripts diretos.
+
+→ **[MANUAL-EXPERT.md](MANUAL-EXPERT.md)** (5 min)
+
+| Novato | Expert |
+|--------|--------|
+| [Primeira visita?](#primeira-visita) · [MANUAL-SCRIPTS](MANUAL-SCRIPTS.md) | [MANUAL-EXPERT](MANUAL-EXPERT.md) · [trilha linear](#trilha-linear) |
+
+---
+
 ## Comece aqui
 
 **Este README é a única porta de entrada.** [Primeira visita?](#primeira-visita) → [trilha linear](#trilha-linear)
@@ -52,6 +64,7 @@ passo a passo. No mesmo passo: coluna **Livro** + coluna **Comandos**.
 | Objetivo | Comece no passo | Pasta |
 |----------|-----------------|-------|
 | **Primeira vez no hub** (não conheço as ferramentas) | [Primeira visita?](#primeira-visita) → [1](#trilha-linear) | este README |
+| **Já expert** (mapa do hub em 5 min) | [MANUAL-EXPERT.md](MANUAL-EXPERT.md) | raiz |
 | **Tails + Haveno verde** no pendrive (portable) | [1](#trilha-linear) | `Tails-OS-Expert/` |
 | **Montar lab** (nó Monero, Tor, mineração) | [Trilhas opcionais](#trilhas-opcionais) · passo 5+ | `Scripts/HomeLab/` |
 | **Carteira Monero + backup + boas práticas** | [4](#trilha-linear) → [5](#trilha-linear) | `Expansao-Curso/` |

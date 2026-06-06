@@ -320,7 +320,7 @@ Ordem: preflight → boot Haveno → verificar Feather.
 
 ### Expert: posso ignorar este manual?
 
-Sim. Use [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) (matriz técnica) e os cabeçalhos `#!/bin/bash` de cada `.sh`.
+Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
 
 ---
 

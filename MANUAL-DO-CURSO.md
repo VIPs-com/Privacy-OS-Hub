@@ -2,6 +2,8 @@
 
 > **Novato?** Ignore este arquivo. Comece em [README — Primeira visita?](README.md#primeira-visita) e na [trilha linear](README.md#trilha-linear).
 >
+> **Expert?** [MANUAL-EXPERT.md](MANUAL-EXPERT.md) — mapa do repo; este arquivo é só índice de capítulos.
+>
 > Na trilha linear, **Comandos** = Playbook do passo; este MANUAL lista capítulos, não substitui a coluna Comandos.
 >
 > **Scripts de automação:** use [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) (novato) — não este índice de capítulos.
