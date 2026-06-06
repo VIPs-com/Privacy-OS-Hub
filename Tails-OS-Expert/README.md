@@ -9,12 +9,12 @@ Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1
 | Passo hub | O que fazer | Livro | Comandos |
 |:---------:|-------------|-------|----------|
 | **1** | Tails + Tor + persistência | [Curso Cap. 2](Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](Playbooks/Playbooks.md) |
-| **2** | Haveno **verde** | [Curso Cap. 3](Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Playbooks/Playbooks.md) |
+| **2** | Haveno **verde** | [Curso Cap. 3](Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [haveno-setup.sh](Scripts/haveno-setup.sh) · [Playbooks §5–6](Playbooks/Playbooks.md) |
 | **3** | Segurança (exploit) | [Curso Cap. 4](Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
 | **4** | Carteira + backup | [Curso Cap. 5](Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](Playbooks/Playbooks.md#9--backup-pós-verde) |
-| **5** | Vol II: Feather + seed · **p/ M2 (passo 8):** Caps. 2–3 · **trade (opcional):** 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| **5** | Vol II: Feather + seed · **p/ M2 (passo 8):** Caps. 2–3 · **trade (opcional):** 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [feather-install-verify.sh](Scripts/feather-install-verify.sh) · [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
 | **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | imprimir |
-| **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | [Playbooks §9–10](Playbooks/Playbooks.md) · [Scripts](Scripts/README.md) |
+| **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | [haveno-setup.sh --boot](Scripts/haveno-setup.sh) · [Scripts README](Scripts/README.md) |
 
 **Próximo módulo:** [Whonix Online (passos 8–12)](../Whonix-Online/README.md) — requer passos 1–4 + Feather (Vol II Cap. 3).
 

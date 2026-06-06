@@ -8,6 +8,8 @@
 
 ## §1 — Verificar imagem Whonix (resumo)
 
+**Host Linux (atalho):** [`Scripts/whonix-verify-image.sh`](../Scripts/whonix-verify-image.sh)
+
 **VirtualBox** (`.ova`):
 
 ```bash

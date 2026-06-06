@@ -26,6 +26,7 @@
 #        --no-clock   nao tenta ajustar o relogio pelo Tor
 #        --watch N    monitora o log por N minutos (padrao 8)
 #        --update     forca reinstalar/atualizar o .deb (mesmo se ja instalado)
+#        --boot-only  delega a haveno-boot.sh (sessao; sem download)
 #
 # ATUALIZAR PARA VERSAO NOVA:
 #   1. Edite HAVENO_DEB_URL e HAVENO_PGP_FPR abaixo com os valores do NOVO release
@@ -52,15 +53,22 @@ TOR_COOKIE="/var/run/tor/control.authcookie"
 DO_CLOCK=1
 DO_UPDATE=0
 WATCH_MIN=8
+BOOT_ONLY=0
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 while [ $# -gt 0 ]; do
   case "$1" in
     --no-clock) DO_CLOCK=0 ;;
     --update)   DO_UPDATE=1 ;;
+    --boot-only) BOOT_ONLY=1 ;;
     --watch)    shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;  # --watch N (sem N: mantem padrao)
     *)          [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
   esac
   shift
 done
+
+if [ "$BOOT_ONLY" = "1" ]; then
+  exec "${SCRIPT_DIR}/haveno-boot.sh" ${WATCH_MIN:+$WATCH_MIN}
+fi
 
 # ----------------------------- Cores -----------------------------------------
 b(){ echo -e "\033[1;34m$*\033[0m"; }       # azul
@@ -170,9 +178,10 @@ fi
 [ -f "${UTILS_DIR}/install.sh" ] || die "install.sh nao encontrado em ${UTILS_DIR}."
 [ -f "${UTILS_DIR}/haveno.yml" ] || die "haveno.yml nao encontrado em ${UTILS_DIR}."
 
-# ----------------------------- 7. Abrir Haveno (exec.sh) ---------------------
-b "[7/9] Abrindo o Haveno (pode pedir senha admin via pkexec)..."
-chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
+# ----------------------------- 7. install.sh + exec.sh (Playbook §7) ---------
+b "[7/9] install.sh + exec.sh (pode pedir senha admin via pkexec)..."
+chmod +x "${UTILS_DIR}/install.sh" "${UTILS_DIR}/exec.sh" 2>/dev/null || true
+sudo "${UTILS_DIR}/install.sh" || die "install.sh falhou."
 nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
 HAVENO_BG=$!
 sleep 8
@@ -181,31 +190,16 @@ g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
 # ----------------------------- 8. Verificar/corrigir filtro ------------------
 b "[8/9] Verificando perfil onion-grater (loaded filter)..."
 sleep 4
-# Checagem por boot atual (-b) para nao pegar logs de sessoes antigas.
-check_filter(){ sudo journalctl -u onion-grater -b --no-pager 2>/dev/null | tail -40; }
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"
+check_filter(){ haveno_check_filter; }
 
 if check_filter | grep -q "loaded filter: haveno"; then
   g "  loaded filter: haveno (OK)."
 else
-  y "  Filtro ainda nao carregou. Aplicando correcao automatica..."
-  sudo cp "${UTILS_DIR}/haveno.yml" "$ONION_GRATER_DST" 2>/dev/null || y "  (cp haveno.yml falhou)"
-  [ -e "$TOR_COOKIE" ] && sudo chmod o+r "$TOR_COOKIE" 2>/dev/null || y "  (cookie Tor ainda nao existe)"
-  if python3 -c "import yaml; yaml.safe_load(open('${ONION_GRATER_DST}')); print('YAML OK')" 2>/dev/null; then
-    g "  YAML OK."
-  else
-    y "  YAML nao validou — recopiando do oficial."
-    sudo cp "${UTILS_DIR}/haveno.yml" "$ONION_GRATER_DST"
-  fi
-  sudo systemctl restart onion-grater 2>/dev/null || y "  (restart onion-grater falhou)"
-  sleep 4
-  # Cross-check de erro de sintaxe / perfil (herdado do v2), so como AVISO.
+  haveno_fix_onion_grater || true
   if check_filter | grep -qiE "bad yaml|invalid|traceback|profile" ; then
     y "  Log do onion-grater menciona possivel erro de YAML/perfil — confira o Capitulo 7 (FAQ) do livro"
-  fi
-  if check_filter | grep -q "loaded filter: haveno"; then
-    g "  Corrigido: loaded filter: haveno."
-  else
-    y "  Ainda 'None'. Feche o Haveno e rode de novo, ou veja o Capitulo 7 (FAQ) do livro"
   fi
 fi
 

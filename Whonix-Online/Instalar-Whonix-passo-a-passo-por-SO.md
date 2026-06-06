@@ -110,6 +110,14 @@ Fonte: https://www.whonix.org/wiki/KVM
 
 ### 5.1 Linux
 
+> **Atalho (host Linux):** [`Scripts/whonix-verify-image.sh`](Scripts/whonix-verify-image.sh) — baixa `derivative.asc`, confere fingerprint e verifica a imagem. Importar a VM no VirtualBox/KVM continua **manual**.
+
+```bash
+chmod +x whonix-verify-image.sh
+./whonix-verify-image.sh /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
+# KVM: ./whonix-verify-image.sh --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
+```
+
 ```bash
 # 1) importe a chave do Whonix:
 gpg --import derivative.asc

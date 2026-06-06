@@ -142,6 +142,12 @@ sudo journalctl -u onion-grater --no-pager | tail -20
 # USB -> persistência -> + Mais opções (admin) -> Tor -> Aplicações -> Outros -> Haveno
 
 ```bash
+# Ou automatizado (recomendado):
+~/Persistent/haveno-boot.sh
+# ou: ~/Persistent/haveno-setup.sh --boot
+```
+
+```bash
 sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 /home/amnesia/Persistent/haveno/App/utils/exec.sh
 ```

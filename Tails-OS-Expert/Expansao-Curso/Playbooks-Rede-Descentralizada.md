@@ -31,6 +31,11 @@
 # Baixe: AppImage Tails + featherwallet.asc + feather-x.x.x.AppImage + feather-x.x.x.AppImage.asc
 
 ```bash
+# Ou automatizado (apos o download pelo Tor Browser):
+~/Persistent/feather-install-verify.sh
+```
+
+```bash
 mkdir -p ~/Persistent/feather/wallets
 mv ~/Tor\ Browser/Browser/Downloads/feather-* ~/Persistent/feather/ 2>/dev/null || true
 mv ~/Tor\ Browser/Browser/Downloads/featherwallet.asc ~/Persistent/feather/ 2>/dev/null || true

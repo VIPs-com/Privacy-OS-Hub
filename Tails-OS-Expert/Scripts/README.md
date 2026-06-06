@@ -1,163 +1,121 @@
 # Scripts — Tails OS Expert
 
-Automação do curso. Há dois conjuntos:
+Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
 
-**A) No Tails (cliente)** — ciclo de vida do Haveno:
+## Orquestrador (comece aqui após passos 1–4 manuais)
 
-| Script | Função |
-|--------|--------|
-| `haveno-auto.sh` | Instalar → abrir → **verde** (Tor, relógio UTC via Tor, PGP, onion-grater) |
-| `haveno-backup.sh` | **Backup/restauração** cifrada da carteira (persistência ou USB) |
-| `haveno-update.sh` | **Atualizar** o Haveno fazendo **backup antes** |
-| `haveno-backup.desktop` | Atalho de menu para o backup (clique em vez de terminal) |
+```bash
+chmod +x ~/Persistent/*.sh
+~/Persistent/haveno-setup.sh           # 1ª vez: install → verde → backup?
+~/Persistent/haveno-setup.sh --boot    # cada sessão
+~/Persistent/haveno-setup.sh --feather # + Feather (passo 5 / M2)
+```
 
-**B) No Home Lab (infraestrutura, bônus)** — pasta [`HomeLab/`](HomeLab/README.md), **não roda no Tails**:
+> **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `tails-preflight.sh` só valida.
 
-| Script | Modalidade |
-|--------|------------|
-| `HomeLab/01-setup-monero-node.sh` | Nó Monero (`monerod` + systemd) |
-| `HomeLab/02-tor-hidden-service.sh` | Publicar o nó via Tor (.onion) |
-| `HomeLab/03-setup-p2pool.sh` | Mineração descentralizada (P2Pool) |
-| `HomeLab/04-setup-xmrig.sh` | Minerador (xmrig → P2Pool) |
+## Matriz script ↔ trilha ↔ Playbook
 
-Teoria e fundamentos: `../Curso-Tails-OS-Expert.md` (Cap. 6 cobre o Home Lab). Comandos manuais: `../Playbooks/Playbooks.md`.
+| Script | Passo hub | Playbook § | Função |
+|--------|-----------|------------|--------|
+| `tails-preflight.sh` | 1–4 | §1–4 | Valida ambiente antes de automatizar |
+| **`haveno-setup.sh`** | **2, 7** | §5–7 | **Orquestrador** (1ª vez / `--boot`) |
+| `haveno-auto.sh` | 2 | §5–6 | Install → verde (1ª vez) |
+| `haveno-boot.sh` | 7 | §7 | `install.sh` + `exec.sh` cada sessão |
+| `haveno-backup.sh` | 4, 7 | §9 | Backup cifrado `Data/` |
+| `haveno-update.sh` | 7 | §10 | Atualizar `.deb` (backup antes) |
+| `feather-install-verify.sh` | 5 | Vol II §2 | Feather PGP + AppImage |
+| `feather-backup.sh` | 5 | Vol II §2 | Backup `feather/wallets/` |
+| `haveno-verify-deb.sh` | 5 | Vol II §3 | Auditar `.deb` em `Install/` |
+| `haveno-switch-network.sh` | 5 | Vol II §8 | Trocar rede (backup + update) |
+| `post-session-check.sh` | 7 | §11 pós-Tails | Tor + onion-grater pós-upgrade |
+| `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (backup) |
+| `haveno-common.sh` | — | — | Biblioteca (source interno) |
 
-> Pré-requisitos (sempre manuais): Tails no USB, **Tor conectado**, **persistência + Dotfiles**, **senha admin** da sessão. Veja Capítulo 2 do livro.
+**Home Lab** ([`HomeLab/`](HomeLab/README.md)) — Debian/Ubuntu, **não** Tails.
 
-## Ciclo de uso — a ordem dos scripts (comece por aqui)
-
-Faça **uma vez**: copie os scripts para `~/Persistent/` (seção logo abaixo). Depois é só este ciclo:
+## Ciclo de uso
 
 ```mermaid
 flowchart LR
-  I["Instalar 1x (copiar p/ ~/Persistent)"] --> A["haveno-auto.sh ate VERDE"]
-  A --> B["haveno-backup.sh proteger"]
-  B --> U["haveno-update.sh atualizar"]
-  U -. novo release .-> A
+  M["Passos 1–4 manual"] --> P["tails-preflight"]
+  P --> S["haveno-setup 1a vez"]
+  S --> B["haveno-setup --boot"]
+  B --> BK["haveno-backup"]
+  BK --> U["haveno-update"]
 ```
 
 | Quando | Rode |
 |--------|------|
-| **1ª vez** (uma vez só) | Copiar scripts → `~/Persistent/` + `chmod +x` (seção abaixo) |
-| **A cada sessão** (após os passos 1–4) | `~/Persistent/haveno-auto.sh` → indicador **verde** |
-| **Antes do 1º depósito / periodicamente** | `~/Persistent/haveno-backup.sh` (cifrado) |
-| **Quando sair release novo** | `~/Persistent/haveno-update.sh` (faz o backup antes) |
+| Antes de qualquer script | `tails-preflight.sh` (ou via `haveno-setup.sh`) |
+| **1ª vez** Haveno | `haveno-setup.sh` ou `haveno-auto.sh` |
+| **Cada sessão** | `haveno-setup.sh --boot` ou `haveno-boot.sh` |
+| Backup / restore | `haveno-backup.sh` |
+| Release novo | `haveno-update.sh` |
+| Feather (M2 pré-req) | `feather-install-verify.sh` → UI carteira |
 
 ---
 
-## Instalar os scripts em `~/Persistent` (uma vez)
+## Instalar scripts em `~/Persistent` (uma vez)
 
-Os scripts precisam estar na **persistência** para rodar com caminho simples. Use **um** dos métodos.
+### Método A — Arquivos (recomendado)
 
-### Método A — pelo gerenciador de Arquivos (simples) — **recomendado para a maioria**
+1. Copie **todos** os `*.sh` desta pasta + `haveno-backup.desktop` → `~/Persistent/`.
+2. `chmod +x ~/Persistent/*.sh`
 
-1. Abra **Arquivos** e entre nesta pasta (`Tails-OS-Expert/Scripts`).
-2. Selecione `haveno-auto.sh`, `haveno-backup.sh`, `haveno-update.sh`, `haveno-backup.desktop`.
-3. **Copiar** → cole em **Casa → Persistent** (`/home/amnesia/Persistent`).
-4. No Terminal:
+### Método B — find
 
 ```bash
-chmod +x ~/Persistent/haveno-*.sh
+find ~/Persistent -path '*/Tails-OS-Expert/Scripts/*.sh' -exec cp -t ~/Persistent {} +
+find ~/Persistent -name 'haveno-backup.desktop' -exec cp -t ~/Persistent {} +
+chmod +x ~/Persistent/*.sh
 ```
-
-### Método B — um comando (não depende do nome da pasta)
-
-> Use o Método B se você **renomeou** a pasta do curso ou o caminho é diferente do padrão. Para a maioria, o **Método A** basta.
-
-```bash
-find ~/Persistent -type f \( -name 'haveno-auto.sh' -o -name 'haveno-backup.sh' -o -name 'haveno-update.sh' -o -name 'haveno-backup.desktop' \) -exec cp -t ~/Persistent {} +
-chmod +x ~/Persistent/haveno-*.sh
-```
-
-Depois rode sempre por: `~/Persistent/haveno-auto.sh`, `~/Persistent/haveno-backup.sh`, `~/Persistent/haveno-update.sh`.
 
 ---
 
-## 1. `haveno-auto.sh` — instalar até o verde
+## Scripts principais
 
-Depois da Persistência + Dotfiles + admin (passos 1–4 do Playbooks):
+### `haveno-setup.sh` — um comando
+
+- **1ª vez:** preflight → `haveno-auto.sh` → pergunta backup
+- **`--boot`:** preflight → `haveno-boot.sh`
+- **`--feather`:** encadeia `feather-install-verify.sh`
+- **`--skip-backup`:** pula prompt de backup
+
+### `haveno-auto.sh` — install até verde
 
 ```bash
 ~/Persistent/haveno-auto.sh
+~/Persistent/haveno-auto.sh --boot-only   # delega a haveno-boot.sh
+~/Persistent/haveno-auto.sh --update
+~/Persistent/haveno-auto.sh --no-clock
 ```
 
-O que faz (em ordem): confere ambiente → garante fuso **UTC** → espera **Tor** → ajusta relógio pela hora obtida **via Tor** (sem vazar local) → baixa e instala o Haveno (URL + PGP da **Reto**, com verificação) → abre pelo menu (`exec.sh`/`pkexec`) → verifica `loaded filter: haveno` e **corrige o onion-grater** se vier `None` → monitora.
+Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma.**
 
-Opções:
+### `haveno-boot.sh` — cada sessão (Playbook §7)
 
 ```bash
-~/Persistent/haveno-auto.sh --no-clock   # não mexe no relógio
-~/Persistent/haveno-auto.sh --update     # força reinstalar/atualizar o .deb
-~/Persistent/haveno-auto.sh 15           # monitora o log por 15 min
+~/Persistent/haveno-boot.sh
+~/Persistent/haveno-boot.sh --watch 8
 ```
 
-**Para outra rede:** edite `HAVENO_DEB_URL` e `HAVENO_PGP_FPR` no topo do script.
+### `feather-install-verify.sh`
 
-**OK se:** ao final, a janela do Haveno fica **verde** (amarelo 5–20 min na 1ª vez é normal). Se não: veja Capítulo 7 (FAQ) do livro.
-
----
-
-## 2. `haveno-backup.sh` — backup e restauração
-
-**Feche o Haveno antes** (o script avisa). Para USB, **monte** o pendrive no gerenciador de Arquivos primeiro.
+Baixe AppImage + `.asc` pelo **Tor Browser** primeiro, depois:
 
 ```bash
-~/Persistent/haveno-backup.sh                 # cifrado, em ~/Persistent/Backups
-~/Persistent/haveno-backup.sh --usb           # escolhe um USB montado
-~/Persistent/haveno-backup.sh --dest /media/amnesia/MEU_USB
-~/Persistent/haveno-backup.sh --no-encrypt    # sem cifrar (NÃO recomendado)
+~/Persistent/feather-install-verify.sh
 ```
 
-Faz: compacta `~/Persistent/haveno/Data/` → verifica integridade → **cifra com GPG** (pede senha) → salva + gera `.sha256`.
+### `haveno-backup.sh` / `feather-backup.sh`
 
-Restaurar (salva o estado atual antes de sobrescrever):
-
-```bash
-~/Persistent/haveno-backup.sh --restore ~/Persistent/Backups/haveno-data-AAAA....tar.gz.gpg
-```
-
-Conferir um backup:
-
-```bash
-sha256sum -c ~/Persistent/Backups/haveno-data-AAAA....tar.gz.gpg.sha256
-```
-
-> A **seed** (Account → Wallet seed) **não** entra no arquivo — anote-a à parte. Seed ≠ backup completo.
-
-### Atalho de menu (clique)
-
-```bash
-mkdir -p ~/.local/share/applications
-find ~/Persistent -type f -name 'haveno-backup.desktop' -exec cp -t ~/.local/share/applications {} +
-chmod +x ~/.local/share/applications/haveno-backup.desktop
-```
-
-Com **Dotfiles** ativo, o atalho persiste entre sessões. Para backup direto no USB pelo atalho, acrescente ` --usb` na linha `Exec=` do `.desktop`.
-
----
-
-## 3. `haveno-update.sh` — atualizar com backup antes
-
-Quando a sua rede publicar versão nova:
-
-```bash
-~/Persistent/haveno-update.sh \
-  --url "https://github.com/retoaccess1/haveno-reto/releases/download/VERSAO-NOVA/haveno-vVERSAO-linux-x86_64-installer.deb" \
-  --pgp "FINGERPRINT_DA_MESMA_REDE"
-```
-
-Faz: confere ambiente → mostra a versão do Tails e **orienta o upgrade do sistema** (Tails Upgrader) → espera Tor → **BACKUP da carteira ANTES** (usa o `haveno-backup.sh`; se faltar, faz um backup cifrado simples) → reinstala o `.deb` novo com **verificação PGP** → abre e confere `loaded filter: haveno`. Os dados em `Data/` são **preservados**.
-
-Sem `--url/--pgp`, reinstala os valores padrão (útil para "reparar" a versão atual). Se o backup falhar, a atualização é **abortada** (dados intactos).
-
-> **Tails (sistema operacional):** este script **não** atualiza o Tails. Use o **Tails Upgrader** (aparece ao conectar no Tor) ou reinstalação oficial — sempre **depois** do backup.
+Mesma interface: `--usb`, `--dest`, `--restore`, GPG. **Seed não entra no arquivo.**
 
 ---
 
 ## Segurança (resumo)
 
-- Use **só `1.6.0-reto`+** (exploit de trades corrigido nessa versão). Cap. 4 do livro.
-- **Instalar ≠ tradear.** Verde = instalação OK; tradear é decisão sua, com cautela e valores pequenos.
-- Os scripts **não** tocam em fundos; preservam `~/Persistent/haveno/Data/`.
+- **Nunca** scriptar: upgrade do **Tails SO**, trades, disputas, seed no arquivo, cold-signing frio.
+- Use **1.6.0-reto+** · **Instalar ≠ tradear** · scripts **não** movem fundos.
 
-*Scripts do curso Tails OS Expert · Reto 1.6.0-reto · maio/2026.*
+*Scripts Tails OS Expert · Reto 1.6.0-reto · jun/2026.*
