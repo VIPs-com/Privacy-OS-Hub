@@ -2,9 +2,9 @@
 
 > ✅ **Trilha recomendada** (interface gráfica). Você está na **Trilha A** — siga **só** este arquivo do início ao fim. **Não** use comandos da Trilha B (`monero-wallet-cli`) no meio; a carteira nasce e morre no Feather.
 >
-> ⬅️ Veio sem passar pelo mapa? Leia antes [`../00 — Comece aqui — Escolha sua trilha.md`](../00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md) (pré-requisitos + regras de ouro). Teoria/“porquê”: [`../Curso — Whonix Online.md`](../Curso%20—%20Whonix%20Online.md) (Cap. 5).
+> ⬅️ Veio sem passar pelo mapa? Leia antes [`../00-Comece-aqui-Escolha-sua-trilha.md`](../00-Comece-aqui-Escolha-sua-trilha.md) (pré-requisitos + regras de ouro). Teoria/“porquê”: [`../Curso-Whonix-Online.md`](../Curso-Whonix-Online.md) (Cap. 5).
 
-**Pré-requisito:** [Módulo 1 (Tails + Haveno)](../../Tails%20OS%20Expert/README.md) concluído — seed, Feather **completo** no Tails, verificação de binários.
+**Pré-requisito:** [Módulo 1 (Tails + Haveno)](../../Tails-OS-Expert/README.md) concluído — seed, Feather **completo** no Tails, verificação de binários.
 
 > 🔒 **Regra inegociável:** a **seed / spend key vive só na máquina FRIA (Tails, bootado offline)**. O Whonix é **view-only**: vê saldo, monta, transmite — **nunca** assina.
 
@@ -83,7 +83,7 @@
 - **Spend key/seed nunca** é digitada, colada ou fotografada numa máquina online. Se acontecer uma vez, a carteira deixou de ser fria → **migre os fundos**.
 - **Haveno é exceção** (quente, escrow ao vivo): leve só o valor do trade ao quente; após operar, saque o excedente para o frio (Curso Cap. 6).
 
-> 💡 Para o **grosso** sem hardware proprietário: reforce **backups** ([`Playbook — Backup e proteção (air-gap).md`](../Playbook%20—%20Backup%20e%20proteção%20(air-gap).md)). Trezor/Ledger é **opcional** — Curso §5.6.
+> 💡 Para o **grosso** sem hardware proprietário: reforce **backups** ([`Playbook-Backup-e-protecao-air-gap.md`](../Playbook-Backup-e-protecao-air-gap.md)). Trezor/Ledger é **opcional** — Curso §5.6.
 
 ---
 
@@ -95,8 +95,8 @@
 | Feather — criar view-only | https://docs.featherwallet.org/guides/create-view-only-wallet |
 | Feather (Tor) | https://docs.featherwallet.org/guides/tor-support |
 | Whonix — Monero | https://www.whonix.org/wiki/Monero |
-| Livro do módulo (teoria) | [`../Curso — Whonix Online.md`](../Curso%20—%20Whonix%20Online.md) (Cap. 5) |
-| Mapa de decisão das trilhas | [`../00 — Comece aqui — Escolha sua trilha.md`](../00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md) |
+| Livro do módulo (teoria) | [`../Curso-Whonix-Online.md`](../Curso-Whonix-Online.md) (Cap. 5) |
+| Mapa de decisão das trilhas | [`../00-Comece-aqui-Escolha-sua-trilha.md`](../00-Comece-aqui-Escolha-sua-trilha.md) |
 
 ---
 

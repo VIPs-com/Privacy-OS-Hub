@@ -4,8 +4,11 @@ CLAUDE.md
 .claude/
 Auditoria/
 
-# --- Pasta auxiliar (rascunhos antigos) — NÃO faz parte do repositório ---
-_arquivo/
+# --- Pasta local (arquivo morto + utilitários) — NÃO faz parte do repositório ---
+_arquivos/
+
+# --- IDE (planos locais vivem em _arquivos/cursor-plans/) ---
+.cursor/
 
 # --- Arquivos compactados / binários grandes ---
 *.zip

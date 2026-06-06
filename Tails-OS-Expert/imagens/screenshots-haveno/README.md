@@ -36,4 +36,4 @@ como acima. Depois de adicionar, referencie no Volume II com `![legenda](imagens
 - **Cap. 9:** **Open dispute** no trade travado.
 - **Indicador verde (Vol I):** canto da janela Haveno **verde** = conectado à rede Reto.
 
-Nomes de menu podem variar por versão — confira o texto do capítulo. Se travar, use o [Folheto — Regras e Golpes](../../Folheto%20—%20Regras%20e%20Golpes.md) e Cap. 9.
+Nomes de menu podem variar por versão — confira o texto do capítulo. Se travar, use o [Folheto — Regras e Golpes](../../Folheto-Regras-e-Golpes.md) e Cap. 9.

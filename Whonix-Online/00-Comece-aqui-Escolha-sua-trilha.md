@@ -1,8 +1,10 @@
 # 00 — Comece aqui — Escolha sua trilha (Cold-Tails-Hot-Whonix)
 
+> 🧭 **PORTEIRO DO MÓDULO 2** — leia isto **antes** de qualquer comando. Depois siga a [trilha numerada no README](README.md#-trilha-do-aluno--siga-nesta-ordem).
+
 Você vai montar a **custódia frio↔quente**: a **chave de gasto (seed) fica só no Tails offline** e o **Whonix online** apenas vê o saldo, monta a transação e transmite. Antes de abrir comandos, **escolha UMA trilha** e siga **só ela** do início ao fim.
 
-> 📖 **Entenda o *porquê* primeiro** (modelo de ameaças, frio↔quente, view-only, riscos): leia o livro [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md), Cap. 5. Este arquivo é o **mapa de decisão**; os comandos estão nas trilhas.
+> 📖 **Entenda o *porquê* primeiro** (modelo de ameaças, frio↔quente, view-only, riscos): leia o livro [`Curso-Whonix-Online.md`](Curso-Whonix-Online.md), Cap. 5. Este arquivo é o **mapa de decisão**; os comandos estão nas trilhas.
 
 ---
 
@@ -34,15 +36,15 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 | Como você opera | Interface gráfica (cliques) | Comandos no terminal |
 | **Quando escolher** | Você quer o caminho mais simples e seguro | Você prefere terminal **ou** quer auditar o processo |
 | **Para quem** | **Maioria** (recomendado) | Avançado |
-| **Abra** | 👉 [`Trilha-A-Feather/Playbook — Feather (GUI).md`](Trilha-A-Feather/Playbook%20—%20Feather%20%28GUI%29.md) | 👉 [`Trilha-B-CLI/Playbook — monero-wallet-cli.md`](Trilha-B-CLI/Playbook%20—%20monero-wallet-cli.md) |
+| **Abra** | 👉 [`Trilha-A-Feather/Playbook-Feather-GUI.md`](Trilha-A-Feather/Playbook-Feather-GUI.md) | 👉 [`Trilha-B-CLI/Playbook-monero-wallet-cli.md`](Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
 
 > ⚠️ **NÃO misture as trilhas.** Não crie a carteira no Feather e tente continuar no `monero-wallet-cli` (nem o contrário). Os arquivos de uma ferramenta não são feitos para a outra. **Escolheu A? Ignore B — e vice-versa.**
 >
 > 💡 **Na dúvida: Trilha A (Feather).**
 >
 > 🔐 **Não tem Trezor/Ledger?** Este hub é para você — **Trilha A** é o caminho padrão (baixo custo, controle
-> total). Antes do grosso, leia [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md).
-> Hardware wallet é **opcional** (custo extra): [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) **§5.6**.
+> total). Antes do grosso, leia [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md).
+> Hardware wallet é **opcional** (custo extra): [`Curso-Whonix-Online.md`](Curso-Whonix-Online.md) **§5.6**.
 
 ---
 
@@ -50,9 +52,9 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 
 Faça isto **antes** de abrir qualquer trilha:
 
-- [ ] Leia e execute [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) — **DUAS cópias** da seed offline + teste de restauração.
-- [ ] **Módulo 1 concluído** ([Tails + Haveno](../Tails%20OS%20Expert/README.md)) — seed, Haveno verde, verificação PGP.
-- [ ] **Feather no Tails** instalado e verificado ([Vol II Cap. 3](../Tails%20OS%20Expert/Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md#3-feather-no-tails--instalar-e-verificar)) — carteira **completa** no lado frio.
+- [ ] Leia e execute [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md) — **DUAS cópias** da seed offline + teste de restauração.
+- [ ] **Módulo 1 concluído** ([Tails + Haveno](../Tails-OS-Expert/README.md)) — seed, Haveno verde, verificação PGP.
+- [ ] **Feather no Tails** instalado e verificado ([Vol II Cap. 3](../Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — carteira **completa** no lado frio.
 - [ ] **Whonix instalado e verificado** — imagem conferida (fingerprint `916B8D99…2EEACCDA`), Gateway + Workstation atualizados via Tor (Curso Cap. 2–3).
 - [ ] **Whonix só sai por Tor** — a Workstation navega **apenas** através do Gateway.
 - [ ] **Seu nó Monero** acessível por Tor (`.onion:18089`) — ou um nó remoto `.onion` confiável (Curso Cap. 4).
@@ -63,10 +65,10 @@ Faça isto **antes** de abrir qualquer trilha:
 
 | Situação | Vá para |
 |----------|---------|
-| Falta backup / não sabe proteger a seed | [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) |
-| Whonix não instalado ou verificação falhou | [`Instalar Whonix — passo a passo por SO.md`](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §5.4 |
-| Sem nó Monero `.onion` | [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) Cap. 4.2 (nó remoto) |
-| Não tem Feather no Tails ainda | [Vol II Cap. 3](../Tails%20OS%20Expert/Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md#3-feather-no-tails--instalar-e-verificar) |
+| Falta backup / não sabe proteger a seed | [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md) |
+| Whonix não instalado ou verificação falhou | [`Instalar-Whonix-passo-a-passo-por-SO.md`](Instalar-Whonix-passo-a-passo-por-SO.md) §3.4, §5.4 |
+| Sem nó Monero `.onion` | [`Curso-Whonix-Online.md`](Curso-Whonix-Online.md) Cap. 4.2 (nó remoto) |
+| Não tem Feather no Tails ainda | [Vol II Cap. 3](../Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar) |
 
 ---
 

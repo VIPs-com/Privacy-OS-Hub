@@ -8,7 +8,7 @@ com o nome indicado — os pontos de inserção no guia de instalação já est�
 
 | Arquivo a criar | Onde entra | O que deve mostrar |
 |-----------------|------------|--------------------|
-| `01-vbox-import-appliance.png` | `Instalar Whonix — passo a passo por SO.md` | VirtualBox → **File → Import Appliance** com o `.ova` selecionado |
+| `01-vbox-import-appliance.png` | `Instalar-Whonix-passo-a-passo-por-SO.md` | VirtualBox → **File → Import Appliance** com o `.ova` selecionado |
 | `02-kleopatra-good-signature.png` | §5 Windows | Kleopatra → **Decrypt/Verify** com assinatura válida + fingerprint `916B8D99…2EEACCDA` |
 | `03-linux-good-signature.png` | §5 Linux/macOS | Terminal com `gpg: Good signature` e fingerprint Whonix |
 | `04-vbox-gateway-workstation.png` | pós-import | VirtualBox com **Gateway + Workstation** na lista de VMs |
@@ -27,4 +27,4 @@ Depois de adicionar, referencie no guia com `![legenda](imagens/screenshots-whon
 - **Lista de VMs:** duas entradas — **Whonix-Gateway** e **Whonix-Workstation**.
 - **Gateway no 1º boot:** ícone ou painel **Tor Connection: Connected** antes de usar a Workstation.
 
-Se qualquer passo divergir, use [`Instalar Whonix — passo a passo por SO.md`](../../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §5.4 e [`Playbooks/Playbooks.md`](../../Playbooks/Playbooks.md) §6.
+Se qualquer passo divergir, use [`Instalar-Whonix-passo-a-passo-por-SO.md`](../../Instalar-Whonix-passo-a-passo-por-SO.md) §3.4, §5.4 e [`Playbooks/Playbooks.md`](../../Playbooks/Playbooks.md) §6.

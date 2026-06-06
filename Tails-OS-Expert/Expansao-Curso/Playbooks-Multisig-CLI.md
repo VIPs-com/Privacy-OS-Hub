@@ -1,6 +1,6 @@
 # Playbooks — Multisig 2-de-3 manual CLI (só comandos)
 
-**Teoria:** [`Multisig 2-de-3 — criação manual CLI.md`](Multisig%202-de-3%20—%20criação%20manual%20CLI.md)  
+**Teoria:** [`Multisig-2-de-3-criacao-manual-CLI.md`](Multisig-2-de-3-criacao-manual-CLI.md)  
 **Haveno trade (automático):** Volume II Cap. 10 — **não** precisa deste playbook para tradear.
 
 > Use **stagenet/testnet** para praticar. Mainnet só após dominar o fluxo.
@@ -78,10 +78,10 @@ submit_multisig multisig_monero_tx
 ## Links
 
 ```text
-Teoria (anexo)    Multisig 2-de-3 — criação manual CLI.md
+Teoria (anexo)    Multisig-2-de-3-criacao-manual-CLI.md
 Doc oficial       https://docs.getmonero.org/multisignature/
 Whonix            https://www.whonix.org/wiki/Monero_Multisig
-Haveno (app)      Curso — Rede Descentralizada (Extensão).md §10
+Haveno (app)      Curso-Rede-Descentralizada-Extensao.md §10
 ```
 
 *Playbooks Multisig CLI · Privacy-OS-Hub. Confirme na doc oficial antes de mainnet.*

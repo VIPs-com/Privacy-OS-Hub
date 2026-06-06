@@ -1,6 +1,6 @@
 # 🛡️ Folheto Expert — Regras de Ouro & Golpes (1 página)
 
-**Imprima ou cole no grupo da turma.** Resumo do que evita 99% dos prejuízos. Detalhes: [`Curso — Tails OS Expert.md`](Curso%20—%20Tails%20OS%20Expert.md) Capítulo 9 · Volume II Cap. 2 (seed na criação).
+**Imprima ou cole no grupo da turma.** Resumo do que evita 99% dos prejuízos. Detalhes: [`Curso-Tails-OS-Expert.md`](Curso-Tails-OS-Expert.md) Capítulo 9 · Volume II Cap. 2 (seed na criação).
 
 **Cartaz do fluxo comprar/vender (imprimível):**
 
@@ -52,7 +52,7 @@
 
 - **Comprando** (paga fiat, recebe XMR): pague pelo app, **guarde comprovante**, só então marque "pago"; sumiu? **disputa**.
 - **Vendendo** (recebe fiat, entrega XMR): **só libere** o XMR quando o dinheiro estiver **na sua conta e irreversível** (prefira **PIX**/dinheiro; cuidado com estorno de cartão/PayPal).
-- **Sempre:** tudo dentro do app (escrow multisig + chat); valores pequenos; na dúvida, **disputa** (nunca "por fora"). Detalhes: [`Expansão Curso/`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md) Cap. 7–9.
+- **Sempre:** tudo dentro do app (escrow multisig + chat); valores pequenos; na dúvida, **disputa** (nunca "por fora"). Detalhes: [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) Cap. 7–9.
 
 ## 🔁 Rotina a cada sessão
 
@@ -60,4 +60,4 @@
 
 ---
 
-*Folheto resumo · maio/2026 · [`Curso — Tails OS Expert.md`](Curso%20—%20Tails%20OS%20Expert.md) · [`Expansão Curso/`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md)*
+*Folheto resumo · maio/2026 · [`Curso-Tails-OS-Expert.md`](Curso-Tails-OS-Expert.md) · [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md)*

@@ -151,7 +151,7 @@ else
   sudo systemctl restart onion-grater 2>/dev/null || true
   sleep 4
   sudo journalctl -u onion-grater -b --no-pager 2>/dev/null | grep -q "loaded filter: haveno" \
-    && g "  Corrigido." || y "  Ainda nao — veja o Capitulo 7 (FAQ) do livro Curso — Tails OS Expert.md"
+    && g "  Corrigido." || y "  Ainda nao — veja o Capitulo 7 (FAQ) do livro Curso-Tails-OS-Expert.md"
 fi
 
 echo

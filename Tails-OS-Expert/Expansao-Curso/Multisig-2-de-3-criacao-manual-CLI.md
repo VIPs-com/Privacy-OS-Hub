@@ -4,7 +4,7 @@
 > (Cap. 10 do Volume II). Este anexo ensina **multisig Monero manual** via `monero-wallet-cli` — laboratório,
 > entendimento do protocolo, carteiras compartilhadas fora do Haveno ou arbitragem avançada.
 
-**Comandos só:** [`Playbooks — Multisig CLI.md`](Playbooks%20—%20Multisig%20CLI.md)
+**Comandos só:** [`Playbooks-Multisig-CLI.md`](Playbooks-Multisig-CLI.md)
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Situação | Precisa deste anexo? |
 |----------|----------------------|
-| **Tradear no Haveno** (escrow por trade) | **Não** — o protocolo cria multisig 2-de-3 **sozinho** ao aceitar/criar oferta ([Cap. 10](Curso%20—%20Rede%20Descentralizada%20(Extensão).md#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz)) |
+| **Tradear no Haveno** (escrow por trade) | **Não** — o protocolo cria multisig 2-de-3 **sozinho** ao aceitar/criar oferta ([Cap. 10](Curso-Rede-Descentralizada-Extensao.md#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz)) |
 | **Entender** como 2-de-3 funciona na prática | **Sim** — leitura + exercício em testnet/stagenet |
 | **Carteira multisig Monero** fora do Haveno (2-of-3 entre pessoas) | **Sim** — fluxo completo abaixo |
 | **Árbitro / infra Haveno** (panorama) | Ver Cap. 17 do Volume II; este anexo é **carteira**, não rede Haveno |
@@ -162,7 +162,7 @@ No **Haveno**, cada trade abre uma carteira multisig **2-de-3** (você + contrap
 |------|------|
 | Multisig Monero (doc primária) | https://docs.getmonero.org/multisignature/ |
 | Whonix + Monero multisig | https://www.whonix.org/wiki/Monero_Multisig |
-| Haveno — o que o app faz (Cap. 10) | [Curso — Rede Descentralizada (Extensão).md](Curso%20—%20Rede%20Descentralizada%20(Extensão).md#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) |
+| Haveno — o que o app faz (Cap. 10) | [Curso-Rede-Descentralizada-Extensao.md](Curso-Rede-Descentralizada-Extensao.md#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) |
 
 ---
 

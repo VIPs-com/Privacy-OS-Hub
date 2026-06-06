@@ -4,7 +4,7 @@
 > que protege os seus fundos: a **chave de gasto (seed) nunca toca a internet**. Onde os comandos exatos
 > mudam por versão/SO, aponto a **fonte oficial** — confira sempre antes de executar dinheiro real.
 >
-> **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../Tails%20OS%20Expert/README.md) concluído — seed, carteira,
+> **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../Tails-OS-Expert/README.md) concluído — seed, carteira,
 > escrow, verificação de binários, Feather no Tails.
 
 ## Sumário
@@ -83,8 +83,8 @@ Baixe **só** de **whonix.org** ([Download](https://www.whonix.org/wiki/Download
    gpg --verify Whonix-*.asc Whonix-*    # precisa dizer: Good signature
    ```
    Procure por **"Good signature"** **e** confirme que o **fingerprint** que assinou é o `916B8D99…2EEACCDA`. "Good signature" de uma chave **errada** não vale.
-3. **Passos exatos por SO** (Linux/Windows/macOS — o `gpg` e o nome dos arquivos variam): guia prático deste módulo em [`Instalar Whonix — passo a passo por SO.md`](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) (§5), ou a fonte oficial **"Verify the images"** (§8). Não pule esta etapa por preguiça de ler o guia do seu SO.
-4. Importe a imagem **verificada** no VirtualBox/KVM e inicie **Gateway + Workstation** — passo a passo em [`Instalar Whonix — passo a passo por SO.md`](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md).
+3. **Passos exatos por SO** (Linux/Windows/macOS — o `gpg` e o nome dos arquivos variam): guia prático deste módulo em [`Instalar-Whonix-passo-a-passo-por-SO.md`](Instalar-Whonix-passo-a-passo-por-SO.md) (§5), ou a fonte oficial **"Verify the images"** (§8). Não pule esta etapa por preguiça de ler o guia do seu SO.
+4. Importe a imagem **verificada** no VirtualBox/KVM e inicie **Gateway + Workstation** — passo a passo em [`Instalar-Whonix-passo-a-passo-por-SO.md`](Instalar-Whonix-passo-a-passo-por-SO.md).
 
 **OK se:** `gpg --verify` diz **"Good signature"** com o fingerprint `916B8D99…2EEACCDA`; o Gateway conecta ao Tor (ícone/Tor Connection); a Workstation navega — e **só** consegue via Gateway.
 
@@ -202,7 +202,7 @@ O Feather faz airgapped por **QR animado (UR) via webcam** (método primário na
 
 Fonte oficial: [Monero — Offline Transaction Signing](https://docs.getmonero.org/cold-storage/offline-transaction-signing/) e [view-only](https://www.getmonero.org/resources/user-guides/view_only.html).
 
-> ⚡ **Comandos só** — escolha sua trilha em [`00 — Comece aqui — Escolha sua trilha.md`](00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md): Trilha A ([Feather](Trilha-A-Feather/Playbook%20—%20Feather%20%28GUI%29.md)) **ou** Trilha B ([`monero-wallet-cli`](Trilha-B-CLI/Playbook%20—%20monero-wallet-cli.md)) — **não as duas**.
+> ⚡ **Comandos só** — escolha sua trilha em [`00-Comece-aqui-Escolha-sua-trilha.md`](00-Comece-aqui-Escolha-sua-trilha.md): Trilha A ([Feather](Trilha-A-Feather/Playbook-Feather-GUI.md)) **ou** Trilha B ([`monero-wallet-cli`](Trilha-B-CLI/Playbook-monero-wallet-cli.md)) — **não as duas**.
 
 - **Criar a view-only** (na quente): pegue `address` e `viewkey` da fria, depois:
   ```bash
@@ -236,7 +236,7 @@ opera em view-only.
 | **Hardware wallet + Feather** (§5.6) | Baixa (operação) | **Opcional** — se já tem ou quer comprar Trezor/Ledger |
 
 > A documentação do Monero também descreve cold storage manual como **complexo e com margem de erro** — por
-> isso exigimos **backups reforçados** e teste com valor mínimo. Checklist: [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md).
+> isso exigimos **backups reforçados** e teste com valor mínimo. Checklist: [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md).
 
 > ⚠️ **Perda total por falha de mídia** (o risco que não é golpe nem comando errado): se a **única**
 > cópia da seed/chave de gasto estiver na máquina fria e o **pendrive/persistência do Tails** (amnésico!)
@@ -249,7 +249,7 @@ opera em view-only.
 - **Restore height** correto — anote-o quando criar a carteira.
 - A **seed/spend key nunca** é digitada, fotografada ou colada numa máquina online. Se isso acontecer uma vez, a carteira deixou de ser fria — **migre os fundos** para uma nova.
 
-> 👉 **Não tem Trezor/Ledger?** Trilha A (Feather air-gap) + [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) é o seu caminho. Hardware wallet é **opcional** (§5.6).
+> 👉 **Não tem Trezor/Ledger?** Trilha A (Feather air-gap) + [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md) é o seu caminho. Hardware wallet é **opcional** (§5.6).
 
 ### 5.6 Alternativa opcional: hardware wallet (Trezor/Ledger) + Feather — **custo extra**
 
@@ -396,7 +396,7 @@ Na prática:
 | **Gerar/custodiar** a chave fria e **assinar offline** | **Tails** (Módulo 1, bootado offline) |
 | **Infra 24/7** (nó Monero, mineração) | **Home lab** (Módulo 1, Cap. 6) |
 | **Tradear no Haveno** (quente) | **Tails** (Módulo 1) |
-| **Custodiar o grosso (baixo custo, air-gap)** | **Tails offline + Trilha A/B** + [`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md) |
+| **Custodiar o grosso (baixo custo, air-gap)** | **Tails offline + Trilha A/B** + [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md) |
 | **Alternativa com hardware proprietário** | **Hardware wallet + Feather** (opcional — §5.6) |
 
 ---
@@ -418,7 +418,7 @@ Na prática:
 | **Feather — hardware wallet** (§5.6) | https://docs.featherwallet.org/guides/create-wallet-hardware-device · https://docs.featherwallet.org/guides/hardware-wallet-support |
 | **Trezor — Monero** | https://trezor.io/coins/wallet/monero |
 | **Ledger — Monero** | https://www.getmonero.org/resources/user-guides/ledger-wallet-cli.html · https://github.com/LedgerHQ/app-monero |
-| **Módulo 1 — Tails + Haveno** | [`../Tails OS Expert/README.md`](../Tails%20OS%20Expert/README.md) |
+| **Módulo 1 — Tails + Haveno** | [`../Tails-OS-Expert/README.md`](../Tails-OS-Expert/README.md) |
 
 ---
 

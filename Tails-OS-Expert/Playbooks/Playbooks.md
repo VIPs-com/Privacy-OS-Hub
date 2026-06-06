@@ -1,6 +1,6 @@
 # Playbooks — Tails OS Expert (só comandos)
 
-Direto ao ponto. Fundamentos e telas: no livro [`../Curso — Tails OS Expert.md`](../Curso%20—%20Tails%20OS%20Expert.md). Automação: pasta [`../Scripts/`](../Scripts/README.md).
+Direto ao ponto. Fundamentos e telas: no livro [`../Curso-Tails-OS-Expert.md`](../Curso-Tails-OS-Expert.md). Automação: pasta [`../Scripts/`](../Scripts/README.md).
 
 **Ordem obrigatória.** Tails **7.8.1+** (7.8.1 = atualização emergencial de segurança, jun/2026). Rede da turma: **Reto `1.6.0-reto`**.
 
@@ -185,6 +185,6 @@ Reto releases    https://github.com/retoaccess1/haveno-reto/releases
 Reto PGP         https://retoswap.com/reto_public.asc
 ```
 
-**Volume II (pós-verde):** [`../Expansão Curso/Playbooks — Rede Descentralizada.md`](../Expansão%20Curso/Playbooks%20—%20Rede%20Descentralizada.md) · teoria: [`../Expansão Curso/Curso — Rede Descentralizada (Extensão).md`](../Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md)
+**Volume II (pós-verde):** [`../Expansao-Curso/Playbooks-Rede-Descentralizada.md`](../Expansao-Curso/Playbooks-Rede-Descentralizada.md) · teoria: [`../Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md`](../Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md)
 
-*Comandos Volume I · Reto 1.6.0-reto · maio/2026. Teoria: `../Curso — Tails OS Expert.md`.*
+*Comandos Volume I · Reto 1.6.0-reto · maio/2026. Teoria: `../Curso-Tails-OS-Expert.md`.*

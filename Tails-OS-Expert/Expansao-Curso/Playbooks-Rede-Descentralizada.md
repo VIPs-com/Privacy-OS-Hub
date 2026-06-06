@@ -1,6 +1,6 @@
 # Playbooks — Rede Descentralizada (só comandos)
 
-**Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso — Rede Descentralizada (Extensão).md`](Curso%20—%20Rede%20Descentralizada%20(Extensão).md).
+**Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso-Rede-Descentralizada-Extensao.md`](Curso-Rede-Descentralizada-Extensao.md).
 
 **Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7, **mais as seções 9–10 Backup/Atualizar**). Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
 
@@ -215,8 +215,8 @@ journalctl -u xmrig -f
 ```text
 # Haveno cria escrow 2-de-3 automaticamente por trade (Cap. 10 do livro).
 # Para multisig Monero manual (educacional / fora do app):
-#   Teoria:  Multisig 2-de-3 — criação manual CLI.md
-#   Comandos: Playbooks — Multisig CLI.md
+#   Teoria:  Multisig-2-de-3-criacao-manual-CLI.md
+#   Comandos: Playbooks-Multisig-CLI.md
 # Pratique em stagenet/testnet primeiro.
 ```
 
@@ -225,10 +225,10 @@ journalctl -u xmrig -f
 ## Links essenciais (Volume II)
 
 ```text
-Extensão (teoria)     Expansão Curso/Curso — Rede Descentralizada (Extensão).md
-Multisig CLI (anexo)  Multisig 2-de-3 — criação manual CLI.md · Playbooks — Multisig CLI.md
+Extensão (teoria)     Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md
+Multisig CLI (anexo)  Multisig-2-de-3-criacao-manual-CLI.md · Playbooks-Multisig-CLI.md
 Volume I (comandos)   ../Playbooks/Playbooks.md
-Volume I (livro)      ../Curso — Tails OS Expert.md
+Volume I (livro)      ../Curso-Tails-OS-Expert.md
 Feather Tails         https://docs.featherwallet.org/guides/tails
 Reto releases         https://github.com/retoaccess1/haveno-reto/releases
 Aloha                 https://haveno-aloha.com/
@@ -240,4 +240,4 @@ HomeLab scripts       ../Scripts/HomeLab/README.md
 Tails upgrade         https://tails.net/doc/upgrade/index.en.html
 ```
 
-*Playbooks Volume II · maio/2026 · Reto 1.6.0-reto. Teoria: `Expansão Curso/Curso — Rede Descentralizada (Extensão).md`.*
+*Playbooks Volume II · maio/2026 · Reto 1.6.0-reto. Teoria: `Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md`.*

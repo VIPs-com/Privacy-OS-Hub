@@ -2,7 +2,7 @@
 
 > ⚠️ **Estes scripts NÃO rodam no Tails.** Eles são para o seu **home lab** — uma instalação **Debian/Ubuntu** normal, sempre ligada (mini PC, NUC, Raspberry Pi 4/5 com SSD). O Tails é o **cliente** (carteira/Haveno); o home lab é a **infraestrutura** (nó, mineração).
 >
-> Contexto: Volume I [`../Curso — Tails OS Expert.md`](../Curso%20—%20Tails%20OS%20Expert.md) Cap. 6 · **Lab integrado:** Volume II [`../Expansão Curso/Curso — Rede Descentralizada (Extensão).md`](../Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md) Cap. 13.
+> Contexto: Volume I [`../../Curso-Tails-OS-Expert.md`](../../Curso-Tails-OS-Expert.md) Cap. 6 · **Lab integrado:** Volume II [`../../Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md`](../../Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) Cap. 13.
 
 Cada script é **independente** e cobre **uma modalidade**. Rode na ordem conforme o que quer explorar.
 

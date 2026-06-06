@@ -67,7 +67,7 @@ b(){ echo -e "\033[1;34m$*\033[0m"; }       # azul
 g(){ echo -e "\033[1;32m$*\033[0m"; }       # verde
 y(){ echo -e "\033[1;33m$*\033[0m"; }       # amarelo
 r(){ echo -e "\033[0;31m$*\033[0m"; }       # vermelho
-die(){ r "ERRO: $*"; echo "Abortando. Veja o Capitulo 7 (FAQ) do livro Curso — Tails OS Expert.md"; exit 1; }
+die(){ r "ERRO: $*"; echo "Abortando. Veja o Capitulo 7 (FAQ) do livro Curso-Tails-OS-Expert.md"; exit 1; }
 
 echo
 b "==============================================================="

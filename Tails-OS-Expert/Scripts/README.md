@@ -20,7 +20,7 @@ Automação do curso. Há dois conjuntos:
 | `HomeLab/03-setup-p2pool.sh` | Mineração descentralizada (P2Pool) |
 | `HomeLab/04-setup-xmrig.sh` | Minerador (xmrig → P2Pool) |
 
-Teoria e fundamentos: `../Curso — Tails OS Expert.md` (Cap. 6 cobre o Home Lab). Comandos manuais: `../Playbooks/Playbooks.md`.
+Teoria e fundamentos: `../Curso-Tails-OS-Expert.md` (Cap. 6 cobre o Home Lab). Comandos manuais: `../Playbooks/Playbooks.md`.
 
 > Pré-requisitos (sempre manuais): Tails no USB, **Tor conectado**, **persistência + Dotfiles**, **senha admin** da sessão. Veja Capítulo 2 do livro.
 
@@ -51,7 +51,7 @@ Os scripts precisam estar na **persistência** para rodar com caminho simples. U
 
 ### Método A — pelo gerenciador de Arquivos (simples)
 
-1. Abra **Arquivos** e entre nesta pasta (`Tails OS Expert/Scripts`).
+1. Abra **Arquivos** e entre nesta pasta (`Tails-OS-Expert/Scripts`).
 2. Selecione `haveno-auto.sh`, `haveno-backup.sh`, `haveno-update.sh`, `haveno-backup.desktop`.
 3. **Copiar** → cole em **Casa → Persistent** (`/home/amnesia/Persistent`).
 4. No Terminal:

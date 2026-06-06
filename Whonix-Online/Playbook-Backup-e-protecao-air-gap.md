@@ -1,7 +1,7 @@
 # Playbook — Backup e proteção (air-gap, sem hardware wallet)
 
 Checklist prático para custodiar o **grosso** com **Cold-Tails / Hot-Whonix** — sem depender de Trezor/Ledger
-ou outro hardware proprietário caro. Teoria e modelo de ameaças: [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) Cap. 5.
+ou outro hardware proprietário caro. Teoria e modelo de ameaças: [`Curso-Whonix-Online.md`](Curso-Whonix-Online.md) Cap. 5.
 
 > **Princípio do hub:** controle total e **responsabilidade sua**. A spend key vive só no Tails offline; o Whonix
 > é view-only. Hardware wallet é **opcional** (§5.6) — não é pré-requisito deste curso.
@@ -10,7 +10,7 @@ ou outro hardware proprietário caro. Teoria e modelo de ameaças: [`Curso — W
 
 ## 1. Antes de mover qualquer valor relevante
 
-- [ ] Fluxo frio↔quente testado com **valor mínimo** (Trilha A ou B — [`00 — Comece aqui`](00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md))
+- [ ] Fluxo frio↔quente testado com **valor mínimo** (Trilha A ou B — [`00 — Comece aqui`](00-Comece-aqui-Escolha-sua-trilha.md))
 - [ ] **DUAS cópias offline** da seed anotadas (papel ou metal, **locais separados**)
 - [ ] **Teste de restauração** feito numa sessão Tails offline (abrir carteira só com a seed de backup)
 - [ ] **Restore height** anotado na criação da carteira
@@ -34,8 +34,8 @@ ou outro hardware proprietário caro. Teoria e modelo de ameaças: [`Curso — W
 
 Siga o Módulo 1 — backup da pasta de dados do Haveno/Feather:
 
-- [`Tails OS Expert/Curso — Tails OS Expert.md`](../Tails%20OS%20Expert/Curso%20—%20Tails%20OS%20Expert.md) §5.2
-- [`Tails OS Expert/Playbooks/Playbooks.md`](../Tails%20OS%20Expert/Playbooks/Playbooks.md) seções Backup/Atualizar
+- [`Tails-OS-Expert/Curso-Tails-OS-Expert.md`](../Tails-OS-Expert/Curso-Tails-OS-Expert.md) §5.2
+- [`Tails-OS-Expert/Playbooks/Playbooks.md`](../Tails-OS-Expert/Playbooks/Playbooks.md) seções Backup/Atualizar
 
 **OK se:** existe cópia cifrada da pasta de dados **além** da seed em papel.
 
@@ -93,7 +93,7 @@ Se a Workstation quebrar ou você apagar a VM:
 
 ## 7. Hardware wallet (opcional)
 
-Se **já tem** ou **quer comprar** Trezor/Ledger: [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) **§5.6** (custo extra, firmware proprietário).
+Se **já tem** ou **quer comprar** Trezor/Ledger: [`Curso-Whonix-Online.md`](Curso-Whonix-Online.md) **§5.6** (custo extra, firmware proprietário).
 Se **não tem** e busca baixo custo: **Trilha A + este playbook** é o caminho do hub.
 
 ---
@@ -104,7 +104,7 @@ Se **não tem** e busca baixo custo: **Trilha A + este playbook** é o caminho d
 |------|------|
 | Cold storage / offline signing | https://docs.getmonero.org/cold-storage/offline-transaction-signing/ |
 | Feather offline signing | https://docs.featherwallet.org/guides/offline-tx-signing |
-| Backup Módulo 1 | [`../Tails OS Expert/Curso — Tails OS Expert.md`](../Tails%20OS%20Expert/Curso%20—%20Tails%20OS%20Expert.md) §5.2 |
+| Backup Módulo 1 | [`../Tails-OS-Expert/Curso-Tails-OS-Expert.md`](../Tails-OS-Expert/Curso-Tails-OS-Expert.md) §5.2 |
 
 ---
 

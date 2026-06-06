@@ -6,9 +6,9 @@
 
 | Volume | Arquivo | Foco |
 |--------|---------|------|
-| **I** | [`../Curso — Tails OS Expert.md`](../Curso%20—%20Tails%20OS%20Expert.md) | Tails + Haveno **verde** + fundamentos + segurança |
+| **I** | [`../Curso-Tails-OS-Expert.md`](../Curso-Tails-OS-Expert.md) | Tails + Haveno **verde** + fundamentos + segurança |
 | **II (este)** | Este arquivo | **Usar** a rede: carteira, trades, Feather, home lab, ecossistema |
-| **II (comandos)** | [`Playbooks — Rede Descentralizada.md`](Playbooks%20—%20Rede%20Descentralizada.md) | Só comandos do Volume II |
+| **II (comandos)** | [`Playbooks-Rede-Descentralizada.md`](Playbooks-Rede-Descentralizada.md) | Só comandos do Volume II |
 
 > **Pré-requisito:** Haveno com indicador **verde** (Volume I, Caps. 2–3) — e **leia os Caps. 4, 5 e 9** do Vol. I (segurança, seed, golpes) **antes de criar conta ou depositar XMR**. Tails **7.8.1+**, persistência + Dotfiles, rede **Reto `1.6.0-reto`** (ou outra rede com URL + PGP conferidos).
 
@@ -37,7 +37,7 @@ Depois explore Caps. 3–4 (Feather/PGP), 6 (primeiro XMR), 9 (disputa), 11 (pag
 7. [Trade na prática — comprar XMR](#7-trade-na-prática--comprar-xmr)
 8. [Trade na prática — vender XMR](#8-trade-na-prática--vender-xmr)
 9. [Disputa — passo a passo](#9-disputa--passo-a-passo)
-10. [Multisig 2-de-3 — o que você faz vs o que o app faz](#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) · [Anexo: criação manual CLI](Multisig%202-de-3%20—%20criação%20manual%20CLI.md)
+10. [Multisig 2-de-3 — o que você faz vs o que o app faz](#10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz) · [Anexo: criação manual CLI](Multisig-2-de-3-criacao-manual-CLI.md)
 11. [Métodos de pagamento — riscos reais](#11-métodos-de-pagamento--riscos-reais)
 12. [Outra rede Haveno (ex.: Aloha)](#12-outra-rede-haveno-ex-aloha)
 13. [Home Lab integrado — lab completo](#13-home-lab-integrado--lab-completo)
@@ -88,7 +88,7 @@ flowchart TB
 
 # 2. Haveno — primeira conta e proteção da seed
 
-> Complementa o Volume I, seção [5.1](../Curso%20—%20Tails%20OS%20Expert.md#51-carteira--criar-restaurar-onde-ficam-os-dados). Aqui é o **ritual na criação** — faça **antes** de depositar XMR ou tradear.
+> Complementa o Volume I, seção [5.1](../Curso-Tails-OS-Expert.md#51-carteira--criar-restaurar-onde-ficam-os-dados). Aqui é o **ritual na criação** — faça **antes** de depositar XMR ou tradear.
 
 ## 2.1 Checklist — momento da primeira conta
 
@@ -435,8 +435,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 - Compartilhar chaves ou seed com contraparte
 
 > **Quer aprender ou operar multisig Monero fora do Haveno?** Não omitimos: anexo educacional
-> [`Multisig 2-de-3 — criação manual CLI.md`](Multisig%202-de-3%20—%20criação%20manual%20CLI.md) +
-> [`Playbooks — Multisig CLI.md`](Playbooks%20—%20Multisig%20CLI.md). Use stagenet/testnet para praticar.
+> [`Multisig-2-de-3-criacao-manual-CLI.md`](Multisig-2-de-3-criacao-manual-CLI.md) +
+> [`Playbooks-Multisig-CLI.md`](Playbooks-Multisig-CLI.md). Use stagenet/testnet para praticar.
 
 **Você SIM:**
 
@@ -444,7 +444,7 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 - Mantém tudo **dentro do app**
 - Usa **disputa** se algo der errado
 
-Diagrama completo: Volume I, [seção 5.5](../Curso%20—%20Tails%20OS%20Expert.md#55-guia-rápido--comprar-e-vender-com-segurança-o-fluxo-da-rede).
+Diagrama completo: Volume I, [seção 5.5](../Curso-Tails-OS-Expert.md#55-guia-rápido--comprar-e-vender-com-segurança-o-fluxo-da-rede).
 
 ---
 
@@ -707,7 +707,7 @@ Separado de atualizar o **Haveno** (Volume I, 5.3).
 
 | Tema | Link |
 |------|------|
-| Volume I (curso base) | [`../Curso — Tails OS Expert.md`](../Curso%20—%20Tails%20OS%20Expert.md) |
+| Volume I (curso base) | [`../Curso-Tails-OS-Expert.md`](../Curso-Tails-OS-Expert.md) |
 | Feather no Tails | https://docs.featherwallet.org/guides/tails |
 | Feather Tor | https://docs.featherwallet.org/guides/tor-support |
 | Haveno Getting Started | https://docs.haveno.exchange/users/getting_started/ |

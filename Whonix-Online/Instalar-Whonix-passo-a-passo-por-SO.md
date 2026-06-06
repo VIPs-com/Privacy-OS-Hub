@@ -1,6 +1,6 @@
 # Instalar o Whonix — passo a passo por SO (VirtualBox / KVM)
 
-Guia prático de **instalação e verificação da imagem**, separado pelo **seu sistema (host)**. Complementa o livro [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) (Cap. 2), que explica o *porquê* (modelo de ameaças, Gateway × Workstation).
+Guia prático de **instalação e verificação da imagem**, separado pelo **seu sistema (host)**. Complementa o livro [`Curso-Whonix-Online.md`](Curso-Whonix-Online.md) (Cap. 2), que explica o *porquê* (modelo de ameaças, Gateway × Workstation).
 
 > 🔒 **Disciplina inegociável:** **baixe → verifique → só então importe**. Imagem **não verificada = não importe**. Mesmo rigor PGP do Módulo 1.
 >
@@ -188,7 +188,7 @@ O fingerprint **`916B8D99…2EEACCDA` não mudou** após a re-certificação (ja
 
 Com o Whonix pronto e atualizado, volte ao livro (Cap. 4–5) e escolha **uma** trilha de cold-signing:
 
-👉 [`00 — Comece aqui — Escolha sua trilha.md`](00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md) → **Trilha A (Feather)** ou **Trilha B (CLI)**.
+👉 [`00-Comece-aqui-Escolha-sua-trilha.md`](00-Comece-aqui-Escolha-sua-trilha.md) → **Trilha A (Feather)** ou **Trilha B (CLI)**.
 
 ---
 
@@ -220,7 +220,7 @@ Para as **Trilhas A/B**, o pendrive de trânsito precisa ser visível na **Works
 
 Fonte: https://www.whonix.org/wiki/VirtualBox · https://www.whonix.org/wiki/KVM
 
-> O pendrive de trânsito **nunca** deve ser usado na máquina online com carteira **completa** — só arquivos de outputs/tx entre frio e quente ([`Playbook — Backup e proteção (air-gap).md`](Playbook%20—%20Backup%20e%20proteção%20(air-gap).md)).
+> O pendrive de trânsito **nunca** deve ser usado na máquina online com carteira **completa** — só arquivos de outputs/tx entre frio e quente ([`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md)).
 
 ---
 

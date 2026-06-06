@@ -1,8 +1,8 @@
 # Playbooks — Whonix Online (só comandos)
 
-**Teoria:** [`Curso — Whonix Online.md`](../Curso%20—%20Whonix%20Online.md) · **Instalação detalhada:** [`Instalar Whonix — passo a passo por SO.md`](../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md)
+**Teoria:** [`Curso-Whonix-Online.md`](../Curso-Whonix-Online.md) · **Instalação detalhada:** [`Instalar-Whonix-passo-a-passo-por-SO.md`](../Instalar-Whonix-passo-a-passo-por-SO.md)
 
-**Pré-requisito:** [Módulo 1 (Tails + Haveno)](../../Tails%20OS%20Expert/README.md) concluído.
+**Pré-requisito:** [Módulo 1 (Tails + Haveno)](../../Tails-OS-Expert/README.md) concluído.
 
 ---
 
@@ -23,7 +23,7 @@ gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 gpg --verify-options show-notations --verify Whonix-*.libvirt.xz.asc Whonix-*.libvirt.xz
 ```
 
-Windows (Kleopatra) / macOS: ver [`Instalar Whonix — passo a passo por SO.md`](../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §5.
+Windows (Kleopatra) / macOS: ver [`Instalar-Whonix-passo-a-passo-por-SO.md`](../Instalar-Whonix-passo-a-passo-por-SO.md) §5.
 
 ```bash
 # EXPKEYSIG (chave expirada no keyring antigo):
@@ -62,9 +62,9 @@ Doc: https://docs.featherwallet.org/guides/tor-support
 ## §4 — Cold-signing (escolha UMA trilha)
 
 ```text
-Porteiro:     00 — Comece aqui — Escolha sua trilha.md
-Trilha A:     Trilha-A-Feather/Playbook — Feather (GUI).md
-Trilha B:     Trilha-B-CLI/Playbook — monero-wallet-cli.md
+Porteiro:     00-Comece-aqui-Escolha-sua-trilha.md
+Trilha A:     Trilha-A-Feather/Playbook-Feather-GUI.md
+Trilha B:     Trilha-B-CLI/Playbook-monero-wallet-cli.md
 ```
 
 ---
@@ -72,7 +72,7 @@ Trilha B:     Trilha-B-CLI/Playbook — monero-wallet-cli.md
 ## §5 — Backup air-gap (sem hardware wallet)
 
 ```text
-Playbook — Backup e proteção (air-gap).md
+Playbook-Backup-e-protecao-air-gap.md
 # DUAS cópias seed offline + teste restauração + pendrive dedicado
 ```
 
@@ -89,19 +89,19 @@ Playbook — Backup e proteção (air-gap).md
 | USB não visto na Workstation | Extension Pack + filtro USB | Instalar §9 |
 | Workstation "sem internet" | Normal se Gateway não conectou ao Tor | Curso Cap. 3 |
 | Sem nó `.onion` próprio | Use nó remoto confiável | Curso Cap. 4.2 |
-| Pré-requisitos incompletos | Volte ao porteiro `00` | `00 — Comece aqui…` |
+| Pré-requisitos incompletos | Volte ao porteiro `00` | `00-Comece-aqui-Escolha-sua-trilha.md` |
 
-Detalhe: [`Instalar Whonix — passo a passo por SO.md`](../Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) §3.4, §4.1, §5.4.
+Detalhe: [`Instalar-Whonix-passo-a-passo-por-SO.md`](../Instalar-Whonix-passo-a-passo-por-SO.md) §3.4, §4.1, §5.4.
 
 ---
 
 ## Links
 
 ```text
-Livro M2           Curso — Whonix Online.md
-Install por SO     Instalar Whonix — passo a passo por SO.md
-Backup air-gap     Playbook — Backup e proteção (air-gap).md
-HW opcional        Curso — Whonix Online.md §5.6
+Livro M2           Curso-Whonix-Online.md
+Install por SO     Instalar-Whonix-passo-a-passo-por-SO.md
+Backup air-gap     Playbook-Backup-e-protecao-air-gap.md
+HW opcional        Curso-Whonix-Online.md §5.6
 Verify images      https://www.whonix.org/wiki/Verify_the_images
 ```
 

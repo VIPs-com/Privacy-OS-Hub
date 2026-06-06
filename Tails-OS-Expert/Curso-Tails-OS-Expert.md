@@ -7,7 +7,7 @@ Este é o **livro** do curso. Tudo está aqui, em capítulos, na ordem. Sem fica
 - **Este arquivo** = teoria + fundamentos + instalação passo a passo (o "porquê" e o "como").
 - **`Playbooks/Playbooks.md`** = só os comandos, direto ao ponto.
 - **Pasta `Scripts/`** = automação (`haveno-auto.sh`, `haveno-backup.sh`, `haveno-update.sh`) com um README explicando cada um.
-- **Volume II:** [`Expansão Curso/`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md) — livro + [`Playbooks — Rede Descentralizada.md`](Expansão%20Curso/Playbooks%20—%20Rede%20Descentralizada.md) (trades, Feather, home lab).
+- **Volume II:** [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) — livro + [`Playbooks-Rede-Descentralizada.md`](Expansao-Curso/Playbooks-Rede-Descentralizada.md) (trades, Feather, home lab).
 
 > **Alinhamento oficial:** procedimentos Haveno conforme `scripts/install_tails/` do repositório haveno-dex/haveno (branch `master`). Tails **7.8.1+**. Rede de exemplo da turma: **Reto** (`1.6.0-reto`).
 > **Segurança:** o exploit do protocolo de trades (20/05/2026) foi **corrigido** na `1.6.0-reto` (24/05/2026). Detalhes no **Capítulo 4**.
@@ -31,7 +31,7 @@ Este é o **livro** do curso. Tudo está aqui, em capítulos, na ordem. Sem fica
 8. [TODOS OS LINKS (referência única)](#8-todos-os-links-referência-única)
 9. [DICAS E ALERTAS FINAIS — não cair em roubadas](#9-dicas-e-alertas-finais--não-cair-em-roubadas)
 
-**Volume II (mão na massa):** [`Expansão Curso/Curso — Rede Descentralizada (Extensão).md`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md) — Feather, seed, trades, home lab, ecossistema.
+**Volume II (mão na massa):** [`Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) — Feather, seed, trades, home lab, ecossistema.
 
 ---
 
@@ -63,8 +63,8 @@ O Tails **não funciona** em celular ou tablet.
 | Saber se pode tradear | **Capítulo 4** |
 | Pós-verde (carteira, backup, redes) | **Capítulo 5** |
 | Resolver um erro | **Capítulo 7 (FAQ)** |
-| Trades, Feather, home lab (mão na massa) | **Volume II:** [`Expansão Curso/`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md) |
-| Só comandos Volume II | **`Expansão Curso/Playbooks — Rede Descentralizada.md`** |
+| Trades, Feather, home lab (mão na massa) | **Volume II:** [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) |
+| Só comandos Volume II | **`Expansao-Curso/Playbooks-Rede-Descentralizada.md`** |
 
 **Regra de ouro:** avance **só** quando o "OK se" do passo atual for verdadeiro. Não pule Tor, persistência ou admin — o Haveno depende dos três.
 
@@ -496,7 +496,7 @@ Depois reabra: **Aplicações → Outros → Haveno**. Mais sintomas e causas no
 
 # 5. PRÓXIMOS PASSOS (pós-verde)
 
-Com o indicador **verde**, a instalação terminou. Daqui em diante é **uso** do Haveno — resumo no Capítulo 5; **passo a passo completo** no Volume II: [`Expansão Curso/Curso — Rede Descentralizada (Extensão).md`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md).
+Com o indicador **verde**, a instalação terminou. Daqui em diante é **uso** do Haveno — resumo no Capítulo 5; **passo a passo completo** no Volume II: [`Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md).
 
 ## 5.1 Carteira — criar, restaurar, onde ficam os dados
 
@@ -516,7 +516,7 @@ Na interface (após verde):
 
 > **Importante:** a **seed sozinha não é backup completo** — não inclui histórico de trades nem contas de pagamento. Para restauração fiel, faça backup da **pasta de dados**.
 
-> **Checklist na criação:** ritual completo (anotar seed offline, separar do USB, backup `Data/` **antes** do 1º depósito) → Extensão, [Capítulo 2](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md#2-haveno--primeira-conta-e-proteção-da-seed).
+> **Checklist na criação:** ritual completo (anotar seed offline, separar do USB, backup `Data/` **antes** do 1º depósito) → Extensão, [Capítulo 2](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed).
 
 ## 5.2 Backup (persistência + Data + cifrar)
 
@@ -662,7 +662,7 @@ Se a contraparte **some**, paga errado ou recusa sem motivo, **abra disputa** no
 
 # 6. ECOSSISTEMA MONERO + TAILS (apêndice)
 
-Informativo. O curso ensina **Haveno no Tails** (P2P via rede de terceiros). A comunidade usa outras ferramentas — registradas aqui para você conhecer. **Mão na massa** (Feather, trades, Trocador, home lab integrado): Volume II [`Expansão Curso/`](Expansão%20Curso/Curso%20—%20Rede%20Descentralizada%20(Extensão).md).
+Informativo. O curso ensina **Haveno no Tails** (P2P via rede de terceiros). A comunidade usa outras ferramentas — registradas aqui para você conhecer. **Mão na massa** (Feather, trades, Trocador, home lab integrado): Volume II [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md).
 
 ```mermaid
 flowchart TB
@@ -1419,8 +1419,8 @@ Por isso a frase do Capítulo 6: *"o parceiro final pode pedir KYC"* — mesmo o
 
 **Parabéns — você concluiu o Tails OS Expert.** O conhecimento aqui vale mais que qualquer atalho: **verifique tudo, desconfie de pressa, nunca entregue sua seed.**
 
-> 📄 **Para imprimir / colar no grupo:** `Folheto — Regras e Golpes.md` (resumo de 1 página das regras de ouro e dos golpes).
+> 📄 **Para imprimir / colar no grupo:** `Folheto-Regras-e-Golpes.md` (resumo de 1 página das regras de ouro e dos golpes).
 
 ---
 
-*Tails OS Expert — Volume I. Tails 7.8.1+ · scripts `install_tails` (haveno-dex/haveno) · rede Reto `1.6.0-reto`. Revisão: jun/2026. Comandos: `Playbooks/Playbooks.md`; automação: `Scripts/`. Volume II: `Expansão Curso/`.*
+*Tails OS Expert — Volume I. Tails 7.8.1+ · scripts `install_tails` (haveno-dex/haveno) · rede Reto `1.6.0-reto`. Revisão: jun/2026. Comandos: `Playbooks/Playbooks.md`; automação: `Scripts/`. Volume II: `Expansao-Curso/`.*
