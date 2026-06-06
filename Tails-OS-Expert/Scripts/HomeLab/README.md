@@ -51,14 +51,16 @@ journalctl -u xmrig -f
 | `WALLET` | 03 | (obrigatório) | Endereço Monero **primário** (começa com `4`) |
 | `MINI` | 03 | `1` | `1` = sidechain mini (hashrate menor) |
 | `P2POOL_SHA256` | 03 | (vazio) | Hash esperado do P2Pool; se vazio, valida a **assinatura GPG** do checksums oficial e confere o hash |
-| `P2POOL_SIGNER_FPR` | 03 | (vazio) | Fingerprint do SChernykh; se passado, **exige** que a assinatura do checksums seja dela (`1FCAAB4D…4DA87ADF`) |
+| `P2POOL_SIGNER_FPR` | 03 | `1FCAAB4D…4DA87ADF` | Fingerprint exigida por padrão (SChernykh); passe outra se a chave rotacionar |
+| `P2POOL_TOFU` | 03 | `0` | `1` = aceitar qualquer VALIDSIG sem match de fingerprint (escape raro) |
 | `XMRIG_SHA256` | 04 | (vazio) | Hash esperado do xmrig; se vazio, compara com o checksums oficial do release |
 
 ## Segurança e avisos
 
 - **Verificação de binários (fail-closed).** Os três scripts **abortam** se o binário não conferir:
   - `01` (monerod) e `04` (xmrig) validam **assinatura GPG** — *binaryfate* (`81AC591F…2A0BDF92`) em `hashes.txt`, e *xmrig* (`9AC4CEA8…8BE94409`, [xmrig.com/docs/gpg-key](https://xmrig.com/docs/gpg-key)) em `SHA256SUMS.sig`.
-  - `03` (P2Pool) — o release publica a lista de hashes **clearsigned** em `sha256sums.txt.asc` (não há `.txt` separado). Por isso a **assinatura GPG é obrigatória**: o script valida a assinatura do checksums **antes** de confiar no hash e aborta em qualquer falha. Importa a chave do *SChernykh* de [p2pool.io/SChernykh.asc](https://p2pool.io/SChernykh.asc) (fallback keyserver). Como o P2Pool usa *reproducible builds* e não publica uma fingerprint central proeminente, sem fixá-la a checagem é **TOFU sobre HTTPS** — para cadeia de confiança forte, confirme a fingerprint `1FCAAB4D…4DA87ADF` (cross-validada em p2pool.io **+** monero-project/gitian.sigs) e rode com `P2POOL_SIGNER_FPR=…` (aí o script **exige** essa fingerprint).
+  - `03` (P2Pool) — o release publica a lista de hashes **clearsigned** em `sha256sums.txt.asc` (não há `.txt` separado). A **assinatura GPG é obrigatória** e, por padrão, o script **exige** a fingerprint do *SChernykh* (`1FCAAB4D…4DA87ADF`, cross-validada em p2pool.io **+** monero-project/gitian.sigs). Escape: `P2POOL_TOFU=1` (só VALIDSIG, sem match de fingerprint). Override: `P2POOL_SIGNER_FPR=<nova>` se a chave rotacionar.
+  - `01` com `PRUNED=0` injeta no `monerod.conf` as flags necessárias ao P2Pool (priority nodes, `in-peers`, DNS blocklist) — o script `03` só pede conferir/reiniciar o `monerod`.
   - Todos aceitam hash fixado: `MONEROD_SHA256` / `XMRIG_SHA256` / `P2POOL_SHA256` (este último **pula** o GPG — use só com `DL_URL` próprio).
 - Os serviços rodam num **usuário dedicado `monero`** (sem login), não no seu usuário.
 - O nó **baixa a blockchain pela internet normal** (não pela Tor). O Tor (script 2) só **publica o RPC** com privacidade.

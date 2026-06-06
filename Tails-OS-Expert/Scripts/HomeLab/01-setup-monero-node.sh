@@ -111,9 +111,16 @@ b "[4/6] Escrevendo /etc/monerod.conf..."
     echo "zmq-pub=tcp://127.0.0.1:18083"
     echo "rpc-bind-ip=127.0.0.1"
     echo "rpc-bind-port=18081"
+    # Flags necessarias p/ P2Pool (script 03) — inocuas em full node sem mineracao
+    echo "add-priority-node=p2pmd.xmrvsbeast.com:18080"
+    echo "add-priority-node=nodes.hashvault.pro:18080"
+    echo "in-peers=64"
+    echo "enable-dns-blocklist=1"
+    echo "enforce-dns-checkpointing=1"
   fi
   echo "no-igd=1"
   echo "out-peers=32"
+  # Banda de upload baixa (< 10 Mbit): edite out-peers=8 e in-peers=16 no monerod.conf
 } > /etc/monerod.conf
 chown monero:monero /etc/monerod.conf
 [ "$PRUNED" = "1" ] && g "  Config: no PRUNED (~100 GB)." || g "  Config: no FULL (~250 GB)."

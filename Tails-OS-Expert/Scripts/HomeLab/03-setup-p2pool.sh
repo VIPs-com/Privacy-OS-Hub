@@ -7,7 +7,7 @@
 #
 # Pre-requisitos:
 #   - No Monero FULL (PRUNED=0 no script 01) com ZMQ e RPC local 18081
-#   - O monerod precisa das flags do P2Pool (ver NOTA abaixo)
+#   - Se rodou o 01 com PRUNED=0, o monerod.conf ja inclui as flags do P2Pool — confira/reinicie
 #
 # O que faz:
 #   - Baixa o P2Pool (release mais recente do GitHub) e instala
@@ -17,21 +17,20 @@
 #         validamos a assinatura do checksums, so depois confiamos no hash de dentro dele.
 #   - Cria o servico systemd 'p2pool' com a sua carteira primaria
 #
-# NOTA DE CONFIANCA (honesta): o P2Pool usa *reproducible builds* e NAO publica uma
-#   fingerprint central tao proeminente quanto binaryfate (Monero) ou xmrig. A chave do
-#   autor (SChernykh) existe em https://p2pool.io/SChernykh.asc e tambem no repositorio
-#   monero-project/gitian.sigs — ambas conferem a fingerprint:
+# NOTA DE CONFIANCA: o P2Pool usa *reproducible builds*. Por padrao este script EXIGE que a
+#   assinatura do checksums seja do SChernykh (fingerprint cross-validada p2pool.io +
+#   monero-project/gitian.sigs):
 #       1FCA AB4D 3DC3 310D 16CB  D508 C47F 82B5 4DA8 7ADF
-#   Sem fixar essa fingerprint, a verificacao do .asc e' TOFU sobre HTTPS. Para cadeia de
-#   confianca forte, confirme a chave nas DUAS fontes acima e rode com P2POOL_SIGNER_FPR=...
-#   (a garantia mais forte do P2Pool e' o checksum + rebuild reproducivel).
+#   Override: P2POOL_SIGNER_FPR=<nova> se a chave rotacionar (confirme nas 2 fontes).
+#   Escape raro: P2POOL_TOFU=1 aceita qualquer VALIDSIG (sem match de fingerprint).
 #
 # Variaveis (env):
 #   WALLET            (OBRIGATORIO) endereco Monero PRIMARIO (comeca com 4)
 #   MINI              (padrao 1; 1 = sidechain mini, ideal p/ PC domestico)
 #   DL_URL            (opcional) URL .tar.gz do P2Pool linux-x64 (se a auto-deteccao falhar)
 #   P2POOL_SHA256     (opcional) hash esperado p/ comparacao direta (PULA o GPG; use com DL_URL custom)
-#   P2POOL_SIGNER_FPR (opcional) fingerprint GPG do SChernykh; se passado, EXIGE VALIDSIG com ela
+#   P2POOL_SIGNER_FPR (opcional) fingerprint exigida (padrao: SChernykh 1FCAAB4D…4DA87ADF)
+#   P2POOL_TOFU       (opcional) 1 = nao exigir match de fingerprint (so VALIDSIG)
 ###############################################################################
 set -euo pipefail
 
@@ -53,11 +52,10 @@ case "$WALLET" in 4*) ;; *) die "WALLET deve ser um endereco PRIMARIO (comeca co
 
 b "[1/4] Verificando pre-requisitos do no..."
 id monero >/dev/null 2>&1 || die "Usuario 'monero' nao existe. Rode o 01-setup-monero-node.sh primeiro (com PRUNED=0)."
-y "  Lembrete: o monerod precisa estar FULL e iniciado com as flags do P2Pool:"
-y "   --zmq-pub tcp://127.0.0.1:18083 --out-peers 32 --in-peers 64 \\"
-y "   --add-priority-node=p2pmd.xmrvsbeast.com:18080 --add-priority-node=nodes.hashvault.pro:18080 \\"
-y "   --enable-dns-blocklist --enforce-dns-checkpointing --rpc-bind-ip=127.0.0.1 --rpc-bind-port=18081"
-y "  (banda de upload < 10 Mbit: use --out-peers 8 --in-peers 16)"
+y "  Lembrete: monerod FULL (PRUNED=0 no script 01) com ZMQ + RPC 18081."
+y "  Se rodou o 01 com PRUNED=0, o /etc/monerod.conf ja inclui as flags do P2Pool — confira e reinicie:"
+y "   sudo systemctl restart monerod"
+y "  (banda de upload < 10 Mbit: edite out-peers=8 e in-peers=16 no monerod.conf)"
 
 b "[2/4] Baixando e VERIFICANDO o P2Pool..."
 command -v curl >/dev/null 2>&1 || { apt-get update -y && apt-get install -y curl tar; }
@@ -80,7 +78,6 @@ if [ -n "${P2POOL_SHA256:-}" ]; then
     || { rm -rf "$TMP"; die "Hash NAO confere com P2POOL_SHA256. Abortando."; }
 else
   # Fingerprint do SChernykh (cross-validada: p2pool.io/SChernykh.asc + monero-project/gitian.sigs).
-  # Usada para BUSCAR a chave no keyserver (fallback) e, se P2POOL_SIGNER_FPR for passado, para EXIGIR a match.
   SCH_FPR="${P2POOL_SIGNER_FPR:-1FCAAB4D3DC3310D16CBD508C47F82B54DA87ADF}"
   # Exigimos o checksums ASSINADO (.asc, clearsigned). O P2Pool publica so 'sha256sums.txt.asc'
   # (sem .txt cru). Forcar .asc impede downgrade silencioso para um checksums nao-assinado.
@@ -98,13 +95,13 @@ else
   GPG_OUT="$(gpg --batch --status-fd 1 --verify "$TMP/sums" 2>/dev/null || true)"
   printf '%s' "$GPG_OUT" | grep -q "VALIDSIG" \
     || { rm -rf "$TMP"; die "Assinatura GPG do checksums NAO valida. Binario suspeito — abortando."; }
-  if [ -n "${P2POOL_SIGNER_FPR:-}" ]; then
-    printf '%s' "$GPG_OUT" | grep -q "VALIDSIG.*${P2POOL_SIGNER_FPR}" \
-      || { rm -rf "$TMP"; die "Assinatura valida, mas NAO com o fingerprint P2POOL_SIGNER_FPR esperado. Abortando."; }
-    g "  OK: assinatura GPG valida e confere com P2POOL_SIGNER_FPR."
+  if [ "${P2POOL_TOFU:-0}" = "1" ]; then
+    y "  OK: assinatura GPG valida (modo TOFU — P2POOL_TOFU=1; fingerprint nao exigida)."
+  elif printf '%s' "$GPG_OUT" | grep -q "VALIDSIG.*${SCH_FPR}"; then
+    g "  OK: assinatura GPG valida e confere com fingerprint ${SCH_FPR}."
   else
-    y "  OK: assinatura GPG valida (TOFU sobre HTTPS — sem fingerprint fixada)."
-    y "      Para cadeia de confianca forte, confirme a chave do SChernykh e rode com P2POOL_SIGNER_FPR (ver cabecalho)."
+    rm -rf "$TMP"
+    die "Assinatura valida, mas NAO com o fingerprint esperado (${SCH_FPR}). Se a chave rotacionou, confirme nas 2 fontes (p2pool.io + gitian.sigs) e rode com P2POOL_SIGNER_FPR=<nova> ou P2POOL_TOFU=1."
   fi
 
   # So agora confiamos no conteudo: o hash baixado E o nome do arquivo tem de bater no checksums verificado.
