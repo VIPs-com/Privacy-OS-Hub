@@ -157,9 +157,11 @@ No **Whonix**, no Feather: **Create new wallet → View only** → cole **endere
 
 **OK se:** a view-only no Whonix sincroniza e mostra **o mesmo saldo** da carteira fria — **sem** ter a chave de gasto.
 
+> Se a view-only **não mostrar fundos antigos**, o **restore height** provavelmente está **alto demais** — **não é perda**; recrie a view-only com a altura correta (anterior à 1ª recepção).
+
 ### 5.3 Gastar com assinatura offline — fluxo **Feather** (recomendado)
 
-O Feather faz airgapped por **(a) QR animado (UR) via webcam** ou **(b) arquivos via USB/SD**. No par Tails↔Whonix, use **arquivos via USB**. Passo a passo (siga a UI atual em [offline-tx-signing](https://docs.featherwallet.org/guides/offline-tx-signing)):
+O Feather faz airgapped por **QR animado (UR) via webcam** (método primário na doc) **ou** por **arquivos via USB/SD**. No par Tails↔Whonix, **arquivos via USB** costumam ser mais simples para um air-gap estrito. Passo a passo (siga a UI atual em [offline-tx-signing](https://docs.featherwallet.org/guides/offline-tx-signing)):
 
 1. **(Quente/Whonix)** sincronize a view-only → **exporte os outputs** para um arquivo (USB).
 2. **(Frio/Tails)** abra a carteira **completa** (Tails **offline**), **importe os outputs**, **exporte as key images** (USB).
@@ -167,6 +169,8 @@ O Feather faz airgapped por **(a) QR animado (UR) via webcam** ou **(b) arquivos
 4. **(Quente/Whonix)** **monte a transação** (destino + valor) → o Feather gera uma **transação não-assinada** (arquivo).
 5. **(Frio/Tails)** **importe a não-assinada** na carteira completa → **confira o destino e o valor na tela da carteira FRIA** → **assine** → gera a **transação assinada** (arquivo).
 6. **(Quente/Whonix)** **importe a assinada** e **transmita** (broadcast) via Tor/seu nó.
+
+> Os passos 1–3 (sincronizar key images) são **obrigatórios no 1º envio** e recomendados sempre que o saldo parecer desatualizado (refletem o **troco** das transações).
 
 > 🔎 **Confira o endereço de destino na máquina FRIA** antes de assinar — a fria é a **fonte de verdade**.
 > Malware na máquina quente poderia trocar o endereço na hora de montar; a sua última checagem é no Tails.
@@ -181,12 +185,14 @@ Fonte oficial: [Monero — Offline Transaction Signing](https://docs.getmonero.o
   ```bash
   monero-wallet-cli --generate-from-view-key NOME-VIEW
   ```
+  > O `--generate-from-view-key` pede só **endereço + view key**. Defina a **altura** depois com `set refresh-from-block-height N` (ou inicie com `--restore-height N`) — senão sincroniza do bloco 0 (lento). Use a altura **anterior** à 1ª recepção.
 - **Sincronizar gastos** (a view-only não conhece key images):
   ```bash
   # quente:  export_outputs outputs_file
   # fria:    import_outputs outputs_file   →   export_key_images ki_file
   # quente:  import_key_images ki_file
   ```
+  > **Repita este ciclo de sincronização após CADA envio** — senão a view-only não enxerga o **troco** e mostra saldo errado (é o passo mais esquecido).
 - **Gastar:**
   ```bash
   # quente:  transfer ENDERECO VALOR   →   gera 'unsigned_monero_tx'
@@ -203,6 +209,11 @@ A **própria documentação do Monero** diz que o cold storage manual (CLI) é *
 | **Hardware wallet + Feather** | Baixa | Maioria — recomendado para o "grosso" |
 | **Feather frio↔quente (arquivos)** | Média | Quem quer air-gap sem hardware |
 | **monero-wallet-cli frio↔quente** | Alta | Avançado / auditoria |
+
+> ⚠️ **Perda total por falha de mídia** (o risco que não é golpe nem comando errado): se a **única**
+> cópia da seed/chave de gasto estiver na máquina fria e o **pendrive/persistência do Tails** (amnésico!)
+> corromper ou sumir, **os fundos somem para sempre** — ninguém recupera. **Antes de custodiar qualquer
+> valor, tenha DUAS cópias offline independentes da seed** (papel/metal, em locais separados). Ver Módulo 1 §5.2.
 
 **Regras de ouro do frio↔quente:**
 - **Teste com valor mínimo** o fluxo **inteiro** (criar view-only → montar → assinar → transmitir) **antes** de mover o grosso.
