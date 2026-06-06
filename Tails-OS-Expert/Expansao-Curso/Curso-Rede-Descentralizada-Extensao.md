@@ -357,6 +357,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 | 8 | Aguarde | Vendedor confere e **libera XMR** — tipicamente **15 min a 2 h** (PIX costuma ser rápido); o app mostra o tempo limite do trade |
 | 9 | Concluído | XMR na carteira Haveno → [sacar para Feather](#52-sacar-xmr-do-haveno-após-comprar) |
 
+> **Não achou "Mark payment as sent"?** O botão fica na tela do **trade ativo** (não em *Markets*). Se o trade acabou de ser aceito, aguarde a inicialização e **recarregue** — e só marque **depois** de pagar de verdade.
+
 > **Se travar na espera:** vendedor offline perto do prazo → **Open dispute** (Cap. 9). Não negocie "por fora" do chat do app.
 
 ## 7.3 Checklist comprador

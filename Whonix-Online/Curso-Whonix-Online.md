@@ -57,7 +57,7 @@ Consequência prática: mesmo um programa **comprometido** na Workstation **não
 > (gerar e custodiar a chave, assinar air-gapped). O **Whonix** é **persistente/online** — perfeito para o
 > que precisa ficar ligado e em rede (carteira *watch-only*, navegação, conectar ao seu nó). Eles **se completam**.
 
-**OK se:** você sabe explicar Gateway (roteia tudo por Tor) × Workstation (trabalho isolado), e **por que** isso protege o IP de forma arquitetural.
+**OK se:** você sabe explicar Gateway (roteia tudo por Tor) × Workstation (trabalho isolado), e **por que** isso protege o IP de forma arquitetural. *(Verificação prática no Cap. 2: com o Gateway no ar, o navegador da Workstation deve mostrar um **IP de saída Tor** — não o seu real — em [check.torproject.org](https://check.torproject.org).)*
 
 ---
 
@@ -177,7 +177,7 @@ No **Whonix**, no Feather: **Create new wallet → View only** → cole **endere
 
 > ⚠️ **Há dois caminhos para a MESMA custódia: Feather (§5.3, interface) OU `monero-wallet-cli` (§5.4, terminal).**
 > **Escolha UM e siga do início ao fim.** Não misture — uma carteira nasce e morre na mesma ferramenta;
-> não importe num lado o que você exportou no outro. Na dúvida: **Feather**.
+> não importe num lado o que você exportou no outro. Na dúvida: **Feather** (continue aqui). Vai de CLI? Pule para o **§5.4**.
 
 O Feather faz airgapped por **QR animado (UR) via webcam** (método primário na doc) **ou** por **arquivos via USB/SD**. No par Tails↔Whonix, **arquivos via USB** costumam ser mais simples para um air-gap estrito. Passo a passo (siga a UI atual em [offline-tx-signing](https://docs.featherwallet.org/guides/offline-tx-signing)):
 

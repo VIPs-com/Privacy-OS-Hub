@@ -49,7 +49,7 @@ flowchart LR
 
 Os scripts precisam estar na **persistência** para rodar com caminho simples. Use **um** dos métodos.
 
-### Método A — pelo gerenciador de Arquivos (simples)
+### Método A — pelo gerenciador de Arquivos (simples) — **recomendado para a maioria**
 
 1. Abra **Arquivos** e entre nesta pasta (`Tails-OS-Expert/Scripts`).
 2. Selecione `haveno-auto.sh`, `haveno-backup.sh`, `haveno-update.sh`, `haveno-backup.desktop`.

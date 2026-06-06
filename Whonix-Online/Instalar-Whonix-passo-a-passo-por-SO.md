@@ -56,7 +56,7 @@ Faça a verificação do seu SO na **§5** (Windows / macOS / Linux). **Só pros
 - Dê **start** em **Whonix-Workstation**.
 - Login padrão: usuário `user`, **sem senha** (passwordless). Troque/defina conforme o guia oficial se for usar de verdade.
 
-# OK se: o Gateway conecta ao Tor; a Workstation abre e navega — e **só** consegue via Gateway.
+> **OK se:** o Gateway conecta ao Tor; a Workstation abre e navega — e **só** consegue via Gateway.
 
 ### 3.4 Troubleshooting VirtualBox
 
@@ -83,7 +83,7 @@ Fonte: https://www.whonix.org/wiki/VirtualBox
 2. Importe seguindo o guia oficial **KVM** (define as redes `Whonix-External`/`Whonix-Internal`, o Gateway e a Workstation): https://www.whonix.org/wiki/KVM
 3. Inicie **Gateway** (espera Tor) e depois **Workstation** pelo `virt-manager`/`virsh`.
 
-# OK se: as redes virtuais sobem; Gateway conecta ao Tor; Workstation só sai via Gateway.
+> **OK se:** as redes virtuais sobem; Gateway conecta ao Tor; Workstation só sai via Gateway.
 
 > Os comandos de import do KVM mudam por versão — **siga o guia oficial KVM** acima como fonte de verdade.
 
@@ -123,8 +123,7 @@ gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
 gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 ```
 
-# OK se: aparece `gpg: Good signature` E o fingerprint que assinou é o `916B8D99…2EEACCDA`.
-# "Good signature" de uma chave ERRADA não vale.
+> **OK se:** aparece `gpg: Good signature` E o fingerprint que assinou é o `916B8D99…2EEACCDA`. ("Good signature" de uma chave **ERRADA** não vale.)
 
 ### 5.2 Windows (Gpg4win / Kleopatra)
 
@@ -133,7 +132,7 @@ gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 3. **Confira o fingerprint** da chave importada nas propriedades do certificado: tem de ser **`916B8D99…2EEACCDA`**.
 4. **Verifique a imagem:** Kleopatra → **Decrypt/Verify** → selecione `Whonix-*.ova.asc` (com o `.ova` na mesma pasta).
 
-# OK se: o Kleopatra mostra assinatura VÁLIDA emitida pela chave de fingerprint 916B8D99…2EEACCDA.
+> **OK se:** o Kleopatra mostra assinatura VÁLIDA emitida pela chave de fingerprint `916B8D99…2EEACCDA`.
 
 > O Kleopatra **não** exibe a notation anti-adulteração do nome do arquivo (que a CLI mostra com `show-notations`). Por isso, **confira você mesmo** que o nome do `.ova` é exatamente o da página de Download. Para o mesmo sinal da CLI, use o gpg do Gpg4win no PATH (abaixo).
 >
@@ -149,7 +148,7 @@ gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
    gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
    ```
 
-# OK se: `gpg: Good signature` com o fingerprint 916B8D99…2EEACCDA.
+> **OK se:** `gpg: Good signature` com o fingerprint `916B8D99…2EEACCDA`.
 
 > Passos oficiais detalhados por SO: **§8 (Links)** → "Verify the images".
 
@@ -180,7 +179,7 @@ O fingerprint **`916B8D99…2EEACCDA` não mudou** após a re-certificação (ja
 - **Não ajuste o relógio manualmente** (o Whonix cuida do tempo via Tor).
 - **Workstation = um propósito.** Nada de e-mail real, login pessoal ou redes sociais (Módulo 1, Cap. 9).
 
-# OK se: a atualização completa via Tor sem erro; existe um snapshot inicial; Workstation "limpa" (sem identidade clearnet).
+> **OK se:** a atualização completa via Tor sem erro; existe um snapshot inicial; Workstation "limpa" (sem identidade clearnet).
 
 ---
 

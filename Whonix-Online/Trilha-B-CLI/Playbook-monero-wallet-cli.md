@@ -62,6 +62,8 @@ set refresh-from-block-height N
 
 ## B2 — Sincronizar gastos (repita após CADA envio — pega o TROCO)
 
+> ⚠️ **Passo mais esquecido.** Sem re-sincronizar as key images, a view-only não enxerga o troco e mostra **saldo errado** — rode no **1º uso** e **após cada envio**.
+
 # Nos comandos abaixo, o nome do arquivo é o CAMINHO no pendrive montado
 # (ex.: /media/user/USB/outputs_file). Ajuste ao ponto de montagem do seu USB.
 
@@ -79,8 +81,7 @@ export_key_images ki_file
 import_key_images ki_file
 ```
 
-> O passo mais esquecido. Sem re-sincronizar key images, a view-only não enxerga o troco e mostra saldo errado.
-> 📖 A doc oficial do Monero mostra este ciclo **depois** do `submit_transfer` (para recuperar o troco). Aqui ele aparece adiantado por didática — **mesmos comandos, resultado equivalente**: o importante é rodá-lo no **1º uso** e **após cada envio**.
+> 📖 A doc oficial do Monero mostra este ciclo **depois** do `submit_transfer` (para recuperar o troco). Aqui ele aparece adiantado por didática — **mesmos comandos, resultado equivalente**.
 
 ## B3 — Gastar
 

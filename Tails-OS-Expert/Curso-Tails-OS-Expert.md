@@ -357,7 +357,7 @@ O que este script oficial faz **por dentro**:
 
 > O `.deb` **ainda não** é instalado em `/opt` aqui — isso ocorre na 3.3, ao abrir o Haveno.
 
-> O comando abaixo usa o método **oficial** do projeto Haveno (`haveno-dex/haveno`, pasta `install_tails`). O `.deb` é **verificado por PGP** dentro do script; você pode abrir `haveno-install.sh` no editor antes de rodar, se quiser inspecionar.
+> O comando abaixo usa o método **oficial** do projeto Haveno (`haveno-dex/haveno`, pasta `install_tails`). O `.deb` é **verificado por PGP** dentro do script; você pode abrir `haveno-install.sh` no editor antes de rodar, se quiser inspecionar. As barras `\` no fim das linhas são **continuação**: é um **único** comando — copie o bloco inteiro de uma vez.
 
 No Terminal (Tor conectado + admin desta sessão), **rede RetoSwap**:
 
