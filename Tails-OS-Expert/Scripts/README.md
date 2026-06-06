@@ -1,5 +1,7 @@
 # Scripts — Tails OS Expert
 
+> **Novato?** Leia primeiro o [**MANUAL-SCRIPTS.md**](../../MANUAL-SCRIPTS.md) — flags, quando usar, segurança ao rodar 2×.
+
 Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
 
 ## Orquestrador (comece aqui após passos 1–4 manuais)

@@ -4,6 +4,8 @@
 >
 > Na trilha linear, **Comandos** = Playbook do passo; este MANUAL lista capítulos, não substitui a coluna Comandos.
 >
+> **Scripts de automação:** use [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) (novato) — não este índice de capítulos.
+>
 > Este manual lista **todos os capítulos** para consulta ou aprofundamento. A ordem de estudo continua
 > sendo a do README — não leia capítulo a capítulo fora de ordem.
 

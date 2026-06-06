@@ -30,7 +30,7 @@ Perdeu o fio? Vá direto ao [plano de contingência](#travou-aqui). Quer todos o
 | **Carteira Monero + backup + boas práticas** | [4](#trilha-linear) → [5](#trilha-linear) | `Expansao-Curso/` |
 | **Tradear no Haveno** (com cautela) | [5](#trilha-linear) | `Expansao-Curso/` |
 | **Whonix online + custódia frio↔quente** | [8](#trilha-linear) (M1: passos 1–4 + Feather) | `Whonix-Online/` |
-| **Automação** (instalar / backup / atualizar) | [7](#trilha-linear) | `Scripts/` |
+| **Automação** (instalar / backup / atualizar) | [7](#trilha-linear) · [MANUAL-SCRIPTS](MANUAL-SCRIPTS.md) | `Scripts/` |
 | **Índice capítulo a capítulo** | [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) | raiz |
 
 ---
@@ -79,7 +79,9 @@ Para quem quer **mão na massa** com o mínimo de teoria — **depois** dos pass
 
 > **~35–40%** dos comandos repetíveis têm script; **0%** dos rituais de custódia (seed, USB frio, conferir destino antes de assinar).
 
-Detalhe: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · [Whonix Scripts](Whonix-Online/Scripts/README.md).
+**Manual completo (novato):** [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) — o que cada script faz, flags (`--boot`, `--feather`, …), quando rodar e o que acontece se executar 2×.
+
+Detalhe técnico: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · [Whonix Scripts](Whonix-Online/Scripts/README.md).
 
 ---
 
