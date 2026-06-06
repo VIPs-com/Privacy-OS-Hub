@@ -38,7 +38,11 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 
 > ⚠️ **NÃO misture as trilhas.** Não crie a carteira no Feather e tente continuar no `monero-wallet-cli` (nem o contrário). Os arquivos de uma ferramenta não são feitos para a outra. **Escolheu A? Ignore B — e vice-versa.**
 >
-> 💡 **Na dúvida: Trilha A (Feather).** Para custodiar o **grosso** com o mínimo de risco, considere ainda **hardware wallet + Feather** (a doc do Monero recomenda — Curso §5.5).
+> 💡 **Na dúvida: Trilha A (Feather).**
+>
+> 🔐 **Para o grosso, há um caminho melhor que as duas trilhas:** **hardware wallet (Trezor/Ledger) + Feather** —
+> a chave de gasto **nunca sai do chip**, sem o malabarismo de arquivos das Trilhas A/B. É o **recomendado**
+> para quantias relevantes. Capítulo completo no livro: [`Curso — Whonix Online.md`](Curso%20—%20Whonix%20Online.md) **§5.6**.
 
 ---
 

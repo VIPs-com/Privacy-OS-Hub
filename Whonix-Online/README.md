@@ -14,8 +14,8 @@ O **lado em rede** do Privacy-OS-Hub: enquanto o **Tails** (Módulo 1) é o lado
 Cobre (verificado em fonte oficial): o Whonix e seu **modelo de ameaças** · **instalar e verificar a
 imagem** (fingerprint `916B8D99…2EEACCDA`) · Monero/Feather **via Tor** (conectar ao seu nó do home lab) ·
 **Cold-Tails-Hot-Whonix** — custódia **frio↔quente** detalhada (criar *view-only*, assinar offline pelo
-**Feather** e pelo **`monero-wallet-cli`**, com o aviso honesto sobre **carteira de hardware**) · onde o
-**Haveno** entra (frio→quente) · quando usar Whonix × Tails × home lab.
+**Feather** e pelo **`monero-wallet-cli`**) · **§5.6 — hardware wallet (Trezor/Ledger) + Feather**, o
+caminho **recomendado para o grosso** · onde o **Haveno** entra (frio→quente) · quando usar Whonix × Tails × home lab.
 
 > **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../Tails%20OS%20Expert/README.md) concluído.
 > **Status:** v1 (aprofundado) + **Playbooks por trilha** (Feather/CLI) + **instalação por SO**. Pendente: **prints** (capturas de tela).

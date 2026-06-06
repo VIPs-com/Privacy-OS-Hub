@@ -211,7 +211,7 @@ Fonte oficial: [Monero — Offline Transaction Signing](https://docs.getmonero.o
 
 ### 5.5 Aviso honesto — **informe-se antes de custodiar o grosso**
 
-A **própria documentação do Monero** diz que o cold storage manual (CLI) é **complexo e com grande margem de erro**, publicado **para fins educacionais** — e que, para muita gente, uma **carteira de hardware** (Trezor/Ledger) usada **dentro do Feather** é **mais simples e mais segura**: a chave de gasto **nunca sai do dispositivo** e você dispensa o malabarismo de arquivos. Considere isto seriamente antes de mover quantias relevantes.
+A **própria documentação do Monero** diz que o cold storage manual (CLI) é **complexo e com grande margem de erro**, publicado **para fins educacionais** — e que, para muita gente, uma **carteira de hardware** (Trezor/Ledger) usada **dentro do Feather** é **mais simples e mais segura**: a chave de gasto **nunca sai do dispositivo** e você dispensa o malabarismo de arquivos. Considere isto seriamente antes de mover quantias relevantes — **detalhado no §5.6**.
 
 | Caminho | Complexidade | Para quem |
 |---------|--------------|-----------|
@@ -229,6 +229,123 @@ A **própria documentação do Monero** diz que o cold storage manual (CLI) é *
 - **Backups:** a **fria** precisa de backup (seed em papel/metal **offline** + pasta de dados cifrada — Módulo 1 §5.2). A **view-only** é **descartável** (recria-se a partir de endereço+view key+restore height).
 - **Restore height** correto — anote-o quando criar a carteira.
 - A **seed/spend key nunca** é digitada, fotografada ou colada numa máquina online. Se isso acontecer uma vez, a carteira deixou de ser fria — **migre os fundos** para uma nova.
+
+> 👉 Para o **grosso**, o caminho **recomendado** não é nenhum dos dois acima — é **hardware wallet + Feather** (§5.6). Leia antes de mover quantias relevantes.
+
+### 5.6 Hardware wallet (Trezor/Ledger) + Feather — **o caminho recomendado para o grosso**
+
+As Trilhas A/B protegem a chave **mantendo-a numa máquina fria** (Tails offline). Uma **carteira de
+hardware** resolve o mesmo problema por outro caminho: a **chave de gasto nasce e vive dentro de um chip
+dedicado e nunca sai dele** — nem para o Tails, nem para o Whonix. O dispositivo **assina internamente**;
+o computador só recebe a transação já assinada. É **mais simples** (sem malabarismo de arquivos por USB) e,
+para a maioria, **mais seguro** — é por isso que a própria documentação do Monero o recomenda (§5.5).
+
+> Isto **não substitui** o conceito frio↔quente — ele **encaixa** nele: a carteira **view-only** continua
+> online no Whonix (vê saldo, monta a tx); o que muda é **quem assina** — agora é o **chip**, não o Tails.
+
+#### 5.6.1 O que muda no modelo de segurança (leia com atenção)
+
+Com air-gap (Trilhas A/B), você confia que a **máquina fria nunca tocou a rede**. Com hardware wallet, a
+confiança **se desloca** para o **chip seguro + o firmware do fabricante**. São ameaças diferentes:
+
+| Modelo | Protege bem contra | Onde é frágil |
+|--------|--------------------|---------------|
+| **Air-gap (Tails offline)** | Malware de rede, vigilância; nada sai online | **Mídia que corrompe** (Tails é amnésico); USB malicioso no boot; erro humano no malabarismo de arquivos |
+| **Hardware wallet** | Máquina **online ou comprometida** (a chave fica no chip); roubo do PC | **Supply-chain** (device adulterado na compra); **firmware** malicioso; você **não conferir o destino na tela do device** |
+
+A consequência prática: **você pode conectar o dispositivo a uma máquina online** (inclusive o Whonix) sem
+expor a chave — porque ela **não sai do chip**. Isso simplifica muito o dia a dia. Em troca, você assume a
+confiança no **fabricante** e precisa de disciplina nova (comprar de fonte idônea, conferir na tela do device).
+
+#### 5.6.2 Trezor × Ledger para Monero (fatos verificados)
+
+| | **Trezor** | **Ledger** |
+|---|-----------|-----------|
+| Modelos atuais c/ Monero | **Safe 3** e **Safe 5** | **Nano S+, Nano X, Stax, Flex** (via app **Monero**) |
+| App nativo do fabricante | **Não** suporta Monero no Trezor Suite | App **Monero** instalável (Ledger Live); mantido pela Ledger em `LedgerHQ/app-monero` (em desenvolvimento ativo — confira issues/limitações antes de usar) |
+| Como usar | **Só** por terceiros: **Feather** ou Monero GUI/CLI | Feather, Monero GUI/CLI |
+| A chave de gasto | Assina **dentro do device**; não é exportada | Assina **dentro do device**; não é exportada |
+
+> A Feather também lista modelos mais antigos (Trezor **Model T**, Ledger **Nano S**), mas eles têm
+> memória/suporte limitados — **prefira os atuais** acima. Lista oficial: [hardware-wallet-support](https://docs.featherwallet.org/guides/hardware-wallet-support).
+
+> **Recomendação do curso:** use o **Feather** como interface (leve, já adotado no Módulo 1) com qualquer um
+> dos dois. Trezor e Ledger são ambos válidos; escolha pela sua confiança no fabricante e disponibilidade.
+
+> 🔒 **O fato verificável que sustenta o modelo:** a doc oficial do Monero confirma que **"os fundos não podem
+> ser comprometidos apenas com a view key"** — a assinatura exige o dispositivo. É isso que torna seguro deixar
+> a view-only numa máquina online enquanto o gasto fica preso ao chip.
+
+#### 5.6.3 Fluxo no Feather (passo a passo)
+
+**Antes:** inicialize o dispositivo **você mesmo** (PIN + frase de recuperação gerada **no próprio device**)
+e **faça o backup offline dessa frase** (papel/metal, DUAS cópias) — ela é a sua salvaguarda real (5.6.5).
+
+1. Conecte o dispositivo. **Ledger:** abra o **app Monero** no device. **Trezor:** **desbloqueie**.
+2. **Linux (Tails/Whonix):** aplique as **udev rules** oficiais do dispositivo (senão o Feather não o enxerga).
+3. No Feather: **File → New/Restore → Create wallet from hardware device**.
+4. Selecione o **tipo de dispositivo** → **Create new wallet file from device** (1ª vez) ou **Restore a wallet from device** (já usado).
+5. Se estiver restaurando, informe o **restore height** (a **data de compra** serve se você não souber a altura).
+6. Dê um **nome** e uma **senha** ao arquivo da carteira → conclua.
+7. **Gastar:** monte a transação no Feather → **confirme o valor e o endereço NA TELA DO DISPOSITIVO** → aprove no device → o Feather transmite via Tor/seu nó.
+
+> 🔎 **A tela do dispositivo é a fonte de verdade** (substitui o "confira na máquina fria" das Trilhas A/B):
+> malware no PC pode trocar o endereço na hora de montar — sua última checagem é **no hardware**, sempre.
+
+> **Ledger — uma escolha no setup:** ele pergunta se você quer **exportar a view key** para o computador.
+> **Exportar** = escaneia a blockchain mais **rápido**, mas se a máquina for comprometida o adversário vê seu
+> histórico (**não** gasta seus fundos — view key só vê). **Manter no device** = mais **privado**, porém o
+> escaneamento é **bem mais lento**. No Whonix (online via Tor), exportar é aceitável; para o máximo de
+> privacidade, mantenha no device.
+
+**OK se:** o Feather mostra a carteira como **hardware** e o saldo correto; ao gastar, o **device pede
+confirmação na tela** e a transação só sai após você aprovar nele.
+
+#### 5.6.4 No Tails/Whonix na prática (USB)
+
+- **VirtualBox (Whonix):** instale o **Extension Pack** e adicione um **filtro USB** do dispositivo à
+  **Workstation** (Settings → USB) para que a VM o enxergue.
+- **Qubes-Whonix:** anexe o dispositivo USB do `sys-usb` ao qube da Workstation (`qvm-usb attach`).
+- **Tails:** o USB funciona, mas o Tails é **amnésico** — você refaz as udev rules/abertura a cada sessão
+  (use a persistência para guardar o arquivo `.keys`, que **não** contém a chave de gasto).
+
+**Onde assinar?** O **dispositivo é a custódia fria** — ele pode assinar tanto a partir do **Tails** quanto
+do **Whonix**:
+
+| Postura | Como | Para quem |
+|---------|------|-----------|
+| **Duplo-frio** | Tails **offline** + dispositivo | Paranoia máxima |
+| **Conveniente** | Dispositivo + **Whonix online** (view-only no mesmo lugar) | Dia a dia — **ainda seguro** (a chave fica no chip) |
+
+#### 5.6.5 Ressalvas que decidem (não pule)
+
+- **Backup da frase de recuperação do DISPOSITIVO** — é o que recupera seus fundos se o device sumir/quebrar.
+  **DUAS cópias offline** (papel/metal, locais separados), igual à seed do Tails (Módulo 1 §5.2). Sem backup,
+  device perdido = **perda total**.
+- **Firmware é a raiz de confiança** — atualize-o numa **máquina confiável** (não no Tails amnésico), seguindo
+  o app oficial do fabricante.
+- **Supply-chain:** compre de **fonte idônea** e **inicialize você mesmo**. **Nunca** use um device que veio com
+  uma frase de recuperação "pronta" — é golpe clássico.
+- **USB é obrigatório para assinar.** Sem o device plugado, você só tem a **view-only** (vê, não gasta).
+- **Confirme sempre destino + valor na tela do device** antes de aprovar.
+- **Teste com valor mínimo** o ciclo inteiro (criar → receber → gastar → confirmar no device) antes do grosso.
+
+#### 5.6.6 Qual caminho é o seu? (atualiza a tabela do §5.5)
+
+| Caminho | Complexidade | Raiz de confiança | Para quem |
+|---------|--------------|-------------------|-----------|
+| **Hardware wallet + Feather** (§5.6) | **Baixa** | Chip + firmware do fabricante | **Maioria — o grosso** |
+| **Feather air-gap** (Trilha A) | Média | Máquina fria offline | Air-gap sem comprar hardware |
+| **`monero-wallet-cli`** (Trilha B) | Alta | Máquina fria offline | Avançado / auditoria |
+
+> **Quando NÃO usar hardware wallet:** se você não confia no fabricante/supply-chain do seu modelo, ou quer
+> uma raiz de confiança 100% software-livre auditável — aí as Trilhas A/B (air-gap) fazem mais sentido.
+
+**Fontes oficiais (confira — muda por versão):** Feather hardware
+([create-wallet-hardware-device](https://docs.featherwallet.org/guides/create-wallet-hardware-device) ·
+[supported devices](https://docs.featherwallet.org/guides/hardware-wallet-support)) · Trezor Monero
+(https://trezor.io/coins/wallet/monero) · Ledger Monero
+(https://www.getmonero.org/resources/user-guides/ledger-wallet-cli.html · https://github.com/LedgerHQ/app-monero).
 
 ---
 
@@ -260,7 +377,7 @@ Na prática:
 | **Gerar/custodiar** a chave fria e **assinar offline** | **Tails** (Módulo 1, bootado offline) |
 | **Infra 24/7** (nó Monero, mineração) | **Home lab** (Módulo 1, Cap. 6) |
 | **Tradear no Haveno** (quente) | **Tails** (Módulo 1) |
-| **Custodiar o grosso com o mínimo de risco** | **Hardware wallet + Feather** (ver 5.5) |
+| **Custodiar o grosso com o mínimo de risco** | **Hardware wallet + Feather** (ver §5.6) |
 
 ---
 
@@ -278,6 +395,9 @@ Na prática:
 | **Feather — assinatura offline** | https://docs.featherwallet.org/guides/offline-tx-signing |
 | Feather — criar carteira view-only | https://docs.featherwallet.org/guides/create-view-only-wallet |
 | Feather (Tor) | https://docs.featherwallet.org/guides/tor-support |
+| **Feather — hardware wallet** (§5.6) | https://docs.featherwallet.org/guides/create-wallet-hardware-device · https://docs.featherwallet.org/guides/hardware-wallet-support |
+| **Trezor — Monero** | https://trezor.io/coins/wallet/monero |
+| **Ledger — Monero** | https://www.getmonero.org/resources/user-guides/ledger-wallet-cli.html · https://github.com/LedgerHQ/app-monero |
 | **Módulo 1 — Tails + Haveno** | [`../Tails OS Expert/README.md`](../Tails%20OS%20Expert/README.md) |
 
 ---
