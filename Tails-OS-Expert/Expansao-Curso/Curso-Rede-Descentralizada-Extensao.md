@@ -150,7 +150,7 @@ A **Feather** é a carteira Monero recomendada para **guardar** XMR fora do Have
 3. Baixe o **AppImage for Tails** (não o genérico Linux, se houver opção separada).
 4. Baixe também:
    - `featherwallet.asc` (chave de assinatura)
-   - `feather-x.x.x-AppImage.asc` (assinatura do AppImage)
+   - `feather-x.x.x.AppImage` + `feather-x.x.x.AppImage.asc` (AppImage e assinatura — **ponto** antes de `AppImage`, não hífen)
 
 > Tor Browser salva em **Downloads**. Mova tudo para `~/Persistent/feather/`:
 
@@ -176,11 +176,14 @@ Confirme o fingerprint (espaços podem variar):
 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
 ```
 
-Verifique o AppImage — **use o `.asc` que veio com o AppImage baixado** (mesmo prefixo de versão; nunca copie um número do tutorial):
+Verifique o AppImage — **use o par `.asc` + `.AppImage` que você baixou** (mesmo prefixo de versão; nunca copie um número do tutorial):
+
+> 📁 Mantenha **só uma versão** na pasta `~/Persistent/feather/`. Se houver mais de um `.AppImage`/`.asc` (ex.: duas versões), o curinga fica ambíguo — **digite os nomes exatos** dos dois arquivos.
 
 ```bash
-gpg --verify feather-*-AppImage.asc
-# ou, se preferir explícito: gpg --verify "$(ls feather-*-AppImage.asc)"
+ls -la feather-*AppImage*
+# Nomeie assinatura E binário (troque pelo que ls mostrou, ex. feather-2.8.1.AppImage.asc):
+gpg --verify feather-*AppImage.asc feather-*AppImage
 ```
 
 **OK se:** `gpg: Good signature from "FeatherWallet <dev@featherwallet.org>"`.

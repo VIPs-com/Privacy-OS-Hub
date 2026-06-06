@@ -28,7 +28,7 @@
 ## 2 — Feather no Tails (download + PGP + executar)
 
 # Tor Browser -> https://featherwallet.org/download
-# Baixe: AppImage Tails + featherwallet.asc + feather-x.x.x-AppImage.asc
+# Baixe: AppImage Tails + featherwallet.asc + feather-x.x.x.AppImage + feather-x.x.x.AppImage.asc
 
 ```bash
 mkdir -p ~/Persistent/feather/wallets
@@ -44,8 +44,9 @@ gpg --import featherwallet.asc
 gpg --list-keys dev@featherwallet.org
 # Fingerprint: 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
 
-# Use o .asc que veio com o AppImage baixado (mesmo prefixo de versão):
-gpg --verify feather-*-AppImage.asc
+# Pasta só com UMA versão; se houver 2+ .AppImage/.asc, digite os nomes exatos.
+# Use o par .asc + .AppImage baixados (ponto antes de AppImage, nao hifen):
+gpg --verify feather-*AppImage.asc feather-*AppImage
 # OK: Good signature from FeatherWallet
 ```
 
