@@ -1,6 +1,6 @@
 # Manual do curso — índice completo (opcional)
 
-> **Novato?** Ignore este arquivo. Use só o [README.md](README.md) e a [trilha linear](README.md#trilha-linear).
+> **Novato?** Ignore este arquivo. Comece em [README — Primeira visita?](README.md#primeira-visita) e na [trilha linear](README.md#trilha-linear).
 >
 > Na trilha linear, **Comandos** = Playbook do passo; este MANUAL lista capítulos, não substitui a coluna Comandos.
 >

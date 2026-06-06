@@ -1,6 +1,8 @@
 # Tails OS Expert — Módulo 1
 
 > **Mapa principal do hub:** [README.md#trilha-linear](../README.md#trilha-linear) (passos **1–7**)
+>
+> **Primeira vez no projeto?** Comece em [README — Primeira visita?](../README.md#primeira-visita) — não abra este zoom antes do passo **1** da trilha raiz.
 
 Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1 — a ordem oficial está no README da raiz.
 

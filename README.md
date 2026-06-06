@@ -10,15 +10,40 @@ segurança operacional.
 
 ---
 
+## Primeira visita?
+
+Você **não precisa** conhecer Tails, Haveno, Feather ou Whonix antes de começar. Este hub assume **zero**
+experiência e ensina **processo + ferramentas** na ordem certa.
+
+| # | Faça isto | Para quê |
+|:-:|-----------|----------|
+| **1** | Abra a [trilha linear](#trilha-linear) e comece no **passo 1** | Um passo de cada vez — Livro (teoria/telas) + Comandos (mão na massa) |
+| **2** | Nos passos **2** e **7**, se quiser automação: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) | Dois comandos bastam (`haveno-setup.sh` e `--boot`); [Apêndice A](MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) explica cada `.sh` |
+| **3** | Só avance quando o **OK se** do passo atual for verdadeiro | Evita pular backup, seed ou pré-requisito do Módulo 2 |
+
+**O que você sai sabendo fazer (trilha completa):** Tails no pendrive · Haveno **verde** · backup cifrado ·
+Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B). **Montar um lab em casa**
+(nó, Tor, mineração) é **opcional** — [Home Lab](Tails-OS-Expert/Scripts/HomeLab/README.md) depois dos passos 1–12.
+
+| Pode **ignorar** no início | Por quê |
+|-----------------------------|---------|
+| [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) | Índice de **todos** os capítulos — use só se quiser aprofundar |
+| Trades (Vol II Caps. 7–8) | **Instalar ≠ tradear** — só se for usar a rede de troca |
+| [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) | Baseline extra — depois da trilha principal |
+| Pasta `HomeLab/` nos Scripts | Roda em **outro PC** (Debian/Ubuntu), não no Tails |
+
+**Precisa de:** um PC para gravar o Tails, um pendrive, paciência no Tor (1ª vez pode demorar), e **papel**
+para anotar a seed (nunca só no computador).
+
+Perdeu o fio? [Travou aqui](#travou-aqui) · Quer só scripts? [Trilha script-first](#trilha-script-first) ·
+Princípios do hub: [MANIFESTO.md](MANIFESTO.md).
+
+---
+
 ## Comece aqui
 
-**Este README é a única porta de entrada.** Siga a [trilha linear](#trilha-linear) passo a passo — um link
-primário por etapa. No mesmo passo, use a coluna **Comandos** para o Playbook (só terminal).
-
-Perdeu o fio? Vá direto ao [plano de contingência](#travou-aqui). Quer todos os capítulos? Abra o
-[MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) (opcional — novatos podem ignorar).
-
-**Princípios:** [MANIFESTO.md](MANIFESTO.md) · Cold-Tails/Hot-Whonix como trilha principal (baixo custo).
+**Este README é a única porta de entrada.** [Primeira visita?](#primeira-visita) → [trilha linear](#trilha-linear)
+passo a passo. No mesmo passo: coluna **Livro** + coluna **Comandos**.
 
 ---
 
@@ -26,7 +51,9 @@ Perdeu o fio? Vá direto ao [plano de contingência](#travou-aqui). Quer todos o
 
 | Objetivo | Comece no passo | Pasta |
 |----------|-----------------|-------|
+| **Primeira vez no hub** (não conheço as ferramentas) | [Primeira visita?](#primeira-visita) → [1](#trilha-linear) | este README |
 | **Tails + Haveno verde** no pendrive (portable) | [1](#trilha-linear) | `Tails-OS-Expert/` |
+| **Montar lab** (nó Monero, Tor, mineração) | [Trilhas opcionais](#trilhas-opcionais) · passo 5+ | `Scripts/HomeLab/` |
 | **Carteira Monero + backup + boas práticas** | [4](#trilha-linear) → [5](#trilha-linear) | `Expansao-Curso/` |
 | **Tradear no Haveno** (com cautela) | [5](#trilha-linear) | `Expansao-Curso/` |
 | **Whonix online + custódia frio↔quente** | [8](#trilha-linear) (M1: passos 1–4 + Feather) | `Whonix-Online/` |

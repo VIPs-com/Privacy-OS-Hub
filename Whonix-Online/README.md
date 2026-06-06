@@ -1,6 +1,8 @@
 # Módulo 2 — Whonix Online
 
 > **Mapa principal do hub:** [README.md#trilha-linear](../README.md#trilha-linear) (passos **8–12**)
+>
+> **Primeira vez?** Não comece aqui — [README — Primeira visita?](../README.md#primeira-visita) e passos **1–7** do Módulo 1 antes do passo **8**.
 
 Lado **online persistente** do hub: Whonix (Gateway + Workstation via Tor) + custódia **frio↔quente**
 (Tails offline assina, Whonix view-only transmite).

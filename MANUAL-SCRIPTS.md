@@ -3,6 +3,8 @@
 > **Para quem?** Aluno **novato** que quer usar os scripts com segurança — sem precisar ser expert em Linux.
 >
 > **Não substitui** a [trilha linear](README.md#trilha-linear) nem o [livro](MANUAL-DO-CURSO.md). Use este manual **junto** com o passo do hub em que você está.
+>
+> **Primeira vez no hub?** Leia antes [README — Primeira visita?](README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
 
 **Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](Tails-OS-Expert/Scripts/README.md) · [Scripts Whonix](Whonix-Online/Scripts/README.md)
 
