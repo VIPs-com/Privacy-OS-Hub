@@ -6,6 +6,22 @@
 
 **Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](Tails-OS-Expert/Scripts/README.md) · [Scripts Whonix](Whonix-Online/Scripts/README.md)
 
+> **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os arquivos da pasta `Scripts/`.
+
+---
+
+## Só estes comandos (iniciante)
+
+Depois dos passos 1–4 manuais e de copiar os scripts para `~/Persistent/`:
+
+| Situação | Comando |
+|----------|---------|
+| **1ª vez** (instalar Haveno) | `~/Persistent/haveno-setup.sh` |
+| **Cada sessão** (novo boot no Tails) | `~/Persistent/haveno-setup.sh --boot` |
+| **Feather** (passo 5 / pré-requisito M2) | `~/Persistent/haveno-setup.sh --feather` ou `--boot --feather` |
+
+Os outros arquivos `.sh` existem para **avançado** ou são chamados **automaticamente** pelo `haveno-setup.sh`. Detalhe de cada um: [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
+
 ---
 
 ## Antes de qualquer script (sempre manual)
@@ -126,7 +142,9 @@ Pula a pergunta “rodar backup agora?”. Use se você **já** fez backup ou fa
 
 ---
 
-## Tabela: todos os scripts Tails
+## Tabela resumo: scripts Tails
+
+Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
 
 | Script | Quando executar | Por quê | Rodar 2× sem apagar dados? |
 |--------|-----------------|---------|----------------------------|
@@ -301,6 +319,277 @@ Ordem: preflight → boot Haveno → verificar Feather.
 ### Expert: posso ignorar este manual?
 
 Sim. Use [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) (matriz técnica) e os cabeçalhos `#!/bin/bash` de cada `.sh`.
+
+---
+
+## Apêndice A — Catálogo de cada arquivo (iniciante)
+
+Use esta seção quando abrir `Tails-OS-Expert/Scripts/` (ou `~/Persistent/` após copiar) e não souber **para que serve** cada arquivo.
+
+### Mapa da pasta (mental — tudo na mesma pasta no Tails)
+
+```text
+Tails-OS-Expert/Scripts/          (copie tudo p/ ~/Persistent/ — mesma lista)
+│
+├── haveno-setup.sh          ★ COMECE AQUI (novato)
+│
+├── Tails (ambiente)
+│   ├── tails-preflight.sh
+│   └── post-session-check.sh
+│
+├── Haveno (carteira / app)
+│   ├── haveno-auto.sh
+│   ├── haveno-boot.sh
+│   ├── haveno-backup.sh
+│   ├── haveno-backup.desktop   (atalho de menu — opcional)
+│   ├── haveno-update.sh
+│   ├── haveno-verify-deb.sh
+│   └── haveno-switch-network.sh
+│
+├── Feather (carteira separada — passo 5 / M2)
+│   ├── feather-install-verify.sh
+│   └── feather-backup.sh
+│
+├── haveno-common.sh         ✗ NÃO EXECUTE (biblioteca interna)
+│
+└── HomeLab/                 ✗ Outro PC (Debian/Ubuntu) — não use no Tails
+
+Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
+└── whonix-verify-image.sh
+```
+
+**Legenda das fichas:** **Novato roda sozinho?** = precisa digitar no terminal sem ser expert. **Rodar 2×** = apagar/sobrescrever carteira? **Disco** = pastas que o script mexe.
+
+---
+
+### ★ Orquestrador
+
+#### `haveno-setup.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Porta única do novato |
+| **Passo hub** | **2** (1ª vez) · **7** (`--boot`) · **5** (`--feather`) |
+| **Novato roda sozinho?** | **Sim** — é o script principal |
+| **O que faz** | Chama os outros na ordem: preflight → auto **ou** boot → (opcional) backup → (opcional) Feather |
+| **O que NÃO faz** | Não grava USB; não anota seed; não tradear |
+| **Comando** | `~/Persistent/haveno-setup.sh` · `--boot` · `--feather` · `--skip-backup` |
+| **Rodar 2×** | **Seguro** — ver seção [Comando principal](#comando-principal-haveno-setupsh) |
+| **Disco** | Não apaga `~/Persistent/haveno/Data/` nem `feather/wallets/` |
+| **Flags** | [Comando principal](#comando-principal-haveno-setupsh) (neste manual) |
+
+---
+
+### Tails — ambiente da sessão
+
+#### `tails-preflight.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Tails (checagem) |
+| **Passo hub** | **1–4** (pré-requisito de todos os scripts) |
+| **Novato roda sozinho?** | Pode, mas o `haveno-setup` já chama por você |
+| **O que faz** | Confere: Tails, usuário amnesia, admin, persistência, Dotfiles, Tor, UTC |
+| **O que NÃO faz** | Não cria persistência; não conecta Tor por você |
+| **Comando** | `~/Persistent/tails-preflight.sh` |
+| **Rodar 2×** | **Sim** — só leitura; zero alteração em carteira |
+| **Disco** | Nenhuma pasta de dados Haveno/Feather |
+| **Se falhar** | Corrija Playbooks §1–4 antes de continuar |
+
+#### `post-session-check.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Tails (pós-manutenção) |
+| **Passo hub** | **7** (depois de atualizar o **SO** Tails) |
+| **Novato roda sozinho?** | Sim, se acabou de usar Tails Upgrader |
+| **O que faz** | Repete preflight + confere onion-grater; lembra de fazer backup |
+| **O que NÃO faz** | Não atualiza o Tails (só o Upgrader oficial faz) |
+| **Comando** | `~/Persistent/post-session-check.sh` |
+| **Rodar 2×** | **Sim** — só checagens |
+| **Disco** | Não mexe em `Data/` |
+
+---
+
+### Haveno — instalação, boot, backup, update
+
+#### `haveno-auto.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno |
+| **Passo hub** | **2** |
+| **Novato roda sozinho?** | **Não** — prefira `haveno-setup.sh` |
+| **O que faz** | Espera Tor → baixa/instala `.deb` com PGP → `install.sh` + `exec.sh` → corrige onion-grater → monitora log |
+| **O que NÃO faz** | Não garante verde na janela; não inclui seed no backup |
+| **Comando** | `~/Persistent/haveno-auto.sh` |
+| **Rodar 2×** | **Sim** — se já instalado, **pula** download; `Data/` intacto |
+| **Disco** | Escreve em `~/Persistent/haveno/` (App, Install); **preserva** `Data/` |
+| **Flags** | [Flags — haveno-auto](#flags-dos-scripts-individuais) |
+
+#### `haveno-boot.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno |
+| **Passo hub** | **7** (cada sessão) |
+| **Novato roda sozinho?** | **Não** — use `haveno-setup.sh --boot` |
+| **O que faz** | Playbook §7: preflight → `sudo install.sh` → `exec.sh` → onion-grater |
+| **O que NÃO faz** | Não baixa versão nova do `.deb` |
+| **Comando** | `~/Persistent/haveno-boot.sh` · `--watch 8` |
+| **Rodar 2×** | **Sim** — pode abrir 2 janelas Haveno; feche extras |
+| **Disco** | Reaplica config em `/etc/onion-grater.d/`; **não apaga** `Data/` |
+
+#### `haveno-backup.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno |
+| **Passo hub** | **4**, **7** |
+| **Novato roda sozinho?** | **Sim** — após 1ª instalação (ou quando o setup perguntar) |
+| **O que faz** | Compacta `~/Persistent/haveno/Data/` → cifra com GPG → salva em `Backups/` ou USB |
+| **O que NÃO faz** | **Seed não entra** no arquivo — anote no app (Account → Wallet seed) |
+| **Comando** | `~/Persistent/haveno-backup.sh` · `--usb` · `--dest` · `--restore` |
+| **Rodar 2×** | **Sim** — cada execução cria arquivo **novo** com data/hora |
+| **Disco** | Lê `Data/`; grava em `Backups/`; `--restore` **substitui** `Data/` (pede `s/N`) |
+| **Flags** | [Flags — haveno-backup](#flags-dos-scripts-individuais) |
+
+#### `haveno-backup.desktop`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno (atalho) |
+| **Passo hub** | **4**, **7** |
+| **Novato roda sozinho?** | Opcional — clique no menu em vez do terminal |
+| **O que faz** | Atalho que chama `haveno-backup.sh` (igual ao script) |
+| **Comando** | Instalar atalho: ver [Scripts/README](Tails-OS-Expert/Scripts/README.md) |
+| **Rodar 2×** | Igual ao `haveno-backup.sh` |
+| **Disco** | Igual ao backup |
+
+#### `haveno-update.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno |
+| **Passo hub** | **7** · Vol II §8 |
+| **Novato roda sozinho?** | Só quando sair **release novo** da sua rede |
+| **O que faz** | Backup **obrigatório** → reinstala `.deb` com PGP → abre Haveno |
+| **O que NÃO faz** | Não atualiza o sistema **Tails** |
+| **Comando** | `~/Persistent/haveno-update.sh --url "…" --pgp "…"` |
+| **Rodar 2×** | **Cuidado** — segunda vez reinstala de novo; `Data/` preservado se backup OK |
+| **Disco** | Atualiza `Install/` e `App/`; **preserva** `Data/` |
+| **Flags** | [Flags — haveno-update](#flags-dos-scripts-individuais) |
+
+#### `haveno-verify-deb.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno (auditoria) |
+| **Passo hub** | **5** (Vol II §3) |
+| **Novato roda sozinho?** | Só se desconfiar do `.deb` |
+| **O que faz** | Verifica assinatura GPG do `.deb` em `haveno/Install/` |
+| **O que NÃO faz** | Não instala nem remove nada |
+| **Comando** | `~/Persistent/haveno-verify-deb.sh` |
+| **Rodar 2×** | **Sim** — só leitura |
+
+#### `haveno-switch-network.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Haveno (rede alternativa) |
+| **Passo hub** | **5** (Vol II §8) |
+| **Novato roda sozinho?** | **Não** — só se for mudar de rede Haveno de propósito |
+| **O que faz** | Avisa → backup → chama `haveno-update` com URL+PGP da **nova** rede |
+| **O que NÃO faz** | Não mistura URL de uma rede com PGP de outra |
+| **Comando** | `~/Persistent/haveno-switch-network.sh --url "…" --pgp "…"` |
+| **Rodar 2×** | Reinstala de novo — feche trades antes |
+| **Disco** | Igual ao update; backup antes |
+
+---
+
+### Feather — passo 5 e pré-requisito M2
+
+#### `feather-install-verify.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Feather |
+| **Passo hub** | **5** |
+| **Novato roda sozinho?** | Sim, **depois** de baixar AppImage + `.asc` no Tor Browser |
+| **O que faz** | Move downloads → importa chave PGP → verifica AppImage → `chmod +x` |
+| **O que NÃO faz** | Não cria carteira; não grava seed — faça na UI do Feather |
+| **Comando** | `~/Persistent/feather-install-verify.sh` |
+| **Rodar 2×** | **Sim** — re-verifica; **não apaga** `~/Persistent/feather/wallets/` |
+| **Disco** | `~/Persistent/feather/` (AppImage, chaves) |
+
+#### `feather-backup.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Feather |
+| **Passo hub** | **5** |
+| **Novato roda sozinho?** | Sim, após criar carteira no Feather |
+| **O que faz** | Backup cifrado de `~/Persistent/feather/wallets/` |
+| **O que NÃO faz** | Seed fora do tarball (papel/metal) |
+| **Comando** | `~/Persistent/feather-backup.sh` · `--usb` · `--restore` |
+| **Rodar 2×** | **Sim** — arquivos novos com timestamp |
+| **Disco** | `wallets/` → `Backups/`; restore pede confirmação |
+
+---
+
+### Não execute / outro contexto
+
+#### `haveno-common.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Biblioteca interna |
+| **Novato roda sozinho?** | **Nunca** — não é programa; outros scripts carregam sozinhos |
+| **O que faz** | Funções compartilhadas (preflight, onion-grater, boot) |
+| **Rodar 2×** | N/A — não rode como `./haveno-common.sh` |
+
+#### `HomeLab/` (pasta)
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Infraestrutura (Debian/Ubuntu) |
+| **Passo hub** | Trilha opcional (nó, P2Pool, mineração) |
+| **Novato no Tails?** | **Ignore** na 1ª passagem — **não roda no Tails** |
+| **O que contém** | `00-verificar-requisitos.sh` … `04-setup-xmrig.sh` |
+| **Onde ler** | [Scripts/HomeLab/README.md](Tails-OS-Expert/Scripts/HomeLab/README.md) |
+
+---
+
+### Whonix — host Linux (não está em `Tails-OS-Expert/Scripts/`)
+
+#### `whonix-verify-image.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Grupo** | Whonix (PC host) |
+| **Passo hub** | **10** |
+| **Onde fica** | `Whonix-Online/Scripts/` — **não** copie para `~/Persistent/` do Tails |
+| **Novato roda sozinho?** | Sim, no Linux onde vai instalar VirtualBox/KVM |
+| **O que faz** | PGP da imagem `.ova` ou `.libvirt.xz` |
+| **O que NÃO faz** | Não importa VM; não configura Tor na Gateway |
+| **Comando** | `./whonix-verify-image.sh imagem.ova imagem.ova.asc` |
+| **Rodar 2×** | **Sim** — só verifica de novo |
+| **Detalhe** | [Seção Whonix](#whonix-host-linux--não-é-no-tails) |
+
+---
+
+### Índice rápido: “preciso rodar?”
+
+| Arquivo | Iniciante precisa rodar manualmente? |
+|---------|--------------------------------------|
+| `haveno-setup.sh` | **Sim** (1ª vez + `--boot`) |
+| `haveno-backup.sh` | **Sim** (antes do 1º depósito) |
+| `feather-install-verify.sh` | **Sim** (passo 5), ou via `--feather` |
+| `feather-backup.sh` | **Sim** (após carteira Feather) |
+| `whonix-verify-image.sh` | **Sim** (passo 10, no PC host) |
+| Todos os outros `haveno-*` / `tails-*` | **Não** — o setup chama ou é avançado |
+| `haveno-common.sh` | **Nunca** |
+| `HomeLab/*` | **Não** (outro computador) |
 
 ---
 

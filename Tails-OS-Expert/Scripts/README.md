@@ -1,6 +1,6 @@
 # Scripts — Tails OS Expert
 
-> **Novato?** Leia primeiro o [**MANUAL-SCRIPTS.md**](../../MANUAL-SCRIPTS.md) — flags, quando usar, segurança ao rodar 2×.
+> **Novato?** Leia o [**MANUAL-SCRIPTS.md**](../../MANUAL-SCRIPTS.md) — [Apêndice A (cada arquivo)](../../MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) · flags · segurança ao rodar 2×.
 
 Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
 
