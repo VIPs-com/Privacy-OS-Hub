@@ -69,8 +69,8 @@ Baixe **só** de **whonix.org** ([Download](https://www.whonix.org/wiki/Download
    gpg --verify Whonix-*.asc Whonix-*    # precisa dizer: Good signature
    ```
    Procure por **"Good signature"** **e** confirme que o **fingerprint** que assinou é o `916B8D99…2EEACCDA`. "Good signature" de uma chave **errada** não vale.
-3. **Passos exatos por SO** (Linux/Windows/macOS — o `gpg` e o nome dos arquivos variam): siga o guia oficial **"Verify the images"** (§8). Não pule esta etapa por preguiça de ler o guia do seu SO.
-4. Importe a imagem **verificada** no VirtualBox/KVM e inicie **Gateway + Workstation**.
+3. **Passos exatos por SO** (Linux/Windows/macOS — o `gpg` e o nome dos arquivos variam): guia prático deste módulo em [`Instalar Whonix — passo a passo por SO.md`](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md) (§5), ou a fonte oficial **"Verify the images"** (§8). Não pule esta etapa por preguiça de ler o guia do seu SO.
+4. Importe a imagem **verificada** no VirtualBox/KVM e inicie **Gateway + Workstation** — passo a passo em [`Instalar Whonix — passo a passo por SO.md`](Instalar%20Whonix%20—%20passo%20a%20passo%20por%20SO.md).
 
 **OK se:** `gpg --verify` diz **"Good signature"** com o fingerprint `916B8D99…2EEACCDA`; o Gateway conecta ao Tor (ícone/Tor Connection); a Workstation navega — e **só** consegue via Gateway.
 
@@ -161,6 +161,10 @@ No **Whonix**, no Feather: **Create new wallet → View only** → cole **endere
 
 ### 5.3 Gastar com assinatura offline — fluxo **Feather** (recomendado)
 
+> ⚠️ **Há dois caminhos para a MESMA custódia: Feather (§5.3, interface) OU `monero-wallet-cli` (§5.4, terminal).**
+> **Escolha UM e siga do início ao fim.** Não misture — uma carteira nasce e morre na mesma ferramenta;
+> não importe num lado o que você exportou no outro. Na dúvida: **Feather**.
+
 O Feather faz airgapped por **QR animado (UR) via webcam** (método primário na doc) **ou** por **arquivos via USB/SD**. No par Tails↔Whonix, **arquivos via USB** costumam ser mais simples para um air-gap estrito. Passo a passo (siga a UI atual em [offline-tx-signing](https://docs.featherwallet.org/guides/offline-tx-signing)):
 
 1. **(Quente/Whonix)** sincronize a view-only → **exporte os outputs** para um arquivo (USB).
@@ -179,20 +183,25 @@ O Feather faz airgapped por **QR animado (UR) via webcam** (método primário na
 
 ### 5.4 O mesmo fluxo no **CLI** (`monero-wallet-cli`, avançado)
 
+> ⚠️ **Alternativa ao §5.3 — não os dois.** Se você criou a carteira no Feather, faça **tudo** no Feather.
+> Este caminho CLI é para quem prefere terminal (ou quer auditar). Não combine as ferramentas no meio do fluxo.
+
 Fonte oficial: [Monero — Offline Transaction Signing](https://docs.getmonero.org/cold-storage/offline-transaction-signing/) e [view-only](https://www.getmonero.org/resources/user-guides/view_only.html).
+
+> ⚡ **Comandos só** — escolha sua trilha em [`00 — Comece aqui — Escolha sua trilha.md`](00%20—%20Comece%20aqui%20—%20Escolha%20sua%20trilha.md): Trilha A ([Feather](Trilha-A-Feather/Playbook%20—%20Feather%20%28GUI%29.md)) **ou** Trilha B ([`monero-wallet-cli`](Trilha-B-CLI/Playbook%20—%20monero-wallet-cli.md)) — **não as duas**.
 
 - **Criar a view-only** (na quente): pegue `address` e `viewkey` da fria, depois:
   ```bash
   monero-wallet-cli --generate-from-view-key NOME-VIEW
   ```
-  > O `--generate-from-view-key` pede só **endereço + view key**. Defina a **altura** depois com `set refresh-from-block-height N` (ou inicie com `--restore-height N`) — senão sincroniza do bloco 0 (lento). Use a altura **anterior** à 1ª recepção.
+  > O `--generate-from-view-key` pede só **endereço + view key**. Defina a **altura** depois, **dentro da carteira**, com `set refresh-from-block-height N` — senão sincroniza do bloco 0 (lento). Use a altura **anterior** à 1ª recepção. (No CLI a altura define-se aqui dentro, não como flag de criação.)
 - **Sincronizar gastos** (a view-only não conhece key images):
   ```bash
   # quente:  export_outputs outputs_file
   # fria:    import_outputs outputs_file   →   export_key_images ki_file
   # quente:  import_key_images ki_file
   ```
-  > **Repita este ciclo de sincronização após CADA envio** — senão a view-only não enxerga o **troco** e mostra saldo errado (é o passo mais esquecido).
+  > **Repita este ciclo de sincronização após CADA envio** — senão a view-only não enxerga o **troco** e mostra saldo errado (é o passo mais esquecido). A doc oficial mostra esse ciclo **após** o `submit_transfer` (recuperação de troco); aqui ele é apresentado também antes do gasto, por didática — mesmos comandos.
 - **Gastar:**
   ```bash
   # quente:  transfer ENDERECO VALOR   →   gera 'unsigned_monero_tx'
