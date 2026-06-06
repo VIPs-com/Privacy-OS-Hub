@@ -40,21 +40,23 @@ Perdeu o fio? Vá direto ao [plano de contingência](#travou-aqui). Quer todos o
 Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se” do passo atual for verdadeiro.
 
 > **Regra:** livro = teoria e telas · Playbook = comandos no **mesmo** passo.
+>
+> **Coluna Comandos:** link = terminal ou ritual copiável. `imprimir` / `—` = sem bash (leitura, decisão ou teoria). Avance pelo Livro; abra Comandos no mesmo passo quando houver link.
 
 | Passo | O que fazer | Livro (abrir) | Comandos |
 |:-----:|-------------|---------------|----------|
 | **1** | Gravar Tails + Tor + persistência | [Curso Vol I — Cap. 2](Tails-OS-Expert/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](Tails-OS-Expert/Playbooks/Playbooks.md) |
 | **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](Tails-OS-Expert/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [Playbooks §5–6](Tails-OS-Expert/Playbooks/Playbooks.md) |
-| **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | — |
-| **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | — |
+| **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](Tails-OS-Expert/Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
+| **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](Tails-OS-Expert/Playbooks/Playbooks.md#9--backup-pós-verde) |
 | **5** | Vol II: Feather + seed · **obrigatório p/ M2 (passo 8):** só Caps. 2–3 · **só se for tradear:** Caps. 7–8 | [Vol II — Antes do 1º trade](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| **6** | Regras de ouro + golpes (imprimir) | [Folheto](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | — |
-| **7** | Automação pós-verde | [Scripts — ciclo de uso](Tails-OS-Expert/Scripts/README.md) | `haveno-auto` · `backup` · `update` |
-| **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | — |
-| **9** | Backup air-gap (DUAS cópias seed) | [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) | — |
-| **10** | Instalar e verificar Whonix (PGP) | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
+| **6** | Regras de ouro + golpes (imprimir) | [Folheto](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | imprimir |
+| **7** | Automação pós-verde | [Scripts — ciclo de uso](Tails-OS-Expert/Scripts/README.md) | [Playbooks §9–10](Tails-OS-Expert/Playbooks/Playbooks.md) · [Scripts](Tails-OS-Expert/Scripts/README.md) |
+| **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
+| **9** | Backup air-gap (DUAS cópias seed) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [Playbook backup air-gap](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| **10** | Instalar e verificar Whonix (PGP; detalhe por SO no Livro) | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
 | **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | — |
-| **12** | Cold-signing — **escolha UMA** trilha | **A:** [Feather GUI](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [CLI](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
+| **12** | Cold-signing — **escolha UMA** trilha | [Curso Whonix — §5.5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | **A:** [Trilha A](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [Trilha B](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
 
 > **Passo 8:** exige passos **1–4** + Feather ([Vol II Cap. 3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
 
@@ -79,17 +81,19 @@ Só depois da trilha principal. **Não misture** com os passos 1–12.
 
 Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abra dezenas de links soltos.
 
-| Situação | Volte ao passo | Arquivo |
-|----------|----------------|---------|
-| Pendrive / Tor / persistência | **1** | [Curso Cap. 2](Tails-OS-Expert/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) · [Playbooks §1–4](Tails-OS-Expert/Playbooks/Playbooks.md) |
-| Haveno não ficou verde | **2** | [Playbooks §8](Tails-OS-Expert/Playbooks/Playbooks.md) · [Curso Cap. 7 FAQ](Tails-OS-Expert/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) |
-| Dúvida se pode tradear | **3** | [Curso Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) |
-| Seed / backup da carteira | **4** ou **9** | Vol I Cap. 5 · [Playbook backup M2](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
-| Feather / 1º trade | **5** | [Vol II Cap. 2–3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) |
-| Escolher trilha A ou B | **8** | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
-| Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) · [Playbooks §6](Whonix-Online/Playbooks/Playbooks.md) |
-| Sem nó `.onion` | **11** | [Curso Cap. 4.2](Whonix-Online/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) |
-| Mapa geral do hub | — | **Você está aqui** — [trilha linear](#trilha-linear) |
+| Situação | Volte ao passo | Livro | Comandos |
+|----------|----------------|-------|----------|
+| Pendrive / Tor / persistência | **1** | [Curso Cap. 2](Tails-OS-Expert/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](Tails-OS-Expert/Playbooks/Playbooks.md) |
+| Haveno não ficou verde | **2** | [Curso Cap. 7 FAQ](Tails-OS-Expert/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) | [Playbooks §8](Tails-OS-Expert/Playbooks/Playbooks.md) |
+| Dúvida se pode tradear | **3** | [Curso Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](Tails-OS-Expert/Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
+| Seed / backup carteira Haveno | **4** | [Curso Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](Tails-OS-Expert/Playbooks/Playbooks.md#9--backup-pós-verde) |
+| Backup air-gap M2 | **9** | [Curso Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| Feather / 1º trade | **5** | [Vol II Cap. 2–3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| Escolher trilha A ou B | **8** | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
+| Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2 §1](Whonix-Online/Playbooks/Playbooks.md) |
+| Cold-signing travou | **12** | [Curso §5.5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [Trilha A](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) ou [Trilha B](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| Sem nó `.onion` | **11** | [Curso Cap. 4.2](Whonix-Online/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) | — |
+| Mapa geral do hub | — | **Você está aqui** — [trilha linear](#trilha-linear) | — |
 
 ---
 

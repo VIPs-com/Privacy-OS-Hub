@@ -70,6 +70,18 @@ sudo echo ok
 
 ---
 
+## 3b — Checklist pré-trade (pós-verde)
+
+# Passo hub **3** — leia o Cap. 4 (livro) antes de tradear. Sem comando automático de trade.
+
+```bash
+ls ~/Persistent/haveno/Install/
+```
+
+# OK se: vê `haveno.deb` (ou artefato da sua rede) · leu Cap. 4 · sabe a diferença **instalar** vs **tradear** · só usa canais oficiais da rede.
+
+---
+
 ## 5 — Instalar Haveno (download + PGP)
 
 ### 5A — Rede Reto (turma — pronto)
@@ -159,6 +171,7 @@ sudo systemctl restart onion-grater
 ## 9 — Backup (pós-verde)
 
 ```bash
+# Feche o Haveno antes do backup (menu ou sair do app)
 ~/Persistent/haveno-backup.sh           # cifrado, em ~/Persistent/Backups
 ~/Persistent/haveno-backup.sh --usb     # em um USB montado
 ~/Persistent/haveno-backup.sh --restore CAMINHO/arquivo.tar.gz.gpg

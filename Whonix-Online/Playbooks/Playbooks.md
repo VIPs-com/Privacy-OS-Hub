@@ -61,6 +61,8 @@ Doc: https://docs.featherwallet.org/guides/tor-support
 
 ## §4 — Cold-signing (escolha UMA trilha)
 
+**Passo hub 8** — escolha A ou B aqui; comandos cold-signing nos playbooks das trilhas.
+
 ```text
 Porteiro:     00-Comece-aqui-Escolha-sua-trilha.md
 Trilha A:     Trilha-A-Feather/Playbook-Feather-GUI.md
@@ -71,8 +73,9 @@ Trilha B:     Trilha-B-CLI/Playbook-monero-wallet-cli.md
 
 ## §5 — Backup air-gap (sem hardware wallet)
 
+**Passo hub 9** — [`Playbook-Backup-e-protecao-air-gap.md`](../Playbook-Backup-e-protecao-air-gap.md)
+
 ```text
-Playbook-Backup-e-protecao-air-gap.md
 # DUAS cópias seed offline + teste restauração + pendrive dedicado
 ```
 

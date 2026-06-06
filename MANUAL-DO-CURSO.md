@@ -2,6 +2,8 @@
 
 > **Novato?** Ignore este arquivo. Use só o [README.md](README.md) e a [trilha linear](README.md#trilha-linear).
 >
+> Na trilha linear, **Comandos** = Playbook do passo; este MANUAL lista capítulos, não substitui a coluna Comandos.
+>
 > Este manual lista **todos os capítulos** para consulta ou aprofundamento. A ordem de estudo continua
 > sendo a do README — não leia capítulo a capítulo fora de ordem.
 
@@ -61,20 +63,20 @@ Livro: [Curso-Rede-Descentralizada-Extensao.md](Tails-OS-Expert/Expansao-Curso/C
 
 Livro: [Curso-Whonix-Online.md](Whonix-Online/Curso-Whonix-Online.md) · Comandos: [Playbooks/Playbooks.md](Whonix-Online/Playbooks/Playbooks.md)
 
-| Cap. | Título | Trilha README |
-|------|--------|---------------|
-| — | [Porteiro — escolha trilha A ou B](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | passo **8** |
-| — | [Backup air-gap](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) | passo **9** |
-| — | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | passo **10** |
-| 1 | [O que é Whonix](Whonix-Online/Curso-Whonix-Online.md#1-o-que-é-o-whonix-e-o-modelo-de-ameaças) | passo **10–11** |
-| 2 | [Instalar e verificar imagem](Whonix-Online/Curso-Whonix-Online.md#2-instalar-e-verificar-a-imagem) | passo **10** |
-| 3 | [Primeiros passos / snapshots](Whonix-Online/Curso-Whonix-Online.md#3-primeiros-passos-atualização-e-snapshots) | passo **10** |
-| 4 | [Monero via Tor](Whonix-Online/Curso-Whonix-Online.md#4-monero-no-whonix--conectar-via-tor) | passo **11** |
-| 5 | [Cold-Tails-Hot-Whonix](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **11–12** |
-| 5.6 | [Hardware wallet (opcional)](Whonix-Online/Curso-Whonix-Online.md#56-hardware-wallet-opcional) | opcional |
-| 6 | [Haveno na narrativa](Whonix-Online/Curso-Whonix-Online.md#6-onde-o-haveno-entra) | passo **12** |
-| 7 | [Whonix × Tails × home lab](Whonix-Online/Curso-Whonix-Online.md#7-quando-usar) | referência |
-| 8 | [Links oficiais](Whonix-Online/Curso-Whonix-Online.md#8-links-oficiais) | referência |
+| Cap. | Título | Trilha README | Comandos |
+|------|--------|---------------|----------|
+| — | [Porteiro — escolha trilha A ou B](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | passo **8** | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
+| — | [Backup air-gap (teoria no Curso Cap. 5)](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **9** | [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| — | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | passo **10** | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
+| 1 | [O que é Whonix](Whonix-Online/Curso-Whonix-Online.md#1-o-que-é-o-whonix-e-o-modelo-de-ameaças) | passo **10–11** | — |
+| 2 | [Instalar e verificar imagem](Whonix-Online/Curso-Whonix-Online.md#2-instalar-e-verificar-a-imagem) | passo **10** | [Playbooks §1](Whonix-Online/Playbooks/Playbooks.md) |
+| 3 | [Primeiros passos / snapshots](Whonix-Online/Curso-Whonix-Online.md#3-primeiros-passos-atualização-e-snapshots) | passo **10** | [Playbooks §2](Whonix-Online/Playbooks/Playbooks.md) |
+| 4 | [Monero via Tor](Whonix-Online/Curso-Whonix-Online.md#4-monero-no-whonix--conectar-via-tor) | passo **11** | — |
+| 5 | [Cold-Tails-Hot-Whonix](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **11–12** | — |
+| 5.6 | [Hardware wallet (opcional)](Whonix-Online/Curso-Whonix-Online.md#56-hardware-wallet-opcional) | opcional | — |
+| 6 | [Haveno na narrativa](Whonix-Online/Curso-Whonix-Online.md#6-onde-o-haveno-entra) | passo **12** | [Trilha A](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · [Trilha B](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| 7 | [Whonix × Tails × home lab](Whonix-Online/Curso-Whonix-Online.md#7-quando-usar) | referência | — |
+| 8 | [Links oficiais](Whonix-Online/Curso-Whonix-Online.md#8-links-oficiais) | referência | — |
 
 **Cold-signing (escolha UMA):**
 
