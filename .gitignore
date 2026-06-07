@@ -7,6 +7,9 @@ Auditoria/
 # --- Pasta local (arquivo morto + utilitários) — NÃO faz parte do repositório ---
 _arquivos/
 
+# --- Agentes internos Claude Code (ficam só no disco local) ---
+agents/
+
 # --- IDE (planos locais vivem em _arquivos/cursor-plans/) ---
 .cursor/
 
