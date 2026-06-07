@@ -8,6 +8,16 @@ segurança operacional.
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e
 > fontes oficiais.
 
+> 🔑 **Fingerprints PGP oficiais** — confira com seus próprios olhos antes de qualquer verificação:
+>
+> | Projeto | Fingerprint |
+> |---------|------------|
+> | Haveno / RetoSwap | `DAA2 4D87 8B8D 36C9 0120  A897 CA02 DAC1 2DAE 2D0F` |
+> | Feather Wallet | `8185 E158 A333 30C7 FD61  BC0D 1F76 E155 CEFB A71C` |
+> | Whonix | `916B 8D99 C38E AF5E 8ADC  7A2A 8D66 066A 2EEA CCDA` |
+>
+> Em sistemas PT-BR, `gpg` exibe **`Assinatura válida`** no lugar de `Good signature` — ambos significam a mesma coisa.
+
 ---
 
 ## Primeira visita?

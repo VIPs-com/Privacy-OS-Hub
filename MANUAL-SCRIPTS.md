@@ -99,7 +99,7 @@ Use este **orquestrador** se você é novato. Ele chama os outros scripts na ord
 ~/Persistent/haveno-setup.sh --boot
 ```
 
-**O que acontece:** preflight → `haveno-boot.sh` (Playbook §7: `install.sh` + `exec.sh` + onion-grater).
+**O que acontece:** preflight → `haveno-boot.sh` (Playbook §7: `install.sh` + `exec.sh` + onion-grater). *(Nota: `install.sh` e `exec.sh` são scripts internos do pacote Haveno `.deb`, não fazem parte deste repositório.)*
 
 **Quando usar:** passo **7** — todo boot depois que o Haveno já foi instalado **uma vez**.  
 **Por quê:** o Tails é amnésico; cada sessão precisa do ritual de boot do Haveno.  
@@ -262,7 +262,7 @@ chmod +x whonix-verify-image.sh
 | **Faz** | Baixa `derivative.asc`, confere fingerprint, `gpg --verify` da imagem |
 | **Não faz** | Importar `.ova` no VirtualBox (manual) |
 | **Rodar 2×** | **Sim** — só verifica de novo; não altera a imagem |
-| **OK se** | `Good signature` + fingerprint `916B8D99…2EEACCDA` com seus olhos |
+| **OK se** | `Good signature` (ou `Assinatura válida` em PT-BR) + fingerprint `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` com seus olhos |
 
 Detalhe: [Whonix-Online/Scripts/README.md](Whonix-Online/Scripts/README.md)
 

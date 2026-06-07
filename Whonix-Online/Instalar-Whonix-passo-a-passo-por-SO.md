@@ -131,7 +131,7 @@ gpg --fingerprint 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
 gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 ```
 
-> **OK se:** aparece `gpg: Good signature` E o fingerprint que assinou é o `916B8D99…2EEACCDA`. ("Good signature" de uma chave **ERRADA** não vale.)
+> **OK se:** aparece `gpg: Good signature` (ou `Assinatura válida` em sistemas PT-BR — é a mesma coisa) E o fingerprint que assinou é o `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA`. ("Good signature" de uma chave **ERRADA** não vale.)
 
 ### 5.2 Windows (Gpg4win / Kleopatra)
 
