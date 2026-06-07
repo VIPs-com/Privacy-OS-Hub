@@ -34,7 +34,7 @@ Lado **online persistente** do hub: Whonix (Gateway + Workstation via Tor) + cus
 | Índice completo (opcional) | [MANUAL-DO-CURSO.md](../MANUAL-DO-CURSO.md) |
 | Travou? | [README#travou-aqui](../README.md#travou-aqui) |
 
-> **Status:** v1 — auditado rodadas 15–18. Prints pendentes (PI-1): mitigados em [screenshots-whonix/](imagens/screenshots-whonix/README.md).
+> **Status:** v1 — auditado rodadas 15–18. PI-1: **2/5** prints em [screenshots-whonix/](imagens/screenshots-whonix/README.md) (`04`, `05`); faltam import + GPG.
 
 ---
 

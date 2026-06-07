@@ -51,9 +51,13 @@ Faça a verificação do seu SO na **§5** (Windows / macOS / Linux). **Só pros
 3. Selecione o `Whonix-*.ova` **verificado** → **Next**.
 4. **Import** (não precisa mudar as configurações) → aceite a licença → aguarde concluir.
 
+![VirtualBox com Whonix-Gateway e Whonix-Workstation importados](imagens/screenshots-whonix/04-vbox-gateway-workstation.png)
+
 ### 3.3 Inicie as duas VMs
 - Dê **start** em **Whonix-Gateway** → espere conectar ao **Tor** (Tor Connection / ícone).
 - Dê **start** em **Whonix-Workstation**.
+
+![Gateway com Tor conectado — aguarde este estado antes da Workstation](imagens/screenshots-whonix/05-gateway-tor-connected.png)
 - Login padrão: usuário `user`, **sem senha** (passwordless). Troque/defina conforme o guia oficial se for usar de verdade.
 
 > **OK se:** o Gateway conecta ao Tor; a Workstation abre e navega — e **só** consegue via Gateway.
@@ -233,16 +237,15 @@ Fonte: https://www.whonix.org/wiki/VirtualBox · https://www.whonix.org/wiki/KVM
 
 ---
 
-## 10. Prints pendentes (manifesto)
+## 10. Prints do manifesto (PI-1)
 
-Capturas a fazer no host real (ainda **não** incluídas). Lista detalhada com nomes de arquivo:
-[`imagens/screenshots-whonix/README.md`](imagens/screenshots-whonix/README.md).
+Lista e status: [`imagens/screenshots-whonix/README.md`](imagens/screenshots-whonix/README.md) (**2/5** incluídos em jun/2026).
 
 - [ ] `01-vbox-import-appliance.png` — VirtualBox → **File → Import Appliance** com o `.ova` selecionado.
 - [ ] `02-kleopatra-good-signature.png` — Kleopatra (**Windows**) → **Decrypt/Verify** + fingerprint válido.
 - [ ] `03-linux-good-signature.png` — Terminal (**Linux/macOS**) → `gpg: Good signature` com `916B8D99…2EEACCDA`.
-- [ ] `04-vbox-gateway-workstation.png` — VirtualBox com **Gateway + Workstation** importados.
-- [ ] `05-gateway-tor-connected.png` — Gateway com **Tor Connection** conectado.
+- [x] `04-vbox-gateway-workstation.png` — VirtualBox com **Gateway + Workstation** importados.
+- [x] `05-gateway-tor-connected.png` — Gateway com **Tor Connection** conectado.
 
 > Mesmo padrão do manifesto de screenshots do Módulo 1: redija/oculte qualquer dado sensível antes de publicar.
 
