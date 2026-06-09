@@ -16,7 +16,7 @@ Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1
 | **4** | Carteira + backup | [Curso Cap. 5](Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](Playbooks/Playbooks.md#9--backup-pós-verde) |
 | **5** | Vol II: Feather + seed · **p/ M2 (passo 8):** Caps. 2–3 · **trade (opcional):** 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [feather-install-verify.sh](Scripts/feather-install-verify.sh) · [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
 | **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | imprimir |
-| **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | [haveno-setup.sh --boot](Scripts/haveno-setup.sh) · [Scripts README](Scripts/README.md) |
+| **7** | Scripts automação | [Scripts/README.md](Scripts/README.md) | [haveno-setup.sh --boot --qa-log](Scripts/haveno-setup.sh) · [COMO-LER-SEUS-LOGS.md](Scripts/COMO-LER-SEUS-LOGS.md) |
 
 **Próximo módulo:** [Whonix Online (passos 8–12)](../Whonix-Online/README.md) — requer passos 1–4 + Feather (Vol II Cap. 3).
 

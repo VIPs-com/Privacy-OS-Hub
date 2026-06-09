@@ -22,7 +22,7 @@ Privacy-OS-Hub/
 │   ├── Curso-Tails-OS-Expert.md      (Vol I — livro)
 │   ├── Playbooks/Playbooks.md        (Vol I — comandos)
 │   ├── Expansao-Curso/               (Vol II — rede + Feather + trades)
-│   ├── Scripts/                      (Tails: haveno-*, feather-*, tails-*)
+│   ├── Scripts/                      (haveno-*, feather-*, qa-*, COMO-LER-SEUS-LOGS.md)
 │   │   └── HomeLab/                  (Debian/Ubuntu — NÃO Tails)
 │   └── Folheto-Regras-e-Golpes.md
 │
@@ -66,12 +66,14 @@ Ordem fixa. Detalhe completo: [README — tabela](README.md#trilha-linear).
 | **6** | Folheto golpes | M1 |
 | **7** | Scripts: boot / backup / update | M1 |
 | **8** | Escolher trilha cold-signing **A ou B** | M2 |
-| **9** | Backup air-gap (2× seed) | M2 |
+| **9** | Confirmar 2× cópias físicas da seed | M2 |
 | **10** | Whonix install + PGP imagem | M2 |
 | **11** | Teoria frio↔quente | M2 |
 | **12** | Cold-signing (Feather GUI **ou** CLI) | M2 |
 
 **Pré-req passo 8:** M1 passos **1–4** + Feather ([Vol II Cap. 3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
+
+**Online × offline:** [README — glossário](README.md#trilha-linear) · **Logs QA:** `--qa-log` → `~/Persistent/qa-logs/` · [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md)
 
 **Contingência:** [README#travou-aqui](README.md#travou-aqui)
 
@@ -110,9 +112,13 @@ Orquestrador novato: `haveno-setup.sh`. Expert pode chamar **direto**:
 | `haveno-update.sh` | Novo `.deb` + PGP |
 | `feather-install-verify.sh` | PGP Feather |
 | `haveno-switch-network.sh` | Troca de rede Haveno |
-| `whonix-verify-image.sh` | PGP imagem (host Linux) |
+| `whonix-verify-image.sh` | PGP imagem (host Linux) · `--qa-log` |
+| `qa-confirm-seed-papel.sh` | Confirmações passo 4 (sem seed no log) |
+| `qa-confirm-passo9.sh` | Ritual 2× cópias físicas |
+| `qa-confirm-passo12.sh` | Pós cold-signing offline |
+| `qa-export-logs.sh` | Copia `qa-logs/` → pendrive USB |
 
-Matriz completa: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · Novato detalhado: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md)
+Matriz completa: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · Novato detalhado: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) · **Ler logs:** [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md)
 
 **Dados persistentes:** `~/Persistent/haveno/Data/` · Feather: `~/Persistent/feather/wallets/` · **Seed ≠ backup automático.**
 

@@ -12,9 +12,9 @@ nunca escondidos.
 
 ## 2. Cold-Tails, Hot-Whonix — trilha principal
 
-A arquitetura central do hub é **custódia fria no Tails offline** e **operação view-only no Whonix online**,
-**sem depender de hardware proprietário caro**. Controle total e **responsabilidade sua**: seed, backup,
-disciplina operacional. Trezor/Ledger são **alternativa opcional** (custo extra), não pré-requisito.
+A arquitetura central do hub é **custódia fria no Tails** (assinatura **sem rede** no passo 12) e **operação
+view-only no Whonix online**, **sem depender de hardware proprietário caro**. Passos 1–9 rodam com **Tor ativo**;
+a seed vai para **papel**, não para arquivo. Trezor/Ledger são **alternativa opcional** (custo extra), não pré-requisito.
 
 ## 3. Não omitir — o aluno escolhe o caminho
 
@@ -36,7 +36,7 @@ no Volume I e no Folheto.
 
 ## 6. Ecossistema
 
-**Tails offline** guarda o grosso e assina. **Whonix online** vê, monta e transmite. **Haveno** é a ponte para
+**Tails** guarda o grosso e **assina offline** (passo 12). **Whonix online** vê, monta e transmite. **Haveno** é a ponte para
 trades quentes (escrow multisig automático). **[Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)**
 (repositório **separado**) oferece baseline opcional — cofre, PGP, backup, SSH — que **complementa** este hub
 sem substituí-lo. Auditoria interna (rodadas documentadas) mantém o material vivo a cada release.

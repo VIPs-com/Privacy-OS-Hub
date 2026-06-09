@@ -12,8 +12,11 @@
 
 ```bash
 chmod +x whonix-verify-image.sh
-./whonix-verify-image.sh /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
-./whonix-verify-image.sh --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
+./whonix-verify-image.sh --qa-log /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
+./whonix-verify-image.sh --qa-log --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
+# Log em: ~/whonix-download/qa-logs/10-whonix-verify-*.txt
 ```
+
+Validação: [COMO-LER-SEUS-LOGS.md](../../Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
 
 *Módulo 2 · Privacy-OS-Hub*

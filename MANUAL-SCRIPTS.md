@@ -43,6 +43,39 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 
 ---
 
+## Validar com logs (recomendado)
+
+Depois de copiar os scripts para `~/Persistent/`:
+
+```bash
+chmod +x ~/Persistent/*.sh
+
+# Exemplo — 1ª instalação com evidência:
+~/Persistent/haveno-setup.sh --qa-log
+
+# Após anotar seed no papel (passo 4):
+~/Persistent/qa-confirm-seed-papel.sh
+
+# Passo 9 — duas cópias físicas (Tails pode estar com Tor):
+~/Persistent/qa-confirm-passo9.sh
+
+# Passo 12 — depois do cold-signing offline:
+~/Persistent/qa-confirm-passo12.sh
+
+# Entregar à equipe (2º pendrive):
+~/Persistent/qa-export-logs.sh --usb
+```
+
+| O log **contém** | O log **nunca contém** |
+|------------------|------------------------|
+| `RESULTADO: PASS` ou `FAIL` | As 25 palavras da seed |
+| `Backup concluido:` · `Fingerprint OK:` | Senhas ou chaves completas |
+| `CONFIRMACAO_HUMANA: ...=SIM` | TX ID completo |
+
+**Glossário:** “offline” no hub pode ser **papel** (passo 4) ou **sem rede** (passo 12) — [README](README.md#trilha-linear).
+
+---
+
 ## Regra de ouro (leia uma vez)
 
 | Os scripts **fazem** | Os scripts **não fazem** |
@@ -356,6 +389,13 @@ Tails-OS-Expert/Scripts/          (copie tudo p/ ~/Persistent/ — mesma lista)
 │
 ├── haveno-common.sh         ✗ NÃO EXECUTE (biblioteca interna)
 │
+├── Validação / QA (passos 4, 9, 12)
+│   ├── qa-confirm-seed-papel.sh
+│   ├── qa-confirm-passo9.sh
+│   ├── qa-confirm-passo12.sh
+│   ├── qa-export-logs.sh
+│   └── COMO-LER-SEUS-LOGS.md   ← como saber se deu PASS
+│
 └── HomeLab/                 ✗ Outro PC (Debian/Ubuntu) — não use no Tails
 
 Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
@@ -377,7 +417,7 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Sim** — é o script principal |
 | **O que faz** | Chama os outros na ordem: preflight → auto **ou** boot → (opcional) backup → (opcional) Feather |
 | **O que NÃO faz** | Não grava USB; não anota seed; não tradear |
-| **Comando** | `~/Persistent/haveno-setup.sh` · `--boot` · `--feather` · `--skip-backup` |
+| **Comando** | `~/Persistent/haveno-setup.sh` · `--boot` · `--feather` · `--skip-backup` · `--qa-log` |
 | **Rodar 2×** | **Seguro** — ver seção [Comando principal](#comando-principal-haveno-setupsh) |
 | **Disco** | Não apaga `~/Persistent/haveno/Data/` nem `feather/wallets/` |
 | **Flags** | [Comando principal](#comando-principal-haveno-setupsh) (neste manual) |
@@ -576,9 +616,46 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Sim, no Linux onde vai instalar VirtualBox/KVM |
 | **O que faz** | PGP da imagem `.ova` ou `.libvirt.xz` |
 | **O que NÃO faz** | Não importa VM; não configura Tor na Gateway |
-| **Comando** | `./whonix-verify-image.sh imagem.ova imagem.ova.asc` |
+| **Comando** | `./whonix-verify-image.sh --qa-log imagem.ova imagem.ova.asc` |
 | **Rodar 2×** | **Sim** — só verifica de novo |
 | **Detalhe** | [Seção Whonix](#whonix-host-linux--não-é-no-tails) |
+
+---
+
+### Validação / QA — confirmações sem segredos
+
+#### `qa-confirm-seed-papel.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Passo hub** | **4** (após anotar seed no papel) |
+| **O que faz** | Perguntas s/N → grava `04-seed-papel-*.txt` |
+| **O que NÃO faz** | Nunca pede nem grava as 25 palavras |
+
+#### `qa-confirm-passo9.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Passo hub** | **9** |
+| **Rede** | Tails **com Tor** OK |
+| **O que faz** | Confirma 2× cópias físicas em locais separados |
+
+#### `qa-confirm-passo12.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Passo hub** | **12** (trilha A) |
+| **Rede** | Tails **sem** Wi‑Fi/cabo |
+| **O que faz** | Confirma cold-signing; TX ID só prefixo + `[BORRADO]` |
+
+#### `qa-export-logs.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Uso** | Copia `~/Persistent/qa-logs/*.txt` para pendrive `--usb` |
+| **Quando** | Entregar evidências à equipe ou outro PC |
+
+Guia completo: [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md)
 
 ---
 
@@ -591,6 +668,10 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 | `feather-install-verify.sh` | **Sim** (passo 5), ou via `--feather` |
 | `feather-backup.sh` | **Sim** (após carteira Feather) |
 | `whonix-verify-image.sh` | **Sim** (passo 10, no PC host) |
+| `qa-confirm-seed-papel.sh` | **Sim** (após passo 4) |
+| `qa-confirm-passo9.sh` | **Sim** (passo 9) |
+| `qa-confirm-passo12.sh` | **Sim** (após passo 12) |
+| `qa-export-logs.sh` | Opcional (entregar logs) |
 | Todos os outros `haveno-*` / `tails-*` | **Não** — o setup chama ou é avançado |
 | `haveno-common.sh` | **Nunca** |
 | `HomeLab/*` | **Não** (outro computador) |
@@ -603,6 +684,8 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 - [ ] Indicador **verde** (ou amarelo temporário entendido)  
 - [ ] `haveno-backup.sh` executado pelo menos uma vez  
 - [ ] **Seed** anotada no papel (Account → Wallet seed) — **fora** do backup automático  
+- [ ] `qa-confirm-seed-papel.sh` → log com 3 confirmações `=SIM`  
+- [ ] (M2) `qa-confirm-passo9.sh` antes de mover valor relevante  
 - [ ] Se for tradear: leu Cap. 4 (exploit) e canais oficiais da rede  
 
 ---

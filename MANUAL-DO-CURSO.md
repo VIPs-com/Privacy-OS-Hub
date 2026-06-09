@@ -13,6 +13,8 @@
 
 **Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui)
 
+**Validar um passo (opcional):** scripts com `--qa-log` gravam `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md). Glossário online/offline: [README — trilha linear](README.md#trilha-linear).
+
 ---
 
 ## Volume I — Tails + Haveno verde
@@ -70,7 +72,7 @@ Livro: [Curso-Whonix-Online.md](Whonix-Online/Curso-Whonix-Online.md) · Comando
 | Cap. | Título | Trilha README | Comandos |
 |------|--------|---------------|----------|
 | — | [Porteiro — escolha trilha A ou B](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | passo **8** | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
-| — | [Backup air-gap (teoria no Curso Cap. 5)](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **9** | [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| — | [Confirmar 2× cópias seed (Curso Cap. 5)](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **9** | [qa-confirm-passo9.sh](Tails-OS-Expert/Scripts/qa-confirm-passo9.sh) |
 | — | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | passo **10** | [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
 | 1 | [O que é Whonix](Whonix-Online/Curso-Whonix-Online.md#1-o-que-é-o-whonix-e-o-modelo-de-ameaças) | passo **10–11** | — |
 | 2 | [Instalar e verificar imagem](Whonix-Online/Curso-Whonix-Online.md#2-instalar-e-verificar-a-imagem) | passo **10** | [Playbooks §1](Whonix-Online/Playbooks/Playbooks.md) |
@@ -96,6 +98,7 @@ Livro: [Curso-Whonix-Online.md](Whonix-Online/Curso-Whonix-Online.md) · Comando
 | Material | Arquivo | Trilha README |
 |----------|---------|---------------|
 | Scripts Tails (auto / backup / update) | [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) | passo **7** |
+| Validar com logs (`--qa-log`) | [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md) | passos **2–12** |
 | Home Lab (nó, P2Pool, xmrig) | [Scripts/HomeLab/README.md](Tails-OS-Expert/Scripts/HomeLab/README.md) | opcional |
 | Folheto regras + golpes | [Folheto-Regras-e-Golpes.md](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | passo **6** |
 

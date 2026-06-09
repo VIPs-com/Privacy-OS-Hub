@@ -30,6 +30,7 @@ experiência e ensina **processo + ferramentas** na ordem certa.
 | **1** | Abra a [trilha linear](#trilha-linear) e comece no **passo 1** | Um passo de cada vez — Livro (teoria/telas) + Comandos (mão na massa) |
 | **2** | Nos passos **2** e **7**, se quiser automação: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) | Dois comandos bastam (`haveno-setup.sh` e `--boot`); [Apêndice A](MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) explica cada `.sh` |
 | **3** | Só avance quando o **OK se** do passo atual for verdadeiro | Evita pular backup, seed ou pré-requisito do Módulo 2 |
+| **4** | (Opcional) Valide com **log**: `haveno-setup.sh --qa-log` → leia `~/Persistent/qa-logs/*.txt` | [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md) — sem expor seed |
 
 **O que você sai sabendo fazer (trilha completa):** Tails no pendrive · Haveno **verde** · backup cifrado ·
 Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B). **Montar um lab em casa**
@@ -129,16 +130,18 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 
 Para quem quer **mão na massa** com o mínimo de teoria — **depois** dos passos 1–4 manuais (Tails no USB, Tor, persistência, admin):
 
-| Objetivo | Comando (em `~/Persistent/`) | Ainda manual |
-|----------|------------------------------|--------------|
-| Haveno verde (1ª vez) | `haveno-setup.sh` | Passos 1–4 · confirmar **verde** na janela |
-| Cada boot Haveno | `haveno-setup.sh --boot` | Indicador verde |
-| Backup Haveno | `haveno-backup.sh` | Seed no papel |
-| Feather (M2 pré-req) | `feather-install-verify.sh` | Criar carteira + seed |
-| Whonix PGP (host Linux) | `whonix-verify-image.sh` | Importar VMs · cold-signing |
-| Trades / M2 air-gap | — | Playbooks Vol II §4–8 · passos 9/12 |
+| Objetivo | Comando (em `~/Persistent/` ou host) | Ainda manual |
+|----------|--------------------------------------|--------------|
+| Haveno verde (1ª vez) | `haveno-setup.sh` · `--qa-log` | Passos 1–4 · confirmar **verde** na janela |
+| Cada boot Haveno | `haveno-setup.sh --boot` · `--qa-log` | Indicador verde |
+| Backup Haveno | `haveno-backup.sh` · `--qa-log` | Seed no papel → `qa-confirm-seed-papel.sh` |
+| Feather (M2 pré-req) | `feather-install-verify.sh` · `--qa-log` | Criar carteira + seed |
+| Passo 9 (2× cópias seed) | `qa-confirm-passo9.sh` | Ritual físico (Tails **com** Tor OK) |
+| Passo 12 (cold-signing) | `qa-confirm-passo12.sh` | Air-gap real · Tails **sem** rede |
+| Exportar logs (equipe) | `qa-export-logs.sh --usb` | 2º pendrive transitório |
+| Whonix PGP (host Linux) | `whonix-verify-image.sh --qa-log` | Importar VMs |
 
-> **~35–40%** dos comandos repetíveis têm script; **0%** dos rituais de custódia (seed, USB frio, conferir destino antes de assinar).
+> **~35–40%** dos comandos repetíveis têm script; rituais de custódia (seed em papel, USB frio, assinar offline) são **humanos** — os scripts `qa-confirm-*` só registram confirmações **sem** gravar segredos.
 
 **Manual completo (novato):** [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) — o que cada script faz, flags (`--boot`, `--feather`, …), quando rodar e o que acontece se executar 2×.
 
@@ -169,7 +172,7 @@ Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abr
 | Haveno não ficou verde | **2** | [Curso Cap. 7 FAQ](Tails-OS-Expert/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) | [Playbooks §8](Tails-OS-Expert/Playbooks/Playbooks.md) |
 | Dúvida se pode tradear | **3** | [Curso Cap. 4](Tails-OS-Expert/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](Tails-OS-Expert/Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
 | Seed / backup carteira Haveno | **4** | [Curso Cap. 5](Tails-OS-Expert/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](Tails-OS-Expert/Playbooks/Playbooks.md#9--backup-pós-verde) |
-| Backup air-gap M2 | **9** | [Curso Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| 2× cópias físicas da seed | **9** | [Curso Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [qa-confirm-passo9.sh](Tails-OS-Expert/Scripts/qa-confirm-passo9.sh) |
 | Feather / 1º trade | **5** | [Vol II Cap. 2–3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) | [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
 | Escolher trilha A ou B | **8** | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
 | Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2 §1](Whonix-Online/Playbooks/Playbooks.md) |
@@ -189,7 +192,8 @@ Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abr
 
 ### Arquitetura (visão)
 
-- **Tails (offline)** → carteira fria, assinatura air-gap — trilha principal, sem hardware proprietário obrigatório.
+- **Tails (com Tor)** → passos 1–9: Haveno, Feather, backups, confirmações em papel.
+- **Tails (sem rede)** → passo **12**: assinatura air-gap (único offline de rede obrigatório no Mínimo M2).
 - **Whonix (online)** → view-only, nó Monero, operações quentes via Tor.
 - **Haveno** → trades quentes (escrow online); custódia frio/quente no passo 12.
 - **Zero-Trust-Core** → baseline opcional; complementa M1/M2, não substitui.
