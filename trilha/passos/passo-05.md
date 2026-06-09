@@ -27,6 +27,6 @@
 |------|------|
 | Livro | [Vol II — Antes do 1º trade](../../modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) |
 | Processo | [P05](../../processos/m1-tor/P05-feather.md) |
-| Comandos | [feather-install-verify.sh](../../automacao/tails/feather-install-verify.sh) · [Playbooks Vol II](../../modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| Comandos | [P05](../../processos/m1-tor/P05-feather.md) |
 
 **Anterior:** [passo-04.md](passo-04.md) · **Próximo:** [passo-06.md](passo-06.md)

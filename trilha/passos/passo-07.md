@@ -25,7 +25,7 @@
 |------|------|
 | Livro | [Scripts — ciclo de uso](../../automacao/tails/README.md) |
 | Processo | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
-| Comandos | [haveno-setup.sh](../../automacao/tails/haveno-setup.sh) |
+| Comandos | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
 | Manual | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) |
 | Matriz | [scripts-matriz.md](../referencia/scripts-matriz.md) |
 

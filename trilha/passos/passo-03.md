@@ -24,6 +24,6 @@
 |------|------|
 | Livro | [Curso Vol I — Cap. 4](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) |
 | Processo | [P03](../../processos/m1-tor/P03-pre-trade.md) |
-| Comandos | [Playbooks §3b](../../modulos/m1-tails-haveno/Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
+| Comandos | [P03](../../processos/m1-tor/P03-pre-trade.md) |
 
 **Anterior:** [passo-02.md](passo-02.md) · **Próximo:** [passo-04.md](passo-04.md)

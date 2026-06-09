@@ -28,7 +28,7 @@ Os outros arquivos `.sh` existem para **avançado** ou são chamados **automatic
 
 ## Antes de qualquer script (sempre manual)
 
-Nenhum script grava o pendrive nem cria a persistência por você. **Termine isto na mão** (Playbooks §1–4):
+Nenhum script grava o pendrive nem cria a persistência por você. **Termine isto na mão** ([P01](processos/m1-tor/P01-bootstrap-tails.md)):
 
 | # | O quê | Por quê |
 |---|--------|---------|
@@ -92,7 +92,7 @@ chmod +x ~/Persistent/*.sh
 
 ## Instalar os scripts (uma vez por persistência)
 
-1. Abra **Arquivos** → pasta `modulos/m1-tails-haveno/Scripts`.
+1. No clone do repo no pendrive: copie `automacao/tails/*.sh` e `automacao/tails/hub-aliases/*.sh` para `~/Persistent/` (ver [automacao/tails/README.md](automacao/tails/README.md)).
 2. Selecione **todos** os arquivos `*.sh` + `haveno-backup.desktop`.
 3. **Copiar** → colar em **Casa → Persistent** (`/home/amnesia/Persistent`).
 4. No Terminal:
@@ -309,7 +309,8 @@ Detalhe: [automacao/whonix-host/README.md](automacao/whonix-host/README.md)
 |--------|----------------|
 | Seed no papel / metal | Segurança física — humano anota |
 | Trades, disputas, fiat | Julgamento e risco financeiro |
-| Cold-signing (passos 9/12) | Air-gap, USB entre máquinas, conferir destino antes de assinar |
+| Passo 9 (ritual 2× seed, Tor OK) | `qa-confirm-passo9.sh` — cópias físicas em locais separados |
+| Passo 12 (cold-signing, **sem rede**) | Air-gap, USB entre máquinas, conferir destino antes de assinar · `qa-confirm-passo12.sh` |
 | Upgrade do **Tails** (SO) | Oficial só via Tails Upgrader |
 | BIOS, Kleopatra (Windows), USB passthrough | GUI / hardware |
 
@@ -332,7 +333,7 @@ Corrija o item listado (Tor, Dotfiles, admin) nos Playbooks §1–4. **Não** us
 
 ### Haveno abriu mas não está verde
 
-Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: Playbooks §8 ou Cap. 7 FAQ. Rodar `haveno-boot.sh` de novo é seguro.
+Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: [P02 §8](processos/m1-tor/P02-haveno-verde.md) ou Cap. 7 FAQ. Rodar `haveno-boot.sh` de novo é seguro.
 
 ### Quero só Feather, Haveno já está verde
 

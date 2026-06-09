@@ -529,7 +529,7 @@ flowchart LR
 No home lab:
 
 ```bash
-cd ../Scripts/HomeLab
+cd automacao/homelab
 chmod +x *.sh
 
 ./00-verificar-requisitos.sh          # OK? CPU, RAM, SSD, rede

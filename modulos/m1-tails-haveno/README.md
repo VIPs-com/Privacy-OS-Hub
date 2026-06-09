@@ -10,13 +10,13 @@ Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1
 
 | Passo hub | O que fazer | Livro | Comandos |
 |:---------:|-------------|-------|----------|
-| **1** | Tails + Tor + persistência | [Curso Cap. 2](Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](Playbooks/Playbooks.md) |
-| **2** | Haveno **verde** | [Curso Cap. 3](Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [haveno-setup.sh](../../automacao/tails/haveno-setup.sh) · [Playbooks §5–6](Playbooks/Playbooks.md) |
-| **3** | Segurança (exploit) | [Curso Cap. 4](Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
-| **4** | Carteira + backup | [Curso Cap. 5](Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](Playbooks/Playbooks.md#9--backup-pós-verde) |
-| **5** | Vol II: Feather + seed · **p/ M2 (passo 8):** Caps. 2–3 · **trade (opcional):** 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [feather-install-verify.sh](../../automacao/tails/feather-install-verify.sh) · [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | imprimir |
-| **7** | Scripts automação | [Scripts/README.md](../../automacao/tails/README.md) | [haveno-setup.sh --boot --qa-log](../../automacao/tails/haveno-setup.sh) · [COMO-LER-SEUS-LOGS.md](../../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) |
+| **1** | Tails + Tor + persistência | [Curso Cap. 2](Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [P01](../../processos/m1-tor/P01-bootstrap-tails.md) |
+| **2** | Haveno **verde** | [Curso Cap. 3](Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [P02](../../processos/m1-tor/P02-haveno-verde.md) |
+| **3** | Segurança (exploit) | [Curso Cap. 4](Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [P03](../../processos/m1-tor/P03-pre-trade.md) |
+| **4** | Carteira + backup | [Curso Cap. 5](Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [P04](../../processos/m1-tor/P04-backup-seed.md) |
+| **5** | Vol II: Feather + seed · **p/ M2 (passo 8):** Caps. 2–3 · **trade (opcional):** 7–8 | [Vol II](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) | [P05](../../processos/m1-tor/P05-feather.md) |
+| **6** | Folheto (imprimir) | [Folheto-Regras-e-Golpes.md](Folheto-Regras-e-Golpes.md) | [P06](../../processos/m1-tor/P06-folheto.md) |
+| **7** | Scripts automação | [automacao/tails](../../automacao/tails/README.md) | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
 
 **Próximo módulo:** [Whonix Online (passos 8–12)](../m2-whonix-custodia/README.md) — requer passos 1–4 + Feather (Vol II Cap. 3).
 

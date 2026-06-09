@@ -4,7 +4,7 @@
 
 **Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso-Rede-Descentralizada-Extensao.md`](Curso-Rede-Descentralizada-Extensao.md).
 
-**Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7, **mais as seções 9–10 Backup/Atualizar**). **Faça backup cifrado (Playbooks §9) antes do 1º depósito de XMR.** Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
+**Pré-requisito:** Volume I concluído — Haveno **verde** ([P01–P07](../../../processos/README.md)). **Faça backup cifrado ([P04](../../../processos/m1-tor/P04-backup-seed.md)) antes do 1º depósito de XMR.** Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
 
 > Tradear: versão **`1.6.0-reto`+**, confirme retomada nos canais oficiais, **valores pequenos** primeiro.
 
@@ -161,7 +161,7 @@ curl -fsSLO https://github.com/haveno-dex/haveno/raw/master/scripts/install_tail
 # Copie ../../automacao/homelab/ para o servidor. No home lab:
 
 ```bash
-cd /caminho/para/Tails\ OS\ Expert/Scripts/HomeLab
+cd /caminho/para/Privacy-OS-Hub/automacao/homelab
 chmod +x *.sh
 
 ./00-verificar-requisitos.sh

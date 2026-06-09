@@ -17,11 +17,13 @@ Privacy-OS-Hub/
 ├── MANUAL-SCRIPTS.md         # Automação (tom novato)
 ├── MANUAL-DO-CURSO.md        # Índice capítulo a capítulo
 ├── MANIFESTO.md
-├── trilha/                     # A — ordem passos 1–12 · mapas · cartões
-│   ├── 00-PORTA-ENTRADA.md
-│   ├── mapa-modos/ · trilhas/ · passos/ · referencia/
+├── trilha/                     # Navegação L0/L1 · cartões passo · glossário
+│   ├── passos/ · mapa-modos/ · trilhas/ · referencia/
 │
-├── modulos/                    # B — livros · playbooks · assets
+├── processos/                  # C — comandos canônicos P01–P12 (v2)
+│   ├── m1-tor/ · porteiro/ · rituais/ · m2-quente/ · m2-frio/
+│
+├── modulos/                    # B — livros · índices playbook · assets
 │   ├── m1-tails-haveno/        (passos 1–7)
 │   └── m2-whonix-custodia/     (passos 8–12)
 │
@@ -42,8 +44,9 @@ Privacy-OS-Hub/
 |------|------|--------------|
 | **Trilha** | [README.md#trilha-linear](README.md#trilha-linear) | Sempre — ordem 1–12 |
 | **Livro** | `Curso-*.md` | Teoria, telas, modelo de ameaças |
-| **Playbook** | `Playbooks/*.md`, trilhas A/B | Terminal / ritual copiável |
-| **Script** | `Scripts/*.sh` | Automação (PGP fail-closed, ciclo Haveno) |
+| **Processo** | `processos/P0x-*.md` | Comandos canônicos por passo (v2) |
+| **Playbook** | `Playbooks/*.md` (índice), trilhas A/B (detalhe) | Legado v1 / cold-signing expandido |
+| **Script** | `automacao/tails/*.sh`, `whonix-host/` | Cópia para `~/Persistent/` |
 | **Folheto** | `Folheto-Regras-e-Golpes.md` | Impressão (passo 6) |
 
 Regra do hub: **Livro + Comandos no mesmo passo** — não pule só para Playbook sem contexto de risco quando for a 1ª vez no passo.

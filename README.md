@@ -105,24 +105,24 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 
 > **Passo 9:** confirme que as **duas cópias físicas** da seed (passo 4) estão em locais separados — `qa-confirm-passo9.sh`. Não exige segundo boot offline no Mínimo M2.
 
-> **Regra:** livro = teoria e telas · Playbook = comandos no **mesmo** passo · [processos/](processos/README.md) = cartão por passo (scripts + link ao playbook canônico).
+> **Regra:** livro = teoria e telas · **[processos/](processos/README.md) = comandos canônicos** (P01–P12) · Playbooks nos módulos = índice legado.
 >
-> **Coluna Comandos:** link = terminal ou ritual copiável. `imprimir` / `—` = sem bash (leitura, decisão ou teoria). Avance pelo Livro; abra Comandos no mesmo passo quando houver link.
+> **Coluna Comandos:** abra o **processo** do passo; `imprimir` / `—` = sem bash. Cartões com OK se: [trilha/passos/](trilha/passos/README.md).
 
 | Passo | O que fazer | Livro (abrir) | Comandos |
 |:-----:|-------------|---------------|----------|
-| **1** | Gravar Tails + Tor + persistência | [Curso Vol I — Cap. 2](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](modulos/m1-tails-haveno/Playbooks/Playbooks.md) |
-| **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [haveno-setup.sh](automacao/tails/haveno-setup.sh) · [Playbooks §5–6](modulos/m1-tails-haveno/Playbooks/Playbooks.md) |
-| **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](modulos/m1-tails-haveno/Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
-| **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](modulos/m1-tails-haveno/Playbooks/Playbooks.md#9--backup-pós-verde) |
-| **5** | Vol II: Feather + seed · **obrigatório p/ M2 (passo 8):** só Caps. 2–3 · **só se for tradear:** Caps. 7–8 | [Vol II — Antes do 1º trade](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) | [feather-install-verify.sh](automacao/tails/feather-install-verify.sh) · [Playbooks Vol II](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| **6** | Regras de ouro + golpes (imprimir) | [Folheto](modulos/m1-tails-haveno/Folheto-Regras-e-Golpes.md) | imprimir |
-| **7** | Automação pós-verde | [Scripts — ciclo de uso](automacao/tails/README.md) | [haveno-setup.sh --boot](automacao/tails/haveno-setup.sh) · [Scripts README](automacao/tails/README.md) |
-| **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) |
-| **9** | Confirmar **2× cópias físicas** da seed (ritual pós passo 4) | [Curso Whonix — Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [qa-confirm-passo9.sh](automacao/tails/qa-confirm-passo9.sh) · [Playbook backup](modulos/m2-whonix-custodia/Playbook-Backup-e-protecao-air-gap.md) |
-| **10** | Instalar e verificar Whonix (PGP; detalhe por SO no Livro) | [Instalar por SO](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [whonix-verify-image.sh](automacao/whonix-host/whonix-verify-image.sh) · [Playbooks M2](modulos/m2-whonix-custodia/Playbooks/Playbooks.md) |
-| **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | — |
-| **12** | Cold-signing — **escolha UMA** trilha | [Curso Whonix — §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | **A:** [Trilha A](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [Trilha B](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| **1** | Gravar Tails + Tor + persistência | [Curso Vol I — Cap. 2](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [P01](processos/m1-tor/P01-bootstrap-tails.md) |
+| **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [P02](processos/m1-tor/P02-haveno-verde.md) |
+| **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [P03](processos/m1-tor/P03-pre-trade.md) |
+| **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [P04](processos/m1-tor/P04-backup-seed.md) |
+| **5** | Vol II: Feather + seed · **obrigatório p/ M2 (passo 8):** só Caps. 2–3 · **só se for tradear:** Caps. 7–8 | [Vol II — Antes do 1º trade](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) | [P05](processos/m1-tor/P05-feather.md) |
+| **6** | Regras de ouro + golpes (imprimir) | [Folheto](modulos/m1-tails-haveno/Folheto-Regras-e-Golpes.md) | [P06](processos/m1-tor/P06-folheto.md) |
+| **7** | Automação pós-verde | [Scripts — ciclo de uso](automacao/tails/README.md) | [P07](processos/m1-tor/P07-rotina-scripts.md) |
+| **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
+| **9** | Confirmar **2× cópias físicas** da seed (ritual pós passo 4) | [Curso Whonix — Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](processos/rituais/P09-ritual-seed.md) |
+| **10** | Instalar e verificar Whonix (PGP; detalhe por SO no Livro) | [Instalar por SO](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [P10](processos/m2-quente/P10-whonix-pgp.md) |
+| **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
+| **12** | Cold-signing — **escolha UMA** trilha | [Curso Whonix — §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P12A](processos/m2-frio/P12a-feather-offline.md) · [P12B](processos/m2-frio/P12b-cli-offline.md) |
 
 > **Passo 8:** exige passos **1–4** + Feather ([Vol II Cap. 3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
 
@@ -172,15 +172,15 @@ Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abr
 
 | Situação | Volte ao passo | Livro | Comandos |
 |----------|----------------|-------|----------|
-| Pendrive / Tor / persistência | **1** | [Curso Cap. 2](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [Playbooks §1–4](modulos/m1-tails-haveno/Playbooks/Playbooks.md) |
-| Haveno não ficou verde | **2** | [Curso Cap. 7 FAQ](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) | [Playbooks §8](modulos/m1-tails-haveno/Playbooks/Playbooks.md) |
-| Dúvida se pode tradear | **3** | [Curso Cap. 4](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [Playbooks §3b](modulos/m1-tails-haveno/Playbooks/Playbooks.md#3b--checklist-pré-trade-pós-verde) |
-| Seed / backup carteira Haveno | **4** | [Curso Cap. 5](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [Playbooks §9](modulos/m1-tails-haveno/Playbooks/Playbooks.md#9--backup-pós-verde) |
-| 2× cópias físicas da seed | **9** | [Curso Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [qa-confirm-passo9.sh](automacao/tails/qa-confirm-passo9.sh) |
+| Pendrive / Tor / persistência | **1** | [Curso Cap. 2](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) | [P01](processos/m1-tor/P01-bootstrap-tails.md) |
+| Haveno não ficou verde | **2** | [Curso Cap. 7 FAQ](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) | [P02 §8](processos/m1-tor/P02-haveno-verde.md) |
+| Dúvida se pode tradear | **3** | [Curso Cap. 4](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [P03](processos/m1-tor/P03-pre-trade.md) |
+| Seed / backup carteira Haveno | **4** | [Curso Cap. 5](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [P04](processos/m1-tor/P04-backup-seed.md) |
+| 2× cópias físicas da seed | **9** | [Curso Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](processos/rituais/P09-ritual-seed.md) |
 | Feather / 1º trade | **5** | [Vol II Cap. 2–3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) | [Playbooks Vol II](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| Escolher trilha A ou B | **8** | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) |
-| Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [Playbooks M2 §1](modulos/m2-whonix-custodia/Playbooks/Playbooks.md) |
-| Cold-signing travou | **12** | [Curso §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [Trilha A](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) ou [Trilha B](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| Escolher trilha A ou B | **8** | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
+| Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [P10](processos/m2-quente/P10-whonix-pgp.md) |
+| Cold-signing travou | **12** | [Curso §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P12A](processos/m2-frio/P12a-feather-offline.md) ou [P12B](processos/m2-frio/P12b-cli-offline.md) |
 | Sem nó `.onion` | **11** | [Curso Cap. 4.2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) | — |
 | Mapa geral do hub | — | **Você está aqui** — [trilha linear](#trilha-linear) | — |
 

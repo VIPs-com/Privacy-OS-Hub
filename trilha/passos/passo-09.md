@@ -27,7 +27,7 @@
 |------|------|
 | Livro | [Curso Whonix — Cap. 5](../../modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) |
 | Processo | [P09](../../processos/rituais/P09-ritual-seed.md) |
-| Comandos | [qa-confirm-passo9.sh](../../automacao/tails/qa-confirm-passo9.sh) · [Playbook backup](../../modulos/m2-whonix-custodia/Playbook-Backup-e-protecao-air-gap.md) |
+| Comandos | [P09](../../processos/rituais/P09-ritual-seed.md) |
 | Trilha | [ritual-seed-passo-9.md](../trilhas/ritual-seed-passo-9.md) |
 
 **Anterior:** [passo-08.md](passo-08.md) · **Próximo:** [passo-10.md](passo-10.md)
