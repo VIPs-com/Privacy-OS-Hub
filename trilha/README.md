@@ -25,11 +25,13 @@ A ordem oficial do curso continua em [README.md — trilha linear](../README.md#
 ```text
 trilha/
 ├── 00-PORTA-ENTRADA.md     ← qual trilha / modo sou eu?
-├── mapa-modos/             ← diagrama mestre + glossário
+├── mapa-modos/             ← FIG-1 diagrama mestre + FIG-2 glossário
 ├── trilhas/                ← M1 Tor · M2 quente · M2 frio A/B · passo 9
-├── passos/                 ← cartão 01…12 (rede, scripts, links)
-└── referencia/             ← matriz scripts · índice diagramas · manuais raiz
+├── passos/                 ← cartão 01…12 → link processos/P0x
+└── referencia/             ← FIG índice · matriz scripts · manuais raiz
 ```
+
+**Figuras:** [diagramas-indice.md](referencia/diagramas-indice.md) (FIG-1…4) · **Repo v2:** [README § 4 camadas](../README.md#como-o-hub-esta-organizado-v2)
 
 ---
 

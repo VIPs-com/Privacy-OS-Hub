@@ -74,6 +74,74 @@ passo a passo. No mesmo passo: coluna **Livro** + coluna **Comandos**.
 
 ---
 
+<a id="como-o-hub-esta-organizado-v2"></a>
+
+## Como o hub está organizado (v2)
+
+Quatro camadas públicas — você **não precisa** decorar; use a [trilha linear](#trilha-linear) no dia a dia.
+
+```mermaid
+flowchart TB
+  subgraph porta [Porta unica]
+    RD["README.md — ordem passos 1 a 12"]
+  end
+
+  subgraph L_trilha [trilha/ — navegacao L0/L1]
+    TR["Cartoes passo · glossario · FIG-1"]
+  end
+
+  subgraph L_modulos [modulos/ — Livro teoria e telas]
+    M1["m1-tails-haveno Vol I e II"]
+    M2["m2-whonix-custodia"]
+  end
+
+  subgraph L_processos [processos/ — Comandos canonicos]
+    PR["P01 a P12 um processo por passo"]
+  end
+
+  subgraph L_auto [automacao/ — scripts]
+    AU["tails/ · whonix-host/ · homelab/"]
+  end
+
+  RD --> TR
+  RD --> PR
+  RD --> M1
+  RD --> M2
+  TR --> PR
+  PR --> AU
+  M1 -.Livro.-> PR
+  M2 -.Livro.-> PR
+```
+
+| Camada | Pasta | Papel na trilha |
+|--------|-------|-----------------|
+| **Porta** | `README.md` | Ordem 1–12 · colunas Livro + Comandos |
+| **Navegação** | [trilha/](trilha/README.md) | Cartões, modos online/offline, [FIG-1](trilha/mapa-modos/diagrama-mestre.md) |
+| **Livro** | [modulos/](modulos/m1-tails-haveno/README.md) | Teoria · telas · trilhas A/B detalhe |
+| **Comandos** | [processos/](processos/README.md) | **P01–P12** — fonte canônica de bash/ritual |
+| **Scripts** | [automacao/](automacao/README.md) | Cópia `~/Persistent/` · `--qa-log` |
+
+**Jornada pedagógica (12 passos)** — detalhe rede, host e air-gap: [diagrama mestre FIG-1](trilha/mapa-modos/diagrama-mestre.md).
+
+```mermaid
+flowchart LR
+  subgraph m1 [M1 passos 1 a 7 — Tails com Tor]
+    direction LR
+    s1[1] --> s2[2] --> s3[3] --> s4[4] --> s5[5] --> s6[6] --> s7[7]
+  end
+  s7 --> s8[8 escolha A/B]
+  s8 --> s9[9 ritual seed]
+  s9 --> s10[10 Whonix host]
+  s10 --> s11[11 teoria]
+  s11 --> s12[12 air-gap]
+```
+
+> Passos **3–4–6** não têm script obrigatório (leitura, backup, folheto). Passo **12** = único **offline de rede** obrigatório no Mínimo M2.
+
+Índice de todas as figuras: [trilha/referencia/diagramas-indice.md](trilha/referencia/diagramas-indice.md).
+
+---
+
 ## Eu quero…
 
 | Objetivo | Comece no passo | Pasta |
@@ -195,13 +263,16 @@ Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abr
 | 2 | **Whonix (online)** | 🟡 v1 | [modulos/m2-whonix-custodia/](modulos/m2-whonix-custodia/README.md) |
 | — | **Zero-Trust-Core** (repo separado) | ✅ Publicado | [github.com/VIPs-com/Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
 
-### Arquitetura (visão)
+### Arquitetura operacional (resumo)
 
-- **Tails (com Tor)** → passos 1–9: Haveno, Feather, backups, confirmações em papel.
-- **Tails (sem rede)** → passo **12**: assinatura air-gap (único offline de rede obrigatório no Mínimo M2).
-- **Whonix (online)** → view-only, nó Monero, operações quentes via Tor.
-- **Haveno** → trades quentes (escrow online); custódia frio/quente no passo 12.
-- **Zero-Trust-Core** → baseline opcional; complementa M1/M2, não substitui.
+| Onde | Passos | Rede |
+|------|:------:|------|
+| **Tails + Tor** | 1–9 | Haveno, Feather, backup, ritual seed |
+| **Host Linux** | 10 | Whonix PGP + import VMs |
+| **Leitura** | 11 | Modelo frio↔quente |
+| **Tails air-gap** | 12 | Cold-signing (único offline obrigatório M2) |
+
+Mapa das **4 camadas do repo** (v2): [Como o hub está organizado](#como-o-hub-esta-organizado-v2) · **FIG-1** (modos/rede): [diagrama-mestre](trilha/mapa-modos/diagrama-mestre.md).
 
 ---
 
