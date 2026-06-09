@@ -362,6 +362,8 @@ Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [automacao/tails/
 
 ---
 
+<a id="apêndice-a--catálogo-de-cada-arquivo-iniciante"></a>
+
 ## Apêndice A — Catálogo de cada arquivo (iniciante)
 
 Use esta seção quando abrir `automacao/tails/` (ou `~/Persistent/` após copiar) e não souber **para que serve** cada arquivo.

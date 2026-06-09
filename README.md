@@ -107,7 +107,8 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 
 > **Regra:** livro = teoria e telas · **[processos/](processos/README.md) = comandos canônicos** (P01–P12) · Playbooks nos módulos = índice legado.
 >
-> **Coluna Comandos:** abra o **processo** do passo; `imprimir` / `—` = sem bash. Cartões com OK se: [trilha/passos/](trilha/passos/README.md).
+> **Coluna Comandos:** abra o **processo** do passo; `imprimir` / `—` = sem bash. Cartões com OK se: [trilha/passos/](trilha/passos/README.md).  
+> **Coluna Livro:** links com `#capítulo` usam âncoras fixas no início de cada capítulo (ex.: Cap. 2 → `#2-fundamentos-do-tails`). Se o preview do editor abrir o arquivo no topo, role um instante ou use o sumário dentro do livro.
 
 | Passo | O que fazer | Livro (abrir) | Comandos |
 |:-----:|-------------|---------------|----------|

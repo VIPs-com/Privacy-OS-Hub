@@ -36,6 +36,8 @@ Este é o **livro** do curso. Tudo está aqui, em capítulos, na ordem. Sem fica
 
 ---
 
+<a id="1-mapa-do-curso-visão-geral"></a>
+
 # 1. MAPA DO CURSO (visão geral)
 
 > **Mapa principal do hub (ordem de estudo):** [README.md#trilha-linear](../../README.md#trilha-linear) · Índice completo (opcional): [MANUAL-DO-CURSO.md](../../MANUAL-DO-CURSO.md)
@@ -113,6 +115,8 @@ flowchart TB
 O exploit do **protocolo de trades** Haveno (20/05/2026) **já foi corrigido** na **`1.6.0-reto`** (24/05/2026). Para **instalar** e estudar: tudo certo. Para **tradear com fundos**: use a `1.6.0-reto`+, confirme nos canais oficiais que o trading foi retomado e comece com valores pequenos. Detalhes no **Capítulo 4**.
 
 ---
+
+<a id="2-fundamentos-do-tails"></a>
 
 # 2. FUNDAMENTOS DO TAILS
 
@@ -305,6 +309,8 @@ Regra: no Tails, o Monero do Haveno usa **9062**, **não** 9050. Scripts caseiro
 
 ---
 
+<a id="3-instalação-e-configuração-do-haveno-na-mão"></a>
+
 # 3. INSTALAÇÃO E CONFIGURAÇÃO DO HAVENO (na mão)
 
 Pré-requisitos desta parte (Capítulo 2): Tails no USB, **Tor conectado**, **persistência + Dotfiles**, **senha admin** desta sessão.
@@ -476,6 +482,8 @@ Depois reabra: **Aplicações → Outros → Haveno**. Mais sintomas e causas no
 
 ---
 
+<a id="4-segurança-exploit-corrigido-na-160-reto"></a>
+
 # 4. SEGURANÇA (exploit corrigido na 1.6.0-reto)
 
 ## O que aconteceu
@@ -500,6 +508,8 @@ Depois reabra: **Aplicações → Outros → Haveno**. Mais sintomas e causas no
 **Resumo:** a falha está **corrigida** na versão do curso. O risco residual é usar versão antiga ou não confirmar a retomada oficial. **Instalar ≠ tradear** — tradear é decisão sua, na versão corrigida e com cautela.
 
 ---
+
+<a id="5-próximos-passos-pós-verde"></a>
 
 # 5. PRÓXIMOS PASSOS (pós-verde)
 
@@ -668,6 +678,8 @@ O ponto crítico: alguns métodos de pagamento são **reversíveis** (chargeback
 Se a contraparte **some**, paga errado ou recusa sem motivo, **abra disputa** no app. O **árbitro** analisa o **chat** e as **provas** (comprovantes anexados) e decide para quem vão os fundos do escrow. Por isso: mantenha **toda** a conversa e os comprovantes **dentro do Haveno** — é a sua proteção. O árbitro **nunca** pede a sua seed ou senha (se pedir, é golpe — ver [Capítulo 9](#9-dicas-e-alertas-finais--não-cair-em-roubadas)).
 
 ---
+
+<a id="6-ecossistema-monero--tails-apêndice"></a>
 
 # 6. ECOSSISTEMA MONERO + TAILS (apêndice)
 
@@ -1205,6 +1217,8 @@ Comece pelo **`00-verificar-requisitos.sh`** (diz se dá para nó pruned, full e
 
 ---
 
+<a id="7-faq--erros-possíveis-após-rodar-os-scripts"></a>
+
 # 7. FAQ — ERROS POSSÍVEIS APÓS RODAR OS SCRIPTS
 
 > Este FAQ é **focado no que pode acontecer depois de rodar os scripts num Tails 7.8.1+ real** (ou a instalação manual do Capítulo 3). É um resumo prático — não um dicionário de todos os erros.
@@ -1274,6 +1288,8 @@ Este curso é para **Tails**. No Debian, o `.deb` da rede funciona **se** o Tor 
 Se nada resolver: feche o Haveno (`pkill -f Haveno` se preciso), confirme Tor OK e admin ativa, e rode novamente o `haveno-auto.sh` (ou o passo 3.2 manual). Seus dados em `Data/` são preservados.
 
 ---
+
+<a id="8-todos-os-links-referência-única"></a>
 
 # 8. TODOS OS LINKS (referência única)
 
@@ -1346,6 +1362,8 @@ Toda URL do curso reunida aqui — para o resto do livro ficar sem links saltand
 | Haveno deployment (seednode / árbitro) | https://github.com/haveno-dex/haveno/blob/master/trilha/deployment-guide.md |
 
 ---
+
+<a id="9-dicas-e-alertas-finais--não-cair-em-roubadas"></a>
 
 # 9. DICAS E ALERTAS FINAIS — não cair em roubadas
 

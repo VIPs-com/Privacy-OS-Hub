@@ -117,6 +117,8 @@ Conecte ao **seu nó do home lab**, publicado via Tor (`.onion:18089` — Módul
 - Feather → Settings → Network: **"Always over Tor"**.
 - Nó remoto: `SEU_ENDERECO.onion`, porta **18089**, marcar como **confiável** (*trusted*).
 
+<a id="42-alternativa--nó-remoto-público-onion"></a>
+
 ### 4.2 Alternativa — nó remoto público (.onion)
 Ressalva **oficial do Whonix** sobre nó remoto: o nó **não** pode gastar seu XMR (você tem as chaves), **não** vê seu IP (você conecta por Tor), **não** sabe seu endereço nem saldo. **Porém:** se a carteira avisar **"node is not responding / misbehaving"**, **saia e troque de nó**. Prefira nós `.onion` conhecidos.
 
@@ -126,6 +128,8 @@ Instale o Feather e **verifique o PGP** (fingerprint `8185E158A33330C7FD61BC0D1F
 **OK se:** o Feather sincroniza via Tor pelo seu `.onion` (ou nó remoto), saldo visível (0 XMR no início é normal).
 
 ---
+
+<a id="5-cold-tails-hot-whonix"></a>
 
 ## 5. Cold-Tails-Hot-Whonix
 

@@ -12,6 +12,8 @@
 
 > **Pré-requisito:** Haveno com indicador **verde** (Volume I, Caps. 2–3) — e **leia os Caps. 4, 5 e 9** do Vol. I (segurança, seed, golpes) **antes de criar conta ou depositar XMR**. Tails **7.8.1+**, persistência + Dotfiles, rede **Reto `1.6.0-reto`** (ou outra rede com URL + PGP conferidos).
 
+<a id="antes-do-1º-trade--leia-só-isto-no-volume-ii"></a>
+
 ### Antes do 1º trade — leia só isto no Volume II
 
 Não precisa ler os 19 capítulos de uma vez. Para o **primeiro trade com valor pequeno**, siga nesta ordem:
@@ -86,6 +88,8 @@ flowchart TB
 
 ---
 
+<a id="2-haveno--primeira-conta-e-proteção-da-seed"></a>
+
 # 2. Haveno — primeira conta e proteção da seed
 
 > Complementa o Volume I, seção [5.1](../Curso-Tails-OS-Expert.md#51-carteira--criar-restaurar-onde-ficam-os-dados). Aqui é o **ritual na criação** — faça **antes** de depositar XMR ou tradear.
@@ -133,6 +137,8 @@ Abra o Haveno **pelo menu** (Aplicações → Outros → Haveno) com indicador *
 **OK se:** seed anotada + backup `Data/` feito **antes** do primeiro depósito.
 
 ---
+
+<a id="3-feather-no-tails--instalar-e-verificar"></a>
 
 # 3. Feather no Tails — instalar e verificar
 
