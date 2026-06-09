@@ -4,22 +4,31 @@
 >
 > **Expert?** [MANUAL-EXPERT.md](MANUAL-EXPERT.md) — mapa do repo; este arquivo é só índice de capítulos.
 >
-> Na trilha linear, **Comandos** = Playbook do passo; este MANUAL lista capítulos, não substitui a coluna Comandos.
+> Na trilha linear, **Comandos** = [`processos/`](processos/README.md) (P01–P12); este MANUAL lista **capítulos** do livro, não substitui os processos.
 >
 > **Scripts de automação:** use [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) (novato) — não este índice de capítulos.
 >
 > Este manual lista **todos os capítulos** para consulta ou aprofundamento. A ordem de estudo continua
 > sendo a do README — não leia capítulo a capítulo fora de ordem.
 
-**Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui) · **Cartões por passo:** [trilha/passos/](trilha/passos/README.md)
+**Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Comandos:** [processos/](processos/README.md) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui) · **Cartões:** [trilha/passos/](trilha/passos/README.md) · **v2:** [CHANGELOG-V2.md](CHANGELOG-V2.md)
 
 **Validar um passo (opcional):** scripts com `--qa-log` gravam `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md). Glossário online/offline: [README — trilha linear](README.md#trilha-linear).
+
+### Processos por passo (comandos canônicos)
+
+| Passo | Processo |
+|:-----:|----------|
+| 1–7 | [P01](processos/m1-tor/P01-bootstrap-tails.md) … [P07](processos/m1-tor/P07-rotina-scripts.md) |
+| 8–12 | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) … [P12A](processos/m2-frio/P12a-feather-offline.md) / [P12B](processos/m2-frio/P12b-cli-offline.md) |
+
+Matriz completa: [processos/README.md](processos/README.md).
 
 ---
 
 ## Volume I — Tails + Haveno verde
 
-Livro: [Curso-Tails-OS-Expert.md](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md) · Comandos: [Playbooks/Playbooks.md](modulos/m1-tails-haveno/Playbooks/Playbooks.md)
+Livro: [Curso-Tails-OS-Expert.md](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md) · Comandos: [P01–P07](processos/README.md) · Índice legado: [Playbooks](modulos/m1-tails-haveno/Playbooks/Playbooks.md)
 
 | Cap. | Título | Trilha README |
 |------|--------|---------------|
@@ -37,7 +46,7 @@ Livro: [Curso-Tails-OS-Expert.md](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.
 
 ## Volume II — Rede descentralizada (mão na massa)
 
-Livro: [Curso-Rede-Descentralizada-Extensao.md](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · Comandos: [Playbooks-Rede-Descentralizada.md](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md)
+Livro: [Curso-Rede-Descentralizada-Extensao.md](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · Feather (obrig.): [P05](processos/m1-tor/P05-feather.md) · Trades (opcional): [Playbooks Vol II](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md)
 
 | Cap. | Título | Obrigatório? | Trilha README |
 |------|--------|--------------|---------------|
@@ -67,29 +76,29 @@ Livro: [Curso-Rede-Descentralizada-Extensao.md](modulos/m1-tails-haveno/Expansao
 
 ## Módulo 2 — Whonix Online
 
-Livro: [Curso-Whonix-Online.md](modulos/m2-whonix-custodia/Curso-Whonix-Online.md) · Comandos: [Playbooks/Playbooks.md](modulos/m2-whonix-custodia/Playbooks/Playbooks.md)
+Livro: [Curso-Whonix-Online.md](modulos/m2-whonix-custodia/Curso-Whonix-Online.md) · Comandos: [P08–P12](processos/README.md) · Índice: [Playbooks M2](modulos/m2-whonix-custodia/Playbooks/Playbooks.md)
 
 | Cap. | Título | Trilha README | Comandos |
 |------|--------|---------------|----------|
-| — | [Porteiro — escolha trilha A ou B](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | passo **8** | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) |
-| — | [Confirmar 2× cópias seed (Curso Cap. 5)](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **9** | [qa-confirm-passo9.sh](automacao/tails/qa-confirm-passo9.sh) |
-| — | [Instalar por SO](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | passo **10** | [Playbooks M2](modulos/m2-whonix-custodia/Playbooks/Playbooks.md) |
+| — | [Porteiro — escolha trilha A ou B](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | passo **8** | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
+| — | [Confirmar 2× cópias seed](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **9** | [P09](processos/rituais/P09-ritual-seed.md) |
+| — | [Instalar por SO](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | passo **10** | [P10](processos/m2-quente/P10-whonix-pgp.md) |
 | 1 | [O que é Whonix](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#1-o-que-é-o-whonix-e-o-modelo-de-ameaças) | passo **10–11** | — |
-| 2 | [Instalar e verificar imagem](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#2-instalar-e-verificar-a-imagem) | passo **10** | [Playbooks §1](modulos/m2-whonix-custodia/Playbooks/Playbooks.md) |
-| 3 | [Primeiros passos / snapshots](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#3-primeiros-passos-atualização-e-snapshots) | passo **10** | [Playbooks §2](modulos/m2-whonix-custodia/Playbooks/Playbooks.md) |
+| 2 | [Instalar e verificar imagem](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#2-instalar-e-verificar-a-imagem) | passo **10** | [P10](processos/m2-quente/P10-whonix-pgp.md) |
+| 3 | [Primeiros passos / snapshots](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#3-primeiros-passos-atualização-e-snapshots) | passo **10** | [P10](processos/m2-quente/P10-whonix-pgp.md) |
 | 4 | [Monero via Tor](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#4-monero-no-whonix--conectar-via-tor) | passo **11** | — |
 | 5 | [Cold-Tails-Hot-Whonix](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | passo **11–12** | — |
 | 5.6 | [Hardware wallet (opcional)](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#56-hardware-wallet-opcional) | opcional | — |
-| 6 | [Haveno na narrativa](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#6-onde-o-haveno-entra) | passo **12** | [Trilha A](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) · [Trilha B](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| 6 | [Haveno na narrativa](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#6-onde-o-haveno-entra) | passo **12** | [P12A](processos/m2-frio/P12a-feather-offline.md) · [P12B](processos/m2-frio/P12b-cli-offline.md) |
 | 7 | [Whonix × Tails × home lab](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#7-quando-usar) | referência | — |
 | 8 | [Links oficiais](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#8-links-oficiais) | referência | — |
 
 **Cold-signing (escolha UMA):**
 
-| Trilha | Playbook | Trilha README |
-|--------|----------|---------------|
-| A — Feather GUI | [Playbook-Feather-GUI.md](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) | passo **12** |
-| B — monero-wallet-cli | [Playbook-monero-wallet-cli.md](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) | passo **12** |
+| Trilha | Processo | Detalhe (telas) |
+|--------|----------|-----------------|
+| A — Feather GUI | [P12A](processos/m2-frio/P12a-feather-offline.md) | [Playbook-Feather-GUI](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) |
+| B — monero-wallet-cli | [P12B](processos/m2-frio/P12b-cli-offline.md) | [Playbook CLI](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
 
 ---
 
@@ -97,7 +106,7 @@ Livro: [Curso-Whonix-Online.md](modulos/m2-whonix-custodia/Curso-Whonix-Online.m
 
 | Material | Arquivo | Trilha README |
 |----------|---------|---------------|
-| Scripts Tails (auto / backup / update) | [Scripts/README.md](automacao/tails/README.md) | passo **7** |
+| Scripts Tails (auto / backup / update) | [automacao/tails/README.md](automacao/tails/README.md) · [P07](processos/m1-tor/P07-rotina-scripts.md) | passo **7** |
 | Validar com logs (`--qa-log`) | [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) | passos **2–12** |
 | Home Lab (nó, P2Pool, xmrig) | [automacao/homelab/README.md](automacao/homelab/README.md) | opcional |
 | Folheto regras + golpes | [Folheto-Regras-e-Golpes.md](modulos/m1-tails-haveno/Folheto-Regras-e-Golpes.md) | passo **6** |

@@ -1,12 +1,14 @@
 # Manual dos scripts de automação
 
+> **Hub v2:** scripts no repo ficam em [`automacao/tails/`](automacao/tails/README.md) — copie para `~/Persistent/`. Comandos por passo: [`processos/`](processos/README.md).
+
 > **Para quem?** Aluno **novato** que quer usar os scripts com segurança — sem precisar ser expert em Linux.
 >
 > **Não substitui** a [trilha linear](README.md#trilha-linear) nem o [livro](MANUAL-DO-CURSO.md). Use este manual **junto** com o passo do hub em que você está.
 >
 > **Primeira vez no hub?** Leia antes [README — Primeira visita?](README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
 
-**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](automacao/tails/README.md) · [Scripts Whonix](automacao/whonix-host/README.md) · [Matriz passo↔script (docs)](trilha/referencia/scripts-matriz.md)
+**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [automacao/tails](automacao/tails/README.md) · [automacao/whonix-host](automacao/whonix-host/README.md) · [processos/](processos/README.md) · [Matriz passo↔script](trilha/referencia/scripts-matriz.md)
 
 > **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os scripts em [`automacao/tails/`](automacao/tails/README.md).
 
@@ -356,7 +358,7 @@ Ordem: preflight → boot Haveno → verificar Feather.
 
 ### Expert: posso ignorar este manual?
 
-Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [Scripts/README.md](automacao/tails/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
+Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [automacao/tails/README.md](automacao/tails/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
 
 ---
 
@@ -507,7 +509,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Passo hub** | **4**, **7** |
 | **Novato roda sozinho?** | Opcional — clique no menu em vez do terminal |
 | **O que faz** | Atalho que chama `haveno-backup.sh` (igual ao script) |
-| **Comando** | Instalar atalho: ver [Scripts/README](automacao/tails/README.md) |
+| **Comando** | Instalar atalho: ver [automacao/tails/README](automacao/tails/README.md) |
 | **Rodar 2×** | Igual ao `haveno-backup.sh` |
 | **Disco** | Igual ao backup |
 
@@ -645,7 +647,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 
 | Campo | Detalhe |
 |-------|---------|
-| **Passo hub** | **12** (trilha A) |
+| **Passo hub** | **12** (trilha **A ou B**) |
 | **Rede** | Tails **sem** Wi‑Fi/cabo |
 | **O que faz** | Confirma cold-signing; TX ID só prefixo + `[BORRADO]` |
 
