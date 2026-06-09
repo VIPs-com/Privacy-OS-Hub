@@ -6,7 +6,7 @@
 >
 > **Primeira vez no hub?** Leia antes [README — Primeira visita?](README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
 
-**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](Tails-OS-Expert/Scripts/README.md) · [Scripts Whonix](Whonix-Online/Scripts/README.md)
+**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](Tails-OS-Expert/Scripts/README.md) · [Scripts Whonix](Whonix-Online/Scripts/README.md) · [Matriz passo↔script (docs)](docs/referencia/scripts-matriz.md)
 
 > **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os arquivos da pasta `Scripts/`.
 

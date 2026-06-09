@@ -68,6 +68,8 @@ Tails, Monero, Tor ou Whonix — **sem hand-holding:** mapa do repo, trilha comp
 **Este README é a única porta de entrada.** [Primeira visita?](#primeira-visita) → [trilha linear](#trilha-linear)
 passo a passo. No mesmo passo: coluna **Livro** + coluna **Comandos**.
 
+**Mapa de navegação (opcional):** a pasta [docs/](docs/README.md) organiza trilhas por modo, glossário online/offline e [cartões por passo](docs/passos/README.md) — só links; a ordem oficial continua na [trilha linear](#trilha-linear) abaixo.
+
 ---
 
 ## Eu quero…

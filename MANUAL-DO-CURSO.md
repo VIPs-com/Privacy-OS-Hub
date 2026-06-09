@@ -11,7 +11,7 @@
 > Este manual lista **todos os capítulos** para consulta ou aprofundamento. A ordem de estudo continua
 > sendo a do README — não leia capítulo a capítulo fora de ordem.
 
-**Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui)
+**Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui) · **Cartões por passo:** [docs/passos/](docs/passos/README.md)
 
 **Validar um passo (opcional):** scripts com `--qa-log` gravam `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md). Glossário online/offline: [README — trilha linear](README.md#trilha-linear).
 

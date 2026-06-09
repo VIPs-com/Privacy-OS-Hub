@@ -17,6 +17,9 @@ Privacy-OS-Hub/
 ├── MANUAL-SCRIPTS.md         # Automação (tom novato)
 ├── MANUAL-DO-CURSO.md        # Índice capítulo a capítulo
 ├── MANIFESTO.md
+├── docs/                     # Navegação L0/L1 (mapas, cartões passo — não substitui módulos)
+│   ├── 00-PORTA-ENTRADA.md
+│   ├── mapa-modos/ · trilhas/ · passos/ · referencia/
 │
 ├── Tails-OS-Expert/          # MÓDULO 1 — passos hub 1–7
 │   ├── Curso-Tails-OS-Expert.md      (Vol I — livro)

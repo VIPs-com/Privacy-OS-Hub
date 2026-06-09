@@ -42,6 +42,8 @@ chmod +x ~/Persistent/*.sh
 
 **Home Lab** ([`HomeLab/`](HomeLab/README.md)) — Debian/Ubuntu, **não** Tails.
 
+**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — wrappers `hubNN-*.sh` por passo do hub.
+
 ## Ciclo de uso
 
 ```mermaid
