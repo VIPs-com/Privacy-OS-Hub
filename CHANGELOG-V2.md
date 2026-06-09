@@ -69,7 +69,7 @@ chmod +x ~/Persistent/*.sh
 
 ## Publicação pós-Rodada 20
 
-- **Publicação:** `git pull origin main` — cadeia `049d426` (rename paths) · `e53ffb0`+ (CHANGELOG Rodada 20)
+- **Publicação:** `git pull origin main` — cadeia `79f6d3e` (FIG-4/FIG-1) · `104a751`+ (fechamento P1–P2) · `f32b735` (HEAD)
 - **Veredito:** LIBERADO para piloto B+ — ver `Privacy-OS-Hub-equipe-dev/validacao/HANDOFF-EQUIPE-DEV.md` (local)
 
 ---
