@@ -8,7 +8,7 @@
 
 **Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](automacao/tails/README.md) · [Scripts Whonix](automacao/whonix-host/README.md) · [Matriz passo↔script (docs)](trilha/referencia/scripts-matriz.md)
 
-> **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os arquivos da pasta `Scripts/`.
+> **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os scripts em [`automacao/tails/`](automacao/tails/README.md).
 
 ---
 
@@ -329,7 +329,7 @@ Detalhe: [automacao/whonix-host/README.md](automacao/whonix-host/README.md)
 
 ### Preflight falhou
 
-Corrija o item listado (Tor, Dotfiles, admin) nos Playbooks §1–4. **Não** use `--no-backup` ou atalhos para “pular” preflight.
+Corrija o item listado (Tor, Dotfiles, admin) em [P01](processos/m1-tor/P01-bootstrap-tails.md). **Não** use `--no-backup` ou atalhos para “pular” preflight.
 
 ### Haveno abriu mas não está verde
 
@@ -439,7 +439,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Comando** | `~/Persistent/tails-preflight.sh` |
 | **Rodar 2×** | **Sim** — só leitura; zero alteração em carteira |
 | **Disco** | Nenhuma pasta de dados Haveno/Feather |
-| **Se falhar** | Corrija Playbooks §1–4 antes de continuar |
+| **Se falhar** | Corrija [P01](processos/m1-tor/P01-bootstrap-tails.md) antes de continuar |
 
 #### `post-session-check.sh`
 
