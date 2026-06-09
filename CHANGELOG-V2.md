@@ -77,7 +77,7 @@ chmod +x ~/Persistent/*.sh
 ## Diagramas v2 (FIG-1…4)
 
 - **`79f6d3e`** — FIG-4 (4 camadas + jornada 1–12 no README); FIG-1 reescrito (P01–P12, tabela rede); índice `diagramas-indice.md`; âncoras FIG-3/FIG-4
-- **Fechamento P1–P2** — cartões passo com FIG-1/2/3; MANUAL-EXPERT + índices; roadmap interno `Privacy-OS-Hub-equipe-dev/ROADMAP-FECHAMENTO-DIAGRAMAS-V2.md`
+- **`104a751`** — fechamento P1–P2: cartões passo FIG-1/2/3; MANUAL-EXPERT `#arquitetura-do-repositorio`; índices; roadmap interno `Privacy-OS-Hub-equipe-dev/ROADMAP-FECHAMENTO-DIAGRAMAS-V2.md`
 
 ---
 
