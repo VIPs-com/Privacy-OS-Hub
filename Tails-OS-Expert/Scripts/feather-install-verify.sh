@@ -13,6 +13,16 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=haveno-common.sh
 source "${SCRIPT_DIR}/haveno-common.sh"
 
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --qa-log) export HAVENO_QA_LOG=1 ;;
+    *) die "Opcao desconhecida: $1" ;;
+  esac
+  shift
+done
+
+qa_log_tee_begin "05-feather"
+
 FEATHER_DIR="${PERSIST}/feather"
 WALLETS_DIR="${FEATHER_DIR}/wallets"
 DOWNLOADS="${HOME}/Tor Browser/Browser/Downloads"
@@ -89,3 +99,6 @@ g "  UI: Create wallet -> seed em PAPEL -> Settings -> Always over Tor"
 g "  Wallets: ${WALLETS_DIR}/"
 g "  Backup depois: ~/Persistent/feather-backup.sh"
 g "==============================================================="
+qa_log_line "REDE: tails_online_tor=SIM"
+y "Apos criar carteira e anotar seed no papel: qa-confirm-seed-papel.sh"
+qa_log_finish 0

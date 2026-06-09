@@ -7,6 +7,7 @@
 #   ~/Persistent/haveno-setup.sh --boot       # sessao: preflight -> boot
 #   ~/Persistent/haveno-setup.sh --feather    # + feather-install-verify.sh
 #   ~/Persistent/haveno-setup.sh --skip-backup
+#   ~/Persistent/haveno-setup.sh --qa-log    # grava logs em ~/Persistent/qa-logs/
 ###############################################################################
 
 set -uo pipefail
@@ -23,10 +24,15 @@ while [ $# -gt 0 ]; do
     --boot) MODE="boot" ;;
     --feather) DO_FEATHER=1 ;;
     --skip-backup) SKIP_BACKUP=1 ;;
+    --qa-log) export HAVENO_QA_LOG=1 ;;
     *) echo "Opcao desconhecida: $1"; exit 1 ;;
   esac
   shift
 done
+
+if [ "${HAVENO_QA_LOG:-0}" = "1" ]; then
+  export HAVENO_QA_LOG=1
+fi
 
 b(){ echo -e "\033[1;34m$*\033[0m"; }
 g(){ echo -e "\033[1;32m$*\033[0m"; }
@@ -58,7 +64,10 @@ FEATHER="${PERSIST}/feather-install-verify.sh"
 [ -x "$BACKUP" ] || BACKUP="${SCRIPT_DIR}/haveno-backup.sh"
 [ -x "$FEATHER" ] || FEATHER="${SCRIPT_DIR}/feather-install-verify.sh"
 
-run "$PREFLIGHT"
+QA_ARGS=()
+[ "${HAVENO_QA_LOG:-0}" = "1" ] && QA_ARGS=(--qa-log)
+
+run "$PREFLIGHT" "${QA_ARGS[@]}"
 
 if [ "$MODE" = "boot" ]; then
   run "$BOOT" --watch 8
@@ -70,7 +79,7 @@ else
     printf "Rodar haveno-backup.sh agora? (s/N): "
     read -r ans
     case "${ans:-N}" in s|S|sim|SIM)
-      [ -x "$BACKUP" ] && run "$BACKUP" || y "haveno-backup.sh nao encontrado — rode depois manualmente."
+      [ -x "$BACKUP" ] && run "$BACKUP" "${QA_ARGS[@]}" || y "haveno-backup.sh nao encontrado — rode depois manualmente."
       ;;
     *) y "Pulando backup. Rode: ~/Persistent/haveno-backup.sh" ;;
     esac
@@ -78,7 +87,7 @@ else
 fi
 
 if [ "$DO_FEATHER" = "1" ]; then
-  [ -x "$FEATHER" ] && run "$FEATHER" || die "feather-install-verify.sh nao encontrado."
+  [ -x "$FEATHER" ] && run "$FEATHER" "${QA_ARGS[@]}" || die "feather-install-verify.sh nao encontrado."
 fi
 
 echo

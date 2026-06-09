@@ -516,7 +516,7 @@ Na interface (após verde):
 | Ação | Menu típico | Observação |
 |------|-------------|------------|
 | Primeira conta | Assistente na 1ª abertura ou **Account** | Defina senha forte da conta |
-| Ver **seed** | **Account → Wallet seed** | Anote offline; quem tem a seed controla os fundos |
+| Ver **seed** | **Account → Wallet seed** | Anote em **papel/metal** (Tails pode estar **com Tor**); quem tem a seed controla os fundos |
 | Backup **completo** | **Account → Backup** | Exporta a **pasta de dados inteira** |
 | Restaurar | **Account → Restore** ou copiar `Data/` | Em dúvida, peça suporte **antes** de apagar |
 
@@ -535,6 +535,8 @@ Na interface (após verde):
 | **Pela interface** | **Account → Backup** para um USB criptografado externo |
 | **Manual** | Feche o Haveno → copie `~/Persistent/haveno/Data/` para mídia externa |
 | **Seed** | **Account → Wallet seed** anotada em papel/metal, separada do backup |
+
+> **“Offline” aqui = suporte físico**, não desligar a rede. O Haveno roda com Tor ativo; a seed vai para **papel**, nunca só no PC. Depois do backup, abra o log: `~/Persistent/qa-logs/04-haveno-backup-*.txt` ([como ler](Scripts/COMO-LER-SEUS-LOGS.md)) — use `haveno-backup.sh --qa-log`.
 
 Exemplo manual cifrado (com o Haveno **fechado**):
 

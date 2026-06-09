@@ -39,6 +39,8 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 
 **Checagem automática:** `~/Persistent/tails-preflight.sh` — só **lê** o ambiente; não altera nada.
 
+**Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md).
+
 ---
 
 ## Regra de ouro (leia uma vez)

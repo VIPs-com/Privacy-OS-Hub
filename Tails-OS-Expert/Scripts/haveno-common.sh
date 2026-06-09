@@ -145,3 +145,60 @@ haveno_session_boot() {
   sleep 4
   haveno_fix_onion_grater || true
 }
+
+# --- QA logs (~/Persistent/qa-logs/) — sem seed, senha ou chaves ----------------
+# Ative com: export HAVENO_QA_LOG=1  ou  --qa-log no script
+# Guia aluno: Scripts/COMO-LER-SEUS-LOGS.md
+
+QA_LOG_DIR="${QA_LOG_DIR:-${PERSIST}/qa-logs}"
+QA_LOG_FILE=""
+
+qa_log_enabled() {
+  [ "${HAVENO_QA_LOG:-0}" = "1" ]
+}
+
+qa_log_init() {
+  local slug="${1:-session}"
+  qa_log_enabled || return 0
+  mkdir -p "$QA_LOG_DIR" || return 0
+  QA_LOG_FILE="${QA_LOG_DIR}/${slug}-$(date +%Y%m%d-%H%M%S).txt"
+  {
+    echo "=== ${slug} — $(date -Iseconds 2>/dev/null || date) ==="
+    echo "script: ${0##*/}"
+    echo "host: $(uname -s 2>/dev/null || echo unknown)"
+  } >>"$QA_LOG_FILE"
+  g "  QA log: $QA_LOG_FILE"
+}
+
+qa_log_line() {
+  [ -n "${QA_LOG_FILE:-}" ] || return 0
+  echo "$*" >>"$QA_LOG_FILE"
+}
+
+qa_log_confirm() {
+  local key="${1:-confirmacao}"
+  local val="${2:-SIM}"
+  qa_log_line "CONFIRMACAO_HUMANA: ${key}=${val}"
+}
+
+qa_log_pass() { qa_log_line "PASS: $*"; }
+qa_log_fail() { qa_log_line "FAIL: $*"; }
+
+qa_log_finish() {
+  local ec="${1:-0}"
+  [ -n "${QA_LOG_FILE:-}" ] || return 0
+  qa_log_line "exit_code: ${ec}"
+  if [ "$ec" = "0" ]; then
+    qa_log_line "RESULTADO: PASS"
+  else
+    qa_log_line "RESULTADO: FAIL"
+  fi
+}
+
+# Duplica stdout/stderr para o arquivo QA (use no inicio do script principal)
+qa_log_tee_begin() {
+  local slug="${1:-session}"
+  qa_log_enabled || return 0
+  qa_log_init "$slug"
+  exec > >(tee -a "$QA_LOG_FILE") 2>&1
+}

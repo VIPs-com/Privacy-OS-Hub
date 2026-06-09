@@ -31,6 +31,10 @@
 
 set -uo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"
+
 # ----------------------------- Caminhos --------------------------------------
 PERSIST="/home/amnesia/Persistent"
 DATA_DIR="${PERSIST}/haveno/Data"
@@ -55,10 +59,13 @@ while [ $# -gt 0 ]; do
     --dest) shift; DEST="${1:-}" ;;
     --no-encrypt) ENCRYPT=0 ;;
     --restore) shift; RESTORE_FILE="${1:-}" ;;
+    --qa-log) export HAVENO_QA_LOG=1 ;;
     *) y "Opcao desconhecida: $1 (ignorada)" ;;
   esac
   shift
 done
+
+qa_log_tee_begin "04-haveno-backup"
 
 echo
 b "==============================================================="
@@ -114,6 +121,8 @@ if [ -n "$RESTORE_FILE" ]; then
   rm -rf "$TMP"
   g "Restauracao concluida em: $DATA_DIR"
   y "Abra o Haveno pelo menu e confirme a carteira/historico."
+  qa_log_line "Restauracao concluida: $DATA_DIR"
+  qa_log_finish 0
   exit 0
 fi
 
@@ -189,3 +198,7 @@ g "  Restaurar:         ~/Persistent/haveno-backup.sh --restore \"$OUT\""
 g "==============================================================="
 y "Lembrete: anote tambem a SEED (Account > Wallet seed) em papel/metal,"
 y "guardada separada deste arquivo. Seed != backup completo."
+qa_log_line "Backup concluido: $OUT"
+qa_log_line "REDE: tails_online_tor=SIM"
+y "Apos anotar a seed no papel, rode: qa-confirm-seed-papel.sh (ou adicione CONFIRMACAO no log manualmente)."
+qa_log_finish 0

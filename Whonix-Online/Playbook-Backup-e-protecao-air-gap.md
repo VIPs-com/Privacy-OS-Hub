@@ -18,17 +18,20 @@ ou outro hardware proprietário caro. Teoria e modelo de ameaças: [`Curso-Whoni
 
 ---
 
-## 2. Backup da carteira fria (Tails offline)
+## 2. Backup da carteira fria
 
 ### 2.1 Seed em papel/metal (obrigatório)
 
 ```text
-# Na máquina FRIA (Tails offline), ao criar ou exportar a carteira:
-# Anote as 25 palavras em papel/metal — NUNCA foto, nuvem ou e-mail.
-# Faça a 2ª cópia em outro local físico (casa de confiança, cofre, etc.).
+# Ao criar a conta (Módulo 1 §5.1) — Tails COM Tor ativo:
+# Account → Wallet seed → anote as 25 palavras em papel/metal.
+# NUNCA foto, nuvem ou e-mail.
+# Faça a 2ª cópia em outro local físico (passo 9 do hub — confirmação ritual).
 ```
 
-**OK se:** você consegue restaurar a carteira **só com a seed** num Tails offline limpo.
+**OK se:** existem **duas cópias físicas** em locais separados e backup cifrado da `Data/` (M1 §5.2).
+
+**Opcional (avançado):** restaurar a carteira **só com a seed** num Tails **sem rede** — teste de recuperação; não é obrigatório no Mínimo M2.
 
 ### 2.2 Pasta de dados cifrada (recomendado)
 

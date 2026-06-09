@@ -8,6 +8,7 @@
 # USO:
 #   ./whonix-verify-image.sh Whonix-*.ova Whonix-*.ova.asc
 #   ./whonix-verify-image.sh --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
+#   ./whonix-verify-image.sh --qa-log Whonix-*.ova Whonix-*.ova.asc
 ###############################################################################
 
 set -uo pipefail
@@ -15,21 +16,26 @@ set -uo pipefail
 WHONIX_FPR="916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA"
 DERIVATIVE_URL="https://www.whonix.org/keys/derivative.asc"
 FORMAT="ova"
+QA_LOG=0
+IMAGE=""
+SIG=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --kvm) FORMAT="libvirt" ;;
+    --qa-log) QA_LOG=1 ;;
     --help|-h)
-      echo "Uso: $0 [--kvm] IMAGEM IMAGEM.asc"
+      echo "Uso: $0 [--kvm] [--qa-log] IMAGEM IMAGEM.asc"
       exit 0
       ;;
-    *) break ;;
+    *)
+      if [ -z "$IMAGE" ]; then IMAGE="$1"
+      elif [ -z "$SIG" ]; then SIG="$1"
+      fi
+      ;;
   esac
   shift
 done
-
-IMAGE="${1:-}"
-SIG="${2:-}"
 
 b(){ echo -e "\033[1;34m$*\033[0m"; }
 g(){ echo -e "\033[1;32m$*\033[0m"; }
@@ -85,3 +91,19 @@ g "  Good signature — confira o fingerprint com SEUS OLHOS: ${WHONIX_FPR}"
 g "  Formato: ${FORMAT}"
 g "  Proximo passo MANUAL: importar no VirtualBox/KVM (Instalar por SO)"
 g "==============================================================="
+
+if [ "$QA_LOG" = "1" ]; then
+  LOG_DIR="$(dirname "$(readlink -f "$IMAGE" 2>/dev/null || echo "$IMAGE")")/qa-logs"
+  mkdir -p "$LOG_DIR"
+  LOG_FILE="${LOG_DIR}/10-whonix-verify-$(date +%Y%m%d-%H%M%S).txt"
+  {
+    echo "=== 10-whonix-verify — $(date -Iseconds 2>/dev/null || date) ==="
+    echo "script: whonix-verify-image.sh"
+    echo "imagem: $(basename "$IMAGE")"
+    echo "Fingerprint OK: ${WHONIX_FPR}"
+    echo "Good signature: SIM"
+    echo "RESULTADO: PASS"
+    echo "exit_code: 0"
+  } >"$LOG_FILE"
+  g "  QA log: $LOG_FILE"
+fi

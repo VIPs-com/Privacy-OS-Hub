@@ -89,6 +89,17 @@ passo a passo. No mesmo passo: coluna **Livro** + coluna **Comandos**.
 
 Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se” do passo atual for verdadeiro.
 
+### Como lemos “online” e “offline” neste hub
+
+| Termo | Significado |
+|-------|-------------|
+| **Online (Tor)** | Tails **com** internet só via Tor — passos **1–8** (Haveno, Feather, scripts). |
+| **Offline (suporte)** | Seed em **papel/metal** — pode anotar com Tor ativo (passo **4**). Nunca foto, chat ou nuvem. |
+| **Offline (rede / air-gap)** | Tails **sem** Wi‑Fi/cabo — passo **12** (cold-signing). Teste de restauração só com seed: **opcional**. |
+| **Validação por log** | Scripts com `--qa-log` gravam `.txt` em `~/Persistent/qa-logs/` — [como ler](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md). |
+
+> **Passo 9:** confirme que as **duas cópias físicas** da seed (passo 4) estão em locais separados — `qa-confirm-passo9.sh`. Não exige segundo boot offline no Mínimo M2.
+
 > **Regra:** livro = teoria e telas · Playbook = comandos no **mesmo** passo.
 >
 > **Coluna Comandos:** link = terminal ou ritual copiável. `imprimir` / `—` = sem bash (leitura, decisão ou teoria). Avance pelo Livro; abra Comandos no mesmo passo quando houver link.
@@ -103,7 +114,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **6** | Regras de ouro + golpes (imprimir) | [Folheto](Tails-OS-Expert/Folheto-Regras-e-Golpes.md) | imprimir |
 | **7** | Automação pós-verde | [Scripts — ciclo de uso](Tails-OS-Expert/Scripts/README.md) | [haveno-setup.sh --boot](Tails-OS-Expert/Scripts/haveno-setup.sh) · [Scripts README](Tails-OS-Expert/Scripts/README.md) |
 | **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) | [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
-| **9** | Backup air-gap (DUAS cópias seed) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [Playbook backup air-gap](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
+| **9** | Confirmar **2× cópias físicas** da seed (ritual pós passo 4) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [qa-confirm-passo9.sh](Tails-OS-Expert/Scripts/qa-confirm-passo9.sh) · [Playbook backup](Whonix-Online/Playbook-Backup-e-protecao-air-gap.md) |
 | **10** | Instalar e verificar Whonix (PGP; detalhe por SO no Livro) | [Instalar por SO](Whonix-Online/Instalar-Whonix-passo-a-passo-por-SO.md) | [whonix-verify-image.sh](Whonix-Online/Scripts/whonix-verify-image.sh) · [Playbooks M2](Whonix-Online/Playbooks/Playbooks.md) |
 | **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | — |
 | **12** | Cold-signing — **escolha UMA** trilha | [Curso Whonix — §5.5](Whonix-Online/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | **A:** [Trilha A](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) · **B:** [Trilha B](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |

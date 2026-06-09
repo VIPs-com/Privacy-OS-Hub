@@ -1,5 +1,7 @@
 # Scripts — Tails OS Expert
 
+> **Validar sem adivinhar:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) — use `--qa-log` e abra os `.txt` em `~/Persistent/qa-logs/`.
+>
 > **Novato?** Leia o [**MANUAL-SCRIPTS.md**](../../MANUAL-SCRIPTS.md) — [Apêndice A (cada arquivo)](../../MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) · flags · segurança ao rodar 2×.
 
 Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
@@ -11,6 +13,7 @@ chmod +x ~/Persistent/*.sh
 ~/Persistent/haveno-setup.sh           # 1ª vez: install → verde → backup?
 ~/Persistent/haveno-setup.sh --boot    # cada sessão
 ~/Persistent/haveno-setup.sh --feather # + Feather (passo 5 / M2)
+~/Persistent/haveno-setup.sh --qa-log    # grava evidencias em ~/Persistent/qa-logs/
 ```
 
 > **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `tails-preflight.sh` só valida.
@@ -30,8 +33,12 @@ chmod +x ~/Persistent/*.sh
 | `haveno-verify-deb.sh` | 5 | Vol II §3 | Auditar `.deb` em `Install/` |
 | `haveno-switch-network.sh` | 5 | Vol II §8 | Trocar rede (backup + update) |
 | `post-session-check.sh` | 7 | §11 pós-Tails | Tor + onion-grater pós-upgrade |
+| `qa-confirm-seed-papel.sh` | 4 | — | Confirmações humanas seed (sem gravar palavras) |
+| `qa-confirm-passo9.sh` | 9 | Playbook backup | Ritual 2× cópias físicas |
+| `qa-confirm-passo12.sh` | 12 | Trilha A | Cold-signing offline (confirmações) |
+| `qa-export-logs.sh` | — | — | Copia `qa-logs/` → pendrive USB |
 | `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (backup) |
-| `haveno-common.sh` | — | — | Biblioteca (source interno) |
+| `haveno-common.sh` | — | — | Biblioteca (source interno + `qa_log_*`) |
 
 **Home Lab** ([`HomeLab/`](HomeLab/README.md)) — Debian/Ubuntu, **não** Tails.
 
