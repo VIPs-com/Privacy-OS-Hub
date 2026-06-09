@@ -232,6 +232,8 @@ No Feather: **Settings → Network → Nodes** → adicione `SEU_ENDERECO.onion:
 
 ---
 
+<a id="4-pgp-na-mão--quando-o-script-falha-ou-você-quer-conferir"></a>
+
 # 4. PGP na mão — quando o script falha ou você quer conferir
 
 O `haveno-install.sh` verifica o `.deb` automaticamente. Use este capítulo se:
@@ -277,6 +279,8 @@ Ver Capítulo 3.3. Fingerprint Feather: `8185E158A33330C7FD61BC0D1F76E155CEFBA71
 
 ---
 
+<a id="5-feather--haveno--fluxo-de-xmr"></a>
+
 # 5. Feather ↔ Haveno — fluxo de XMR
 
 ```mermaid
@@ -312,6 +316,8 @@ flowchart LR
 
 ---
 
+<a id="6-conseguir-o-primeiro-xmr-3-caminhos"></a>
+
 # 6. Conseguir o primeiro XMR (3 caminhos)
 
 Para tradear no Haveno você precisa de **pouco XMR** (depósito de segurança). Escolha **um** caminho:
@@ -336,6 +342,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 - **Não** aceite "manda seed/endereço por Telegram" de desconhecido.
 
 ---
+
+<a id="7-trade-na-prática--comprar-xmr"></a>
 
 # 7. Trade na prática — comprar XMR
 
@@ -379,6 +387,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 
 ---
 
+<a id="8-trade-na-prática--vender-xmr"></a>
+
 # 8. Trade na prática — vender XMR
 
 > **Mais arriscado** que comprar: métodos **reversíveis** (chargeback) permitem golpe.
@@ -413,6 +423,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 
 ---
 
+<a id="9-disputa--passo-a-passo"></a>
+
 # 9. Disputa — passo a passo
 
 1. Trade em andamento → botão **Open dispute** (ou **Dispute** no menu do trade).
@@ -430,6 +442,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 > O árbitro **nunca** pede seed. Volume I, Cap. 9.
 
 ---
+
+<a id="10-multisig-2-de-3--o-que-você-faz-vs-o-que-o-app-faz"></a>
 
 # 10. Multisig 2-de-3 — o que você faz vs o que o app faz
 
@@ -459,6 +473,8 @@ Passo a passo completo no [Capítulo 15](#15-trocador--swap-passo-a-passo). Resu
 Diagrama completo: Volume I, [seção 5.5](../Curso-Tails-OS-Expert.md#55-guia-rápido--comprar-e-vender-com-segurança-o-fluxo-da-rede).
 
 ---
+
+<a id="11-métodos-de-pagamento--riscos-reais"></a>
 
 # 11. Métodos de pagamento — riscos reais
 
@@ -516,6 +532,8 @@ Substitua pelos valores publicados no **site/GitHub oficial** da rede escolhida.
 Confirme na nova rede se o **fix do exploit** (#2315) está na versão publicada antes de tradear.
 
 ---
+
+<a id="13-home-lab-integrado--lab-completo"></a>
 
 # 13. Home Lab integrado — lab completo
 
@@ -585,6 +603,8 @@ Use carteira **só para mineração** — endereços P2Pool são públicos.
 
 ---
 
+<a id="14-bisq-no-tor--introdução-prática"></a>
+
 # 14. Bisq no Tor — introdução prática
 
 **Bisq** é P2P com base **Bitcoin** (não Monero-native como Haveno). Útil para BTC↔fiat; depois converte BTC→XMR (Trocador ou atomic swap).
@@ -612,6 +632,8 @@ Use carteira **só para mineração** — endereços P2Pool são públicos.
 4. Para XMR: saque BTC → [Trocador Cap. 15](#15-trocador--swap-passo-a-passo) ou atomic swap Cap. 16.
 
 ---
+
+<a id="15-trocador--swap-passo-a-passo"></a>
 
 # 15. Trocador — swap passo a passo
 
@@ -644,6 +666,8 @@ Use carteira **só para mineração** — endereços P2Pool são públicos.
 
 ---
 
+<a id="16-atomic-swaps--eigenwallet-e-basicswap"></a>
+
 # 16. Atomic swaps — eigenwallet e BasicSwap
 
 Troca **BTC ↔ XMR** sem exchange centralizada — **sem** fiat P2P.
@@ -670,6 +694,8 @@ Troca **BTC ↔ XMR** sem exchange centralizada — **sem** fiat P2P.
 > **Nível alto.** Complete Cap. 13 (nó Monero) antes. Não substitui Haveno para comprar com PIX.
 
 ---
+
+<a id="17-infra-haveno--seednode-e-árbitro-panorama"></a>
 
 # 17. Infra Haveno — seednode e árbitro (panorama)
 

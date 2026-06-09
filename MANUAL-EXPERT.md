@@ -81,7 +81,7 @@ Ordem fixa. Detalhe completo: [README — tabela](README.md#trilha-linear).
 
 **Online × offline:** [README — glossário](README.md#trilha-linear) · **Logs QA:** `--qa-log` → `~/Persistent/qa-logs/` · [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
-**Contingência:** [README#travou-aqui](README.md#travou-aqui)
+**Contingência:** [README#travou-aqui](README.md#travou-aqui) · **Mapa repo:** [FIG-4](README.md#como-o-hub-esta-organizado-v2)
 
 ---
 

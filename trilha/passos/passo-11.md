@@ -25,6 +25,6 @@
 | Livro | [Curso Whonix — Cap. 5](../../modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) |
 | Processo | [P11](../../processos/m2-quente/P11-modelo-frio-quente.md) |
 | Comandos | [P11](../../processos/m2-quente/P11-modelo-frio-quente.md) |
-| Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
+| Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) · [FIG-3 preview](../mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente) (USB no passo 12) |
 
 **Anterior:** [passo-10.md](passo-10.md) · **Próximo:** [passo-12.md](passo-12.md)

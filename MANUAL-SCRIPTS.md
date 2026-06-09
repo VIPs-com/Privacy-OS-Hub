@@ -280,6 +280,15 @@ flowchart TD
   FW --> DONE
 ```
 
+| Etapa no fluxo | Passo hub | Processo |
+|---------------|:---------:|----------|
+| Passos 1–4 manual | 1–4 | [P01](processos/m1-tor/P01-bootstrap-tails.md) … [P04](processos/m1-tor/P04-backup-seed.md) |
+| `tails-preflight` / setup / boot | 2, 7 | [P02](processos/m1-tor/P02-haveno-verde.md) · [P07](processos/m1-tor/P07-rotina-scripts.md) |
+| `haveno-backup` | 4 | [P04](processos/m1-tor/P04-backup-seed.md) |
+| Feather (M2) | 5 | [P05](processos/m1-tor/P05-feather.md) |
+
+Ordem oficial: [README — trilha linear](README.md#trilha-linear).
+
 ---
 
 ## Whonix (host Linux — não é no Tails)

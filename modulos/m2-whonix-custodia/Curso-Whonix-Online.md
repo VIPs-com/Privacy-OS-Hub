@@ -107,6 +107,8 @@ Baixe **só** de **whonix.org** ([Download](https://www.whonix.org/wiki/Download
 
 ---
 
+<a id="4-monero-no-whonix--conectar-via-tor"></a>
+
 ## 4. Monero no Whonix — conectar via Tor
 
 A orientação **oficial do Whonix** é usar **nó remoto via Tor** (não rodar um nó pesado dentro da Workstation). Carteira recomendada: **Feather** (leve; o curso já a usa).

@@ -1,6 +1,6 @@
 # Matriz scripts ↔ passo ↔ playbook
 
-Espelho navegável de [Scripts/README.md](../../automacao/tails/README.md). **Nomes funcionais** não mudam.
+Espelho navegável de [automacao/tails/README.md](../../automacao/tails/README.md) · atalho aluno: [README script-first](../../README.md#trilha-script-first). **Nomes funcionais** não mudam.
 
 ---
 

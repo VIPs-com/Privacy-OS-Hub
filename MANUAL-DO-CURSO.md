@@ -11,7 +11,7 @@
 > Este manual lista **todos os capítulos** para consulta ou aprofundamento. A ordem de estudo continua
 > sendo a do README — não leia capítulo a capítulo fora de ordem.
 
-**Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Comandos:** [processos/](processos/README.md) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui) · **Cartões:** [trilha/passos/](trilha/passos/README.md) · **v2:** [CHANGELOG-V2.md](CHANGELOG-V2.md)
+**Mapa principal:** [README.md#trilha-linear](README.md#trilha-linear) · **Repo (FIG-4):** [README § 4 camadas](README.md#como-o-hub-esta-organizado-v2) · **Comandos:** [processos/](processos/README.md) · **Travou?** [README.md#travou-aqui](README.md#travou-aqui) · **Cartões:** [trilha/passos/](trilha/passos/README.md) · **v2:** [CHANGELOG-V2.md](CHANGELOG-V2.md)
 
 **Validar um passo (opcional):** scripts com `--qa-log` gravam `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md). Glossário online/offline: [README — trilha linear](README.md#trilha-linear).
 

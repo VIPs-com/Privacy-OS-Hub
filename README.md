@@ -34,6 +34,8 @@ experiência e ensina **processo + ferramentas** na ordem certa.
 | **3** | Só avance quando o **OK se** do passo atual for verdadeiro | Evita pular backup, seed ou pré-requisito do Módulo 2 |
 | **4** | (Opcional) Valide com **log**: `haveno-setup.sh --qa-log` → leia `~/Persistent/qa-logs/*.txt` | [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) — sem expor seed |
 
+> **Estrutura do repositório (opcional):** [FIG-4 — 4 camadas](#como-o-hub-esta-organizado-v2) · índice [FIG-1…4](trilha/referencia/diagramas-indice.md)
+
 **O que você sai sabendo fazer (trilha completa):** Tails no pendrive · Haveno **verde** · backup cifrado ·
 Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B). **Montar um lab em casa**
 (nó, Tor, mineração) é **opcional** — [Home Lab](automacao/homelab/README.md) depois dos passos 1–12.
@@ -199,6 +201,8 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 
 ---
 
+<a id="trilha-script-first"></a>
+
 ## Trilha script-first (atalho)
 
 Para quem quer **mão na massa** com o mínimo de teoria — **depois** dos passos 1–4 manuais (Tails no USB, Tor, persistência, admin):
@@ -218,7 +222,7 @@ Para quem quer **mão na massa** com o mínimo de teoria — **depois** dos pass
 
 **Manual completo (novato):** [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) — o que cada script faz, flags (`--boot`, `--feather`, …), quando rodar e o que acontece se executar 2×.
 
-Detalhe técnico: [Scripts/README.md](automacao/tails/README.md) · [Whonix Scripts](automacao/whonix-host/README.md).
+Detalhe técnico: [automacao/tails/README.md](automacao/tails/README.md) · [automacao/whonix-host](automacao/whonix-host/README.md) · [matriz passo×script](trilha/referencia/scripts-matriz.md).
 
 ---
 
@@ -245,13 +249,16 @@ Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abr
 | Haveno não ficou verde | **2** | [Curso Cap. 7 FAQ](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) | [P02 §8](processos/m1-tor/P02-haveno-verde.md) |
 | Dúvida se pode tradear | **3** | [Curso Cap. 4](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [P03](processos/m1-tor/P03-pre-trade.md) |
 | Seed / backup carteira Haveno | **4** | [Curso Cap. 5](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [P04](processos/m1-tor/P04-backup-seed.md) |
-| 2× cópias físicas da seed | **9** | [Curso Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](processos/rituais/P09-ritual-seed.md) |
-| Feather / 1º trade | **5** | [Vol II Cap. 2–3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#2-haveno--primeira-conta-e-proteção-da-seed) | [Playbooks Vol II](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| Feather (obrig. M2) | **5** | [Vol II Cap. 2–3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar) | [P05](processos/m1-tor/P05-feather.md) |
+| 1º trade Haveno (opcional) | **5** | [Vol II Caps. 7–8](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#7-trade-na-prática--comprar-xmr) | [Playbooks Vol II §4–6](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| Folheto golpes | **6** | [Folheto](modulos/m1-tails-haveno/Folheto-Regras-e-Golpes.md) | [P06](processos/m1-tor/P06-folheto.md) |
+| Scripts / rotina pós-verde | **7** | [automacao/tails](automacao/tails/README.md) | [P07](processos/m1-tor/P07-rotina-scripts.md) |
 | Escolher trilha A ou B | **8** | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
+| 2× cópias físicas da seed | **9** | [Curso Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](processos/rituais/P09-ritual-seed.md) |
 | Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [P10](processos/m2-quente/P10-whonix-pgp.md) |
-| Cold-signing travou | **12** | [Curso §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P12A](processos/m2-frio/P12a-feather-offline.md) ou [P12B](processos/m2-frio/P12b-cli-offline.md) |
-| Sem nó `.onion` | **11** | [Curso Cap. 4.2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) | — |
-| Mapa geral do hub | — | **Você está aqui** — [trilha linear](#trilha-linear) | — |
+| Modelo frio↔quente / nó `.onion` | **11** | [Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) · [§4.2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
+| Cold-signing travou | **12** | [Curso §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) · [FIG-3](trilha/mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente) | [P12A](processos/m2-frio/P12a-feather-offline.md) · [P12B](processos/m2-frio/P12b-cli-offline.md) |
+| Mapa geral do hub | — | [FIG-4](#como-o-hub-esta-organizado-v2) · [FIG-1](trilha/mapa-modos/diagrama-mestre.md) | [diagramas-indice](trilha/referencia/diagramas-indice.md) · [trilha linear](#trilha-linear) |
 
 ---
 

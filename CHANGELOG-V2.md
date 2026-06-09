@@ -81,6 +81,16 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Alinhamento documentação v2
+
+- **Travou aqui?** passos 1–12 + P01–P12 · Feather=P05 · trades opcional separado · FIG-3 no passo 12
+- **M2 README** coluna Comandos → `processos/` P08–P12
+- **MANUAL-SCRIPTS** fluxo visual ↔ passos/P0x · **Playbooks Vol II** banner P05
+- **Âncoras** Vol II caps 4–17 · Whonix §4 · `#trilha-script-first`
+- Roadmap interno: `Privacy-OS-Hub-equipe-dev/ROADMAP-ALINHAMENTO-DOCUMENTACAO-V2.md`
+
+---
+
 ## Pendente pós-beta
 
 - [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md`)

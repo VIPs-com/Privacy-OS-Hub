@@ -1,6 +1,7 @@
 # Playbooks — Rede Descentralizada (só comandos)
 
-> **Feather (obrigatório M2):** comandos em [`processos/m1-tor/P05-feather.md`](../../../processos/m1-tor/P05-feather.md). Este arquivo mantém **trades opcionais** (§4–6) e PGP manual (§3).
+> **Trilha principal passo 5 (Feather, obrig. M2):** use **[`P05`](../../../processos/m1-tor/P05-feather.md)** — não este arquivo.  
+> **Este Playbook** = **trades opcionais** (§4–6) + PGP manual (§3) — só se for tradear na rede Haveno.
 
 **Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso-Rede-Descentralizada-Extensao.md`](Curso-Rede-Descentralizada-Extensao.md).
 
