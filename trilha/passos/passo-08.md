@@ -11,16 +11,17 @@
 
 ---
 
-## Pré-requisitos
+## Pré-requisitos (passo 8 — só a decisão)
 
-Passos **1–4** + Feather ([Vol II Cap. 3](../../modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
+Passos **1–4** + Feather ([P05](../../processos/m1-tor/P05-feather.md) · Vol II Cap. 3) — **não** exige trade · **não** exige Whonix ainda (passo **10**).
 
 ---
 
 ## OK se
 
 - [ ] Escolheu **uma** trilha: [A Feather GUI](../trilhas/m2-tails-frio-feather-a.md) ou [B CLI](../trilhas/m2-tails-frio-cli-b.md)
-- [ ] Entendeu: Whonix = **quente/view-only** · Tails passo 12 = **frio/assina**
+- [ ] Entendeu: Whonix = **quente/view-only** (passos 10–11) · Tails passo 12 = **frio/assina**
+- [ ] Sabe que **não mistura** A com B depois de escolher
 
 ---
 

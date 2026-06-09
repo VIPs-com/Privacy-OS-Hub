@@ -8,6 +8,7 @@
 | **Scripts** | `feather-install-verify.sh --qa-log` ou `haveno-setup.sh --feather --qa-log` |
 | **Log esperado** | log Feather em `~/Persistent/qa-logs/` |
 | **Não confundir com** | Passo 12 Trilha A (Feather **offline**) |
+| **Pré-requisito** | Passo **4** concluído (backup cifrado + seed em papel — [P04](../../processos/m1-tor/P04-backup-seed.md)) |
 
 ---
 

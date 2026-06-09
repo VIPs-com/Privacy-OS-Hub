@@ -19,6 +19,8 @@
 
 > **Offline (suporte)** = papel/metal. **Não** precisa desligar Wi‑Fi para anotar a seed.
 
+> **Próximo:** passo **5** (Feather) só depois destes OK se — backup e seed em papel vêm **antes** do Feather e do Módulo 2.
+
 ---
 
 ## Links

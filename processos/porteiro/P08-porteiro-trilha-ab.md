@@ -39,15 +39,22 @@ Você vai montar **custódia frio↔quente**: seed **só no Tails offline**; Who
 
 ---
 
-## Pré-requisitos (DUAS trilhas)
+## Pré-requisitos para o passo 8 (agora — só decidir A ou B)
 
-- [ ] [Playbook backup](../../modulos/m2-whonix-custodia/Playbook-Backup-e-protecao-air-gap.md) — 2× seed offline
-- [ ] M1 concluído — Haveno verde, PGP, [Feather P05](../m1-tor/P05-feather.md)
-- [ ] Whonix verificado — [P10](../m2-quente/P10-whonix-pgp.md)
+- [ ] M1 passos **1–4** concluídos (Haveno **verde** + backup + seed em papel — [P04](../m1-tor/P04-backup-seed.md))
+- [ ] **Feather** instalado ([P05](../m1-tor/P05-feather.md) · Vol II Cap. 3) — **obrigatório** para M2
+- [ ] Leu o mapa: [00-Comece-aqui](../../modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md)
+
+> **Não precisa** Whonix instalado neste passo — isso é o passo **10** ([P10](../m2-quente/P10-whonix-pgp.md)).
+
+---
+
+## Antes do passo 12 (depois — não bloqueia a escolha A/B)
+
+- [ ] Passos **9–11** concluídos (ritual seed · Whonix PGP · teoria frio↔quente)
+- [ ] [Playbook backup air-gap](../../modulos/m2-whonix-custodia/Playbook-Backup-e-protecao-air-gap.md) — 2× seed em locais separados
 - [ ] Pendrive dedicado frio↔quente
 - [ ] Em mãos: endereço primário (`4…`), **view key**, **restore height**
-
-Mapa completo: [00-Comece-aqui](../../modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md)
 
 ---
 

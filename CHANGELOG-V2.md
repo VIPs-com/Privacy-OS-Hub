@@ -91,10 +91,18 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Revisão pedagógica R21 (estática)
+
+- Passos **4, 8, 9, 12** — veredito **APROVADO** (gate sem Tails)
+- Correção principal: **P08** pré-requisitos em 2 fases (passo 8 ≠ passo 12)
+- Relatório: `Privacy-OS-Hub-equipe-dev/validacao/07-REVISAO-PEDAGOGICA-ESTATICA-R21.md`
+
+---
+
 ## Pendente pós-beta
 
-- [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md`)
-- [ ] Revisão pedagógica amostra (passos 4, 8, 9, 12)
+- [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md`) — **equipe-dev**
+- [x] Revisão pedagógica amostra estática (passos 4, 8, 9, 12) — R21
 - [ ] Remoção gradual dos stubs após período de redirect
 - [ ] Tag `v2.0.0` estável
 

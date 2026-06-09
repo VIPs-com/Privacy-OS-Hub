@@ -49,9 +49,16 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 
 ---
 
-## 2. Pré-requisitos comuns (valem para as DUAS trilhas)
+## 2. Pré-requisitos — leia em duas fases
 
-Faça isto **antes** de abrir qualquer trilha:
+### Fase A — passo hub **8** (escolher A ou B — agora)
+
+- [ ] M1 passos **1–4** + **Feather** ([Vol II Cap. 3](../m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — [P05](../../processos/m1-tor/P05-feather.md)
+- [ ] Escolheu **uma** trilha (seção 1 acima) — anote na ficha: A ou B
+
+### Fase B — passos **9–12** (antes de executar cold-signing)
+
+Faça isto **antes** de abrir os playbooks de assinatura offline:
 
 - [ ] Leia e execute [`Playbook-Backup-e-protecao-air-gap.md`](Playbook-Backup-e-protecao-air-gap.md) — **DUAS cópias** da seed offline + teste de restauração.
 - [ ] **Módulo 1 concluído** ([Tails + Haveno](../m1-tails-haveno/README.md)) — seed, Haveno verde, verificação PGP.

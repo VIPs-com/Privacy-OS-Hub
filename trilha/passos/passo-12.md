@@ -20,6 +20,17 @@
 
 ---
 
+## Antes de abrir a carteira (ordem)
+
+1. **Desligue** Wi‑Fi e cabo no Tails (ou boot sem rede).
+2. **Confirme** ícone de rede desligado / sem Tor ativo.
+3. **Só então** abra Feather ou `monero-wallet-cli` (carteira completa).
+4. Após assinar: `qa-confirm-passo12.sh` · transmitir no Whonix quente (playbook).
+
+Ver fluxo USB: [FIG-3](../mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente).
+
+---
+
 ## OK se
 
 - [ ] Tails bootou **sem** rede antes de abrir carteira
