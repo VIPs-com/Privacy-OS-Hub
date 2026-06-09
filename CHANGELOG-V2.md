@@ -69,7 +69,7 @@ chmod +x ~/Persistent/*.sh
 
 ## Publicação pós-Rodada 20
 
-- **HEAD `main`:** `e53ffb0` (`049d426` rename paths · `e53ffb0` CHANGELOG Rodada 20)
+- **HEAD `main`:** `6ae2126` (`049d426` rename paths · `e53ffb0` CHANGELOG Rodada 20)
 - **Veredito:** LIBERADO para piloto B+ — ver `Privacy-OS-Hub-equipe-dev/validacao/HANDOFF-EQUIPE-DEV.md` (local)
 
 ---
