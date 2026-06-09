@@ -107,9 +107,18 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Liberação campo R23 (2026-05-29)
+
+- **HEAD:** `2ba833b` · doc v2-beta **fechada** (gates estáticos R20→R23)
+- **Veredito:** LIBERADO PARA CAMPO — piloto B+ Tails físico
+- Relatório local: `Auditoria/Rodada-23-Liberacao-Campo-Tails.md` · espelho `validacao/09-LIBERACAO-CAMPO-R23.md`
+- Porta execução: `validacao/PACOTE-PILOTO-B+-PRONTO.md` · `validacao/HANDOFF-EQUIPE-DEV.md`
+
+---
+
 ## Pendente pós-beta
 
-- [ ] Piloto B+ Tails físico — porta: [PACOTE-PILOTO-B+-PRONTO](Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md) · [05-CHECKLIST](Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md) — **equipe-dev**
+- [ ] Piloto B+ Tails físico — **LIBERADO R23** · [PACOTE-PILOTO-B+-PRONTO](Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md) · [05-CHECKLIST](Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md) — **equipe campo**
 - [x] Revisão pedagógica amostra estática (passos 4, 8, 9, 12) — R21
 - [ ] Remoção gradual dos stubs após período de redirect
 - [ ] Tag `v2.0.0` estável
