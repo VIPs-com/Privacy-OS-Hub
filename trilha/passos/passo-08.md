@@ -28,6 +28,7 @@ Passos **1–4** + Feather ([Vol II Cap. 3](../../modulos/m1-tails-haveno/Expans
 
 | Tipo | Link |
 |------|------|
+| Processo | [P08](../../processos/porteiro/P08-porteiro-trilha-ab.md) |
 | Livro + Comandos | [00-Comece-aqui](../../modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) |
 | Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
 

@@ -1,5 +1,7 @@
 # Playbooks — Tails OS Expert (só comandos)
 
+> **Processos (v2):** cada passo do hub tem cartão em [`processos/`](../../../processos/README.md) — scripts, OK se e link de volta aqui. Comandos completos permanecem neste arquivo (canônico).
+
 Direto ao ponto. Fundamentos e telas: no livro [`../Curso-Tails-OS-Expert.md`](../Curso-Tails-OS-Expert.md). Automação: pasta [`../../../automacao/tails/`](../../../automacao/tails/README.md).
 
 **Ordem obrigatória.** Tails **7.8.1+** (7.8.1 = atualização emergencial de segurança, jun/2026). Rede da turma: **Reto `1.6.0-reto`**.

@@ -103,7 +103,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 
 > **Passo 9:** confirme que as **duas cópias físicas** da seed (passo 4) estão em locais separados — `qa-confirm-passo9.sh`. Não exige segundo boot offline no Mínimo M2.
 
-> **Regra:** livro = teoria e telas · Playbook = comandos no **mesmo** passo.
+> **Regra:** livro = teoria e telas · Playbook = comandos no **mesmo** passo · [processos/](processos/README.md) = cartão por passo (scripts + link ao playbook canônico).
 >
 > **Coluna Comandos:** link = terminal ou ritual copiável. `imprimir` / `—` = sem bash (leitura, decisão ou teoria). Avance pelo Livro; abra Comandos no mesmo passo quando houver link.
 

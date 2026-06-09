@@ -1,6 +1,6 @@
 # Cartões por passo (1–12)
 
-Cada arquivo é um **cartão de navegação** — links para Livro e Playbook **existentes**, sem duplicar texto.
+Cada arquivo é um **cartão de navegação** — links para Livro, [processo](../../processos/README.md) e Playbook **existentes**, sem duplicar texto.
 
 | Passo | Cartão | Trilha |
 |:-----:|--------|--------|

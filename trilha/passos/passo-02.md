@@ -23,6 +23,7 @@
 | Tipo | Link |
 |------|------|
 | Livro | [Curso Vol I — Cap. 3](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) |
+| Processo | [P02](../../processos/m1-tor/P02-haveno-verde.md) |
 | Comandos | [haveno-setup.sh](../../automacao/tails/haveno-setup.sh) · [Playbooks §5–6](../../modulos/m1-tails-haveno/Playbooks/Playbooks.md) |
 | Manual novato | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) |
 

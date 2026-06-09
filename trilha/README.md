@@ -13,7 +13,7 @@ A ordem oficial do curso continua em [README.md — trilha linear](../README.md#
 |---------|------|
 | **Novato** (primeira vez) | [00-PORTA-ENTRADA.md](00-PORTA-ENTRADA.md) |
 | **Perdido** (online vs offline?) | [mapa-modos/](mapa-modos/README.md) |
-| **Executando passo N** | [passos/](passos/README.md) |
+| **Executando passo N** | [passos/](passos/README.md) · [processos/](../processos/README.md) |
 | **Módulo 2** (frio↔quente) | [trilhas/](trilhas/README.md) |
 | **Scripts** (o quê e quando?) | [referencia/scripts-matriz.md](referencia/scripts-matriz.md) · [automacao/](../automacao/README.md) |
 | **Livros / playbooks** | [modulos/](../modulos/README.md) |

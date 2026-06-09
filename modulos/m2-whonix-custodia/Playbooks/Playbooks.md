@@ -1,5 +1,7 @@
 # Playbooks — Whonix Online (só comandos)
 
+> **Processos (v2):** passos 8–12 em [`processos/`](../../../processos/README.md) — cartões P08–P12 com scripts e rituais.
+
 **Teoria:** [`Curso-Whonix-Online.md`](../Curso-Whonix-Online.md) · **Instalação detalhada:** [`Instalar-Whonix-passo-a-passo-por-SO.md`](../Instalar-Whonix-passo-a-passo-por-SO.md)
 
 **Pré-requisito:** [Módulo 1 (Tails + Haveno)](../../m1-tails-haveno/README.md) concluído.

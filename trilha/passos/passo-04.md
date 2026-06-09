@@ -26,6 +26,7 @@
 | Tipo | Link |
 |------|------|
 | Livro | [Curso Vol I — Cap. 5](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) |
+| Processo | [P04](../../processos/m1-tor/P04-backup-seed.md) |
 | Comandos | [Playbooks §9](../../modulos/m1-tails-haveno/Playbooks/Playbooks.md#9--backup-pós-verde) |
 | Glossário | [offline suporte vs air-gap](../mapa-modos/glossario.md) |
 | Como ler logs | [COMO-LER-SEUS-LOGS.md](../../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) |
