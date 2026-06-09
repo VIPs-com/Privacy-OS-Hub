@@ -126,6 +126,14 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Baseline de proteção + backup prático (2026-06-09)
+
+- **Nova página:** [trilha/trilhas/opcionais-zero-trust-baseline.md](trilha/trilhas/opcionais-zero-trust-baseline.md) — entrega o processo de **cofre · PGP · backup 3-2-1 off-site** usando o que o aluno já criou (seed P04, ritual P09, Feather, hábito PGP); aprofundamento opcional no **Zero-Trust-Core** (não tira o aluno do curso).
+- **Prático Haveno:** `haveno-backup.sh` (compacta + cifra GPG + `.sha256`; `--usb` salva em pendrive), restauração e *atualizar com backup antes* amarrados ao 3-2-1 + insight **`seed ≠ backup completo`** (seed recupera fundos, não histórico/contas de pagamento → backup da pasta `Data/`).
+- **Navegação repontada:** README "Trilhas opcionais"/"Baseline opcional", `MANUAL-EXPERT`, `MANUAL-DO-CURSO` e `trilha/trilhas/README.md` apontam para a página local (que linka o ZTC).
+
+---
+
 ## Pendente pós-beta
 
 - [ ] Piloto B+ Tails físico — **LIBERADO R23** · [PACOTE-PILOTO-B+-PRONTO](Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md) · [05-CHECKLIST](Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md) — **equipe campo**

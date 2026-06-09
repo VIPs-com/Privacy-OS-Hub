@@ -109,6 +109,7 @@ Livro: [Curso-Whonix-Online.md](modulos/m2-whonix-custodia/Curso-Whonix-Online.m
 | Scripts Tails (auto / backup / update) | [automacao/tails/README.md](automacao/tails/README.md) · [P07](processos/m1-tor/P07-rotina-scripts.md) | passo **7** |
 | Validar com logs (`--qa-log`) | [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) | passos **2–12** |
 | Home Lab (nó, P2Pool, xmrig) | [automacao/homelab/README.md](automacao/homelab/README.md) | opcional |
+| Proteção: cofre · PGP · backup 3-2-1 | [Baseline de proteção](trilha/trilhas/opcionais-zero-trust-baseline.md) | opcional |
 | Folheto regras + golpes | [Folheto-Regras-e-Golpes.md](modulos/m1-tails-haveno/Folheto-Regras-e-Golpes.md) | passo **6** |
 
 ---

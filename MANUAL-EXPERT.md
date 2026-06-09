@@ -94,7 +94,7 @@ Não misturar com a trilha principal. [README — opcionais](README.md#trilhas-o
 | Nó Monero + `.onion` + P2Pool / xmrig | [automacao/homelab/](automacao/homelab/README.md) |
 | Multisig 2-de-3 manual (educacional) | [Multisig CLI](modulos/m1-tails-haveno/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) |
 | Hardware wallet | [Curso M2 §5.6](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#56-hardware-wallet-opcional) |
-| Baseline cofre / PGP / backup 3-2-1 | [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
+| Baseline cofre / PGP / backup 3-2-1 | [Baseline de proteção](trilha/trilhas/opcionais-zero-trust-baseline.md) → [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
 
 ### Cold-signing (passo 12) — escolha UMA
 

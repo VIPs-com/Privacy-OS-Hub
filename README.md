@@ -235,7 +235,7 @@ Só depois da trilha principal. **Não misture** com os passos 1–12.
 | Home Lab (nó + mineração) | Quer infra em Debian/Ubuntu | [Scripts/HomeLab](automacao/homelab/README.md) | Passo 5+ |
 | Multisig 2-de-3 manual (educacional) | Entender escrow além do app | [Anexo CLI](modulos/m1-tails-haveno/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) | Vol II Cap. 10 |
 | Hardware wallet (Trezor/Ledger) | Alternativa com custo extra | [Curso M2 §5.6](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#56-hardware-wallet-opcional) | Passo 12 |
-| Zero-Trust-Core (baseline) | Cofre, PGP, backup 3-2-1 off-site | [GitHub ZTC](https://github.com/VIPs-com/Zero-Trust-Core) | M1 + idealmente M2 |
+| Cofre, PGP, backup 3-2-1 off-site | Proteger seed e backups após a trilha | [Baseline de proteção](trilha/trilhas/opcionais-zero-trust-baseline.md) | M1 + idealmente M2 |
 
 ---
 
@@ -286,6 +286,8 @@ Mapa das **4 camadas do repo** (v2): [Como o hub está organizado](#como-o-hub-e
 ## Baseline opcional — [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core)
 
 Use **depois** dos passos 1–12 se quiser cofres, PGP air-gap, backup off-site e SSH além deste hub.
+
+**Comece sem sair daqui:** a página [Cofre · PGP · backup 3-2-1](trilha/trilhas/opcionais-zero-trust-baseline.md) entrega o processo usando o que você já criou no curso; depois aprofunde no ZTC:
 
 | Material | Link |
 |----------|------|

@@ -10,5 +10,6 @@ Cada arquivo agrupa **links** para o conteúdo existente — não substitui os m
 | M2 — Tails frio + Feather (A) | 12 | [m2-tails-frio-feather-a.md](m2-tails-frio-feather-a.md) |
 | M2 — Tails frio + CLI (B) | 12 | [m2-tails-frio-cli-b.md](m2-tails-frio-cli-b.md) |
 | Home Lab (opcional) | — | [opcionais-home-lab.md](opcionais-home-lab.md) |
+| Baseline de proteção: cofre · PGP · 3-2-1 (opcional) | — | [opcionais-zero-trust-baseline.md](opcionais-zero-trust-baseline.md) |
 
 **Porteiro M2 (passo 8):** [00-Comece-aqui](../../modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md)
