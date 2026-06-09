@@ -4,13 +4,13 @@ CLAUDE.md
 .claude/
 Auditoria/
 
-# --- Pasta local (arquivo morto + utilitários) — NÃO faz parte do repositório ---
-_arquivos/
+# --- Doc interna equipe dev · prefixo do repo evita colisão em backups mistos ---
+Privacy-OS-Hub-equipe-dev/
 
 # --- Agentes internos Claude Code (ficam só no disco local) ---
 agents/
 
-# --- IDE (planos locais vivem em _arquivos/cursor-plans/) ---
+# --- IDE (planos locais vivem em Privacy-OS-Hub-equipe-dev/arquivo-morto/cursor-plans/) ---
 .cursor/
 
 # --- Arquivos compactados / binários grandes ---

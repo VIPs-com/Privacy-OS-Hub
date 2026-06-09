@@ -69,7 +69,7 @@ chmod +x ~/Persistent/*.sh
 
 ## Pendente pós-beta
 
-- [ ] Piloto B+ Tails físico (`_arquivos/validacao/03-GUIA-…`)
+- [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/03-GUIA-…`)
 - [ ] Revisão pedagógica amostra (passos 4, 8, 9, 12)
 - [ ] Remoção gradual dos stubs após período de redirect
 - [ ] Tag `v2.0.0` estável

@@ -14,7 +14,7 @@ Capturas do **host real** (Windows/Linux/macOS) para o Módulo 2. PNG; nomes em 
 | `04-vbox-gateway-workstation.png` | ✅ **incluído** | VirtualBox com **Gateway + Workstation** na lista |
 | `05-gateway-tor-connected.png` | ✅ **incluído** | Gateway com **Tor Connection** conectado |
 
-**2/5** no repo · checklist das faltantes: `_arquivos/testes/evidencias/prints-whonix/CHECKLIST-CAPTURAS-RESTANTES.md` (gitignored)
+**2/5** no repo · checklist das faltantes: `Privacy-OS-Hub-equipe-dev/testes/evidencias/prints-whonix/CHECKLIST-CAPTURAS-RESTANTES.md` (gitignored)
 
 Inserção no guia: `![legenda](imagens/screenshots-whonix/NOME.png)` — ver [`Instalar-Whonix-passo-a-passo-por-SO.md`](../../Instalar-Whonix-passo-a-passo-por-SO.md) §3 e §10.
 

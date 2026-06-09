@@ -50,4 +50,4 @@ cp -v "$SRC"/*.txt "$DEST/" 2>/dev/null || die "Nenhum .txt em $SRC"
 sync
 g "Exportado para: $DEST"
 g "Ejetar com seguranca antes de remover o pendrive."
-y "No Debian: copie para _arquivos/testes/evidencias/logs-terminal/"
+y "No Debian: copie para Privacy-OS-Hub-equipe-dev/testes/evidencias/logs-terminal/"
