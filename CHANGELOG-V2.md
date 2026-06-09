@@ -67,9 +67,16 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Publicação pós-Rodada 20
+
+- **HEAD `main`:** `049d426` — `.gitignore` e paths públicos → `Privacy-OS-Hub-equipe-dev/`
+- **Veredito:** LIBERADO para piloto B+ — ver `Privacy-OS-Hub-equipe-dev/validacao/HANDOFF-EQUIPE-DEV.md` (local)
+
+---
+
 ## Pendente pós-beta
 
-- [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/03-GUIA-…`)
+- [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md`)
 - [ ] Revisão pedagógica amostra (passos 4, 8, 9, 12)
 - [ ] Remoção gradual dos stubs após período de redirect
 - [ ] Tag `v2.0.0` estável
