@@ -26,6 +26,7 @@
 | Livro | [Instalar por SO](../../modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) |
 | Processo | [P10](../../processos/m2-quente/P10-whonix-pgp.md) |
 | Comandos | [P10](../../processos/m2-quente/P10-whonix-pgp.md) |
+| Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
 | Trilha | [m2-whonix-quente.md](../trilhas/m2-whonix-quente.md) |
 
 **Anterior:** [passo-09.md](passo-09.md) · **Próximo:** [passo-11.md](passo-11.md)

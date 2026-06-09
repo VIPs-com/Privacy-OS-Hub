@@ -42,7 +42,7 @@
   └─────────────────────────────────────┘
 ```
 
-**Mapa completo:** [mapa-modos/diagrama-mestre.md](mapa-modos/diagrama-mestre.md)
+**Mapas:** [FIG-1 — trilha e rede](mapa-modos/diagrama-mestre.md) · [FIG-4 — 4 camadas do repo](../README.md#como-o-hub-esta-organizado-v2) · [índice FIG-1…4](referencia/diagramas-indice.md)
 
 ---
 

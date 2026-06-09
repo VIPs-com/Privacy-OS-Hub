@@ -28,6 +28,7 @@
 | Livro | [Curso Whonix — Cap. 5](../../modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) |
 | Processo | [P09](../../processos/rituais/P09-ritual-seed.md) |
 | Comandos | [P09](../../processos/rituais/P09-ritual-seed.md) |
+| Diagrama | [FIG-2](../mapa-modos/glossario.md) (Tor OK ≠ passo 12 air-gap) |
 | Trilha | [ritual-seed-passo-9.md](../trilhas/ritual-seed-passo-9.md) |
 
 **Anterior:** [passo-08.md](passo-08.md) · **Próximo:** [passo-10.md](passo-10.md)

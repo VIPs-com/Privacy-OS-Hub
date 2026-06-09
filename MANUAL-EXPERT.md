@@ -8,7 +8,11 @@
 
 ---
 
+<a id="arquitetura-do-repositorio"></a>
+
 ## Arquitetura do repositório
+
+> **Diagrama visual (FIG-4):** [README — Como o hub está organizado](README.md#como-o-hub-esta-organizado-v2) · Índice: [FIG-1…4](trilha/referencia/diagramas-indice.md)
 
 ```text
 Privacy-OS-Hub/

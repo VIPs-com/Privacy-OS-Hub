@@ -18,6 +18,12 @@
 
 ---
 
+## Diagrama
+
+Ver [FIG-3](../referencia/diagramas-indice.md) · [diagrama mestre § USB](../mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente)
+
+---
+
 ## Para quem
 
 Terminal · auditoria do processo · **não** é o mesmo “CLI” do Home Lab.

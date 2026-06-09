@@ -35,7 +35,8 @@
 |------|------|
 | Livro | [Curso Whonix — §5.5](../../modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) |
 | Processo | [P12A](../../processos/m2-frio/P12a-feather-offline.md) · [P12B](../../processos/m2-frio/P12b-cli-offline.md) |
-| Glossário | [air-gap](../mapa-modos/glossario.md) |
+| Diagrama | [FIG-3](../mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente) (USB frio↔quente) |
+| Glossário | [FIG-2 — air-gap](../mapa-modos/glossario.md) |
 | Como ler logs | [COMO-LER-SEUS-LOGS.md](../../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) |
 
 **Anterior:** [passo-11.md](passo-11.md) · **Fim da trilha 1–12**

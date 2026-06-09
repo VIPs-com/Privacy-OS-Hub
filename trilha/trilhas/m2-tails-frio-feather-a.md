@@ -22,7 +22,7 @@ Leia antes: [00-Comece-aqui](../../modulos/m2-whonix-custodia/00-Comece-aqui-Esc
 
 ## Diagrama
 
-Ver [FIG-3](../referencia/diagramas-indice.md) · [diagrama mestre](../mapa-modos/diagrama-mestre.md)
+Ver [FIG-3](../referencia/diagramas-indice.md) · [diagrama mestre § USB](../mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente)
 
 ---
 

@@ -25,6 +25,7 @@
 | Livro | [Curso Vol I — Cap. 3](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) |
 | Processo | [P02](../../processos/m1-tor/P02-haveno-verde.md) |
 | Comandos | [P02](../../processos/m1-tor/P02-haveno-verde.md) |
+| Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
 | Manual novato | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) |
 
 **Anterior:** [passo-01.md](passo-01.md) · **Próximo:** [passo-03.md](passo-03.md)

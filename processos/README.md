@@ -1,6 +1,6 @@
 # Processos — execução (Camada C)
 
-> **Comandos e rituais** por passo do hub. Teoria: [modulos/](../modulos/README.md) · Ordem: [trilha/](../trilha/README.md) · Scripts: [automacao/](../automacao/README.md)
+> **Comandos e rituais** por passo do hub. Teoria: [modulos/](../modulos/README.md) · Ordem: [trilha/](../trilha/README.md) · Scripts: [automacao/](../automacao/README.md) · Figuras: [FIG-1…4](../trilha/referencia/diagramas-indice.md)
 
 Cada arquivo abaixo é um **cartão de processo** com comandos executáveis. Playbooks nos módulos viraram **índices** que apontam para cá; trades Haveno (opcional) permanecem no Vol II.
 

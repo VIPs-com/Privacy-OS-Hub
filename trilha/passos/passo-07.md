@@ -27,6 +27,7 @@
 | Processo | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
 | Comandos | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
 | Manual | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) |
+| Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
 | Matriz | [scripts-matriz.md](../referencia/scripts-matriz.md) |
 
 **Anterior:** [passo-06.md](passo-06.md) · **Próximo:** [passo-08.md](passo-08.md)

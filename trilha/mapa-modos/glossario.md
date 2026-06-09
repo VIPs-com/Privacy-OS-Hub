@@ -1,4 +1,6 @@
-# Glossário controlado — Privacy-OS-Hub
+# Glossário controlado — Privacy-OS-Hub (FIG-2)
+
+> **Figura canônica FIG-2** — online / offline / air-gap. Índice: [diagramas-indice.md](../referencia/diagramas-indice.md)
 
 Use **sempre** o qualificador. Evite a palavra sozinha “offline” ou “CLI”.
 

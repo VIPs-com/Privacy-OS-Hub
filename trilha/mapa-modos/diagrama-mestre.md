@@ -123,4 +123,4 @@ Detalhe: [Trilha A](../../modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-F
 
 ---
 
-*FIG-1 · trilha/mapa-modos · v2 · mai/2026*
+*FIG-1 · trilha/mapa-modos · v2 · jun/2026*

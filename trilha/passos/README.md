@@ -19,4 +19,4 @@ Cada arquivo é um **cartão de navegação** — links para Livro, [processo](.
 
 **Fonte da ordem:** [README — trilha linear](../../README.md#trilha-linear)
 
-**Perdido entre online/offline?** [mapa-modos/glossario.md](../mapa-modos/glossario.md)
+**Perdido entre online/offline?** [FIG-2 glossário](../mapa-modos/glossario.md) · **Figuras canônicas:** [diagramas-indice.md](../referencia/diagramas-indice.md)

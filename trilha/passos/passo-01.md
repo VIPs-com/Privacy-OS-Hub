@@ -26,6 +26,7 @@
 | Livro | [Curso Vol I — Cap. 2](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) |
 | Processo | [P01](../../processos/m1-tor/P01-bootstrap-tails.md) |
 | Comandos | [P01](../../processos/m1-tor/P01-bootstrap-tails.md) |
-| Glossário | [online vs offline](../mapa-modos/glossario.md) |
+| Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
+| Glossário | [FIG-2](../mapa-modos/glossario.md) |
 
 **Anterior:** — · **Próximo:** [passo-02.md](passo-02.md)

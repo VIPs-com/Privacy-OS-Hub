@@ -15,7 +15,7 @@ Figuras **canônicas** — outras páginas devem linkar aqui, não redesenhar.
 
 | Situação | Abra |
 |----------|------|
-| “Como o repo está organizado?” | **FIG-4** · [MANUAL-EXPERT](../../MANUAL-EXPERT.md#arquitetura-do-repositório) |
+| “Como o repo está organizado?” | **FIG-4** · [MANUAL-EXPERT](../../MANUAL-EXPERT.md#arquitetura-do-repositorio) |
 | “Online ou offline?” | **FIG-2** · [passo-04](../passos/passo-04.md) · [passo-09](../passos/passo-09.md) · [passo-12](../passos/passo-12.md) |
 | “Qual trilha sou eu?” | **FIG-1** · [00-PORTA-ENTRADA](../00-PORTA-ENTRADA.md) |
 | “Ordem dos 12 passos + P01–P12?” | **FIG-1** · [README trilha](../../README.md#trilha-linear) |

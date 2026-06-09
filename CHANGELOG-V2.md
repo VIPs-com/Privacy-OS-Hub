@@ -74,6 +74,13 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Diagramas v2 (FIG-1…4)
+
+- **`79f6d3e`** — FIG-4 (4 camadas + jornada 1–12 no README); FIG-1 reescrito (P01–P12, tabela rede); índice `diagramas-indice.md`; âncoras FIG-3/FIG-4
+- **Fechamento P1–P2** — cartões passo com FIG-1/2/3; MANUAL-EXPERT + índices; roadmap interno `Privacy-OS-Hub-equipe-dev/ROADMAP-FECHAMENTO-DIAGRAMAS-V2.md`
+
+---
+
 ## Pendente pós-beta
 
 - [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md`)

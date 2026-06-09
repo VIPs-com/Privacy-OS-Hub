@@ -48,7 +48,7 @@ Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B)
 **Precisa de:** um PC para gravar o Tails, um pendrive, paciência no Tor (1ª vez pode demorar), e **papel**
 para anotar a seed (nunca só no computador).
 
-Perdeu o fio? [Travou aqui](#travou-aqui) · Quer só scripts? [Trilha script-first](#trilha-script-first) ·
+Perdeu o fio? [Mapa do repo (FIG-4)](#como-o-hub-esta-organizado-v2) · [Travou aqui](#travou-aqui) · Quer só scripts? [Trilha script-first](#trilha-script-first) ·
 Princípios do hub: [MANIFESTO.md](MANIFESTO.md).
 
 ---
