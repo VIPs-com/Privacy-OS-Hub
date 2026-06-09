@@ -34,7 +34,7 @@ experiência e ensina **processo + ferramentas** na ordem certa.
 | **3** | Só avance quando o **OK se** do passo atual for verdadeiro | Evita pular backup, seed ou pré-requisito do Módulo 2 |
 | **4** | (Opcional) Valide com **log**: `haveno-setup.sh --qa-log` → leia `~/Persistent/qa-logs/*.txt` | [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) — sem expor seed |
 
-> **Estrutura do repositório (opcional):** [FIG-4 — 4 camadas](#como-o-hub-esta-organizado-v2) · índice [FIG-1…4](trilha/referencia/diagramas-indice.md)
+> **Estrutura do repositório (opcional):** [FIG-4 — 4 camadas](#como-o-hub-esta-organizado-v2) · índice [FIG-1…4](trilha/referencia/diagramas-indice.md) · [visão em diagrama dos 12 passos](trilha/00-PORTA-ENTRADA.md)
 
 **O que você sai sabendo fazer (trilha completa):** Tails no pendrive · Haveno **verde** · backup cifrado ·
 Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B). **Montar um lab em casa**
@@ -192,7 +192,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
 | **9** | Confirmar **2× cópias físicas** da seed (ritual pós passo 4) | [Curso Whonix — Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](processos/rituais/P09-ritual-seed.md) |
 | **10** | Instalar e verificar Whonix (PGP; detalhe por SO no Livro) | [Instalar por SO](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [P10](processos/m2-quente/P10-whonix-pgp.md) |
-| **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
+| **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — §5.1](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#51-por-que-separar-o-princípio) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
 | **12** | Cold-signing — **escolha UMA** trilha | [Curso Whonix — §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P12A](processos/m2-frio/P12a-feather-offline.md) · [P12B](processos/m2-frio/P12b-cli-offline.md) |
 
 > **Passo 8:** exige passos **1–4** + Feather ([Vol II Cap. 3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
@@ -256,7 +256,7 @@ Perdeu o fio? **Volte ao passo** da [trilha linear](#trilha-linear) — não abr
 | Escolher trilha A ou B | **8** | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
 | 2× cópias físicas da seed | **9** | [Curso Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](processos/rituais/P09-ritual-seed.md) |
 | Whonix / verificação PGP falhou | **10** | [Instalar §3.4 / §5.4](modulos/m2-whonix-custodia/Instalar-Whonix-passo-a-passo-por-SO.md) | [P10](processos/m2-quente/P10-whonix-pgp.md) |
-| Modelo frio↔quente / nó `.onion` | **11** | [Cap. 5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) · [§4.2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
+| Modelo frio↔quente / nó `.onion` | **11** | [§5.1](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#51-por-que-separar-o-princípio) · [§4.2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#42-alternativa--nó-remoto-público-onion) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
 | Cold-signing travou | **12** | [Curso §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) · [FIG-3](trilha/mapa-modos/diagrama-mestre.md#fig-3-usb-frio-quente) | [P12A](processos/m2-frio/P12a-feather-offline.md) · [P12B](processos/m2-frio/P12b-cli-offline.md) |
 | Mapa geral do hub | — | [FIG-4](#como-o-hub-esta-organizado-v2) · [FIG-1](trilha/mapa-modos/diagrama-mestre.md) | [diagramas-indice](trilha/referencia/diagramas-indice.md) · [trilha linear](#trilha-linear) |
 

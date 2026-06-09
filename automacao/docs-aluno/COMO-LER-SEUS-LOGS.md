@@ -60,7 +60,7 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 | `01-preflight-*` | `Tor conectado (IsTor: true)` + `RESULTADO: PASS` | `Preflight FALHOU` ou `RESULTADO: FAIL` |
 | `04-haveno-backup-*` | `Backup concluido:` + `RESULTADO: PASS` | `ERRO:` ou `RESULTADO: FAIL` |
 | `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` | qualquer `=NAO` |
-| `05-feather-*` | `Fingerprint OK: 8185E158` + `Good signature` | `Assinatura GPG FALHOU` |
+| `05-feather-*` | `Fingerprint OK: 8185E158` + `VALIDSIG 8185E158` | `Assinatura GPG FALHOU` |
 | `07-post-session-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal |
 | `09-seed-confirmacao-*` | 3 confirmações `=SIM` | qualquer `=NAO` |
 | `12-cold-signing-*` | `tails_offline_airgap=SIM` + confirmações `=SIM` | campo crítico `=NAO` |
@@ -98,7 +98,7 @@ Ver também: [README — trilha linear](../../README.md#trilha-linear).
 ## Se deu FAIL
 
 1. Leia a linha `ERRO:` ou `Preflight FALHOU` no `.txt`.  
-2. Abra o Playbook do passo ([Playbooks.md](../../modulos/m1-tails-haveno/Playbooks/Playbooks.md)).  
+2. Volte ao passo certo em [README → Travou aqui?](../../README.md#travou-aqui) (cada situação → passo + processo P0x).  
 3. Corrija e rode de novo com `--qa-log`.  
 4. **Não** edite o `.txt` à mão para fingir PASS.
 

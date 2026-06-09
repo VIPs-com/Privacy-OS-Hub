@@ -22,6 +22,8 @@ Tails **7.8.1+** · Rede turma: **Reto `1.6.0-reto`**.
 # Tails Installer -> Instalar no USB -> Boot F12/F11/Esc -> USB -> Tails
 ```
 
+> **Tecla de boot varia por fabricante** (Dell/Lenovo/Acer F12/F11 · HP Esc→F9 · ASUS Esc/F8): [Livro Cap. 2](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails).
+
 **OK se:** tela "Bem-vindo ao Tails".
 
 ---

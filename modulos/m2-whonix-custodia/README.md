@@ -16,7 +16,7 @@ Lado **online persistente** do hub: Whonix (Gateway + Workstation via Tor) + cus
 | **8** | Mapa + escolher trilha A **ou** B | [00-Comece-aqui](00-Comece-aqui-Escolha-sua-trilha.md) | [P08](../../processos/porteiro/P08-porteiro-trilha-ab.md) |
 | **9** | Confirmar 2× cópias físicas da seed | [Curso Cap. 5](Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P09](../../processos/rituais/P09-ritual-seed.md) |
 | **10** | Instalar Whonix + PGP (detalhe por SO no Livro) | [Instalar por SO](Instalar-Whonix-passo-a-passo-por-SO.md) | [P10](../../processos/m2-quente/P10-whonix-pgp.md) |
-| **11** | Teoria cold-signing | [Curso Cap. 5](Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P11](../../processos/m2-quente/P11-modelo-frio-quente.md) |
+| **11** | Teoria cold-signing | [Curso §5.1](Curso-Whonix-Online.md#51-por-que-separar-o-princípio) | [P11](../../processos/m2-quente/P11-modelo-frio-quente.md) |
 | **12** | Cold-signing — **UMA** trilha | [Curso §5.5](Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P12A](../../processos/m2-frio/P12a-feather-offline.md) · [P12B](../../processos/m2-frio/P12b-cli-offline.md) |
 
 ### Passo 12 — escolha UMA trilha (não misture)

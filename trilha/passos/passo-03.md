@@ -14,7 +14,7 @@
 ## OK se
 
 - [ ] Entendeu: **instalar ≠ tradear**
-- [ ] Leu checklist pré-trade (Playbook §3b)
+- [ ] Leu checklist pré-trade ([P03](../../processos/m1-tor/P03-pre-trade.md))
 
 ---
 

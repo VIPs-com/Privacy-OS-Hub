@@ -1230,7 +1230,7 @@ Antes de tudo, lembre: **abra o Haveno pelo menu** (ou `exec.sh`), com **Tor con
 A barra do Haveno parou no passo **1 de 4**. Isso quase nunca é "a rede caiu" — é o **Tor local** que ainda não está pronto.
 
 - Confirme o Tor do Tails: `curl -s --max-time 30 https://check.torproject.org/api/ip | grep IsTor` deve dar `true`.
-- Relógio/data corretos (Tor falha com relógio muito errado). O `haveno-auto.sh` ajusta a hora via Tor.
+- Relógio/data corretos (Tor falha com relógio muito errado). O Tails já usa **UTC** por padrão; o `haveno-auto.sh` ainda reforça o fuso UTC + ajusta a hora via Tor. No caminho **manual**, não mude o fuso para o seu local.
 - Aguarde 5–10 min na 1ª vez. Se passar de ~30 min preso no 1/4, feche e reabra.
 
 ## 7.2 Não fica verde + pop-up "No default Tor Instance configured"

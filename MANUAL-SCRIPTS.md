@@ -94,7 +94,8 @@ chmod +x ~/Persistent/*.sh
 
 ## Instalar os scripts (uma vez por persistência)
 
-1. No clone do repo no pendrive: copie `automacao/tails/*.sh` e `automacao/tails/hub-aliases/*.sh` para `~/Persistent/` (ver [automacao/tails/README.md](automacao/tails/README.md)).
+0. **Obter o repo no Tails:** Tor Browser → `https://github.com/VIPs-com/Privacy-OS-Hub` → **Code ▸ Download ZIP** → salve em `~/Persistent/` e extraia (ou copie a pasta de outro PC via pendrive). *(No Tails não há `git` pré-instalado para `git clone` sem configuração extra.)*
+1. No repo baixado: copie `automacao/tails/*.sh` e `automacao/tails/hub-aliases/*.sh` para `~/Persistent/` (ver [automacao/tails/README.md](automacao/tails/README.md)).
 2. Selecione **todos** os arquivos `*.sh` + `haveno-backup.desktop`.
 3. **Copiar** → colar em **Casa → Persistent** (`/home/amnesia/Persistent`).
 4. No Terminal:
