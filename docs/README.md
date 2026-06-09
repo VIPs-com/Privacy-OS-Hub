@@ -10,4 +10,6 @@
 | `docs/mapa-modos/` | [trilha/mapa-modos/](../trilha/mapa-modos/README.md) |
 | `docs/trilhas/` | [trilha/trilhas/](../trilha/trilhas/README.md) |
 
-Scripts: [automacao/](../automacao/README.md) · Módulos: [modulos/](../modulos/)
+Scripts: [automacao/](../automacao/README.md) · Módulos: [modulos/](../modulos/) · Comandos: [processos/](../processos/README.md)
+
+Release v2: [CHANGELOG-V2.md](../CHANGELOG-V2.md)

@@ -5,6 +5,8 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `2fa` · `pgp`
 
+> **v2.0.0-beta** — reorganização em `trilha/` · `modulos/` · `processos/` · `automacao/`. [CHANGELOG-V2.md](CHANGELOG-V2.md)
+
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e
 > fontes oficiais.
 

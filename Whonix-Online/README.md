@@ -8,5 +8,6 @@
 |-------|-------|
 | Curso · Trilhas A/B | `modulos/m2-whonix-custodia/` |
 | `Scripts/` | [automacao/whonix-host/](../automacao/whonix-host/README.md) |
+| Playbooks (comandos) | [processos/](../processos/README.md) P08–P12 |
 
 Trilha: [trilha/passos/](../trilha/passos/README.md) (passos 8–12)
