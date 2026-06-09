@@ -10,4 +10,4 @@
 | `Scripts/` | [automacao/whonix-host/](../automacao/whonix-host/README.md) |
 | Playbooks (comandos) | [processos/](../processos/README.md) P08–P12 |
 
-Trilha: [trilha/passos/](../trilha/passos/README.md) (passos 8–12)
+Trilha: [trilha/passos/](../trilha/passos/README.md) (passos 8–12) · Scripts: [Whonix-Online/Scripts/](Scripts/README.md) · Índice stubs: [stubs-v1-indice.md](../trilha/referencia/stubs-v1-indice.md)

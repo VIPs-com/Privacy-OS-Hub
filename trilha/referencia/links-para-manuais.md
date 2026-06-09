@@ -30,6 +30,7 @@ A pasta `trilha/` **não substitui** estes arquivos — apenas facilita chegar n
 | [trilhas/](../trilhas/README.md) | Agrupamento por modo |
 | [mapa-modos/](../mapa-modos/README.md) | FIG-1 · FIG-2 · FIG-3 |
 | [diagramas-indice.md](diagramas-indice.md) | Catálogo FIG-1…4 (+ FIG-4 no README) |
+| [stubs-v1-indice.md](stubs-v1-indice.md) | Redirects v1 → v2 (bookmarks antigos) |
 
 ---
 

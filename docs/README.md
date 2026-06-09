@@ -12,4 +12,4 @@
 
 Scripts: [automacao/](../automacao/README.md) · Módulos: [modulos/](../modulos/) · Comandos: [processos/](../processos/README.md)
 
-Release v2: [CHANGELOG-V2.md](../CHANGELOG-V2.md)
+Release v2: [CHANGELOG-V2.md](../CHANGELOG-V2.md) · Índice completo stubs: [stubs-v1-indice.md](../trilha/referencia/stubs-v1-indice.md)

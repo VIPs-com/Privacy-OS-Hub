@@ -99,9 +99,17 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Stubs v1 + pacote piloto (R22)
+
+- Índice público: [trilha/referencia/stubs-v1-indice.md](trilha/referencia/stubs-v1-indice.md)
+- Stub criado: `Whonix-Online/Scripts/README.md` → `automacao/whonix-host/`
+- Pacote equipe-dev: `Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md`
+
+---
+
 ## Pendente pós-beta
 
-- [ ] Piloto B+ Tails físico (`Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md`) — **equipe-dev**
+- [ ] Piloto B+ Tails físico — porta: [PACOTE-PILOTO-B+-PRONTO](Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md) · [05-CHECKLIST](Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md) — **equipe-dev**
 - [x] Revisão pedagógica amostra estática (passos 4, 8, 9, 12) — R21
 - [ ] Remoção gradual dos stubs após período de redirect
 - [ ] Tag `v2.0.0` estável
