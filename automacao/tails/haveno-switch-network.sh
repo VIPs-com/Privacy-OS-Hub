@@ -13,21 +13,21 @@ BACKUP="${PERSIST}/haveno-backup.sh"
 [ -x "$UPDATE" ] || UPDATE="${SCRIPT_DIR}/haveno-update.sh"
 [ -x "$BACKUP" ] || BACKUP="${SCRIPT_DIR}/haveno-backup.sh"
 
+b(){ echo -e "\033[1;34m$*\033[0m"; }
+y(){ echo -e "\033[1;33m$*\033[0m"; }
+r(){ echo -e "\033[0;31m$*\033[0m"; }
+die(){ r "ERRO: $*"; exit 1; }
+
 URL=""
 PGP=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --url) shift; URL="${1:-}" ;;
     --pgp) shift; PGP="${1:-}" ;;
-    *) die_msg="Opcao: --url e --pgp obrigatorios" ;;
+    *) die "Opcao desconhecida: $1 (use --url URL_DO_DEB --pgp FINGERPRINT)" ;;
   esac
   shift
 done
-
-b(){ echo -e "\033[1;34m$*\033[0m"; }
-y(){ echo -e "\033[1;33m$*\033[0m"; }
-r(){ echo -e "\033[0;31m$*\033[0m"; }
-die(){ r "ERRO: $*"; exit 1; }
 
 [ -n "$URL" ] && [ -n "$PGP" ] || die "Uso: $0 --url URL_DO_DEB --pgp FINGERPRINT_DA_MESMA_REDE"
 

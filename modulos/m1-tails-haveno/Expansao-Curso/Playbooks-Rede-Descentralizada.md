@@ -55,7 +55,9 @@ gpg --list-keys dev@featherwallet.org
 # Pasta só com UMA versão; se houver 2+ .AppImage/.asc, digite os nomes exatos.
 # Use o par .asc + .AppImage baixados (ponto antes de AppImage, nao hifen):
 gpg --verify feather-*AppImage.asc feather-*AppImage
-# OK: Good signature from FeatherWallet
+# OK SE (2 condicoes): "Good signature from FeatherWallet" E a linha
+#   "Primary key fingerprint:" == 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
+# "Good signature" sozinho NAO basta (chave de mesmo nome forja isso). User ID igual != chave igual.
 ```
 
 ```bash
@@ -86,7 +88,8 @@ gpg --verify haveno-v1.6.0-linux-x86_64-installer.deb.sig \
 ```
 
 # Outra rede: importe a chave do SITE OFICIAL da rede, não a Reto.
-# OK se: Good signature + fingerprint bate com a URL do .deb.
+# OK SE (2 condicoes): "Good signature" E "Primary key fingerprint:" == DAA24D878B8D36C90120A897CA02DAC12DAE2D0F
+# "Good signature" sozinho NAO basta — o que prova e o fingerprint bater (mesma rede da URL do .deb).
 
 ---
 

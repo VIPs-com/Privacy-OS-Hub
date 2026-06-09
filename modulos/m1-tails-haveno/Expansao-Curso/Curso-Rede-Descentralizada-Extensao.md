@@ -192,9 +192,13 @@ ls -la feather-*AppImage*
 gpg --verify feather-*AppImage.asc feather-*AppImage
 ```
 
-**OK se:** `gpg: Good signature from "FeatherWallet <dev@featherwallet.org>"`.
+**OK se (duas condições):**
+1. `gpg: Good signature from "FeatherWallet <dev@featherwallet.org>"`; **e**
+2. a linha `Primary key fingerprint:` mostra **exatamente** `8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C`.
 
-Se **BAD signature** → **não execute**. Baixe de novo só de `featherwallet.org`.
+> ⚠️ **"Good signature" sozinho não basta.** Qualquer um pode criar uma chave com o nome "FeatherWallet" — o `gpg` diria "Good signature" do mesmo jeito. O que **prova** a autenticidade é o **fingerprint** bater com o oficial acima. **User ID igual ≠ chave igual.** (Em PT-BR o `gpg` mostra `Assinatura válida` no lugar de `Good signature` — mesma coisa.)
+
+Se **BAD signature**, ou o fingerprint **não** bater → **não execute**. Apague e baixe de novo só de `featherwallet.org`.
 
 ## 3.4 Executar
 
@@ -263,7 +267,11 @@ gpg --verify haveno-v1.6.0-linux-x86_64-installer.deb.sig \
   haveno-v1.6.0-linux-x86_64-installer.deb
 ```
 
-**OK se:** `Good signature` e fingerprint da **mesma rede** da URL.
+**OK se (duas condições):**
+1. `gpg: Good signature` (ou `Assinatura válida` em PT-BR); **e**
+2. a linha `Primary key fingerprint:` mostra **exatamente** `DAA24D878B8D36C90120A897CA02DAC12DAE2D0F` (mesma rede da URL do `.deb`).
+
+> ⚠️ **"Good signature" sozinho não basta** — o que prova é o **fingerprint** do signatário bater com o da rede cujo `.deb` você baixou. **User ID igual ≠ chave igual.**
 
 ## 4.2 Erros comuns
 

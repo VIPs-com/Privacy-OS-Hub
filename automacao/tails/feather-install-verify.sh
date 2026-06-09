@@ -82,10 +82,14 @@ if [ "$fp_clean" != "$FEATHER_FPR" ]; then
 fi
 g "  Fingerprint OK: ${FEATHER_FPR}"
 
-if ! gpg --verify "$ASCFILE" "$APPIMAGE" 2>&1 | tee /tmp/feather-gpg.log | grep -q "Good signature"; then
-  die "Assinatura GPG FALHOU. Confira o par baixado."
+# Fail-closed locale-independente: amarra a assinatura ao fingerprint (status-fd + VALIDSIG).
+# Nao usar grep "Good signature" (quebra em PT-BR: "Assinatura valida") nem aceita chave de mesmo User ID.
+gpg --status-fd 1 --verify "$ASCFILE" "$APPIMAGE" > /tmp/feather-gpg.log 2>&1 || true
+if ! grep -q "^\[GNUPG:\] VALIDSIG .*${FEATHER_FPR}" /tmp/feather-gpg.log; then
+  cat /tmp/feather-gpg.log >&2
+  die "Assinatura GPG FALHOU ou nao casa o fingerprint ${FEATHER_FPR}. NAO execute o AppImage."
 fi
-g "  Good signature from FeatherWallet."
+g "  VALIDSIG ${FEATHER_FPR} (assinatura amarrada ao fingerprint)."
 
 b "[5/5] Executavel..."
 chmod +x "$APPIMAGE"

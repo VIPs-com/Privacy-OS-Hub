@@ -4,7 +4,7 @@ Guia prático de **instalação e verificação da imagem**, separado pelo **seu
 
 > 🔒 **Disciplina inegociável:** **baixe → verifique → só então importe**. Imagem **não verificada = não importe**. Mesmo rigor PGP do Módulo 1.
 >
-> 🖼️ **Prints:** as capturas de tela deste guia estão **pendentes** (ver [§10 — manifesto](#10-prints-pendentes-manifesto)). Os passos textuais já são suficientes para concluir.
+> 🖼️ **Prints:** as capturas de tela deste guia estão **pendentes** (ver [§10 — manifesto](#10-prints-do-manifesto-pi-1)). Os passos textuais já são suficientes para concluir.
 
 ---
 

@@ -46,7 +46,9 @@ gpg --list-keys dev@featherwallet.org
 # Fingerprint: 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
 
 gpg --verify feather-*AppImage.asc feather-*AppImage
-# OK: Good signature from FeatherWallet
+# OK SE (2 condicoes): "Good signature from FeatherWallet" E a linha
+#   "Primary key fingerprint:" == 8185 E158 A333 30C7 FD61 BC0D 1F76 E155 CEFB A71C
+# "Good signature" sozinho NAO basta (chave de mesmo nome forja isso). User ID igual != chave igual.
 ```
 
 ```bash

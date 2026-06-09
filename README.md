@@ -168,7 +168,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 
 | Termo | Significado |
 |-------|-------------|
-| **Online (Tor)** | Tails **com** internet só via Tor — passos **1–8** (Haveno, Feather, scripts). |
+| **Online (Tor)** | Tails **com** internet só via Tor — passos **1–9** (Haveno, Feather, scripts, ritual seed). |
 | **Offline (suporte)** | Seed em **papel/metal** — pode anotar com Tor ativo (passo **4**). Nunca foto, chat ou nuvem. |
 | **Offline (rede / air-gap)** | Tails **sem** Wi‑Fi/cabo — passo **12** (cold-signing). Teste de restauração só com seed: **opcional**. |
 | **Validação por log** | Scripts com `--qa-log` gravam `.txt` em `~/Persistent/qa-logs/` — [como ler](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md). |

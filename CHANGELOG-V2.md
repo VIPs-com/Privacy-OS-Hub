@@ -116,6 +116,16 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Manutenção R24 + backlog Purple P-1…P-5 (2026-06-09)
+
+- **Âncora:** `Instalar-Whonix-passo-a-passo-por-SO.md` §10 → `#10-prints-do-manifesto-pi-1`
+- **Scripts:** `feather-install-verify.sh` · `haveno-verify-deb.sh` — PGP `--status-fd 1` + `VALIDSIG` (locale-independente); `haveno-switch-network.sh` — `die` em opção inválida
+- **Doc manual PGP (P-3):** Vol II §3.3/§4.1 · Playbooks §2–3 · `P05-feather.md` — exigem fingerprint do signatário
+- **README:** passos online **1–9** (alinha passo 9 em Tails com Tor)
+- Gate local (gitignored): `Privacy-OS-Hub-equipe-dev/checkers/` — ver `Auditoria/Rodada-24-Correcoes-Doc-e-Gate-Links.md`
+
+---
+
 ## Pendente pós-beta
 
 - [ ] Piloto B+ Tails físico — **LIBERADO R23** · [PACOTE-PILOTO-B+-PRONTO](Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md) · [05-CHECKLIST](Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md) — **equipe campo**
