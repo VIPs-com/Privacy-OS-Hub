@@ -1,5 +1,7 @@
 # Trilha B — monero-wallet-cli · Playbook cold-signing
 
+> **v2 — processo hub:** [`processos/m2-frio/P12b-cli-offline.md`](../../../processos/m2-frio/P12b-cli-offline.md). Este arquivo mantém o **detalhe completo**.
+
 > ⚙️ **Trilha avançada** (terminal). Você está na **Trilha B** — siga **só** este arquivo do início ao fim. **Não** use o Feather (Trilha A) no meio; a carteira nasce e morre no `monero-wallet-cli`.
 >
 > 💡 Quer o caminho mais simples? Use a **Trilha A (Feather)**. Esta trilha é para quem prefere terminal **ou** quer auditar o processo.

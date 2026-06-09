@@ -4,17 +4,17 @@ trilha: m1-tor
 rede: tails_online_tor
 scripts: []
 livro: modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto
+playbook_legacy: modulos/m1-tails-haveno/Playbooks/Playbooks.md
 ---
 
 # P03 — Cautela pré-trade
 
-**Cartão:** [passo-03](../../trilha/passos/passo-03.md)
+**Cartão:** [passo-03](../../trilha/passos/passo-03.md) · **Livro:** [Cap. 4](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto)
 
-## Playbook canônico
+Passo hub **3** — leia o Cap. 4 (livro) antes de tradear. Sem comando automático de trade.
 
-[Playbooks §3b — Checklist pré-trade](../../modulos/m1-tails-haveno/Playbooks/Playbooks.md)
+```bash
+ls ~/Persistent/haveno/Install/
+```
 
-## OK se
-
-- Leu Cap. 4 do livro
-- Entende: **instalar ≠ tradear**
+**OK se:** vê `haveno.deb` (ou artefato da sua rede) · leu Cap. 4 · sabe a diferença **instalar** vs **tradear** · só usa canais oficiais da rede.

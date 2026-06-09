@@ -2,7 +2,7 @@
 
 > **Comandos e rituais** por passo do hub. Teoria: [modulos/](../modulos/README.md) · Ordem: [trilha/](../trilha/README.md) · Scripts: [automacao/](../automacao/README.md)
 
-Cada arquivo abaixo é um **cartão de processo** — aponta para o playbook canônico (conteúdo completo ainda nos módulos; fatiamento incremental).
+Cada arquivo abaixo é um **cartão de processo** com comandos executáveis. Playbooks nos módulos viraram **índices** que apontam para cá; trades Haveno (opcional) permanecem no Vol II.
 
 ---
 

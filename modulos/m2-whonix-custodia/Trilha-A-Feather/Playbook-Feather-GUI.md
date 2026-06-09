@@ -1,5 +1,7 @@
 # Trilha A — Feather (GUI) · Playbook cold-signing
 
+> **v2 — processo hub:** [`processos/m2-frio/P12a-feather-offline.md`](../../../processos/m2-frio/P12a-feather-offline.md). Este arquivo mantém o **detalhe completo** (telas, regras, fontes).
+
 > ✅ **Trilha recomendada** (interface gráfica). Você está na **Trilha A** — siga **só** este arquivo do início ao fim. **Não** use comandos da Trilha B (`monero-wallet-cli`) no meio; a carteira nasce e morre no Feather.
 >
 > ⬅️ Veio sem passar pelo mapa? Leia antes [`../00-Comece-aqui-Escolha-sua-trilha.md`](../00-Comece-aqui-Escolha-sua-trilha.md) (pré-requisitos + regras de ouro). Teoria/“porquê”: [`../Curso-Whonix-Online.md`](../Curso-Whonix-Online.md) (Cap. 5).

@@ -1,5 +1,7 @@
 # Playbooks — Rede Descentralizada (só comandos)
 
+> **Feather (obrigatório M2):** comandos em [`processos/m1-tor/P05-feather.md`](../../../processos/m1-tor/P05-feather.md). Este arquivo mantém **trades opcionais** (§4–6) e PGP manual (§3).
+
 **Volume II.** Direto ao ponto. Telas, checklists e teoria: [`Curso-Rede-Descentralizada-Extensao.md`](Curso-Rede-Descentralizada-Extensao.md).
 
 **Pré-requisito:** Volume I concluído — Haveno **verde** ([`../Playbooks/Playbooks.md`](../Playbooks/Playbooks.md) passos 1–7, **mais as seções 9–10 Backup/Atualizar**). **Faça backup cifrado (Playbooks §9) antes do 1º depósito de XMR.** Tails **7.8.1+** (atualização emergencial jun/2026). Rede turma: **Reto `1.6.0-reto`**.
