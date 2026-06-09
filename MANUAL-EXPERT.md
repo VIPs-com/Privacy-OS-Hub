@@ -17,24 +17,19 @@ Privacy-OS-Hub/
 ├── MANUAL-SCRIPTS.md         # Automação (tom novato)
 ├── MANUAL-DO-CURSO.md        # Índice capítulo a capítulo
 ├── MANIFESTO.md
-├── docs/                     # Navegação L0/L1 (mapas, cartões passo — não substitui módulos)
+├── trilha/                     # A — ordem passos 1–12 · mapas · cartões
 │   ├── 00-PORTA-ENTRADA.md
 │   ├── mapa-modos/ · trilhas/ · passos/ · referencia/
 │
-├── Tails-OS-Expert/          # MÓDULO 1 — passos hub 1–7
-│   ├── Curso-Tails-OS-Expert.md      (Vol I — livro)
-│   ├── Playbooks/Playbooks.md        (Vol I — comandos)
-│   ├── Expansao-Curso/               (Vol II — rede + Feather + trades)
-│   ├── Scripts/                      (haveno-*, feather-*, qa-*, COMO-LER-SEUS-LOGS.md)
-│   │   └── HomeLab/                  (Debian/Ubuntu — NÃO Tails)
-│   └── Folheto-Regras-e-Golpes.md
+├── modulos/                    # B — livros · playbooks · assets
+│   ├── m1-tails-haveno/        (passos 1–7)
+│   └── m2-whonix-custodia/     (passos 8–12)
 │
-└── Whonix-Online/            # MÓDULO 2 — passos hub 8–12
-    ├── Curso-Whonix-Online.md
-    ├── Playbooks/Playbooks.md
-    ├── Scripts/whonix-verify-image.sh   (host Linux)
-    ├── Trilha-A-Feather/ · Trilha-B-CLI/
-    └── Instalar-Whonix-passo-a-passo-por-SO.md
+└── automacao/                  # D — todos os scripts
+    ├── tails/                  (Tails + qa)
+    ├── whonix-host/
+    ├── homelab/                (Debian — NÃO Tails)
+    └── docs-aluno/
 ```
 
 **Fora deste repo (opcional):** [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) · [OpenPGP-GPG do Zero ao Expert](https://github.com/VIPs-com/OpenPGP-GPG-do-Zero-ao-Expert)
@@ -74,9 +69,9 @@ Ordem fixa. Detalhe completo: [README — tabela](README.md#trilha-linear).
 | **11** | Teoria frio↔quente | M2 |
 | **12** | Cold-signing (Feather GUI **ou** CLI) | M2 |
 
-**Pré-req passo 8:** M1 passos **1–4** + Feather ([Vol II Cap. 3](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
+**Pré-req passo 8:** M1 passos **1–4** + Feather ([Vol II Cap. 3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
 
-**Online × offline:** [README — glossário](README.md#trilha-linear) · **Logs QA:** `--qa-log` → `~/Persistent/qa-logs/` · [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md)
+**Online × offline:** [README — glossário](README.md#trilha-linear) · **Logs QA:** `--qa-log` → `~/Persistent/qa-logs/` · [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
 **Contingência:** [README#travou-aqui](README.md#travou-aqui)
 
@@ -88,17 +83,17 @@ Não misturar com a trilha principal. [README — opcionais](README.md#trilhas-o
 
 | Quer… | Abrir |
 |-------|--------|
-| Nó Monero + `.onion` + P2Pool / xmrig | [Scripts/HomeLab/](Tails-OS-Expert/Scripts/HomeLab/README.md) |
-| Multisig 2-de-3 manual (educacional) | [Multisig CLI](Tails-OS-Expert/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) |
-| Hardware wallet | [Curso M2 §5.6](Whonix-Online/Curso-Whonix-Online.md#56-hardware-wallet-opcional) |
+| Nó Monero + `.onion` + P2Pool / xmrig | [automacao/homelab/](automacao/homelab/README.md) |
+| Multisig 2-de-3 manual (educacional) | [Multisig CLI](modulos/m1-tails-haveno/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) |
+| Hardware wallet | [Curso M2 §5.6](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#56-hardware-wallet-opcional) |
 | Baseline cofre / PGP / backup 3-2-1 | [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
 
 ### Cold-signing (passo 12) — escolha UMA
 
 | Trilha | Playbook |
 |--------|----------|
-| **A — Feather GUI** (padrão hub) | [Playbook-Feather-GUI.md](Whonix-Online/Trilha-A-Feather/Playbook-Feather-GUI.md) |
-| **B — monero-wallet-cli** | [Playbook-monero-wallet-cli.md](Whonix-Online/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| **A — Feather GUI** (padrão hub) | [Playbook-Feather-GUI.md](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) |
+| **B — monero-wallet-cli** | [Playbook-monero-wallet-cli.md](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
 
 ---
 
@@ -121,7 +116,7 @@ Orquestrador novato: `haveno-setup.sh`. Expert pode chamar **direto**:
 | `qa-confirm-passo12.sh` | Pós cold-signing offline |
 | `qa-export-logs.sh` | Copia `qa-logs/` → pendrive USB |
 
-Matriz completa: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · Novato detalhado: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) · **Ler logs:** [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md)
+Matriz completa: [Scripts/README.md](automacao/tails/README.md) · Novato detalhado: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) · **Ler logs:** [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
 **Dados persistentes:** `~/Persistent/haveno/Data/` · Feather: `~/Persistent/feather/wallets/` · **Seed ≠ backup automático.**
 
@@ -138,7 +133,7 @@ Matriz completa: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · Novat
 | Whonix PGP | `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` |
 | Tor SOCKS (Tails) | **9050** |
 | Monero proxy Haveno | **9062** (não trocar por 9050) |
-| Links Vol I | [Cap. 8](Tails-OS-Expert/Curso-Tails-OS-Expert.md#8-todos-os-links-referência-única) |
+| Links Vol I | [Cap. 8](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#8-todos-os-links-referência-única) |
 
 ---
 
@@ -157,10 +152,10 @@ Matriz completa: [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) · Novat
 | Objetivo | Vá direto a |
 |----------|-------------|
 | Ordem oficial | [Trilha linear](README.md#trilha-linear) |
-| Só comandos Haveno M1 | [Playbooks M1](Tails-OS-Expert/Playbooks/Playbooks.md) |
-| Rede / Feather / trade | [Vol II](Tails-OS-Expert/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · [Playbooks Vol II](Tails-OS-Expert/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| Whonix + cold-signing | [Curso M2](Whonix-Online/Curso-Whonix-Online.md) · [00-Comece-aqui](Whonix-Online/00-Comece-aqui-Escolha-sua-trilha.md) |
-| FAQ erros Haveno | [Vol I Cap. 7](Tails-OS-Expert/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) |
+| Só comandos Haveno M1 | [Playbooks M1](modulos/m1-tails-haveno/Playbooks/Playbooks.md) |
+| Rede / Feather / trade | [Vol II](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · [Playbooks Vol II](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
+| Whonix + cold-signing | [Curso M2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md) · [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) |
+| FAQ erros Haveno | [Vol I Cap. 7](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) |
 | Índice todos capítulos | [MANUAL-DO-CURSO](MANUAL-DO-CURSO.md) |
 
 ---

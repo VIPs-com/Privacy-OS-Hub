@@ -6,7 +6,7 @@
 >
 > **Primeira vez no hub?** Leia antes [README — Primeira visita?](README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
 
-**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](Tails-OS-Expert/Scripts/README.md) · [Scripts Whonix](Whonix-Online/Scripts/README.md) · [Matriz passo↔script (docs)](docs/referencia/scripts-matriz.md)
+**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [Scripts Tails](automacao/tails/README.md) · [Scripts Whonix](automacao/whonix-host/README.md) · [Matriz passo↔script (docs)](trilha/referencia/scripts-matriz.md)
 
 > **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os arquivos da pasta `Scripts/`.
 
@@ -39,7 +39,7 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 
 **Checagem automática:** `~/Persistent/tails-preflight.sh` — só **lê** o ambiente; não altera nada.
 
-**Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md).
+**Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
 
 ---
 
@@ -92,7 +92,7 @@ chmod +x ~/Persistent/*.sh
 
 ## Instalar os scripts (uma vez por persistência)
 
-1. Abra **Arquivos** → pasta `Tails-OS-Expert/Scripts`.
+1. Abra **Arquivos** → pasta `modulos/m1-tails-haveno/Scripts`.
 2. Selecione **todos** os arquivos `*.sh` + `haveno-backup.desktop`.
 3. **Copiar** → colar em **Casa → Persistent** (`/home/amnesia/Persistent`).
 4. No Terminal:
@@ -299,7 +299,7 @@ chmod +x whonix-verify-image.sh
 | **Rodar 2×** | **Sim** — só verifica de novo; não altera a imagem |
 | **OK se** | `Good signature` (ou `Assinatura válida` em PT-BR) + fingerprint `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` com seus olhos |
 
-Detalhe: [Whonix-Online/Scripts/README.md](Whonix-Online/Scripts/README.md)
+Detalhe: [automacao/whonix-host/README.md](automacao/whonix-host/README.md)
 
 ---
 
@@ -355,18 +355,18 @@ Ordem: preflight → boot Haveno → verificar Feather.
 
 ### Expert: posso ignorar este manual?
 
-Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [Scripts/README.md](Tails-OS-Expert/Scripts/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
+Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [Scripts/README.md](automacao/tails/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
 
 ---
 
 ## Apêndice A — Catálogo de cada arquivo (iniciante)
 
-Use esta seção quando abrir `Tails-OS-Expert/Scripts/` (ou `~/Persistent/` após copiar) e não souber **para que serve** cada arquivo.
+Use esta seção quando abrir `automacao/tails/` (ou `~/Persistent/` após copiar) e não souber **para que serve** cada arquivo.
 
 ### Mapa da pasta (mental — tudo na mesma pasta no Tails)
 
 ```text
-Tails-OS-Expert/Scripts/          (copie tudo p/ ~/Persistent/ — mesma lista)
+automacao/tails/          (copie tudo p/ ~/Persistent/ — mesma lista)
 │
 ├── haveno-setup.sh          ★ COMECE AQUI (novato)
 │
@@ -398,7 +398,7 @@ Tails-OS-Expert/Scripts/          (copie tudo p/ ~/Persistent/ — mesma lista)
 │
 └── HomeLab/                 ✗ Outro PC (Debian/Ubuntu) — não use no Tails
 
-Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
+automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 └── whonix-verify-image.sh
 ```
 
@@ -506,7 +506,7 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 | **Passo hub** | **4**, **7** |
 | **Novato roda sozinho?** | Opcional — clique no menu em vez do terminal |
 | **O que faz** | Atalho que chama `haveno-backup.sh` (igual ao script) |
-| **Comando** | Instalar atalho: ver [Scripts/README](Tails-OS-Expert/Scripts/README.md) |
+| **Comando** | Instalar atalho: ver [Scripts/README](automacao/tails/README.md) |
 | **Rodar 2×** | Igual ao `haveno-backup.sh` |
 | **Disco** | Igual ao backup |
 
@@ -600,11 +600,11 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 | **Passo hub** | Trilha opcional (nó, P2Pool, mineração) |
 | **Novato no Tails?** | **Ignore** na 1ª passagem — **não roda no Tails** |
 | **O que contém** | `00-verificar-requisitos.sh` … `04-setup-xmrig.sh` |
-| **Onde ler** | [Scripts/HomeLab/README.md](Tails-OS-Expert/Scripts/HomeLab/README.md) |
+| **Onde ler** | [automacao/homelab/README.md](automacao/homelab/README.md) |
 
 ---
 
-### Whonix — host Linux (não está em `Tails-OS-Expert/Scripts/`)
+### Whonix — host Linux (não está em `automacao/tails/`)
 
 #### `whonix-verify-image.sh`
 
@@ -612,7 +612,7 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 |-------|---------|
 | **Grupo** | Whonix (PC host) |
 | **Passo hub** | **10** |
-| **Onde fica** | `Whonix-Online/Scripts/` — **não** copie para `~/Persistent/` do Tails |
+| **Onde fica** | `automacao/whonix-host/` — **não** copie para `~/Persistent/` do Tails |
 | **Novato roda sozinho?** | Sim, no Linux onde vai instalar VirtualBox/KVM |
 | **O que faz** | PGP da imagem `.ova` ou `.libvirt.xz` |
 | **O que NÃO faz** | Não importa VM; não configura Tor na Gateway |
@@ -655,7 +655,7 @@ Whonix-Online/Scripts/       (outro módulo — host Linux, não o pendrive)
 | **Uso** | Copia `~/Persistent/qa-logs/*.txt` para pendrive `--usb` |
 | **Quando** | Entregar evidências à equipe ou outro PC |
 
-Guia completo: [COMO-LER-SEUS-LOGS.md](Tails-OS-Expert/Scripts/COMO-LER-SEUS-LOGS.md)
+Guia completo: [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
 ---
 
