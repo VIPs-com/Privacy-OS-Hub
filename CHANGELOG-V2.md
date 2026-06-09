@@ -95,7 +95,7 @@ chmod +x ~/Persistent/*.sh
 
 - Passos **4, 8, 9, 12** — veredito **APROVADO** (gate sem Tails)
 - Correção principal: **P08** pré-requisitos em 2 fases (passo 8 ≠ passo 12)
-- Relatório: `Privacy-OS-Hub-equipe-dev/validacao/07-REVISAO-PEDAGOGICA-ESTATICA-R21.md`
+- Relatório: gate pedagógico estático (camada local da equipe-dev)
 
 ---
 
@@ -111,7 +111,7 @@ chmod +x ~/Persistent/*.sh
 
 - **HEAD:** `2ba833b` · doc v2-beta **fechada** (gates estáticos R20→R23)
 - **Veredito:** LIBERADO PARA CAMPO — piloto B+ Tails físico
-- Relatório local: `Auditoria/Rodada-23-Liberacao-Campo-Tails.md` · espelho `validacao/09-LIBERACAO-CAMPO-R23.md`
+- Relatório local: `Auditoria/Rodada-23-Liberacao-Campo-Tails.md`
 - Porta execução: `validacao/PACOTE-PILOTO-B+-PRONTO.md` · `validacao/HANDOFF-EQUIPE-DEV.md`
 
 ---
@@ -136,7 +136,7 @@ chmod +x ~/Persistent/*.sh
 
 ## Pendente pós-beta
 
-- [ ] Piloto B+ Tails físico — **LIBERADO R23** · [PACOTE-PILOTO-B+-PRONTO](Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md) · [05-CHECKLIST](Privacy-OS-Hub-equipe-dev/validacao/05-CHECKLIST-PILOTO-B+-V2.md) — **equipe campo**
+- [ ] Piloto B+ Tails físico — **LIBERADO R23** · pacote/checklist do piloto na camada local da equipe-dev — **equipe campo**
 - [x] Revisão pedagógica amostra estática (passos 4, 8, 9, 12) — R21
 - [ ] Remoção gradual dos stubs após período de redirect
 - [ ] Tag `v2.0.0` estável
