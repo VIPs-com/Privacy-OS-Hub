@@ -1300,13 +1300,24 @@ Sintoma no [7/9]: `dpkg: problemas de dependência` — faltam pacotes como `lib
 
 **Persistência entre reboots:** pacotes `apt` somem ao reiniciar o Tails, **a menos** que você ative **Software adicional** no armazenamento persistente. Isso é normal — o script reinstala as libs automaticamente em cada sessão (rápido na 2ª vez). Seus dados em `~/Persistent/haveno/` (incluindo `Install/` e `Data/`) **sempre** persistem.
 
-**Recuperação manual** (se rodar script antigo sem R28):
+**Recuperação (sem recomecar download)** — scripts atualizados em `~/Persistent/`:
+
+```bash
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
+./sync-hub-scripts.sh
+~/Persistent/haveno-auto.sh --install-only
+```
+
+O modo `--install-only` instala deps `apt`, limpa estado `config-files` do dpkg, cria `haveno.deb` se necessário e roda `install.sh`.
+
+**Recuperação manual** (script antigo):
 
 ```bash
 sudo apt-get update
 sudo apt-get install -y libavcodec60 libavformat60 libavutil58 libicu74 \
   libjpeg-turbo8 libjxl0.7 libmbedcrypto7t64 librav1e0 libssh-gcrypt-4 \
   libsvtav1enc1d1 libswresample4 libx265-199
+sudo dpkg -i ~/Persistent/haveno/Install/haveno.deb
 sudo ~/Persistent/haveno/App/utils/install.sh
 ```
 

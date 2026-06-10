@@ -22,6 +22,7 @@ SKIP_BACKUP=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --boot) MODE="boot" ;;
+    --install-only) MODE="install-only" ;;
     --feather) DO_FEATHER=1 ;;
     --skip-backup) SKIP_BACKUP=1 ;;
     --qa-log) export HAVENO_QA_LOG=1 ;;
@@ -71,6 +72,8 @@ run "$PREFLIGHT" "${QA_ARGS[@]}"
 
 if [ "$MODE" = "boot" ]; then
   run "$BOOT" --watch 8
+elif [ "$MODE" = "install-only" ]; then
+  run "$AUTO" --install-only
 else
   run "$AUTO"
   if [ "$SKIP_BACKUP" = "0" ]; then

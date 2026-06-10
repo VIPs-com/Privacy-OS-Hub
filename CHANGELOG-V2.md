@@ -134,6 +134,14 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Recuperação `--install-only` + sync R28b (2026-06-10)
+
+- **`haveno-auto.sh --install-only`:** continua do [7/9] sem re-download (deps + purge config-files + install)
+- **`sync-hub-scripts.sh`:** copia `*.sh` do repo para `~/Persistent/`
+- **`haveno-common.sh`:** `haveno_fix_dpkg_state`, `haveno_ensure_install_deb_link`, detecta qualquer `*.deb` em `Install/`
+
+---
+
 ## Deps `.deb` + diário piloto R28 (2026-06-10)
 
 - **`haveno-common.sh`:** `haveno_ensure_deb_deps()` + `haveno_run_install()` — apt das 12 libs antes de `install.sh` (Tails 7.8+)

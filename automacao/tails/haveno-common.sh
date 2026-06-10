@@ -102,6 +102,56 @@ HAVENO_DEB_DEPS=(
   libssh-gcrypt-4 libsvtav1enc1d1 libswresample4 libx265-199
 )
 
+# Retorna caminho do .deb em Install/ (ou vazio).
+haveno_find_install_deb() {
+  local install_dir="${HAVENO_DIR}/Install"
+  if [ -f "${install_dir}/haveno.deb" ]; then
+    echo "${install_dir}/haveno.deb"
+    return 0
+  fi
+  find "$install_dir" -maxdepth 1 -name '*.deb' -type f 2>/dev/null | head -1
+}
+
+haveno_has_install_deb() {
+  [ -n "$(haveno_find_install_deb)" ]
+}
+
+# install.sh upstream espera Install/haveno.deb — cria symlink se so existir nome longo.
+haveno_ensure_install_deb_link() {
+  local install_dir="${HAVENO_DIR}/Install" deb real
+  mkdir -p "$install_dir" || die "Nao criei ${install_dir}/"
+  if [ -L "${install_dir}/haveno.deb" ] || [ -f "${install_dir}/haveno.deb" ]; then
+    g "  Install/haveno.deb OK."
+    return 0
+  fi
+  deb="$(find "$install_dir" -maxdepth 1 -name '*.deb' -type f 2>/dev/null | head -1)"
+  [ -n "$deb" ] || die "Nenhum .deb em ${install_dir}/ — rode [6/9] ou copie o pacote verificado."
+  real="$(basename "$deb")"
+  ln -sf "$real" "${install_dir}/haveno.deb"
+  g "  Install/haveno.deb -> ${real}"
+}
+
+# Recupera estado quebrado apos 'apt-get install -f' (config-files) ou dpkg sem deps.
+haveno_fix_dpkg_state() {
+  if ! dpkg-query -W -f='${Status}' haveno >/dev/null 2>&1; then
+    return 0
+  fi
+  local st
+  st="$(dpkg-query -W -f='${Status}' haveno 2>/dev/null || echo "")"
+  case "$st" in
+    *"config-files"*)
+      y "  haveno em estado config-files (comum apos apt install -f) — limpando..."
+      sudo dpkg --purge haveno 2>/dev/null || true
+      ;;
+    *"half-configured"*|*"unpacked"*)
+      y "  haveno incompleto (${st%% *}...) — removendo para reinstalar..."
+      sudo dpkg --remove --force-remove-reinstreq haveno 2>/dev/null \
+        || sudo dpkg --purge haveno 2>/dev/null || true
+      ;;
+  esac
+  g "  Estado dpkg pronto para install.sh."
+}
+
 haveno_ensure_deb_deps() {
   if ! command -v apt-get >/dev/null 2>&1; then
     y "  apt-get ausente — ambiente nao-Debian; pulando deps."
@@ -109,9 +159,11 @@ haveno_ensure_deb_deps() {
   fi
   b "  Dependencias do .deb (apt)..."
   y "  O install.sh oficial so roda dpkg -i; no Tails as libs nao vem pre-instaladas."
-  y "  Sem 'Software adicional' persistido, o apt repete a cada boot — automatico e rapido se ja instaladas."
-  y "  NAO rode 'apt-get install -f' ANTES disto com haveno desconfigurado — pode REMOVER o pacote."
-  sudo apt-get update -qq 2>/dev/null || y "  apt-get update falhou (rede?) — tentando install mesmo assim."
+  y "  apt-get update pelo Tor pode levar 3-6 min — aguarde."
+  y "  NAO rode 'apt-get install -f' sozinho com haveno desconfigurado — remove o pacote."
+  if ! sudo apt-get update; then
+    y "  apt-get update falhou (rede?) — tentando install das libs mesmo assim."
+  fi
   if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${HAVENO_DEB_DEPS[@]}"; then
     r "  Falha ao instalar dependencias do .deb."
     y "  Veja Cap. 7 FAQ 7.11 (Curso-Tails-OS-Expert.md) ou ative Software adicional na persistencia."
@@ -124,10 +176,17 @@ haveno_ensure_deb_deps() {
 haveno_run_install() {
   local utils="${UTILS_DIR}"
   [ -f "${utils}/install.sh" ] || die "install.sh nao encontrado. Rode haveno-auto.sh primeiro."
+  haveno_ensure_install_deb_link
+  haveno_fix_dpkg_state
   haveno_ensure_deb_deps || die "Dependencias do .deb nao instaladas."
   b "Rodando install.sh (pkexec — pode pedir senha admin)..."
   chmod +x "${utils}/install.sh" 2>/dev/null || true
-  sudo "${utils}/install.sh" || die "install.sh falhou."
+  if ! sudo "${utils}/install.sh"; then
+    r "  install.sh falhou."
+    y "  Nao rode install.sh direto sem passar por haveno-auto.sh — faltam deps apt."
+    y "  Recuperacao: ~/Persistent/haveno-auto.sh --install-only"
+    die "install.sh falhou."
+  fi
 }
 
 haveno_check_installed() {

@@ -99,7 +99,10 @@ chmod +x ~/Persistent/*.sh
 ~/Persistent/haveno-auto.sh --boot-only   # delega a haveno-boot.sh
 ~/Persistent/haveno-auto.sh --update
 ~/Persistent/haveno-auto.sh --no-clock
+~/Persistent/haveno-auto.sh --install-only   # recuperacao: deps + install (sem download)
 ```
+
+**Atualizar scripts do ZIP para `~/Persistent/`:** `./sync-hub-scripts.sh` (nesta pasta).
 
 Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma.**
 

@@ -26,6 +26,7 @@
 #        --no-clock   nao tenta ajustar o relogio pelo Tor
 #        --watch N    monitora o log por N minutos (padrao 8)
 #        --update     forca reinstalar/atualizar o .deb (mesmo se ja instalado)
+#        --install-only  so [7-9]: deps apt + install.sh (sem download; recuperacao)
 #        --boot-only  delega a haveno-boot.sh (sessao; sem download)
 #
 # ATUALIZAR PARA VERSAO NOVA:
@@ -54,11 +55,15 @@ DO_CLOCK=1
 DO_UPDATE=0
 WATCH_MIN=8
 BOOT_ONLY=0
+INSTALL_ONLY=0
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"
 while [ $# -gt 0 ]; do
   case "$1" in
     --no-clock) DO_CLOCK=0 ;;
     --update)   DO_UPDATE=1 ;;
+    --install-only) INSTALL_ONLY=1; DO_CLOCK=0 ;;
     --boot-only) BOOT_ONLY=1 ;;
     --watch)    shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;  # --watch N (sem N: mantem padrao)
     *)          [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
@@ -68,6 +73,44 @@ done
 
 if [ "$BOOT_ONLY" = "1" ]; then
   exec "${SCRIPT_DIR}/haveno-boot.sh" ${WATCH_MIN:+$WATCH_MIN}
+fi
+
+# ----------------------------- Modo recuperacao (--install-only) -----------
+if [ "$INSTALL_ONLY" = "1" ]; then
+  echo
+  b "==============================================================="
+  b "  haveno-auto.sh --install-only (deps + install, sem download)"
+  b "==============================================================="
+  echo
+  b "[recuperacao] Conferindo minimo..."
+  sudo -v 2>/dev/null || die "Senha de administrador nao ativa."
+  [ -d "$PERSIST" ] || die "Persistencia nao encontrada ($PERSIST)."
+  [ -f "${UTILS_DIR}/install.sh" ] || die "install.sh ausente em ${UTILS_DIR}/."
+  [ -f "${UTILS_DIR}/exec.sh" ] || die "exec.sh ausente."
+  haveno_has_install_deb || die "Nenhum .deb em ${HAVENO_DIR}/Install/ — nao precisa recomecar do zero se ja copiou o .deb."
+  g "  .deb na persistencia OK."
+  b "[7/9] Dependencias apt + install.sh + exec.sh..."
+  chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
+  haveno_run_install || die "install.sh falhou."
+  nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
+  HAVENO_BG=$!
+  sleep 8
+  g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
+  b "[8/9] Verificando onion-grater..."
+  sleep 4
+  if haveno_check_filter | grep -q "loaded filter: haveno"; then
+    g "  loaded filter: haveno (OK)."
+  else
+    haveno_fix_onion_grater || true
+  fi
+  b "[9/9] Monitorando por ${WATCH_MIN} min..."
+  y "  CONFIRME o indicador VERDE na janela do Haveno."
+  deadline=$(( $(date +%s) + WATCH_MIN*60 ))
+  while [ "$(date +%s)" -lt "$deadline" ]; do
+    sleep 15
+  done
+  g "  Concluido --install-only. Dados: ${HAVENO_DIR}/Data/"
+  exit 0
 fi
 
 # ----------------------------- Cores -----------------------------------------
@@ -227,7 +270,7 @@ fi
 INSTALL_SHA="$(sha256sum haveno-install.sh 2>/dev/null | awk '{print $1}')"
 g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de procedencia)"
 
-if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || [ ! -f "${HAVENO_DIR}/Install/haveno.deb" ]; then
+if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; then
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."
   y "  Download do .deb pelo Tor: pode levar 30-90 min. A linha 'Downloading Haveno from URL...' nao atualiza — normal."
   y "  Progresso abaixo (atualiza a cada 30s); ou em outro terminal: watch -n 30 'ls -lh ${HAVENO_DIR}/Install/*.deb 2>/dev/null'"
@@ -258,8 +301,6 @@ fi
 [ -f "${UTILS_DIR}/haveno.yml" ] || die "haveno.yml nao encontrado em ${UTILS_DIR}."
 
 # ----------------------------- 7. install.sh + exec.sh (Playbook §7) ---------
-# shellcheck source=haveno-common.sh
-source "${SCRIPT_DIR}/haveno-common.sh"
 b "[7/9] Dependencias apt + install.sh + exec.sh (pode pedir senha admin)..."
 chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
 haveno_run_install || die "install.sh falhou."
