@@ -77,6 +77,57 @@ y(){ echo -e "\033[1;33m$*\033[0m"; }       # amarelo
 r(){ echo -e "\033[0;31m$*\033[0m"; }       # vermelho
 die(){ r "ERRO: $*"; echo "Abortando. Veja o Capitulo 7 (FAQ) do livro Curso-Tails-OS-Expert.md"; exit 1; }
 
+_fetch_http_date() {
+  local url="$1"
+  curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 30 "$url" 2>/dev/null \
+    | grep -i '^date:' | head -1 | sed -E 's/^[Dd]ate:[[:space:]]*//' | tr -d '\r'
+}
+
+_fmt_bytes() {
+  local b="${1:-0}"
+  if command -v numfmt >/dev/null 2>&1; then
+    numfmt --to=iec-i --suffix=B "$b" 2>/dev/null || echo "${b} B"
+  elif [ "$b" -ge 1048576 ] 2>/dev/null; then
+    awk -v n="$b" 'BEGIN{printf "%.1f MiB", n/1048576}'
+  elif [ "$b" -ge 1024 ] 2>/dev/null; then
+    awk -v n="$b" 'BEGIN{printf "%.1f KiB", n/1024}'
+  else
+    echo "${b} B"
+  fi
+}
+
+_haveno_deb_bytes_now() {
+  local d size=0 f s
+  for d in "${HAVENO_DIR}/Install" "${HAVENO_DIR}"; do
+    [ -d "$d" ] || continue
+    while IFS= read -r -d '' f; do
+      s=$(stat -c%s "$f" 2>/dev/null || echo 0)
+      [ "$s" -gt "$size" ] && size=$s
+    done < <(find "$d" -maxdepth 2 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -print0 2>/dev/null)
+  done
+  echo "$size"
+}
+
+_monitor_haveno_deb_download() {
+  local target_pid="$1" expected="${2:-0}" prev=0
+  mkdir -p "${HAVENO_DIR}/Install" 2>/dev/null || true
+  while kill -0 "$target_pid" 2>/dev/null; do
+    local now human pct=""
+    now=$(_haveno_deb_bytes_now)
+    human=$(_fmt_bytes "$now")
+    if [ "$expected" -gt 0 ] 2>/dev/null && [ "$now" -gt 0 ]; then
+      pct="$(awk -v n="$now" -v e="$expected" 'BEGIN{printf " (~%.0f%%)", (n/e)*100}')"
+    fi
+    if [ "$now" -gt 0 ]; then
+      printf "  [download] %s%s — aguardando haveno-install.sh...\n" "$human" "$pct"
+    elif [ "$prev" -eq 0 ]; then
+      y "  [download] iniciando (upstream ainda nao criou o .deb em ${HAVENO_DIR}/Install/)..."
+    fi
+    prev=$now
+    sleep 30
+  done
+}
+
 echo
 b "==============================================================="
 b "  haveno-auto.sh — Haveno no Tails (Reto 1.6.0-reto)  "
@@ -135,17 +186,28 @@ fi
 # ----------------------------- 5. Relogio via Tor ----------------------------
 if [ "$DO_CLOCK" = "1" ]; then
   b "[5/9] Ajustando relogio pela hora obtida ATRAVES do Tor (sem vazar local)..."
-  y "  (Opcional/fallback: o Tails ja sincroniza o tempo via Tor. Use --no-clock para pular.)"
-  HTTPDATE="$(curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 30 https://check.torproject.org/ 2>/dev/null \
-             | grep -i '^date:' | sed -E 's/^[Dd]ate:[[:space:]]*//' | tr -d '\r')"
+  y "  (Opcional/fallback: o Tails sincroniza o tempo via Tor no boot — nao e NTP classico. Use --no-clock para pular.)"
+  HTTPDATE=""
+  for clock_url in \
+      "https://check.torproject.org/" \
+      "https://www.torproject.org/" \
+      "https://www.debian.org/"; do
+    HTTPDATE="$(_fetch_http_date "$clock_url")"
+    [ -n "${HTTPDATE:-}" ] && break
+    sleep 3
+  done
   if [ -n "${HTTPDATE:-}" ]; then
     if sudo date -s "$HTTPDATE" >/dev/null 2>&1; then
       g "  Relogio ajustado (UTC): $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
     else
-      y "  Nao consegui aplicar a hora; o Tor ja corrige sozinho. Seguindo."
+      y "  Nao consegui aplicar a hora; o Tails ja corrige sozinho. Seguindo."
+      y "  Hora atual: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
     fi
   else
-    y "  Sem cabecalho Date pelo Tor; o relogio do Tails ja deve estar OK. Seguindo."
+    y "  Sem cabecalho Date pelo Tor apos 3 tentativas — nao ajustei o relogio."
+    y "  No Tails, 'timedatectl' costuma mostrar synchronized: no — isso e normal (sync via Tor, nao NTP)."
+    y "  Hora atual do sistema: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+    y "  Confira com um relogio UTC confiavel; se TLS/PGP falharem, reinicie o Tails com Tor."
   fi
 else
   y "[5/9] Pulando ajuste de relogio (--no-clock)."
@@ -167,8 +229,23 @@ g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de proced
 
 if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || [ ! -f "${HAVENO_DIR}/Install/haveno.deb" ]; then
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."
+  y "  Download do .deb pelo Tor: pode levar 30-90 min. A linha 'Downloading Haveno from URL...' nao atualiza — normal."
+  y "  Progresso abaixo (atualiza a cada 30s); ou em outro terminal: watch -n 30 'ls -lh ${HAVENO_DIR}/Install/*.deb 2>/dev/null'"
+  EXPECTED_DEB_BYTES="$(curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 45 "$HAVENO_DEB_URL" 2>/dev/null \
+    | grep -i '^content-length:' | awk '{print $2}' | tr -d '\r')"
+  if [ -n "${EXPECTED_DEB_BYTES:-}" ] && [ "${EXPECTED_DEB_BYTES:-0}" -gt 0 ] 2>/dev/null; then
+    y "  Tamanho esperado do .deb: $(_fmt_bytes "$EXPECTED_DEB_BYTES")"
+  fi
   b "  Rodando haveno-install.sh (verifica assinatura PGP)..."
-  if ! bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+  bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" &
+  INSTALL_PID=$!
+  _monitor_haveno_deb_download "$INSTALL_PID" "${EXPECTED_DEB_BYTES:-0}" &
+  MON_PID=$!
+  wait "$INSTALL_PID"
+  INSTALL_RC=$?
+  kill "$MON_PID" 2>/dev/null || true
+  wait "$MON_PID" 2>/dev/null || true
+  if [ "$INSTALL_RC" -ne 0 ]; then
     die "haveno-install.sh falhou (PGP/URL/rede). Confira release atual da Reto."
   fi
   g "  Haveno preparado na persistencia."

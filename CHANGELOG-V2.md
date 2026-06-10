@@ -134,6 +134,15 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## UX piloto campo R27 (2026-06-10)
+
+- **`haveno-auto.sh` [5/9]:** 3 tentativas de `Date:` via Tor; fallback explica `timedatectl synchronized: no` no Tails e mostra `date -u`
+- **`haveno-auto.sh` [6/9]:** aviso 30–90 min + monitor `[download]` com tamanho e % a cada 30s durante `haveno-install.sh`
+- **Docs:** Curso §3.2 · `MANUAL-SCRIPTS.md` (CRLF/ZIP) · `automacao/tails/README.md`
+- **Auditoria local:** `Auditoria/Rodada-27-Piloto-Campo-UX.md`
+
+---
+
 ## Fechamento backlog R26 (2026-06-09)
 
 - **Scripts:** `feather-backup.sh` — `--restore` com confirmação `(s/N)` + `AES256`; QA-log `tails_online_tor_esperado=SIM`; `haveno-auto.sh` loga sha256 do `haveno-install.sh`

@@ -218,6 +218,12 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 | `--boot-only` | Já instalado; só esta sessão | Sim |
 | `--no-clock` | Relógio do Tails já OK | Sim |
 
+**Durante o [6/9] (1ª vez):** o download do `.deb` pelo Tor pode levar **30–90 min**. A linha `Downloading Haveno from URL...` (script upstream) **não atualiza** — o `haveno-auto.sh` imprime `[download] … (~%)` a cada 30s. Não interrompa.
+
+**Relógio [5/9]:** se não houver `Date:` HTTP, o script mostra a hora atual e explica que `timedatectl` → `synchronized: no` é **normal no Tails** (sync via Tor, não NTP).
+
+**Copiar scripts no Tails:** prefira o **ZIP do GitHub** extraído no Tails (LF). Cópia direta do Windows/USB pode introduzir CRLF (`$'\r': comando não encontrado`) — use `dos2unix ~/Persistent/*.sh` se necessário.
+
 #### `haveno-boot.sh`
 
 ```bash

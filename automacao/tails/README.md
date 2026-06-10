@@ -103,6 +103,8 @@ chmod +x ~/Persistent/*.sh
 
 Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma.**
 
+No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**). A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime `[download] tamanho (~%)` a cada 30s.
+
 ### `haveno-boot.sh` — cada sessão (Playbook §7)
 
 ```bash
