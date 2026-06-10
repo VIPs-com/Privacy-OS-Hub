@@ -1288,6 +1288,28 @@ Este curso é para **Tails**. No Debian, o `.deb` da rede funciona **se** o Tor 
 
 Se nada resolver: feche o Haveno (`pkill -f Haveno` se preciso), confirme Tor OK e admin ativa, e rode novamente o `haveno-auto.sh` (ou o passo 3.2 manual). Seus dados em `Data/` são preservados.
 
+## 7.11 `install.sh` falhou — dependências do `.deb` / `apt-get install -f`
+
+Sintoma no [7/9]: `dpkg: problemas de dependência` — faltam pacotes como `libavcodec60`, `libicu74`, `libmbedcrypto7t64`, etc.
+
+**Causa:** o `install.sh` oficial só executa `dpkg -i`. No Tails 7.8+ (Debian 13) essas bibliotecas **existem nos repositórios**, mas **não vêm pré-instaladas**.
+
+**O que o hub faz:** `haveno-auto.sh` e `haveno-boot.sh` instalam as dependências via `apt` **antes** do `install.sh` (idempotente — repete a cada boot se necessário).
+
+**Armadilha:** `sudo apt-get install -f` **sozinho**, com o pacote `haveno` desconfigurado, pode **remover** o Haveno em vez de consertar. Instale as dependências **primeiro** (o script do hub já faz isso).
+
+**Persistência entre reboots:** pacotes `apt` somem ao reiniciar o Tails, **a menos** que você ative **Software adicional** no armazenamento persistente. Isso é normal — o script reinstala as libs automaticamente em cada sessão (rápido na 2ª vez). Seus dados em `~/Persistent/haveno/` (incluindo `Install/` e `Data/`) **sempre** persistem.
+
+**Recuperação manual** (se rodar script antigo sem R28):
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libavcodec60 libavformat60 libavutil58 libicu74 \
+  libjpeg-turbo8 libjxl0.7 libmbedcrypto7t64 librav1e0 libssh-gcrypt-4 \
+  libsvtav1enc1d1 libswresample4 libx265-199
+sudo ~/Persistent/haveno/App/utils/install.sh
+```
+
 ---
 
 <a id="8-todos-os-links-referência-única"></a>

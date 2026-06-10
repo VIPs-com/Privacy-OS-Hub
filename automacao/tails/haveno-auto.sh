@@ -258,9 +258,11 @@ fi
 [ -f "${UTILS_DIR}/haveno.yml" ] || die "haveno.yml nao encontrado em ${UTILS_DIR}."
 
 # ----------------------------- 7. install.sh + exec.sh (Playbook §7) ---------
-b "[7/9] install.sh + exec.sh (pode pedir senha admin via pkexec)..."
-chmod +x "${UTILS_DIR}/install.sh" "${UTILS_DIR}/exec.sh" 2>/dev/null || true
-sudo "${UTILS_DIR}/install.sh" || die "install.sh falhou."
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"
+b "[7/9] Dependencias apt + install.sh + exec.sh (pode pedir senha admin)..."
+chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
+haveno_run_install || die "install.sh falhou."
 nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
 HAVENO_BG=$!
 sleep 8
@@ -269,8 +271,6 @@ g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
 # ----------------------------- 8. Verificar/corrigir filtro ------------------
 b "[8/9] Verificando perfil onion-grater (loaded filter)..."
 sleep 4
-# shellcheck source=haveno-common.sh
-source "${SCRIPT_DIR}/haveno-common.sh"
 check_filter(){ haveno_check_filter; }
 
 if check_filter | grep -q "loaded filter: haveno"; then

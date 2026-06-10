@@ -94,6 +94,42 @@ tails_preflight_check() {
   return 0
 }
 
+# Dependencias do .deb Haveno 1.6.0-reto no Tails 7.8+ (Debian 13 Trixie).
+# O install.sh upstream so faz dpkg -i; o hub instala isto antes (idempotente).
+HAVENO_DEB_DEPS=(
+  libavcodec60 libavformat60 libavutil58 libicu74
+  libjpeg-turbo8 libjxl0.7 libmbedcrypto7t64 librav1e0
+  libssh-gcrypt-4 libsvtav1enc1d1 libswresample4 libx265-199
+)
+
+haveno_ensure_deb_deps() {
+  if ! command -v apt-get >/dev/null 2>&1; then
+    y "  apt-get ausente — ambiente nao-Debian; pulando deps."
+    return 0
+  fi
+  b "  Dependencias do .deb (apt)..."
+  y "  O install.sh oficial so roda dpkg -i; no Tails as libs nao vem pre-instaladas."
+  y "  Sem 'Software adicional' persistido, o apt repete a cada boot — automatico e rapido se ja instaladas."
+  y "  NAO rode 'apt-get install -f' ANTES disto com haveno desconfigurado — pode REMOVER o pacote."
+  sudo apt-get update -qq 2>/dev/null || y "  apt-get update falhou (rede?) — tentando install mesmo assim."
+  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${HAVENO_DEB_DEPS[@]}"; then
+    r "  Falha ao instalar dependencias do .deb."
+    y "  Veja Cap. 7 FAQ 7.11 (Curso-Tails-OS-Expert.md) ou ative Software adicional na persistencia."
+    return 1
+  fi
+  g "  Dependencias do .deb OK."
+  return 0
+}
+
+haveno_run_install() {
+  local utils="${UTILS_DIR}"
+  [ -f "${utils}/install.sh" ] || die "install.sh nao encontrado. Rode haveno-auto.sh primeiro."
+  haveno_ensure_deb_deps || die "Dependencias do .deb nao instaladas."
+  b "Rodando install.sh (pkexec — pode pedir senha admin)..."
+  chmod +x "${utils}/install.sh" 2>/dev/null || true
+  sudo "${utils}/install.sh" || die "install.sh falhou."
+}
+
 haveno_check_installed() {
   [ -f "${UTILS_DIR}/exec.sh" ] && [ -f "${UTILS_DIR}/install.sh" ] && [ -f "${UTILS_DIR}/haveno.yml" ]
 }
@@ -129,11 +165,9 @@ haveno_fix_onion_grater() {
 # Playbook §7: install.sh + exec.sh
 haveno_session_boot() {
   local utils="${UTILS_DIR}"
-  [ -f "${utils}/install.sh" ] || die "install.sh nao encontrado. Rode haveno-auto.sh primeiro."
   [ -f "${utils}/exec.sh" ] || die "exec.sh nao encontrado."
 
-  b "Rodando install.sh (pkexec — pode pedir senha admin)..."
-  sudo "${utils}/install.sh" || die "install.sh falhou."
+  haveno_run_install
 
   b "Abrindo Haveno (exec.sh)..."
   chmod +x "${utils}/exec.sh" 2>/dev/null || true

@@ -222,7 +222,15 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 
 **Relógio [5/9]:** se não houver `Date:` HTTP, o script mostra a hora atual e explica que `timedatectl` → `synchronized: no` é **normal no Tails** (sync via Tor, não NTP).
 
+**Dependências [7/9]:** o `install.sh` upstream só faz `dpkg -i`. O hub instala libs Debian (FFmpeg, ICU, etc.) via `apt` **antes** — automático em `haveno-auto.sh` e `haveno-boot.sh`. A cada **novo boot** o Tails pode precisar repetir o `apt` (rápido); opcional: **Software adicional** na persistência para manter pacotes. **Não** rode só `apt-get install -f` com haveno desconfigurado — pode **remover** o pacote.
+
 **Copiar scripts no Tails:** prefira o **ZIP do GitHub** extraído no Tails (LF). Cópia direta do Windows/USB pode introduzir CRLF (`$'\r': comando não encontrado`) — use `dos2unix ~/Persistent/*.sh` se necessário.
+
+| Situação | Script certo |
+|----------|----------------|
+| **1ª instalação** | `haveno-auto.sh` ou `haveno-setup.sh` |
+| **Cada sessão** | `haveno-boot.sh` / `haveno-setup.sh --boot` |
+| **Versão nova** (já tem `Data/`) | `haveno-update.sh` (exige `~/Persistent/haveno-backup.sh`) |
 
 #### `haveno-boot.sh`
 

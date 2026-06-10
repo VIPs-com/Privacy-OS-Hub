@@ -134,6 +134,14 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Deps `.deb` + diário piloto R28 (2026-06-10)
+
+- **`haveno-common.sh`:** `haveno_ensure_deb_deps()` + `haveno_run_install()` — apt das 12 libs antes de `install.sh` (Tails 7.8+)
+- **FAQ 7.11:** armadilha `apt-get install -f` · Software adicional opcional
+- **Auditoria local:** `Auditoria/Rodada-28-Piloto-Campo-Progresso.md` (diário campo B+ até [7/9])
+
+---
+
 ## UX piloto campo R27 (2026-06-10)
 
 - **`haveno-auto.sh` [5/9]:** 3 tentativas de `Date:` via Tor; fallback explica `timedatectl synchronized: no` no Tails e mostra `date -u`
