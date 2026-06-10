@@ -134,6 +134,14 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Fechamento backlog R26 (2026-06-09)
+
+- **Scripts:** `feather-backup.sh` — `--restore` com confirmação `(s/N)` + `AES256`; QA-log `tails_online_tor_esperado=SIM`; `haveno-auto.sh` loga sha256 do `haveno-install.sh`
+- **Baseline:** `--usb` ≠ off-site; aviso `--restore`; link restauração
+- **Didática:** README passo 5 · cartões 01/02/10/11 · MANUAL-DO-CURSO mínimo M2 · Folheto alt-text · [REGRA] trilha M2
+
+---
+
 ## Pendente pós-beta
 
 - [ ] Piloto B+ Tails físico — **LIBERADO R23** · pacote/checklist do piloto na camada local da equipe-dev — **equipe campo**

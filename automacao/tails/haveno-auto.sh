@@ -162,6 +162,8 @@ if [ "$dl_ok" = "0" ]; then
   curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
 fi
 [ "$dl_ok" = "1" ] || die "Nao baixei haveno-install.sh (rede/Tor)."
+INSTALL_SHA="$(sha256sum haveno-install.sh 2>/dev/null | awk '{print $1}')"
+g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de procedencia)"
 
 if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || [ ! -f "${HAVENO_DIR}/Install/haveno.deb" ]; then
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."

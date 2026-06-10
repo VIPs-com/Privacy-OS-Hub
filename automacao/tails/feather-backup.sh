@@ -50,9 +50,17 @@ if [ -n "$RESTORE_FILE" ]; then
     *) die "Formato nao reconhecido." ;;
   esac
   tar -tzf "$TARFILE" >/dev/null 2>&1 || die "Arquivo corrompido."
-  [ -d "$DATA_DIR" ] && mv "$DATA_DIR" "${PERSIST}/feather/wallets.bak-$(date +%Y%m%d-%H%M%S)"
+  g "  Arquivo OK."
+  y "CUIDADO: restauracao SOBRESCREVE ${DATA_DIR}/"
+  if [ -d "$DATA_DIR" ]; then
+    SAFETY="${PERSIST}/feather/wallets.bak-$(date +%Y%m%d-%H%M%S)"
+    y "  Estado atual sera salvo em: $SAFETY"
+    printf "Confirmar restauracao (sobrescreve wallets/)? (s/N): "; read -r ans
+    case "${ans:-N}" in s|S|sim|SIM) ;; *) rm -rf "$TMP"; die "Cancelado."; esac
+    mv "$DATA_DIR" "$SAFETY" || { rm -rf "$TMP"; die "Nao consegui salvar o estado atual."; }
+  fi
   mkdir -p "$(dirname "$DATA_DIR")"
-  tar -xzf "$TARFILE" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" || die "Falha ao extrair."
+  tar -xzf "$TARFILE" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" || { rm -rf "$TMP"; die "Falha ao extrair."; }
   rm -rf "$TMP"
   g "Restaurado em: $DATA_DIR"
   exit 0
@@ -78,7 +86,7 @@ tar -tzf "$TARFILE" >/dev/null 2>&1 || die "Tar corrompido."
 
 if [ "$ENCRYPT" = "1" ]; then
   OUT="${DEST}/${BASE}.tar.gz.gpg"
-  gpg -c -o "$OUT" "$TARFILE" || die "Falha ao cifrar."
+  gpg -c --cipher-algo AES256 -o "$OUT" "$TARFILE" || die "Falha ao cifrar."
 else
   OUT="${DEST}/${BASE}.tar.gz"
   cp "$TARFILE" "$OUT"

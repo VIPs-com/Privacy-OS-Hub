@@ -42,7 +42,7 @@ _confirm "seed_anotada_papel" "Seed anotada em papel/metal" && ok=$((ok+1)) || t
 _confirm "seed_nao_fotografada" "Seed NAO fotografada nem digitada fora do papel" && ok=$((ok+1)) || true
 _confirm "seed_nao_so_no_pc" "Seed NAO existe so no computador" && ok=$((ok+1)) || true
 
-qa_log_line "REDE: tails_online_tor=SIM"
+qa_log_line "REDE: tails_online_tor_esperado=SIM"
 
 if [ "$ok" -eq 3 ]; then
   qa_log_finish 0

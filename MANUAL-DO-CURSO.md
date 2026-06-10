@@ -46,6 +46,8 @@ Livro: [Curso-Tails-OS-Expert.md](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.
 
 ## Volume II — Rede descentralizada (mão na massa)
 
+> **Mínimo M2 (passo 8+):** caps. **2–3** obrigatórios · caps. **7–8** só se for **tradear** · resto = opcional.
+
 Livro: [Curso-Rede-Descentralizada-Extensao.md](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · Feather (obrig.): [P05](processos/m1-tor/P05-feather.md) · Trades (opcional): [Playbooks Vol II](modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentralizada.md)
 
 | Cap. | Título | Obrigatório? | Trilha README |

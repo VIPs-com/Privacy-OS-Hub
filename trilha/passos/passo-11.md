@@ -11,9 +11,11 @@
 
 ---
 
-## OK se
+## OK se (responda sem olhar — antes do passo 12)
 
-- [ ] Entendeu: quente **vê** · frio **assina**
+- [ ] **Quente vê · frio assina:** Whonix (quente) é view-only; **spend key** nunca sai do Tails (frio)
+- [ ] O Whonix **assina** a transação? → **Não** — quem assina é o Tails offline (passo 12)
+- [ ] O que viaja no USB entre quente e frio? → **unsigned tx** (quente→frio) e **signed tx** (frio→quente); **nunca** seed nem spend key
 - [ ] Sabe por que nó remoto `.onion` é alternativa (Cap. 4.2)
 
 ---

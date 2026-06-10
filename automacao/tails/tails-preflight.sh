@@ -31,7 +31,7 @@ echo
 if tails_preflight_check; then
   echo
   g "Preflight OK — pode rodar haveno-setup.sh, haveno-auto.sh ou feather-install-verify.sh"
-  qa_log_line "REDE: tails_online_tor=SIM"
+  qa_log_line "REDE: tails_online_tor_esperado=SIM"
   qa_log_finish 0
   exit 0
 fi

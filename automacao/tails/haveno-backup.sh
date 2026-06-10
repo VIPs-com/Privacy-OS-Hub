@@ -173,7 +173,7 @@ g "  OK (${SIZE})."
 if [ "$ENCRYPT" = "1" ]; then
   b "[3/4] Cifrando com GPG (defina uma senha forte; guarde-a)..."
   OUT="${DEST}/${BASE}.tar.gz.gpg"
-  gpg -c -o "$OUT" "$TARFILE" || { rm -rf "$TMP"; die "Falha ao cifrar."; }
+  gpg -c --cipher-algo AES256 -o "$OUT" "$TARFILE" || { rm -rf "$TMP"; die "Falha ao cifrar."; }
 else
   y "[3/4] --no-encrypt: salvando SEM cifrar (NAO recomendado)."
   OUT="${DEST}/${BASE}.tar.gz"
@@ -199,6 +199,6 @@ g "==============================================================="
 y "Lembrete: anote tambem a SEED (Account > Wallet seed) em papel/metal,"
 y "guardada separada deste arquivo. Seed != backup completo."
 qa_log_line "Backup concluido: $OUT"
-qa_log_line "REDE: tails_online_tor=SIM"
+qa_log_line "REDE: tails_online_tor_esperado=SIM"
 y "Apos anotar a seed no papel, rode: qa-confirm-seed-papel.sh (ou adicione CONFIRMACAO no log manualmente)."
 qa_log_finish 0

@@ -2,7 +2,7 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Modo** | M2 quente · host Linux |
+| **Modo** | M2 quente · **no SEU PC host** (Linux/Windows/macOS) — **não no Tails** |
 | **Rede** | Tor via Gateway (após import) |
 | **Ferramenta** | KVM/QEMU · imagens Whonix |
 | **Scripts** | `whonix-verify-image.sh --qa-log` (no **host**, não no Tails) |

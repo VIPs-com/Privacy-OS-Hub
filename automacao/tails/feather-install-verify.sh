@@ -103,6 +103,6 @@ g "  UI: Create wallet -> seed em PAPEL -> Settings -> Always over Tor"
 g "  Wallets: ${WALLETS_DIR}/"
 g "  Backup depois: ~/Persistent/feather-backup.sh"
 g "==============================================================="
-qa_log_line "REDE: tails_online_tor=SIM"
+qa_log_line "REDE: tails_online_tor_esperado=SIM"
 y "Apos criar carteira e anotar seed no papel: qa-confirm-seed-papel.sh"
 qa_log_finish 0

@@ -11,6 +11,8 @@
 
 ---
 
+> **Gravar o pendrive:** passo a passo no [Livro Cap. 2](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#2-fundamentos-do-tails) (antes de bootar).
+
 ## OK se
 
 - [ ] Tails boota do pendrive

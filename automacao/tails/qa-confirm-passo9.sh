@@ -37,7 +37,7 @@ _confirm() {
 }
 
 ok=0
-qa_log_line "REDE: tails_online_tor=SIM"
+qa_log_line "REDE: tails_online_tor_esperado=SIM"
 _confirm "duas_copias_fisicas_separadas" "Existem 2 copias da seed em locais fisicos separados" && ok=$((ok+1)) || true
 _confirm "nenhuma_copia_digital_seed" "Nenhuma copia digital da seed (foto, nuvem, chat)" && ok=$((ok+1)) || true
 _confirm "seed_nunca_transmitida_rede" "Seed nunca foi enviada por rede" && ok=$((ok+1)) || true

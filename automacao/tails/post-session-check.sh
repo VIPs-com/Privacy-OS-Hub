@@ -35,5 +35,5 @@ fi
 
 y "Lembrete: backup com ~/Persistent/haveno-backup.sh"
 y "Tails SO: use Tails Upgrader (NAO script nao oficial)."
-qa_log_line "REDE: tails_online_tor=SIM"
+qa_log_line "REDE: tails_online_tor_esperado=SIM"
 qa_log_finish 0

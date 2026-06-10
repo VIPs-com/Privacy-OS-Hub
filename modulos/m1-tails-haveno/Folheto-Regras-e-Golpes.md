@@ -4,7 +4,7 @@
 
 **Cartaz do fluxo comprar/vender (imprimível):**
 
-![Comprar e vender com segurança](imagens/cartaz-comprar-vender-seguro.png)
+![Cartaz: regras de compra e venda segura — nunca envie seed por chat nem foto](imagens/cartaz-comprar-vender-seguro.png)
 
 ---
 

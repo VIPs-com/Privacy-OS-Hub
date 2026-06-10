@@ -29,7 +29,7 @@ experiência e ensina **processo + ferramentas** na ordem certa.
 
 | # | Faça isto | Para quê |
 |:-:|-----------|----------|
-| **1** | Abra a [trilha linear](#trilha-linear) e comece no **passo 1** | Um passo de cada vez — Livro (teoria/telas) + Comandos (mão na massa) |
+| **1** | Abra a [trilha linear](#trilha-linear) e comece no **passo 1** → [tabela dos 12 passos](#trilha-linear) | Um passo de cada vez — Livro (teoria/telas) + Comandos (mão na massa) |
 | **2** | Nos passos **2** e **7**, se quiser automação: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) | Dois comandos bastam (`haveno-setup.sh` e `--boot`); [Apêndice A](MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) explica cada `.sh` |
 | **3** | Só avance quando o **OK se** do passo atual for verdadeiro | Evita pular backup, seed ou pré-requisito do Módulo 2 |
 | **4** | (Opcional) Valide com **log**: `haveno-setup.sh --qa-log` → leia `~/Persistent/qa-logs/*.txt` | [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) — sem expor seed |
@@ -186,7 +186,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **2** | Instalar Haveno até o **verde** | [Curso Vol I — Cap. 3](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#3-instalação-e-configuração-do-haveno-na-mão) | [P02](processos/m1-tor/P02-haveno-verde.md) |
 | **3** | Segurança (exploit / cautela) | [Curso Vol I — Cap. 4](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#4-segurança-exploit-corrigido-na-160-reto) | [P03](processos/m1-tor/P03-pre-trade.md) |
 | **4** | Carteira, backup, pós-verde | [Curso Vol I — Cap. 5](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#5-próximos-passos-pós-verde) | [P04](processos/m1-tor/P04-backup-seed.md) |
-| **5** | Vol II: Feather + seed · **obrigatório p/ M2 (passo 8):** só Caps. 2–3 · **só se for tradear:** Caps. 7–8 | [Vol II — Antes do 1º trade](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) | [P05](processos/m1-tor/P05-feather.md) |
+| **5** | Feather + seed no papel | [Vol II — Antes do 1º trade](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#antes-do-1º-trade--leia-só-isto-no-volume-ii) | [P05](processos/m1-tor/P05-feather.md) |
 | **6** | Regras de ouro + golpes (imprimir) | [Folheto](modulos/m1-tails-haveno/Folheto-Regras-e-Golpes.md) | [P06](processos/m1-tor/P06-folheto.md) |
 | **7** | Automação pós-verde | [Scripts — ciclo de uso](automacao/tails/README.md) | [P07](processos/m1-tor/P07-rotina-scripts.md) |
 | **8** | **M2** — mapa + escolher trilha A **ou** B | [00-Comece-aqui](modulos/m2-whonix-custodia/00-Comece-aqui-Escolha-sua-trilha.md) | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) |
@@ -195,6 +195,7 @@ Do zero ao fluxo completo. **Não pule passos.** Avance só quando o “OK se”
 | **11** | Teoria frio↔quente (modelo de ameaças) | [Curso Whonix — §5.1](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#51-por-que-separar-o-princípio) | [P11](processos/m2-quente/P11-modelo-frio-quente.md) |
 | **12** | Cold-signing — **escolha UMA** trilha | [Curso Whonix — §5.5](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#5-cold-tails-hot-whonix) | [P12A](processos/m2-frio/P12a-feather-offline.md) · [P12B](processos/m2-frio/P12b-cli-offline.md) |
 
+> **Passo 5:** Vol II Caps. **2–3** (obrigatório p/ M2 no passo 8). Caps. **7–8** só se for **tradear**.
 > **Passo 8:** exige passos **1–4** + Feather ([Vol II Cap. 3](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md#3-feather-no-tails--instalar-e-verificar)) — **não** exige trade.
 
 **Zoom do módulo:** [modulos/m1-tails-haveno/README.md](modulos/m1-tails-haveno/README.md) (passos 1–7) · [modulos/m2-whonix-custodia/README.md](modulos/m2-whonix-custodia/README.md) (passos 8–12).

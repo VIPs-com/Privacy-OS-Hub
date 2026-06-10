@@ -74,7 +74,7 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 === 04-haveno-backup — 2026-06-08T15:00:00 ===
 ...
 Backup concluido: /home/amnesia/Persistent/Backups/haveno-data-....tar.gz.gpg
-REDE: tails_online_tor=SIM
+REDE: tails_online_tor_esperado=SIM
 exit_code: 0
 RESULTADO: PASS
 ```

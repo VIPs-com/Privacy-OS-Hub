@@ -39,7 +39,7 @@ Há **duas formas de fazer a MESMA coisa**. Mesmo resultado, ferramentas diferen
 | **Para quem** | **Maioria** (recomendado) | Avançado |
 | **Abra** | 👉 [`Trilha-A-Feather/Playbook-Feather-GUI.md`](Trilha-A-Feather/Playbook-Feather-GUI.md) | 👉 [`Trilha-B-CLI/Playbook-monero-wallet-cli.md`](Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
 
-> ⚠️ **NÃO misture as trilhas.** Não crie a carteira no Feather e tente continuar no `monero-wallet-cli` (nem o contrário). Os arquivos de uma ferramenta não são feitos para a outra. **Escolheu A? Ignore B — e vice-versa.**
+> **[REGRA] NÃO misture as trilhas.** Não crie a carteira no Feather e tente continuar no `monero-wallet-cli` (nem o contrário). Os arquivos de uma ferramenta não são feitos para a outra. **Escolheu A? Ignore B — e vice-versa.**
 >
 > 💡 **Na dúvida: Trilha A (Feather).**
 >

@@ -14,7 +14,7 @@
 ## OK se
 
 - [ ] Janela Haveno mostra indicador **verde**
-- [ ] PGP do `.deb` conferido (livro + playbook)
+- [ ] PGP do `.deb`: `Good signature` / `Assinatura válida` **e** fingerprint `DAA24D878B8D36C90120A897CA02DAC12DAE2D0F` bate (livro + [P02](../../processos/m1-tor/P02-haveno-verde.md))
 
 ---
 
