@@ -2,9 +2,10 @@
 ###############################################################################
 # feather-install-verify.sh — Feather no Tails (Vol II Playbook §2)
 #
-# NAO FAZ: criar carteira, anotar seed, trades.
-# USO: ~/Persistent/hub-scripts/feather-install-verify.sh [--qa-log]
-#      Baixa chave + AppImage via Tor se ausentes; PGP fail-closed antes de executar.
+# NAO FAZ: criar carteira, anotar seed, trades (isso e na UI — humano).
+# USO: ~/Persistent/hub-scripts/feather-install-verify.sh [--qa-log] [--no-launch]
+#      Baixa chave + AppImage via Tor se ausentes; PGP fail-closed; abre a UI (como Haveno).
+#      --no-launch  so re-verifica PGP sem abrir janela.
 #      Fallback manual: Tor Browser -> featherwallet.org/download -> ~/Persistent/feather/
 ###############################################################################
 
@@ -14,9 +15,11 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=haveno-common.sh
 source "${SCRIPT_DIR}/haveno-common.sh"
 
+DO_LAUNCH=1
 while [ $# -gt 0 ]; do
   case "$1" in
     --qa-log) export HAVENO_QA_LOG=1 ;;
+    --no-launch) DO_LAUNCH=0 ;;
     *) die "Opcao desconhecida: $1" ;;
   esac
   shift
@@ -41,14 +44,14 @@ b "  feather-install-verify.sh — Feather no Tails (PGP fail-closed)"
 b "==============================================================="
 echo
 
-b "[1/5] Preflight..."
+b "[1/6] Preflight..."
 tails_preflight_check || die "Preflight falhou."
 
-b "[2/5] Preparando pastas..."
+b "[2/6] Preparando pastas..."
 mkdir -p "$WALLETS_DIR"
 g "  ${FEATHER_DIR}"
 
-b "[3/5] Coletando artefatos..."
+b "[3/6] Coletando artefatos..."
 shopt -s nullglob
 moved=0
 for f in "${DOWNLOADS}"/feather-* "${DOWNLOADS}"/featherwallet.asc; do
@@ -115,7 +118,7 @@ ASCFILE="${ascfiles[0]}"
 [ -f "$ASCFILE" ] || die "Assinatura .asc ausente em ${FEATHER_DIR} (par incompleto)."
 g "  Par: $(basename "$APPIMAGE")"
 
-b "[4/5] Verificacao PGP..."
+b "[4/6] Verificacao PGP..."
 gpg --import "${FEATHER_DIR}/featherwallet.asc" 2>/dev/null || true
 fp="$(gpg --with-colons --fingerprint dev@featherwallet.org 2>/dev/null | awk -F: '$1=="fpr"{print $10; exit}')"
 fp_clean="$(echo "${fp:-}" | tr -d ' ')"
@@ -133,18 +136,47 @@ if ! grep -q "^\[GNUPG:\] VALIDSIG .*${FEATHER_FPR}" /tmp/feather-gpg.log; then
 fi
 g "  VALIDSIG ${FEATHER_FPR} (assinatura amarrada ao fingerprint)."
 
-b "[5/5] Executavel..."
+b "[5/6] Executavel..."
 chmod +x "$APPIMAGE"
 g "  chmod +x OK."
 
+FEATHER_DESKTOP="${FEATHER_DIR}/feather.desktop"
+if [ "$DO_LAUNCH" = "1" ]; then
+  b "[6/6] Abrindo Feather (como Haveno apos install)..."
+  cat > "$FEATHER_DESKTOP" <<EOF
+[Desktop Entry]
+Name=Feather Wallet
+Comment=Carteira Monero verificada (PGP fail-closed)
+Exec=${APPIMAGE}
+Terminal=false
+Type=Application
+Categories=Finance;
+EOF
+  g "  Atalho: ${FEATHER_DESKTOP}"
+  if [ -d "${HOME}/Desktop" ]; then
+    cp "$FEATHER_DESKTOP" "${HOME}/Desktop/Feather-Wallet.desktop"
+    g "  Atalho: ~/Desktop/Feather-Wallet.desktop"
+  fi
+  if pgrep -f "feather-.*AppImage" >/dev/null 2>&1; then
+    y "  Feather ja parece aberto — nao abro outra janela."
+  else
+    nohup "$APPIMAGE" >/tmp/feather-app.log 2>&1 &
+    sleep 5
+    g "  Feather iniciado (log: /tmp/feather-app.log)."
+  fi
+  echo
+  y "  Na janela do Feather: Create wallet -> seed em PAPEL -> Settings -> Always over Tor"
+  y "  Volte a este terminal quando terminar a 1a configuracao."
+else
+  y "[6/6] Pulado (--no-launch). Abra manualmente: ${APPIMAGE}"
+fi
+
 echo
 g "==============================================================="
-g "  Feather verificado. Para abrir:"
+g "  Feather verificado${DO_LAUNCH:+ e aberto}."
 g "  ${APPIMAGE}"
-g "  UI: Create wallet -> seed em PAPEL -> Settings -> Always over Tor"
 g "  Wallets: ${WALLETS_DIR}/"
-g "  Backup depois: ~/Persistent/feather-backup.sh"
+g "  Backup depois (feche o Feather antes): ~/Persistent/hub-scripts/feather-backup.sh"
 g "==============================================================="
 qa_log_line "REDE: tails_online_tor_esperado=SIM"
-y "Apos criar carteira e anotar seed no papel: qa-confirm-seed-papel.sh"
 qa_log_finish 0

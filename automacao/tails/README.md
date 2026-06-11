@@ -148,11 +148,14 @@ os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
 
 ### `feather-install-verify.sh`
 
-Baixe AppImage + `.asc` pelo **Tor Browser** primeiro, depois:
+Baixa (via Tor) + verifica PGP fail-closed + **abre** o Feather (como o Haveno após install):
 
 ```bash
-~/Persistent/hub-scripts/feather-install-verify.sh
+~/Persistent/hub-scripts/feather-install-verify.sh --qa-log
+~/Persistent/hub-scripts/feather-install-verify.sh --no-launch   # so re-auditar PGP
 ```
+
+Atalho gerado em `~/Persistent/feather/feather.desktop` (e `~/Desktop/` se existir).
 
 ### `haveno-backup.sh` / `feather-backup.sh`
 

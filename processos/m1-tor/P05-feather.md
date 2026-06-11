@@ -25,8 +25,9 @@ playbook_legacy: modulos/m1-tails-haveno/Expansao-Curso/Playbooks-Rede-Descentra
 ```
 
 ```bash
-# Automatizado (após o download pelo Tor Browser):
-~/Persistent/feather-install-verify.sh --qa-log
+# Automatizado (download via Tor + PGP fail-closed + abre a UI — como Haveno):
+~/Persistent/hub-scripts/feather-install-verify.sh --qa-log
+# Na janela: Create wallet -> seed em PAPEL -> Settings -> Always over Tor
 ```
 
 Manual:

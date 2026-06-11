@@ -68,6 +68,13 @@ fi
 
 [ -d "$DATA_DIR" ] || die "Pasta nao encontrada ($DATA_DIR). Crie carteira no Feather primeiro."
 
+if pgrep -f "feather-.*AppImage" >/dev/null 2>&1; then
+  y "ATENCAO: o Feather parece estar ABERTO."
+  y "Feche-o antes de continuar para nao copiar wallets/ em uso."
+  printf "Continuar mesmo assim? (s/N): "; read -r ans
+  case "${ans:-N}" in s|S|sim|SIM) ;; *) die "Cancelado. Feche o Feather e rode de novo."; esac
+fi
+
 if [ "$USE_USB" = "1" ] && [ -z "$DEST" ]; then
   mapfile -t VOLS < <(find "$MEDIA_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
   [ "${#VOLS[@]}" -gt 0 ] || die "Nenhum USB montado."
