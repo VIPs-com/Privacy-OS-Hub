@@ -39,6 +39,7 @@ chmod +x ~/Persistent/*.sh
 | `qa-export-logs.sh` | — | — | Copia `qa-logs/` → pendrive USB |
 | `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (backup) |
 | `haveno-common.sh` | — | — | Biblioteca (source interno + `qa_log_*`) |
+| `haveno-onion-grater.yml` | 2, 7 | §8 | **Filtro Tor corrigido** p/ Haveno 1.6.0 (PoW) — ver abaixo |
 
 **Home Lab** ([`HomeLab/`](../homelab/README.md)) — Debian/Ubuntu, **não** Tails.
 
@@ -109,6 +110,24 @@ Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma
 No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**). A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime `[download] tamanho (~%)` a cada 30s.
 
 No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do `install.sh` upstream — idempotente a cada boot. FAQ Cap. **7.11**.
+
+### `haveno-onion-grater.yml` — filtro Tor corrigido (1.6.0)
+
+O `haveno.yml` que vem **dentro do instalador upstream** não autoriza o `ADD_ONION`
+com os parâmetros PoW que o Haveno **1.6.0** passou a enviar — o onion-grater
+bloqueia (`Command filtered`) e o app cai com *"A conexão com a rede do Haveno
+falhou"*. Este arquivo é a versão corrigida (validada em campo 2026-06-11);
+os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
+**Copie-o junto com os `.sh`.** Detalhe do erro: FAQ Cap. **7.12–7.13**.
+
+### Como ler os logs (depurar sem adivinhar)
+
+| Log | Onde | O que mostra |
+|-----|------|--------------|
+| Saída do script | terminal | `PASS`/`FAIL` por etapa, em verde/vermelho |
+| `--qa-log` | `~/Persistent/qa-logs/*.txt` | Evidência por execução — [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) |
+| Haveno (app) | `/tmp/haveno-exec.log` | Erros de partida (ex.: cookie do Tor, `Command filtered`) |
+| onion-grater | `sudo journalctl -u onion-grater -b` | Filtro carregado? Comando bloqueado aparece como `command filtered: ...` |
 
 ### `haveno-boot.sh` — cada sessão (Playbook §7)
 

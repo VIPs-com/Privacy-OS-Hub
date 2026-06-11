@@ -2,6 +2,22 @@
 
 > **Tag:** `v2.0.0-beta` · **Data:** 2026-06-08 · **Branch:** `main`
 
+---
+
+## 2026-06-11 — Fixes de campo R29 (Tails real, Haveno 1.6.0)
+
+Dois bugs **Major** encontrados e validados ao vivo na trilha do passo 2/7:
+
+| Fix | Sintoma | Correção |
+|-----|---------|----------|
+| **R29a — cookie do Tor** | Haveno fecha na hora: `torControlCookieFile ... is not readable` | `chmod o+r` reaplicado a **cada** sessão, **antes** do `exec.sh` (Tails amnésico) — FAQ **7.12** |
+| **R29b — filtro PoW** | Popup "conexão com a rede do Haveno falhou" (`Command filtered`) | Novo `automacao/tails/haveno-onion-grater.yml` — o yml do instalador upstream 1.6.0 não autoriza o `ADD_ONION` com params PoW (bug upstream) — FAQ **7.13** |
+
+Arquivos: `haveno-common.sh` (ordem cookie/filtro→exec + preferência ao yml do hub) ·
+`sync-hub-scripts.sh` (copia o yml) · `haveno-onion-grater.yml` (novo) ·
+Curso Vol I FAQ 7.12–7.13 · `automacao/tails/README.md` (tabela "como ler os logs").
+Validação: RetoSwap conectado à Mainnet via Tor, nó Tor criado (prints internos).
+
 Reorganização em **4 camadas** sem mudar a trilha pedagógica 1–12 nem os nomes dos scripts em `~/Persistent/`.
 
 ---

@@ -1321,6 +1321,55 @@ sudo dpkg -i ~/Persistent/haveno/Install/haveno.deb
 sudo ~/Persistent/haveno/App/utils/install.sh
 ```
 
+## 7.12 `torControlCookieFile ... is not readable` (Haveno fecha na hora)
+
+Sintoma em `/tmp/haveno-exec.log`:
+
+```text
+haveno.common.config.ConfigException: problem parsing option 'torControlCookieFile':
+File [/var/run/tor/control.authcookie] is not readable
+```
+
+**Causa:** o Tails é **amnésico** — o `chmod o+r` no cookie do Tor (Cap. 2.6) se
+perde a **cada boot**. Sem leitura no cookie, o Haveno aborta antes de abrir a janela.
+
+**Correção:**
+
+```bash
+sudo chmod o+r /var/run/tor/control.authcookie
+```
+
+e reabra pelo menu. Os scripts do hub (atualizados em jun/2026) reaplicam esse
+`chmod` automaticamente em **toda** sessão, antes de abrir o Haveno.
+
+## 7.13 `Command filtered` — "A conexão com a rede do Haveno falhou" (1.6.0)
+
+Sintoma: o Haveno abre, o Tor conecta, mas aparece o popup
+*"A conexão com a rede do Haveno falhou (erro reportado: Error reply: Command filtered)"*.
+No `journalctl -u onion-grater -b` aparece:
+
+```text
+command filtered: ADD_ONION NEW:BEST PoWQueueBurst=100 PoWDefensesEnabled=1 PoWQueueRate=10 Port=9999,...
+```
+
+**Causa (bug do instalador upstream 1.6.0):** o Haveno 1.6.0 passou a publicar o
+hidden service com parâmetros **PoW** (anti-DoS) no `ADD_ONION`, mas o
+`haveno.yml` que vem dentro do instalador só autoriza o comando **sem** esses
+parâmetros — o onion-grater (corretamente fail-closed) bloqueia.
+
+**Correção do hub:** use o filtro corrigido `haveno-onion-grater.yml`
+(em `automacao/tails/` do repo; o `sync-hub-scripts.sh` copia junto). Os scripts
+preferem esse arquivo automaticamente quando ele está em `~/Persistent/`. Manual:
+
+```bash
+sudo cp ~/Persistent/haveno-onion-grater.yml /etc/onion-grater.d/haveno.yml
+sudo systemctl restart onion-grater
+```
+
+Confirme `loaded filter: haveno` no journalctl e reabra o Haveno.
+Validado em campo (jun/2026): com o filtro corrigido, o app conecta —
+*"Conectado a Mainnet de Monero (via Tor)"* + *"Nó da rede Tor criado"*.
+
 ---
 
 <a id="8-todos-os-links-referência-única"></a>

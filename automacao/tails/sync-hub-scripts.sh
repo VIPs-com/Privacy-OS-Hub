@@ -22,6 +22,8 @@ die(){ echo -e "\033[0;31mERRO: $*\033[0m"; exit 1; }
 
 b "Copiando scripts de ${SCRIPT_DIR}/ -> ${DEST}/"
 cp -v "${SCRIPT_DIR}"/*.sh "$DEST/"
+# Filtro onion-grater corrigido (PoW 1.6.0) — sem ele o Haveno cai com 'Command filtered'
+[ -f "${SCRIPT_DIR}/haveno-onion-grater.yml" ] && cp -v "${SCRIPT_DIR}/haveno-onion-grater.yml" "$DEST/"
 chmod +x "${DEST}"/*.sh
 g "Pronto. Rode: ${DEST}/haveno-auto.sh --install-only"
 g "  (ou ${DEST}/haveno-setup.sh se preferir o orquestrador)"

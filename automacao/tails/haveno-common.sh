@@ -8,6 +8,10 @@ DOTFILES_DIR="${DOTFILES_DIR:-/live/persistence/TailsData_unlocked/dotfiles}"
 ONION_GRATER_DST="${ONION_GRATER_DST:-/etc/onion-grater.d/haveno.yml}"
 TOR_COOKIE="${TOR_COOKIE:-/var/run/tor/control.authcookie}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+# Filtro onion-grater CORRIGIDO do hub: cobre os params PoW do ADD_ONION no
+# Haveno 1.6.0, que o haveno.yml do instalador upstream bloqueia (Command
+# filtered). Preferir sempre que existir ao lado dos scripts.
+HUB_ONION_YML="${HUB_ONION_YML:-${SCRIPT_DIR}/haveno-onion-grater.yml}"
 
 b(){ echo -e "\033[1;34m$*\033[0m"; }
 g(){ echo -e "\033[1;32m$*\033[0m"; }
@@ -199,17 +203,29 @@ haveno_check_filter() {
 
 haveno_fix_onion_grater() {
   local utils="${UTILS_DIR}"
-  if haveno_check_filter | grep -q "loaded filter: haveno"; then
-    g "  loaded filter: haveno (OK)."
+  # Cookie do Tor: chmod se perde a cada boot (Tails amnesico) — aplicar SEMPRE,
+  # mesmo com o filtro ja carregado, senao o Haveno aborta com 'not readable'.
+  [ -e "$TOR_COOKIE" ] && sudo chmod o+r "$TOR_COOKIE" 2>/dev/null || true
+  local yml_src="${utils}/haveno.yml"
+  if [ -f "$HUB_ONION_YML" ]; then
+    yml_src="$HUB_ONION_YML"
+  fi
+  # Se o yml instalado ja e identico ao desejado E o filtro carregou, nada a fazer.
+  # (Filtro carregado com yml DIFERENTE = pode ser o upstream quebrado p/ PoW —
+  # DIV-20260611-02 — entao reinstala e reinicia mesmo assim.)
+  if sudo cmp -s "$yml_src" "$ONION_GRATER_DST" 2>/dev/null && \
+     haveno_check_filter | grep -q "loaded filter: haveno"; then
+    g "  loaded filter: haveno (OK, filtro do hub)."
     return 0
   fi
   y "  Aplicando correcao onion-grater..."
-  sudo cp "${utils}/haveno.yml" "$ONION_GRATER_DST" 2>/dev/null || true
+  [ "$yml_src" = "$HUB_ONION_YML" ] && g "  Usando filtro corrigido do hub (com PoW do Haveno 1.6.0)."
+  sudo cp "$yml_src" "$ONION_GRATER_DST" 2>/dev/null || true
   [ -e "$TOR_COOKIE" ] && sudo chmod o+r "$TOR_COOKIE" 2>/dev/null || true
   if python3 -c "import yaml; yaml.safe_load(open('${ONION_GRATER_DST}')); print('YAML OK')" 2>/dev/null; then
     g "  YAML OK."
   else
-    sudo cp "${utils}/haveno.yml" "$ONION_GRATER_DST"
+    sudo cp "$yml_src" "$ONION_GRATER_DST"
   fi
   sudo systemctl restart onion-grater 2>/dev/null || true
   sleep 4
@@ -228,15 +244,15 @@ haveno_session_boot() {
 
   haveno_run_install
 
+  # onion-grater + cookie ANTES do exec.sh — o Haveno le o cookie na partida.
+  b "Verificando onion-grater..."
+  haveno_fix_onion_grater || true
+
   b "Abrindo Haveno (exec.sh)..."
   chmod +x "${utils}/exec.sh" 2>/dev/null || true
   nohup "${utils}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
   sleep 8
   g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
-
-  b "Verificando onion-grater..."
-  sleep 4
-  haveno_fix_onion_grater || true
 }
 
 # --- QA logs (~/Persistent/qa-logs/) — sem seed, senha ou chaves ----------------
