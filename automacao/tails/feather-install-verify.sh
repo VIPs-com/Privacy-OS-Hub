@@ -127,6 +127,18 @@ if [ "$fp_clean" != "$FEATHER_FPR" ]; then
 fi
 g "  Fingerprint OK: ${FEATHER_FPR}"
 
+# Gate humano (padrao do hub: "confira com seus proprios olhos") — mesma
+# interatividade do fluxo Haveno. O script confere por software acima; aqui
+# VOCE compara com a fonte oficial antes de seguir.
+echo
+y "  CONFIRA NO OLHO — fingerprint da chave importada:"
+gpg --fingerprint dev@featherwallet.org 2>/dev/null | grep -A1 "^pub" | tail -1 | sed 's/^/    /'
+y "  Esperado (README do curso / docs.featherwallet.org):"
+echo "      8185 E158 A333 30C7 FD61  BC0D 1F76 E155 CEFB A71C"
+read -rp "  Os dois batem, caractere por caractere? (s/n) " FPR_OK
+[ "${FPR_OK:-n}" = "s" ] || die "Fingerprint NAO confirmado pelo operador. PARE: nao execute o AppImage; avise a equipe."
+g "  Confirmado humano em $(date -u '+%Y-%m-%d %H:%M UTC')."
+
 # Fail-closed locale-independente: amarra a assinatura ao fingerprint (status-fd + VALIDSIG).
 # Nao usar grep "Good signature" (quebra em PT-BR: "Assinatura valida") nem aceita chave de mesmo User ID.
 gpg --status-fd 1 --verify "$ASCFILE" "$APPIMAGE" > /tmp/feather-gpg.log 2>&1 || true
