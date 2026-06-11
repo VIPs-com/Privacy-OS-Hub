@@ -1288,36 +1288,47 @@ Este curso é para **Tails**. No Debian, o `.deb` da rede funciona **se** o Tor 
 
 Se nada resolver: feche o Haveno (`pkill -f Haveno` se preciso), confirme Tor OK e admin ativa, e rode novamente o `haveno-auto.sh` (ou o passo 3.2 manual). Seus dados em `Data/` são preservados.
 
-## 7.11 `install.sh` falhou — dependências do `.deb` / `apt-get install -f`
+## 7.11 `install.sh` falhou — dependências do `.deb` (`não tem candidato para instalação`)
 
-Sintoma no [7/9]: `dpkg: problemas de dependência` — faltam pacotes como `libavcodec60`, `libicu74`, `libmbedcrypto7t64`, etc.
+Sintoma no [7/9] ou no boot de cada sessão: `dpkg: problemas de dependência`, ou o apt
+respondendo **`O pacote 'libicu74' não tem candidato para instalação`** (e o mesmo para
+`libavcodec60`, `libjpeg-turbo8`, `libmbedcrypto7t64`...), **mesmo com `apt-get update` OK**.
 
-**Causa:** o `install.sh` oficial só executa `dpkg -i`. No Tails 7.8+ (Debian 13) essas bibliotecas **existem nos repositórios**, mas **não vêm pré-instaladas**.
+> ⚠️ **CAUSA REAL (validada em campo 2026-06-11):** o `.deb` do haveno-reto **1.6.0**
+> declara as dependências com **nomes de bibliotecas do UBUNTU** — e no Debian 13 do
+> Tails esses pacotes **não existem com esses nomes** (lá é `libicu76`, `libavcodec61`...).
+> **Não adianta** tentar `apt-get install libicu74...` — vai falhar **sempre**, em
+> qualquer rede. Não é problema do seu Tor nem do seu Tails.
 
-**O que o hub faz:** `haveno-auto.sh` e `haveno-boot.sh` instalam as dependências via `apt` **antes** do `install.sh` (idempotente — repete a cada boot se necessário).
+**Por que o Haveno funciona mesmo assim:** o app embute o próprio runtime (Java/JavaFX),
+então essas libs declaradas não fazem falta na prática. A instalação correta ignora os
+nomes errados: `dpkg -i --force-depends`.
 
-**Armadilha:** `sudo apt-get install -f` **sozinho**, com o pacote `haveno` desconfigurado, pode **remover** o Haveno em vez de consertar. Instale as dependências **primeiro** (o script do hub já faz isso).
+**O que o hub faz (scripts atuais — automático):** lê o campo `Depends` **de dentro do
+próprio `.deb`**, instala via apt **só o que existe** no Tails, e aplica
+`--force-depends` para os nomes Ubuntu-only. Você não precisa fazer nada.
 
-**Persistência entre reboots:** pacotes `apt` somem ao reiniciar o Tails, **a menos** que você ative **Software adicional** no armazenamento persistente. Isso é normal — o script reinstala as libs automaticamente em cada sessão (rápido na 2ª vez). Seus dados em `~/Persistent/haveno/` (incluindo `Install/` e `Data/`) **sempre** persistem.
+**Armadilha (NUNCA faça):** `sudo apt-get install -f` com o `haveno` desconfigurado
+propõe **REMOVER** o Haveno em vez de consertar. Não rode.
 
-**Recuperação (sem recomecar download)** — scripts atualizados em `~/Persistent/`:
+**Persistência entre reboots:** o Tails é **amnésico** — o sistema (dpkg/apt) zera a
+cada boot; só a `~/Persistent` sobrevive. Por isso **cada sessão** re-registra o `.deb`
+(rápido, sem novo download — o `.deb` de 264 MB fica em `Install/`). Sua carteira em
+`Data/` **nunca** é reinstalada.
+
+**Recuperação (sem recomeçar download)** — scripts atualizados:
 
 ```bash
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
-~/Persistent/haveno-auto.sh --install-only
+~/Persistent/hub-scripts/haveno-auto.sh --install-only
 ```
 
-O modo `--install-only` instala deps `apt`, limpa estado `config-files` do dpkg, cria `haveno.deb` se necessário e roda `install.sh`.
-
-**Recuperação manual** (script antigo):
+**Recuperação manual** (só se os scripts não estiverem disponíveis):
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y libavcodec60 libavformat60 libavutil58 libicu74 \
-  libjpeg-turbo8 libjxl0.7 libmbedcrypto7t64 librav1e0 libssh-gcrypt-4 \
-  libsvtav1enc1d1 libswresample4 libx265-199
-sudo dpkg -i ~/Persistent/haveno/Install/haveno.deb
+sudo dpkg -i --force-depends ~/Persistent/haveno/Install/haveno.deb
 sudo ~/Persistent/haveno/App/utils/install.sh
 ```
 

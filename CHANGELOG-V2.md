@@ -18,6 +18,20 @@ Arquivos: `haveno-common.sh` (ordem cookie/filtro→exec + preferência ao yml d
 Curso Vol I FAQ 7.12–7.13 · `automacao/tails/README.md` (tabela "como ler os logs").
 Validação: RetoSwap conectado à Mainnet via Tor, nó Tor criado (prints internos).
 
+## 2026-06-11 — R30/R31: Feather + boot do zero (continuação da bateria)
+
+| Fix | Sintoma | Correção |
+|-----|---------|----------|
+| **R30 — chave Feather 404** | `feather-install-verify.sh` morria baixando `featherwallet.asc` (URL do GitHub master morta) | Fallback em cadeia: site oficial → keyserver pinado pelo fingerprint; download automático do AppImage via Tor; **gate humano** de fingerprint ("confira no olho"); abre o app + atalhos — `639c841`…`29bbfea` |
+| **R30b — Persistent poluída** | `sync-hub-scripts.sh` despejava ~17 arquivos na raiz | Scripts agora em **`~/Persistent/hub-scripts/`** (pasta única; dados do operador fora) — `1c5da78` |
+| **R31 — apt update sem retry** | Boot novo: update via Tor falhava e o script seguia → todas as libs "sem candidato" | Retry 3×30s + abort fail-closed — `37c54b6` |
+| **R31b — ⚠️ deps com nomes UBUNTU** | Mesmo com update OK, `libicu74`/`libavcodec60`/etc. **não existem no Debian 13** — o `.deb` 1.6.0-reto declara Depends com nomes de libs do **Ubuntu** | Deps lidas **de dentro do `.deb`**, instala só o que existe, fallback `dpkg --force-depends` (app embute runtime — funciona; validado em boot do zero) — `62fdb62` · FAQ **7.11** reescrito |
+
+> ⚠️ **Para mantenedores:** nunca fixar lista de dependências do `.deb` em script ou doc —
+> os nomes vêm do empacotamento upstream (Ubuntu) e quebram no Debian/Tails.
+> Sempre ler do próprio pacote (`dpkg-deb -f ... Depends`). Reportar ao haveno-reto
+> junto com a issue do filtro PoW.
+
 Reorganização em **4 camadas** sem mudar a trilha pedagógica 1–12 nem os nomes dos scripts em `~/Persistent/`.
 
 ---
