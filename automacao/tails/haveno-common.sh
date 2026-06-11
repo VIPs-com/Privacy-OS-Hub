@@ -98,13 +98,13 @@ tails_preflight_check() {
   return 0
 }
 
-# Dependencias do .deb Haveno 1.6.0-reto no Tails 7.8+ (Debian 13 Trixie).
-# O install.sh upstream so faz dpkg -i; o hub instala isto antes (idempotente).
-HAVENO_DEB_DEPS=(
-  libavcodec60 libavformat60 libavutil58 libicu74
-  libjpeg-turbo8 libjxl0.7 libmbedcrypto7t64 librav1e0
-  libssh-gcrypt-4 libsvtav1enc1d1 libswresample4 libx265-199
-)
+# Dependencias do .deb: lidas DE DENTRO do proprio pacote (dpkg-deb -f Depends),
+# nao de lista fixa. Motivo (DIV-20260610-02): o .deb 1.6.0-reto declara nomes
+# de libs do UBUNTU (libicu74, libavcodec60...) que NAO existem no Debian 13 do
+# Tails — uma lista fixa com esses nomes falha em todo boot. O hub instala as
+# que existirem e tolera as Ubuntu-only com dpkg --force-depends (o Haveno
+# embute o proprio runtime; validado em campo 2026-06-10/11).
+HAVENO_DEPS_MISSING=0
 
 # Retorna caminho do .deb em Install/ (ou vazio).
 haveno_find_install_deb() {
@@ -165,9 +165,10 @@ haveno_ensure_deb_deps() {
   y "  O install.sh oficial so roda dpkg -i; no Tails as libs nao vem pre-instaladas."
   y "  apt-get update pelo Tor pode levar 3-6 min — aguarde."
   y "  NAO rode 'apt-get install -f' sozinho com haveno desconfigurado — remove o pacote."
+  local deb="${HAVENO_DIR}/Install/haveno.deb"
+  [ -f "$deb" ] || { y "  Sem ${deb} — pulando deps (install.sh vai apontar o que falta)."; return 0; }
   # Tails e amnesico: as listas apt ZERAM a cada boot. Sem update completo,
-  # TODA lib da 'nao tem candidato para instalacao'. Fail-closed com retry —
-  # nao adianta tentar instalar com listas vazias (DIV-20260611-05).
+  # nada tem candidato. Fail-closed com retry (DIV-20260611-05).
   local tent
   for tent in 1 2 3; do
     if sudo apt-get update; then
@@ -181,16 +182,53 @@ haveno_ensure_deb_deps() {
     y "  apt-get update falhou (tentativa ${tent}/3) — aguardando 30s (Tor)..."
     sleep 30
   done
-  # Confirma que as listas realmente tem candidatos antes de instalar
-  if ! apt-cache policy "${HAVENO_DEB_DEPS[0]}" 2>/dev/null | grep -q "Candidato.*[0-9]\|Candidate.*[0-9]"; then
-    r "  Listas apt sem candidato para ${HAVENO_DEB_DEPS[0]} — update incompleto."
-    y "  Aguarde o Tor estabilizar (1-2 min) e rode de novo. FAQ 7.11."
-    return 1
+  # Le o Depends DE DENTRO do .deb e classifica (DIV-20260610-02: nomes Ubuntu)
+  local deps_raw item nome status alt instalaveis=() faltando=()
+  deps_raw="$(dpkg-deb -f "$deb" Depends 2>/dev/null || true)"
+  [ -n "$deps_raw" ] || { g "  .deb sem Depends declarado."; return 0; }
+  local IFS=','
+  for item in $deps_raw; do
+    item="$(echo "$item" | sed 's/([^)]*)//g')"
+    status=""
+    local IFS='|'
+    for alt in $item; do
+      nome="$(echo "$alt" | tr -d '[:space:]')"
+      [ -n "$nome" ] || continue
+      if dpkg-query -W -f='${Status}' "$nome" 2>/dev/null | grep -q "install ok installed"; then
+        status="ok"; break
+      fi
+    done
+    if [ -z "$status" ]; then
+      for alt in $item; do
+        nome="$(echo "$alt" | tr -d '[:space:]')"
+        [ -n "$nome" ] || continue
+        if LC_ALL=C apt-cache policy "$nome" 2>/dev/null | grep -q 'Candidate: [0-9]'; then
+          status="instalar"; instalaveis+=("$nome"); break
+        fi
+      done
+    fi
+    if [ -z "$status" ]; then
+      nome="$(echo "$item" | tr -d '[:space:]' | cut -d'|' -f1)"
+      [ -n "$nome" ] && faltando+=("$nome")
+    fi
+    local IFS=','
+  done
+  unset IFS
+  if [ "${#instalaveis[@]}" -gt 0 ]; then
+    b "  Instalando ${#instalaveis[@]} dependencia(s) disponiveis: ${instalaveis[*]}"
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${instalaveis[@]}" || {
+      r "  apt nao instalou: ${instalaveis[*]}"
+      y "  Veja Cap. 7 FAQ 7.11 ou ative Software adicional na persistencia."
+      return 1
+    }
   fi
-  if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${HAVENO_DEB_DEPS[@]}"; then
-    r "  Falha ao instalar dependencias do .deb."
-    y "  Veja Cap. 7 FAQ 7.11 (Curso-Tails-OS-Expert.md) ou ative Software adicional na persistencia."
-    return 1
+  HAVENO_DEPS_MISSING=0
+  if [ "${#faltando[@]}" -gt 0 ]; then
+    HAVENO_DEPS_MISSING=1
+    y "  ${#faltando[@]} dependencia(s) com nome Ubuntu, inexistentes no Debian/Tails:"
+    y "    ${faltando[*]}"
+    y "  Conhecido (DIV-20260610-02) — o dpkg vai usar --force-depends; o Haveno"
+    y "  embute o runtime e abre normalmente (validado em campo)."
   fi
   g "  Dependencias do .deb OK."
   return 0
@@ -205,9 +243,23 @@ haveno_run_install() {
   b "Rodando install.sh (pkexec — pode pedir senha admin)..."
   chmod +x "${utils}/install.sh" 2>/dev/null || true
   if ! sudo "${utils}/install.sh"; then
+    # Deps com nome Ubuntu inexistentes no Debian (DIV-20260610-02): o dpkg -i
+    # do install.sh falha por Depends, mas o app roda sem elas (runtime embutido).
+    # Fallback validado em campo: --force-depends + reconfigure.
+    if [ "${HAVENO_DEPS_MISSING:-0}" = "1" ] && [ -f "${HAVENO_DIR}/Install/haveno.deb" ]; then
+      y "  install.sh falhou por Depends Ubuntu-only — aplicando dpkg --force-depends..."
+      if sudo dpkg -i --force-depends "${HAVENO_DIR}/Install/haveno.deb"; then
+        sudo dpkg --configure -a 2>/dev/null || true
+        g "  haveno instalado com --force-depends (DIV-20260610-02)."
+        # install.sh tambem cria atalhos/launcher — tenta de novo agora que o
+        # pacote esta instalado; se ainda falhar, segue (dpkg ja instalou).
+        sudo "${utils}/install.sh" 2>/dev/null || true
+        return 0
+      fi
+    fi
     r "  install.sh falhou."
     y "  Nao rode install.sh direto sem passar por haveno-auto.sh — faltam deps apt."
-    y "  Recuperacao: ~/Persistent/haveno-auto.sh --install-only"
+    y "  Recuperacao: ~/Persistent/hub-scripts/haveno-auto.sh --install-only"
     die "install.sh falhou."
   fi
 }
