@@ -27,7 +27,12 @@ FEATHER_DIR="${PERSIST}/feather"
 WALLETS_DIR="${FEATHER_DIR}/wallets"
 DOWNLOADS="${HOME}/Tor Browser/Browser/Downloads"
 FEATHER_FPR="8185E158A33330C7FD61BC0D1F76E155CEFBA71C"
-FEATHER_KEY_URL="https://raw.githubusercontent.com/feather-wallet/feather/master/featherwallet.asc"
+# URLs da chave, em ordem de preferencia (a do GitHub master morreu — 404,
+# DIV-20260611-03). A 2a e o keyserver pinado pelo fingerprint completo.
+FEATHER_KEY_URLS=(
+  "https://featherwallet.org/files/featherwallet.asc"
+  "https://keys.openpgp.org/vks/v1/by-fingerprint/${FEATHER_FPR}"
+)
 
 echo
 b "==============================================================="
@@ -53,8 +58,15 @@ shopt -u nullglob
 
 if [ ! -f "${FEATHER_DIR}/featherwallet.asc" ]; then
   y "  featherwallet.asc ausente — baixando via Tor..."
-  curl -x socks5h://127.0.0.1:9050 -fsSL "$FEATHER_KEY_URL" -o "${FEATHER_DIR}/featherwallet.asc" \
-    || die "Nao baixei featherwallet.asc. Baixe pelo Tor Browser: featherwallet.org/download"
+  for url in "${FEATHER_KEY_URLS[@]}"; do
+    if curl -x socks5h://127.0.0.1:9050 -fsSL "$url" -o "${FEATHER_DIR}/featherwallet.asc"; then
+      g "  Chave baixada de: ${url}"
+      break
+    fi
+    y "  Falhou: ${url} — tentando a proxima..."
+  done
+  [ -s "${FEATHER_DIR}/featherwallet.asc" ] \
+    || die "Nao baixei featherwallet.asc de nenhuma fonte. Baixe pelo Tor Browser: featherwallet.org/download"
 fi
 
 appimages=("${FEATHER_DIR}"/feather-*AppImage)
