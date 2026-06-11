@@ -9,12 +9,19 @@ Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
 ## Orquestrador (comece aqui após passos 1–4 manuais)
 
 ```bash
-chmod +x ~/Persistent/*.sh
-~/Persistent/haveno-setup.sh           # 1ª vez: install → verde → backup?
-~/Persistent/haveno-setup.sh --boot    # cada sessão
-~/Persistent/haveno-setup.sh --feather # + Feather (passo 5 / M2)
-~/Persistent/haveno-setup.sh --qa-log    # grava evidencias em ~/Persistent/qa-logs/
+# instalar/atualizar (cria ~/Persistent/hub-scripts/ — raiz da Persistent fica limpa):
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
+
+~/Persistent/hub-scripts/haveno-setup.sh           # 1ª vez: install → verde → backup?
+~/Persistent/hub-scripts/haveno-setup.sh --boot    # cada sessão
+~/Persistent/hub-scripts/haveno-setup.sh --feather # + Feather (passo 5 / M2)
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log  # grava evidencias em ~/Persistent/qa-logs/
 ```
+
+> **Layout (jun/2026):** os scripts vivem em **`~/Persistent/hub-scripts/`** — uma
+> pasta só, fácil de achar e de apagar/recriar no update. Seus **dados** ficam fora
+> dela: `haveno/` (carteira), `Backups/`, `feather/`, `qa-logs/`. Caminhos antigos
+> `~/Persistent/*.sh` em docs = layout anterior; os scripts funcionam nos dois.
 
 > **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `tails-preflight.sh` só valida.
 
@@ -67,20 +74,23 @@ flowchart LR
 
 ---
 
-## Instalar scripts em `~/Persistent` (uma vez)
+## Instalar scripts (uma vez — e a cada update do ZIP)
 
-### Método A — Arquivos (recomendado)
-
-1. Copie **todos** os `*.sh` desta pasta + `haveno-backup.desktop` → `~/Persistent/`.
-2. `chmod +x ~/Persistent/*.sh`
-
-### Método B — find
+### Método A — `sync-hub-scripts.sh` (recomendado)
 
 ```bash
-find ~/Persistent -path '*/automacao/tails/*.sh' -exec cp -t ~/Persistent {} +
-find ~/Persistent -name 'haveno-backup.desktop' -exec cp -t ~/Persistent {} +
-chmod +x ~/Persistent/*.sh
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
+./sync-hub-scripts.sh
 ```
+
+Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os `.sh` + o filtro
+`haveno-onion-grater.yml` + o atalho `.desktop`, e oferece limpar scripts do
+layout antigo soltos na raiz (sem tocar nos seus dados).
+
+### Método B — manual
+
+1. Copie **todos** os `*.sh` + `haveno-onion-grater.yml` + `haveno-backup.desktop` desta pasta → `~/Persistent/hub-scripts/`.
+2. `chmod +x ~/Persistent/hub-scripts/*.sh`
 
 ---
 
@@ -96,11 +106,11 @@ chmod +x ~/Persistent/*.sh
 ### `haveno-auto.sh` — install até verde
 
 ```bash
-~/Persistent/haveno-auto.sh
-~/Persistent/haveno-auto.sh --boot-only   # delega a haveno-boot.sh
-~/Persistent/haveno-auto.sh --update
-~/Persistent/haveno-auto.sh --no-clock
-~/Persistent/haveno-auto.sh --install-only   # recuperacao: deps + install (sem download)
+~/Persistent/hub-scripts/haveno-auto.sh
+~/Persistent/hub-scripts/haveno-auto.sh --boot-only   # delega a haveno-boot.sh
+~/Persistent/hub-scripts/haveno-auto.sh --update
+~/Persistent/hub-scripts/haveno-auto.sh --no-clock
+~/Persistent/hub-scripts/haveno-auto.sh --install-only   # recuperacao: deps + install (sem download)
 ```
 
 **Atualizar scripts do ZIP para `~/Persistent/`:** `./sync-hub-scripts.sh` (nesta pasta).
@@ -132,8 +142,8 @@ os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
 ### `haveno-boot.sh` — cada sessão (Playbook §7)
 
 ```bash
-~/Persistent/haveno-boot.sh
-~/Persistent/haveno-boot.sh --watch 8
+~/Persistent/hub-scripts/haveno-boot.sh
+~/Persistent/hub-scripts/haveno-boot.sh --watch 8
 ```
 
 ### `feather-install-verify.sh`
@@ -141,7 +151,7 @@ os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
 Baixe AppImage + `.asc` pelo **Tor Browser** primeiro, depois:
 
 ```bash
-~/Persistent/feather-install-verify.sh
+~/Persistent/hub-scripts/feather-install-verify.sh
 ```
 
 ### `haveno-backup.sh` / `feather-backup.sh`
