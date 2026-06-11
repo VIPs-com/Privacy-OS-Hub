@@ -165,8 +165,27 @@ haveno_ensure_deb_deps() {
   y "  O install.sh oficial so roda dpkg -i; no Tails as libs nao vem pre-instaladas."
   y "  apt-get update pelo Tor pode levar 3-6 min — aguarde."
   y "  NAO rode 'apt-get install -f' sozinho com haveno desconfigurado — remove o pacote."
-  if ! sudo apt-get update; then
-    y "  apt-get update falhou (rede?) — tentando install das libs mesmo assim."
+  # Tails e amnesico: as listas apt ZERAM a cada boot. Sem update completo,
+  # TODA lib da 'nao tem candidato para instalacao'. Fail-closed com retry —
+  # nao adianta tentar instalar com listas vazias (DIV-20260611-05).
+  local tent
+  for tent in 1 2 3; do
+    if sudo apt-get update; then
+      break
+    fi
+    if [ "$tent" = "3" ]; then
+      r "  apt-get update falhou 3x — sem listas apt, as libs nao instalam."
+      y "  Confirme o Tor conectado (Tor Connection assistant) e rode de novo."
+      return 1
+    fi
+    y "  apt-get update falhou (tentativa ${tent}/3) — aguardando 30s (Tor)..."
+    sleep 30
+  done
+  # Confirma que as listas realmente tem candidatos antes de instalar
+  if ! apt-cache policy "${HAVENO_DEB_DEPS[0]}" 2>/dev/null | grep -q "Candidato.*[0-9]\|Candidate.*[0-9]"; then
+    r "  Listas apt sem candidato para ${HAVENO_DEB_DEPS[0]} — update incompleto."
+    y "  Aguarde o Tor estabilizar (1-2 min) e rode de novo. FAQ 7.11."
+    return 1
   fi
   if ! sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${HAVENO_DEB_DEPS[@]}"; then
     r "  Falha ao instalar dependencias do .deb."
