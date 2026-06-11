@@ -3,8 +3,9 @@
 # feather-install-verify.sh — Feather no Tails (Vol II Playbook §2)
 #
 # NAO FAZ: criar carteira, anotar seed, trades.
-# USO: baixe pelo Tor Browser primeiro, depois:
-#      ~/Persistent/feather-install-verify.sh
+# USO: ~/Persistent/hub-scripts/feather-install-verify.sh [--qa-log]
+#      Baixa chave + AppImage via Tor se ausentes; PGP fail-closed antes de executar.
+#      Fallback manual: Tor Browser -> featherwallet.org/download -> ~/Persistent/feather/
 ###############################################################################
 
 set -uo pipefail
@@ -69,20 +70,49 @@ if [ ! -f "${FEATHER_DIR}/featherwallet.asc" ]; then
     || die "Nao baixei featherwallet.asc de nenhuma fonte. Baixe pelo Tor Browser: featherwallet.org/download"
 fi
 
+shopt -s nullglob
 appimages=("${FEATHER_DIR}"/feather-*AppImage)
 ascfiles=("${FEATHER_DIR}"/feather-*AppImage.asc)
+shopt -u nullglob
+
+# Sem AppImage local? Baixa via Tor direto do site oficial (igual ao .deb do
+# Haveno). Seguro: a verificacao PGP fail-closed do [4/5] roda do mesmo jeito —
+# arquivo adulterado = aborta.
+if [ "${#appimages[@]}" -eq 0 ]; then
+  y "  AppImage ausente — descobrindo versao atual via Tor (featherwallet.org)..."
+  FEATHER_VER="$(curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 120 "https://featherwallet.org/download/" 2>/dev/null \
+    | grep -oE 'linux-appimage/feather-[0-9]+\.[0-9]+(\.[0-9]+)?\.AppImage' \
+    | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)"
+  [ -n "$FEATHER_VER" ] || die "Nao descobri a versao atual. Baixe pelo Tor Browser: featherwallet.org/download -> mova para ${FEATHER_DIR}"
+  g "  Versao atual: ${FEATHER_VER}"
+  FEATHER_BASE="https://featherwallet.org/files/releases/linux-appimage/feather-${FEATHER_VER}.AppImage"
+  y "  Baixando AppImage (~50 MB via Tor — pode demorar alguns minutos)..."
+  curl -x socks5h://127.0.0.1:9050 -fL --retry 3 -o "${FEATHER_DIR}/feather-${FEATHER_VER}.AppImage" "$FEATHER_BASE" \
+    || die "Download do AppImage falhou. Baixe pelo Tor Browser: featherwallet.org/download"
+  curl -x socks5h://127.0.0.1:9050 -fsSL -o "${FEATHER_DIR}/feather-${FEATHER_VER}.AppImage.asc" "${FEATHER_BASE}.asc" \
+    || die "Download do .asc falhou. Baixe pelo Tor Browser: featherwallet.org/download"
+  g "  Baixados: feather-${FEATHER_VER}.AppImage + .asc"
+  shopt -s nullglob
+  appimages=("${FEATHER_DIR}"/feather-*AppImage)
+  ascfiles=("${FEATHER_DIR}"/feather-*AppImage.asc)
+  shopt -u nullglob
+fi
 
 if [ "${#appimages[@]}" -eq 0 ] || [ "${#ascfiles[@]}" -eq 0 ]; then
   die "AppImage + .asc ausentes. Tor Browser -> featherwallet.org/download -> mova para ${FEATHER_DIR}"
 fi
 if [ "${#appimages[@]}" -gt 1 ] || [ "${#ascfiles[@]}" -gt 1 ]; then
   y "  Varias versoes encontradas — use UMA:"
+  shopt -s nullglob
   ls -la "${FEATHER_DIR}"/feather-*AppImage* 2>/dev/null || true
+  shopt -u nullglob
   die "Deixe apenas um par .AppImage + .AppImage.asc em ${FEATHER_DIR}"
 fi
 
 APPIMAGE="${appimages[0]}"
 ASCFILE="${ascfiles[0]}"
+[ -f "$APPIMAGE" ] || die "AppImage ausente em ${FEATHER_DIR} (glob nao encontrou arquivo real)."
+[ -f "$ASCFILE" ] || die "Assinatura .asc ausente em ${FEATHER_DIR} (par incompleto)."
 g "  Par: $(basename "$APPIMAGE")"
 
 b "[4/5] Verificacao PGP..."
