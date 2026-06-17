@@ -7,7 +7,7 @@ Este é o **livro** do curso. Tudo está aqui, em capítulos, na ordem. Sem fica
 - **Este arquivo** = teoria + fundamentos + instalação passo a passo (o "porquê" e o "como").
 - **[`processos/`](../../processos/README.md)** = comandos canônicos por passo (P01–P07 neste módulo).
 - **`Playbooks/Playbooks.md`** = índice legado → aponta para `processos/`.
-- **[`automacao/tails/`](../../automacao/tails/README.md)** = scripts no repo (`haveno-auto.sh`, `haveno-backup.sh`, …) — copie para `~/Persistent/` uma vez.
+- **[`automacao/tails/`](../../automacao/tails/README.md)** = scripts no repo (`haveno-auto.sh`, `haveno-backup.sh`, …) — instale com `sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`.
 - **Volume II:** [`Expansao-Curso/`](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) — livro + [`Playbooks-Rede-Descentralizada.md`](Expansao-Curso/Playbooks-Rede-Descentralizada.md) (trades, Feather, home lab).
 
 > **Alinhamento oficial:** procedimentos Haveno conforme `scripts/install_tails/` do repositório haveno-dex/haveno (branch `master`). Tails **7.8.1+**. Rede de exemplo da turma: **Reto** (`1.6.0-reto`).
@@ -64,7 +64,7 @@ O Tails **não funciona** em celular ou tablet.
 |------------|-----|
 | Entender cada etapa (aula) | Este **livro**, capítulos 2 e 3 |
 | Só os comandos, rápido | **[`processos/m1-tor/`](../../processos/README.md)** (P01–P07) ou índice `Playbooks/Playbooks.md` |
-| Automatizar (instalar/backup/atualizar) | **[`automacao/tails/`](../../automacao/tails/README.md)** — copie para `~/Persistent/` — **só após os passos 1–4** |
+| Automatizar (instalar/backup/atualizar) | **[`automacao/tails/`](../../automacao/tails/README.md)** — `sync-hub-scripts.sh` → `~/Persistent/hub-scripts/` — **só após os passos 1–4** |
 | Saber se pode tradear | **Capítulo 4** |
 | Pós-verde (carteira, backup, redes) | **Capítulo 5** |
 | Resolver um erro | **Capítulo 7 (FAQ)** |
@@ -315,7 +315,7 @@ Regra: no Tails, o Monero do Haveno usa **9062**, **não** 9050. Scripts caseiro
 
 Pré-requisitos desta parte (Capítulo 2): Tails no USB, **Tor conectado**, **persistência + Dotfiles**, **senha admin** desta sessão.
 
-> **Atalho:** se quiser pular a digitação, use os scripts em [`automacao/tails/`](../../automacao/tails/README.md) — **(1)** copie para `~/Persistent/` uma vez (`cp automacao/tails/*.sh automacao/tails/hub-aliases/*.sh ~/Persistent/`); **(2)** rode `~/Persistent/haveno-auto.sh`. Abaixo é o caminho **manual**, para você entender cada etapa.
+> **Atalho:** se quiser pular a digitação, use os scripts em [`automacao/tails/`](../../automacao/tails/README.md) — **(1)** instale uma vez com `cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh` (cria `~/Persistent/hub-scripts/`); **(2)** rode `~/Persistent/hub-scripts/haveno-auto.sh`. Abaixo é o caminho **manual**, para você entender cada etapa.
 
 ## 3.1 Antes de instalar — rede de terceiros, URL e PGP
 
@@ -537,12 +537,12 @@ Na interface (após verde):
 
 ## 5.2 Backup (persistência + Data + cifrar)
 
-> **Para a maioria:** use `~/Persistent/haveno-backup.sh` (cifrado e prático; origem no repo: [`automacao/tails/haveno-backup.sh`](../../automacao/tails/haveno-backup.sh)). As opções abaixo são complementares ou alternativas.
+> **Para a maioria:** use `~/Persistent/hub-scripts/haveno-backup.sh` (cifrado e prático; origem no repo: [`automacao/tails/haveno-backup.sh`](../../automacao/tails/haveno-backup.sh)). As opções abaixo são complementares ou alternativas.
 
 | Camada | Como |
 |--------|------|
 | **Pendrive Tails inteiro** | Guia oficial Tails de backup da persistência (link no Capítulo 8) |
-| **Só o Haveno (prático)** | `~/Persistent/haveno-backup.sh` — compacta + **cifra (GPG)** + gera `.sha256`; `--usb` salva em pendrive |
+| **Só o Haveno (prático)** | `~/Persistent/hub-scripts/haveno-backup.sh` — compacta + **cifra (GPG)** + gera `.sha256`; `--usb` salva em pendrive |
 | **Pela interface** | **Account → Backup** para um USB criptografado externo |
 | **Manual** | Feche o Haveno → copie `~/Persistent/haveno/Data/` para mídia externa |
 | **Seed** | **Account → Wallet seed** anotada em papel/metal, separada do backup |
@@ -562,7 +562,7 @@ gpg -c haveno-data-backup.tar.gz
 
 Quando a sua rede publicar versão nova:
 
-1. **Backup primeiro** (`~/Persistent/haveno-backup.sh` ou Account → Backup).
+1. **Backup primeiro** (`~/Persistent/hub-scripts/haveno-backup.sh` ou Account → Backup).
 2. Anote a **URL nova** do `.deb` e o **PGP** do mesmo release.
 3. Reinstale (manual ou script) — os dados em `Data/` são **preservados**.
 
@@ -575,7 +575,7 @@ bash haveno-install.sh \
   "FINGERPRINT_DA_MESMA_REDE"
 ```
 
-Automático (faz backup antes): `~/Persistent/haveno-update.sh` (veja [`automacao/tails/README.md`](../../automacao/tails/README.md)). **Ao usar o script, o backup é feito automaticamente — você não precisa repetir o passo 1 acima.**
+Automático (faz backup antes): `~/Persistent/hub-scripts/haveno-update.sh` (veja [`automacao/tails/README.md`](../../automacao/tails/README.md)). **Ao usar o script, o backup é feito automaticamente — você não precisa repetir o passo 1 acima.**
 
 > **Tails (sistema):** atualize pelo **Tails Upgrader** (ao conectar no Tor) ou reinstalação oficial — **nunca** por script. Faça o backup primeiro.
 
@@ -1274,7 +1274,7 @@ Já passou do Tor e está sincronizando P2P/Monero. Na 1ª vez, 15–30 min pode
 
 Quase sempre o Haveno foi aberto **sem** `--userDataDir` (ex.: rodando o binário direto). Resultado: usou pasta volátil em vez de `~/Persistent/haveno/Data`.
 
-**Solução:** abra **sempre** por **Aplicações → Outros → Haveno** (ou `exec.sh`), que força o caminho persistente. Se tiver backup: `~/Persistent/haveno-backup.sh --restore SEU_BACKUP.tar.gz.gpg`.
+**Solução:** abra **sempre** por **Aplicações → Outros → Haveno** (ou `exec.sh`), que força o caminho persistente. Se tiver backup: `~/Persistent/hub-scripts/haveno-backup.sh --restore SEU_BACKUP.tar.gz.gpg`.
 
 ## 7.8 Atalho do Haveno sumiu do menu
 

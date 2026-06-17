@@ -19,8 +19,8 @@
 # NUNCA: foto, nuvem, chat, e-mail da seed
 
 ```bash
-~/Persistent/haveno-backup.sh
-# ou: ~/Persistent/haveno-backup.sh --usb
+~/Persistent/hub-scripts/haveno-backup.sh
+# ou: ~/Persistent/hub-scripts/haveno-backup.sh --usb
 ```
 
 # OK se: seed em papel separado do USB + backup cifrado de Data/ feito ANTES do 1º depósito.
@@ -35,7 +35,7 @@
 
 ```bash
 # Ou automatizado (apos o download pelo Tor Browser):
-~/Persistent/feather-install-verify.sh
+~/Persistent/hub-scripts/feather-install-verify.sh
 ```
 
 ```bash
@@ -146,7 +146,7 @@ gpg --verify haveno-v1.6.0-linux-x86_64-installer.deb.sig \
 
 # Feche trades + backup ANTES:
 ```bash
-~/Persistent/haveno-backup.sh
+~/Persistent/hub-scripts/haveno-backup.sh
 ```
 
 # Obtenha URL .deb + PGP no site/GitHub OFICIAL da nova rede (mesmo release):
@@ -211,7 +211,7 @@ journalctl -u xmrig -f
 ## 11 — Atualizar Tails (sistema)
 
 ```bash
-~/Persistent/haveno-backup.sh
+~/Persistent/hub-scripts/haveno-backup.sh
 # Backup persistência Tails: guia oficial tails.net
 ```
 

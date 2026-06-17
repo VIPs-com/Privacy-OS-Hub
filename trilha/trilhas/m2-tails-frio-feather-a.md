@@ -16,7 +16,7 @@ Leia antes: [00-Comece-aqui](../../modulos/m2-whonix-custodia/00-Comece-aqui-Esc
 
 1. Cartão: [passo-12.md](../passos/passo-12.md)
 2. Playbook: [Trilha A — Feather GUI](../../modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md)
-3. Após assinar: `~/Persistent/qa-confirm-passo12.sh`
+3. Após assinar: `~/Persistent/hub-scripts/qa-confirm-passo12.sh`
 
 ---
 

@@ -21,10 +21,10 @@
 ## Comando porta (novato)
 
 ```bash
-chmod +x ~/Persistent/*.sh
-~/Persistent/haveno-setup.sh --qa-log              # 1ª vez
-~/Persistent/haveno-setup.sh --boot --qa-log       # cada sessão
-~/Persistent/haveno-setup.sh --feather --qa-log    # + Feather
+chmod +x ~/Persistent/hub-scripts/*.sh
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log              # 1ª vez
+~/Persistent/hub-scripts/haveno-setup.sh --boot --qa-log       # cada sessão
+~/Persistent/hub-scripts/haveno-setup.sh --feather --qa-log    # + Feather
 ```
 
 Manual: [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md)

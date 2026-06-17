@@ -91,7 +91,7 @@ submit_transfer
 ## Após assinar offline
 
 ```bash
-~/Persistent/qa-confirm-passo12.sh
+~/Persistent/hub-scripts/qa-confirm-passo12.sh
 ```
 
 **OK se:** mesmo critério que [P12A](P12a-feather-offline.md) — air-gap real.

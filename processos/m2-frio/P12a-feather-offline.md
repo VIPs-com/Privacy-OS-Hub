@@ -97,7 +97,7 @@ No Whonix (Feather): **Create new wallet → View only** → cole os três → *
 ## Após assinar offline
 
 ```bash
-~/Persistent/qa-confirm-passo12.sh
+~/Persistent/hub-scripts/qa-confirm-passo12.sh
 ```
 
 **OK se:** Tails **sem** rede antes de abrir carteira · `12-cold-signing-*.txt` → `tails_offline_airgap=SIM`.

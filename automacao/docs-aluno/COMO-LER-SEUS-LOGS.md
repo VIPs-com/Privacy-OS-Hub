@@ -18,20 +18,20 @@ Ative gravação com **`--qa-log`** nos scripts (ou `haveno-setup.sh --qa-log`).
 ## Como rodar
 
 ```bash
-chmod +x ~/Persistent/*.sh
+chmod +x ~/Persistent/hub-scripts/*.sh
 
 # Exemplos (Tails com Tor):
-~/Persistent/tails-preflight.sh --qa-log
-~/Persistent/haveno-setup.sh --qa-log
-~/Persistent/haveno-backup.sh --qa-log
-~/Persistent/feather-install-verify.sh --qa-log
-~/Persistent/post-session-check.sh --qa-log
-~/Persistent/qa-confirm-seed-papel.sh    # apos anotar seed no papel
-~/Persistent/qa-confirm-passo9.sh        # passo 9 — 2 copias fisicas
-~/Persistent/qa-confirm-passo12.sh       # passo 12 — Tails SEM rede
+~/Persistent/hub-scripts/tails-preflight.sh --qa-log
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log
+~/Persistent/hub-scripts/haveno-backup.sh --qa-log
+~/Persistent/hub-scripts/feather-install-verify.sh --qa-log
+~/Persistent/hub-scripts/post-session-check.sh --qa-log
+~/Persistent/hub-scripts/qa-confirm-seed-papel.sh    # apos anotar seed no papel
+~/Persistent/hub-scripts/qa-confirm-passo9.sh        # passo 9 — 2 copias fisicas
+~/Persistent/hub-scripts/qa-confirm-passo12.sh       # passo 12 — Tails SEM rede
 
 # Exportar para equipe / outro PC:
-~/Persistent/qa-export-logs.sh --usb
+~/Persistent/hub-scripts/qa-export-logs.sh --usb
 ```
 
 **Host Debian (passo 10):**

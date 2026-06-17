@@ -21,7 +21,7 @@
 # Do clone no pendrive persistente:
 cp automacao/tails/*.sh automacao/tails/hub-aliases/*.sh ~/Persistent/
 cp automacao/tails/haveno-backup.desktop ~/Persistent/
-chmod +x ~/Persistent/*.sh
+chmod +x ~/Persistent/hub-scripts/*.sh
 ```
 
 ---

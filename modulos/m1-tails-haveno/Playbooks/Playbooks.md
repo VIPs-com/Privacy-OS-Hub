@@ -26,10 +26,10 @@ Direto ao ponto. Fundamentos e telas: [`../Curso-Tails-OS-Expert.md`](../Curso-T
 
 Passos **1–4** são sempre manuais. Do **5** em diante, você pode automatizar.
 
-**Antes de automatizar:** copie os scripts para `~/Persistent/` uma vez ([`../../../automacao/tails/README.md`](../../../automacao/tails/README.md) → "Ciclo de uso").
+**Antes de automatizar:** instale os scripts uma vez (`sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`) ([`../../../automacao/tails/README.md`](../../../automacao/tails/README.md) → "Ciclo de uso").
 
 ```bash
-~/Persistent/haveno-auto.sh
+~/Persistent/hub-scripts/haveno-auto.sh
 ```
 
 ---

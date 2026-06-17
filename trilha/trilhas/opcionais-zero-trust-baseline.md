@@ -57,12 +57,12 @@ ferramentas de backup), o material dedicado é o **[Zero-Trust-Core](#aprofundar
 **Na prática — o backup do Haveno já faz o 3-2-1 digital para você:**
 
 ```bash
-~/Persistent/haveno-backup.sh                 # compacta Data/ + cifra (GPG, senha) + gera .sha256
-~/Persistent/haveno-backup.sh --usb           # mesma cópia num pendrive montado = sua **2ª mídia** (ainda em casa)
+~/Persistent/hub-scripts/haveno-backup.sh                 # compacta Data/ + cifra (GPG, senha) + gera .sha256
+~/Persistent/hub-scripts/haveno-backup.sh --usb           # mesma cópia num pendrive montado = sua **2ª mídia** (ainda em casa)
 # Off-site: leve **uma** cópia do .gpg para fora de casa (cofre, familiar de confiança) — pendrive em casa ≠ off-site
 sha256sum -c haveno-data-AAAAMMDD-HHMMSS.tar.gz.gpg.sha256   # conferir integridade depois
 # CUIDADO: --restore SOBRESCREVE Data/ (pede confirmação; salva Data.bak antes)
-~/Persistent/haveno-backup.sh --restore haveno-data-...tar.gz.gpg   # como restaurar: [MANUAL-SCRIPTS § haveno-backup](../../MANUAL-SCRIPTS.md#haveno-backupsh)
+~/Persistent/hub-scripts/haveno-backup.sh --restore haveno-data-...tar.gz.gpg   # como restaurar: [MANUAL-SCRIPTS § haveno-backup](../../MANUAL-SCRIPTS.md#haveno-backupsh)
 ```
 
 - Saída: um `.tar.gz.gpg` **cifrado por senha** + um `.sha256` para detectar corrupção. O que viaja no backup é a pasta `~/Persistent/haveno/Data/` — **carteira, histórico de trades e contas de pagamento**. Detalhe: [P04](../../processos/m1-tor/P04-backup-seed.md) · [Curso §5.1 — onde ficam os dados](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#51-carteira--criar-restaurar-onde-ficam-os-dados) · [scripts](../../automacao/tails/README.md). A carteira **Feather** tem o equivalente `feather-backup.sh`.
@@ -72,7 +72,7 @@ sha256sum -c haveno-data-AAAAMMDD-HHMMSS.tar.gz.gpg.sha256   # conferir integrid
 
 > **OK se:** seed em 2 locais físicos separados · backup cifrado em 2 mídias + 1 off-site · senha do backup guardada **fora** do backup · você já restaurou um backup de teste com sucesso.
 
-**Manter no tempo — atualizar com backup antes:** quando sua rede publicar uma versão nova do Haveno, **backup primeiro, atualizar depois** — os dados em `Data/` são preservados. O `~/Persistent/haveno-update.sh` já faz o backup antes ([Curso §5.3](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#53-atualizar-o-haveno-com-backup-antes) · [scripts](../../automacao/tails/README.md)). O **Tails** (sistema) atualize só pelo **Tails Upgrader** — **nunca por script**.
+**Manter no tempo — atualizar com backup antes:** quando sua rede publicar uma versão nova do Haveno, **backup primeiro, atualizar depois** — os dados em `Data/` são preservados. O `~/Persistent/hub-scripts/haveno-update.sh` já faz o backup antes ([Curso §5.3](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#53-atualizar-o-haveno-com-backup-antes) · [scripts](../../automacao/tails/README.md)). O **Tails** (sistema) atualize só pelo **Tails Upgrader** — **nunca por script**.
 
 ---
 

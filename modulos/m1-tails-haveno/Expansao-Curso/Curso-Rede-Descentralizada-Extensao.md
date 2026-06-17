@@ -105,7 +105,7 @@ Abra o Haveno **pelo menu** (Aplicações → Outros → Haveno) com indicador *
 | 3 | Se a interface pedir, **confirme** a seed (digite palavras de volta) | Passou na verificação |
 | 4 | Guarde o papel **longe** do pendrive Tails e do PC | Seed em local físico separado |
 | 5 | **Não** fotografe, imprima em impressora de rede, e-mail ou nuvem | Zero cópia digital da seed |
-| 6 | Rode backup da pasta `Data/` (`~/Persistent/haveno-backup.sh` ou Account → Backup) | Arquivo `.tar.gz.gpg` (ou equivalente) em mídia **separada** |
+| 6 | Rode backup da pasta `Data/` (`~/Persistent/hub-scripts/haveno-backup.sh` ou Account → Backup) | Arquivo `.tar.gz.gpg` (ou equivalente) em mídia **separada** |
 | 7 | Entenda: **seed ≠ backup completo** | Você sabe que trades/histórico/contas ficam em `Data/` |
 
 ## 2.2 O que a seed controla (e o que não controla)

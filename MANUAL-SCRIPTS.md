@@ -1,6 +1,6 @@
 # Manual dos scripts de automação
 
-> **Hub v2:** scripts no repo ficam em [`automacao/tails/`](automacao/tails/README.md) — copie para `~/Persistent/`. Comandos por passo: [`processos/`](processos/README.md).
+> **Hub v2:** scripts no repo ficam em [`automacao/tails/`](automacao/tails/README.md) — instale com `sync-hub-scripts.sh`, que os coloca em **`~/Persistent/hub-scripts/`**. Comandos por passo: [`processos/`](processos/README.md).
 
 > **Para quem?** Aluno **novato** que quer usar os scripts com segurança — sem precisar ser expert em Linux.
 >
@@ -16,13 +16,13 @@
 
 ## Só estes comandos (iniciante)
 
-Depois dos passos 1–4 manuais e de copiar os scripts para `~/Persistent/`:
+Depois dos passos 1–4 manuais e de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`):
 
 | Situação | Comando |
 |----------|---------|
-| **1ª vez** (instalar Haveno) | `~/Persistent/haveno-setup.sh` |
-| **Cada sessão** (novo boot no Tails) | `~/Persistent/haveno-setup.sh --boot` |
-| **Feather** (passo 5 / pré-requisito M2) | `~/Persistent/haveno-setup.sh --feather` ou `--boot --feather` |
+| **1ª vez** (instalar Haveno) | `~/Persistent/hub-scripts/haveno-setup.sh` |
+| **Cada sessão** (novo boot no Tails) | `~/Persistent/hub-scripts/haveno-setup.sh --boot` |
+| **Feather** (passo 5 / pré-requisito M2) | `~/Persistent/hub-scripts/haveno-setup.sh --feather` ou `--boot --feather` |
 
 Os outros arquivos `.sh` existem para **avançado** ou são chamados **automaticamente** pelo `haveno-setup.sh`. Detalhe de cada um: [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
 
@@ -39,7 +39,7 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 | 3 | Armazenamento persistente + **Dotfiles** | Scripts e carteira ficam em `~/Persistent/` |
 | 4 | Senha de **administrador** na sessão (+ Mais opções no boot) | `install.sh` e onion-grater precisam de admin |
 
-**Checagem automática:** `~/Persistent/tails-preflight.sh` — só **lê** o ambiente; não altera nada.
+**Checagem automática:** `~/Persistent/hub-scripts/tails-preflight.sh` — só **lê** o ambiente; não altera nada.
 
 **Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
 
@@ -47,25 +47,25 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 
 ## Validar com logs (recomendado)
 
-Depois de copiar os scripts para `~/Persistent/`:
+Depois de instalar os scripts (via `sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`):
 
 ```bash
-chmod +x ~/Persistent/*.sh
+chmod +x ~/Persistent/hub-scripts/*.sh
 
 # Exemplo — 1ª instalação com evidência:
-~/Persistent/haveno-setup.sh --qa-log
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log
 
 # Após anotar seed no papel (passo 4):
-~/Persistent/qa-confirm-seed-papel.sh
+~/Persistent/hub-scripts/qa-confirm-seed-papel.sh
 
 # Passo 9 — duas cópias físicas (Tails pode estar com Tor):
-~/Persistent/qa-confirm-passo9.sh
+~/Persistent/hub-scripts/qa-confirm-passo9.sh
 
 # Passo 12 — depois do cold-signing offline:
-~/Persistent/qa-confirm-passo12.sh
+~/Persistent/hub-scripts/qa-confirm-passo12.sh
 
 # Entregar à equipe (2º pendrive):
-~/Persistent/qa-export-logs.sh --usb
+~/Persistent/hub-scripts/qa-export-logs.sh --usb
 ```
 
 | O log **contém** | O log **nunca contém** |
@@ -95,16 +95,18 @@ chmod +x ~/Persistent/*.sh
 ## Instalar os scripts (uma vez por persistência)
 
 0. **Obter o repo no Tails:** Tor Browser → `https://github.com/VIPs-com/Privacy-OS-Hub` → **Code ▸ Download ZIP** → salve em `~/Persistent/` e extraia (ou copie a pasta de outro PC via pendrive). *(No Tails não há `git` pré-instalado para `git clone` sem configuração extra.)*
-1. No repo baixado: copie `automacao/tails/*.sh` e `automacao/tails/hub-aliases/*.sh` para `~/Persistent/` (ver [automacao/tails/README.md](automacao/tails/README.md)).
-2. Selecione **todos** os arquivos `*.sh` + `haveno-backup.desktop`.
-3. **Copiar** → colar em **Casa → Persistent** (`/home/amnesia/Persistent`).
-4. No Terminal:
+1. No repo baixado, rode o sincronizador — ele cria **`~/Persistent/hub-scripts/`** com todos os `.sh` + `haveno-onion-grater.yml` + atalho, e oferece limpar versões antigas soltas na raiz (sem tocar nos seus dados):
 
 ```bash
-chmod +x ~/Persistent/*.sh
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
+./sync-hub-scripts.sh
 ```
 
-**OK se:** `ls ~/Persistent/haveno-setup.sh` existe e `~/Persistent/tails-preflight.sh` roda sem “permission denied”.
+> **Por que uma pasta só (`hub-scripts/`)?** Mantém a raiz da `~/Persistent` limpa — seus
+> **dados** (`haveno/`, `Backups/`, `feather/`, `qa-logs/`) não se misturam com os scripts,
+> e atualizar é só re-rodar o `sync` (apaga/recria a pasta inteira sem risco).
+
+**OK se:** `ls ~/Persistent/hub-scripts/haveno-setup.sh` existe e `~/Persistent/hub-scripts/tails-preflight.sh` roda sem “permission denied”.
 
 > Copiar de novo por cima **só substitui os scripts** — não mexe em `~/Persistent/haveno/Data/` nem em carteiras Feather.
 
@@ -117,7 +119,7 @@ Use este **orquestrador** se você é novato. Ele chama os outros scripts na ord
 ### Sem flags (1ª vez — Haveno ainda não instalado)
 
 ```bash
-~/Persistent/haveno-setup.sh
+~/Persistent/hub-scripts/haveno-setup.sh
 ```
 
 **O que acontece:**
@@ -134,7 +136,7 @@ Use este **orquestrador** se você é novato. Ele chama os outros scripts na ord
 ### `--boot` (cada nova sessão no Tails)
 
 ```bash
-~/Persistent/haveno-setup.sh --boot
+~/Persistent/hub-scripts/haveno-setup.sh --boot
 ```
 
 **O que acontece:** preflight → `haveno-boot.sh` (Playbook §7: `install.sh` + `exec.sh` + onion-grater). *(Nota: `install.sh` e `exec.sh` são scripts internos do pacote Haveno `.deb`, não fazem parte deste repositório.)*
@@ -148,7 +150,7 @@ Use este **orquestrador** se você é novato. Ele chama os outros scripts na ord
 ### `--feather` (Feather no Tails — passo 5 / pré-requisito M2)
 
 ```bash
-~/Persistent/haveno-setup.sh --feather
+~/Persistent/hub-scripts/haveno-setup.sh --feather
 ```
 
 **Combinações:**
@@ -173,7 +175,7 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 ### `--skip-backup`
 
 ```bash
-~/Persistent/haveno-setup.sh --skip-backup
+~/Persistent/hub-scripts/haveno-setup.sh --skip-backup
 ```
 
 Pula a pergunta “rodar backup agora?”. Use se você **já** fez backup ou fará logo depois com `haveno-backup.sh`.
@@ -205,11 +207,11 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 #### `haveno-auto.sh`
 
 ```bash
-~/Persistent/haveno-auto.sh              # padrao: install se necessario + abrir
-~/Persistent/haveno-auto.sh --boot-only  # igual haveno-boot.sh
-~/Persistent/haveno-auto.sh --update     # forca reinstall do .deb (dados preservados)
-~/Persistent/haveno-auto.sh --no-clock   # nao ajusta relogio via Tor
-~/Persistent/haveno-auto.sh --watch 15   # monitora log 15 min
+~/Persistent/hub-scripts/haveno-auto.sh              # padrao: install se necessario + abrir
+~/Persistent/hub-scripts/haveno-auto.sh --boot-only  # igual haveno-boot.sh
+~/Persistent/hub-scripts/haveno-auto.sh --update     # forca reinstall do .deb (dados preservados)
+~/Persistent/hub-scripts/haveno-auto.sh --no-clock   # nao ajusta relogio via Tor
+~/Persistent/hub-scripts/haveno-auto.sh --watch 15   # monitora log 15 min
 ```
 
 | Flag | Quando | Seguro 2×? |
@@ -224,7 +226,7 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 ```bash
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
-~/Persistent/haveno-auto.sh --install-only
+~/Persistent/hub-scripts/haveno-auto.sh --install-only
 ```
 
 **Durante o [6/9] (1ª vez):** o download do `.deb` pelo Tor pode levar **30–90 min**. A linha `Downloading Haveno from URL...` (script upstream) **não atualiza** — o `haveno-auto.sh` imprime `[download] … (~%)` a cada 30s. Não interrompa.
@@ -233,29 +235,29 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 **Dependências [7/9]:** o `install.sh` upstream só faz `dpkg -i`. O hub instala libs Debian (FFmpeg, ICU, etc.) via `apt` **antes** — automático em `haveno-auto.sh` e `haveno-boot.sh`. A cada **novo boot** o Tails pode precisar repetir o `apt` (rápido); opcional: **Software adicional** na persistência para manter pacotes. **Não** rode só `apt-get install -f` com haveno desconfigurado — pode **remover** o pacote.
 
-**Copiar scripts no Tails:** prefira o **ZIP do GitHub** extraído no Tails (LF). Cópia direta do Windows/USB pode introduzir CRLF (`$'\r': comando não encontrado`) — use `dos2unix ~/Persistent/*.sh` se necessário.
+**Copiar scripts no Tails:** prefira o **ZIP do GitHub** extraído no Tails (LF). Cópia direta do Windows/USB pode introduzir CRLF (`$'\r': comando não encontrado`) — use `dos2unix ~/Persistent/hub-scripts/*.sh` se necessário.
 
 | Situação | Script certo |
 |----------|----------------|
 | **1ª instalação** | `haveno-auto.sh` ou `haveno-setup.sh` |
 | **Cada sessão** | `haveno-boot.sh` / `haveno-setup.sh --boot` |
-| **Versão nova** (já tem `Data/`) | `haveno-update.sh` (exige `~/Persistent/haveno-backup.sh`) |
+| **Versão nova** (já tem `Data/`) | `haveno-update.sh` (exige `~/Persistent/hub-scripts/haveno-backup.sh`) |
 
 #### `haveno-boot.sh`
 
 ```bash
-~/Persistent/haveno-boot.sh
-~/Persistent/haveno-boot.sh --watch 8
+~/Persistent/hub-scripts/haveno-boot.sh
+~/Persistent/hub-scripts/haveno-boot.sh --watch 8
 ```
 
 #### `haveno-backup.sh`
 
 ```bash
-~/Persistent/haveno-backup.sh                    # cifrado em ~/Persistent/Backups/
-~/Persistent/haveno-backup.sh --usb              # escolhe USB montado
-~/Persistent/haveno-backup.sh --dest /caminho    # pasta fixa
-~/Persistent/haveno-backup.sh --no-encrypt       # NAO recomendado
-~/Persistent/haveno-backup.sh --restore ARQUIVO  # SOBRESCREVE Data/ — pede confirmacao
+~/Persistent/hub-scripts/haveno-backup.sh                    # cifrado em ~/Persistent/Backups/
+~/Persistent/hub-scripts/haveno-backup.sh --usb              # escolhe USB montado
+~/Persistent/hub-scripts/haveno-backup.sh --dest /caminho    # pasta fixa
+~/Persistent/hub-scripts/haveno-backup.sh --no-encrypt       # NAO recomendado
+~/Persistent/hub-scripts/haveno-backup.sh --restore ARQUIVO  # SOBRESCREVE Data/ — pede confirmacao
 ```
 
 | Ação | Perigoso? |
@@ -269,7 +271,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 #### `haveno-update.sh`
 
 ```bash
-~/Persistent/haveno-update.sh --url "URL_DO_DEB" --pgp "FINGERPRINT"
+~/Persistent/hub-scripts/haveno-update.sh --url "URL_DO_DEB" --pgp "FINGERPRINT"
 ```
 
 | Flag | Uso |
@@ -280,7 +282,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 #### `haveno-switch-network.sh`
 
 ```bash
-~/Persistent/haveno-switch-network.sh --url "URL" --pgp "FP"
+~/Persistent/hub-scripts/haveno-switch-network.sh --url "URL" --pgp "FP"
 ```
 
 Pede confirmação, roda backup, depois `haveno-update`. **Feche trades** antes.
@@ -373,18 +375,18 @@ Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: [P02 §8](processos/m
 ### Quero só Feather, Haveno já está verde
 
 ```bash
-~/Persistent/tails-preflight.sh
-~/Persistent/feather-install-verify.sh
+~/Persistent/hub-scripts/tails-preflight.sh
+~/Persistent/hub-scripts/feather-install-verify.sh
 ```
 
-Ou: `~/Persistent/haveno-setup.sh --boot --feather` se já está na sessão habitual.
+Ou: `~/Persistent/hub-scripts/haveno-setup.sh --boot --feather` se já está na sessão habitual.
 
 ### Posso combinar `--boot` e `--feather`?
 
 **Sim.**
 
 ```bash
-~/Persistent/haveno-setup.sh --boot --feather
+~/Persistent/hub-scripts/haveno-setup.sh --boot --feather
 ```
 
 Ordem: preflight → boot Haveno → verificar Feather.
@@ -399,12 +401,12 @@ Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [automacao/tails/
 
 ## Apêndice A — Catálogo de cada arquivo (iniciante)
 
-Use esta seção quando abrir `automacao/tails/` (ou `~/Persistent/` após copiar) e não souber **para que serve** cada arquivo.
+Use esta seção quando abrir `automacao/tails/` (ou `~/Persistent/hub-scripts/` após `sync`) e não souber **para que serve** cada arquivo.
 
 ### Mapa da pasta (mental — tudo na mesma pasta no Tails)
 
 ```text
-automacao/tails/          (copie tudo p/ ~/Persistent/ — mesma lista)
+automacao/tails/          (sync-hub-scripts.sh copia tudo p/ ~/Persistent/hub-scripts/)
 │
 ├── haveno-setup.sh          ★ COMECE AQUI (novato)
 │
@@ -455,7 +457,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Sim** — é o script principal |
 | **O que faz** | Chama os outros na ordem: preflight → auto **ou** boot → (opcional) backup → (opcional) Feather |
 | **O que NÃO faz** | Não grava USB; não anota seed; não tradear |
-| **Comando** | `~/Persistent/haveno-setup.sh` · `--boot` · `--feather` · `--skip-backup` · `--qa-log` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-setup.sh` · `--boot` · `--feather` · `--skip-backup` · `--qa-log` |
 | **Rodar 2×** | **Seguro** — ver seção [Comando principal](#comando-principal-haveno-setupsh) |
 | **Disco** | Não apaga `~/Persistent/haveno/Data/` nem `feather/wallets/` |
 | **Flags** | [Comando principal](#comando-principal-haveno-setupsh) (neste manual) |
@@ -473,7 +475,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Pode, mas o `haveno-setup` já chama por você |
 | **O que faz** | Confere: Tails, usuário amnesia, admin, persistência, Dotfiles, Tor, UTC |
 | **O que NÃO faz** | Não cria persistência; não conecta Tor por você |
-| **Comando** | `~/Persistent/tails-preflight.sh` |
+| **Comando** | `~/Persistent/hub-scripts/tails-preflight.sh` |
 | **Rodar 2×** | **Sim** — só leitura; zero alteração em carteira |
 | **Disco** | Nenhuma pasta de dados Haveno/Feather |
 | **Se falhar** | Corrija [P01](processos/m1-tor/P01-bootstrap-tails.md) antes de continuar |
@@ -487,7 +489,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Sim, se acabou de usar Tails Upgrader |
 | **O que faz** | Repete preflight + confere onion-grater; lembra de fazer backup |
 | **O que NÃO faz** | Não atualiza o Tails (só o Upgrader oficial faz) |
-| **Comando** | `~/Persistent/post-session-check.sh` |
+| **Comando** | `~/Persistent/hub-scripts/post-session-check.sh` |
 | **Rodar 2×** | **Sim** — só checagens |
 | **Disco** | Não mexe em `Data/` |
 
@@ -504,7 +506,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Não** — prefira `haveno-setup.sh` |
 | **O que faz** | Espera Tor → baixa/instala `.deb` com PGP → `install.sh` + `exec.sh` → corrige onion-grater → monitora log |
 | **O que NÃO faz** | Não garante verde na janela; não inclui seed no backup |
-| **Comando** | `~/Persistent/haveno-auto.sh` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-auto.sh` |
 | **Rodar 2×** | **Sim** — se já instalado, **pula** download; `Data/` intacto |
 | **Disco** | Escreve em `~/Persistent/haveno/` (App, Install); **preserva** `Data/` |
 | **Flags** | [Flags — haveno-auto](#flags-dos-scripts-individuais) |
@@ -518,7 +520,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Não** — use `haveno-setup.sh --boot` |
 | **O que faz** | Playbook §7: preflight → `sudo install.sh` → `exec.sh` → onion-grater |
 | **O que NÃO faz** | Não baixa versão nova do `.deb` |
-| **Comando** | `~/Persistent/haveno-boot.sh` · `--watch 8` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-boot.sh` · `--watch 8` |
 | **Rodar 2×** | **Sim** — pode abrir 2 janelas Haveno; feche extras |
 | **Disco** | Reaplica config em `/etc/onion-grater.d/`; **não apaga** `Data/` |
 
@@ -531,7 +533,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Sim** — após 1ª instalação (ou quando o setup perguntar) |
 | **O que faz** | Compacta `~/Persistent/haveno/Data/` → cifra com GPG → salva em `Backups/` ou USB |
 | **O que NÃO faz** | **Seed não entra** no arquivo — anote no app (Account → Wallet seed) |
-| **Comando** | `~/Persistent/haveno-backup.sh` · `--usb` · `--dest` · `--restore` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-backup.sh` · `--usb` · `--dest` · `--restore` |
 | **Rodar 2×** | **Sim** — cada execução cria arquivo **novo** com data/hora |
 | **Disco** | Lê `Data/`; grava em `Backups/`; `--restore` **substitui** `Data/` (pede `s/N`) |
 | **Flags** | [Flags — haveno-backup](#flags-dos-scripts-individuais) |
@@ -557,7 +559,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Só quando sair **release novo** da sua rede |
 | **O que faz** | Backup **obrigatório** → reinstala `.deb` com PGP → abre Haveno |
 | **O que NÃO faz** | Não atualiza o sistema **Tails** |
-| **Comando** | `~/Persistent/haveno-update.sh --url "…" --pgp "…"` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-update.sh --url "…" --pgp "…"` |
 | **Rodar 2×** | **Cuidado** — segunda vez reinstala de novo; `Data/` preservado se backup OK |
 | **Disco** | Atualiza `Install/` e `App/`; **preserva** `Data/` |
 | **Flags** | [Flags — haveno-update](#flags-dos-scripts-individuais) |
@@ -571,7 +573,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Só se desconfiar do `.deb` |
 | **O que faz** | Verifica assinatura GPG do `.deb` em `haveno/Install/` |
 | **O que NÃO faz** | Não instala nem remove nada |
-| **Comando** | `~/Persistent/haveno-verify-deb.sh` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-verify-deb.sh` |
 | **Rodar 2×** | **Sim** — só leitura |
 
 #### `haveno-switch-network.sh`
@@ -583,7 +585,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Não** — só se for mudar de rede Haveno de propósito |
 | **O que faz** | Avisa → backup → chama `haveno-update` com URL+PGP da **nova** rede |
 | **O que NÃO faz** | Não mistura URL de uma rede com PGP de outra |
-| **Comando** | `~/Persistent/haveno-switch-network.sh --url "…" --pgp "…"` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-switch-network.sh --url "…" --pgp "…"` |
 | **Rodar 2×** | Reinstala de novo — feche trades antes |
 | **Disco** | Igual ao update; backup antes |
 
@@ -600,7 +602,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Sim, **depois** de baixar AppImage + `.asc` no Tor Browser |
 | **O que faz** | Move downloads → importa chave PGP → verifica AppImage → `chmod +x` |
 | **O que NÃO faz** | Não cria carteira; não grava seed — faça na UI do Feather |
-| **Comando** | `~/Persistent/feather-install-verify.sh` |
+| **Comando** | `~/Persistent/hub-scripts/feather-install-verify.sh` |
 | **Rodar 2×** | **Sim** — re-verifica; **não apaga** `~/Persistent/feather/wallets/` |
 | **Disco** | `~/Persistent/feather/` (AppImage, chaves) |
 
@@ -613,7 +615,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | Sim, após criar carteira no Feather |
 | **O que faz** | Backup cifrado de `~/Persistent/feather/wallets/` |
 | **O que NÃO faz** | Seed fora do tarball (papel/metal) |
-| **Comando** | `~/Persistent/feather-backup.sh` · `--usb` · `--restore` |
+| **Comando** | `~/Persistent/hub-scripts/feather-backup.sh` · `--usb` · `--restore` |
 | **Rodar 2×** | **Sim** — arquivos novos com timestamp |
 | **Disco** | `wallets/` → `Backups/`; restore pede confirmação |
 

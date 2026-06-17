@@ -15,7 +15,7 @@ Não é um segundo momento de “gerar seed offline” — é **ritual operacion
 ## Executar
 
 ```bash
-~/Persistent/qa-confirm-passo9.sh
+~/Persistent/hub-scripts/qa-confirm-passo9.sh
 ```
 
 Log esperado: `~/Persistent/qa-logs/09-seed-confirmacao-*.txt` com 3× `CONFIRMACAO_HUMANA=SIM`

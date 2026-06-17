@@ -38,7 +38,7 @@ Teoria completa: [Playbook backup air-gap](../../modulos/m2-whonix-custodia/Play
 ## Confirmação (script)
 
 ```bash
-~/Persistent/qa-confirm-passo9.sh
+~/Persistent/hub-scripts/qa-confirm-passo9.sh
 ```
 
 **OK se:** `09-seed-confirmacao-*.txt` → 3× SIM · duas cópias em locais separados.

@@ -75,7 +75,7 @@ sudo echo ok
 ## Validação (script)
 
 ```bash
-~/Persistent/tails-preflight.sh --qa-log
+~/Persistent/hub-scripts/tails-preflight.sh --qa-log
 ```
 
 Log: `~/Persistent/qa-logs/01-preflight-*.txt` → [COMO-LER](../../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)

@@ -13,16 +13,16 @@ playbook_legacy: modulos/m1-tails-haveno/Playbooks/Playbooks.md
 
 ```bash
 # Feche o Haveno antes do backup (menu ou sair do app)
-~/Persistent/haveno-backup.sh           # cifrado, em ~/Persistent/Backups
-~/Persistent/haveno-backup.sh --usb     # em um USB montado
-~/Persistent/haveno-backup.sh --restore CAMINHO/arquivo.tar.gz.gpg
+~/Persistent/hub-scripts/haveno-backup.sh           # cifrado, em ~/Persistent/Backups
+~/Persistent/hub-scripts/haveno-backup.sh --usb     # em um USB montado
+~/Persistent/hub-scripts/haveno-backup.sh --restore CAMINHO/arquivo.tar.gz.gpg
 ```
 
 Com validação de log:
 
 ```bash
-~/Persistent/haveno-backup.sh --qa-log
-~/Persistent/qa-confirm-seed-papel.sh
+~/Persistent/hub-scripts/haveno-backup.sh --qa-log
+~/Persistent/hub-scripts/qa-confirm-seed-papel.sh
 ```
 
 **OK se:** `04-haveno-backup-*.txt` → PASS · `04-seed-papel-*.txt` → 3× SIM · seed em **papel** (nunca só no PC).
