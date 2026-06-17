@@ -305,6 +305,16 @@ if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; 
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."
   EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
   haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."
+  DEB_BASENAME="$(basename "$HAVENO_DEB_URL")"
+  SKIP_UPSTREAM=0
+  if [ -f "./${DEB_BASENAME}" ] && haveno_deb_size_ok "./${DEB_BASENAME}" && [ -d "$UTILS_DIR" ]; then
+    y "  .deb completo em .download/ — verificando PGP e promovendo para Install/ (sem re-download)."
+    haveno_predownload_sig "$HAVENO_DEB_URL"
+    if haveno_finalize_verified_deb_in_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+      SKIP_UPSTREAM=1
+    fi
+  fi
+  if [ "$SKIP_UPSTREAM" = "0" ]; then
   y "  Download do .deb pelo Tor: pode levar 30-90 min. A linha 'Downloading Haveno from URL...' nao atualiza — normal."
   y "  Progresso abaixo (a cada 30s); ou: watch -n 30 'ls -lh ${HAVENO_DIR}/.download/ ${HAVENO_DIR}/Install/*.deb 2>/dev/null'"
   if [ -n "${EXPECTED_DEB_BYTES:-}" ] && [ "${EXPECTED_DEB_BYTES:-0}" -gt 0 ] 2>/dev/null; then
@@ -328,7 +338,16 @@ if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; 
   kill "$MON_PID" 2>/dev/null || true
   wait "$MON_PID" 2>/dev/null || true
   if [ "$INSTALL_RC" -ne 0 ]; then
-    die "haveno-install.sh falhou (PGP/URL/rede). Se travou em ~119B, apague lixo: rm -f ${HAVENO_DIR}/.download/*.deb* e tente de novo — ou baixe o .deb pelo Tor Browser e rode --install-only."
+    if [ -f "./${DEB_BASENAME}" ] && haveno_deb_size_ok "./${DEB_BASENAME}"; then
+      y "  haveno-install.sh falhou apos o .deb completo — tentando verificar PGP localmente..."
+      haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "."
+      haveno_predownload_sig "$HAVENO_DEB_URL"
+      if haveno_finalize_verified_deb_in_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+        INSTALL_RC=0
+      fi
+    fi
+    [ "$INSTALL_RC" -eq 0 ] || die "haveno-install.sh falhou (PGP/URL/rede). Se .deb ja esta em .download/, rode: haveno-setup.sh --install-only apos copiar .deb+.sig para Install/."
+  fi
   fi
   g "  Haveno preparado na persistencia."
 else

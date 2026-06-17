@@ -123,6 +123,16 @@ if ! curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
 fi
 EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
 haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."
+DEB_BASENAME="$(basename "$HAVENO_DEB_URL")"
+DEB_READY=0
+if [ -f "./${DEB_BASENAME}" ] && haveno_deb_size_ok "./${DEB_BASENAME}" && [ -d "$UTILS_DIR" ]; then
+  y "  .deb completo em .download/ — verificando PGP e promovendo para Install/."
+  haveno_predownload_sig "$HAVENO_DEB_URL"
+  if haveno_finalize_verified_deb_in_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+    DEB_READY=1
+  fi
+fi
+if [ "$DEB_READY" = "0" ]; then
 # Garante a .sig na CWD antes do upstream (DIV-20260617-02): sem ela o gpg do
 # haveno-install.sh aborta com "No such file or directory" mesmo com o .deb OK.
 haveno_predownload_sig "$HAVENO_DEB_URL"
@@ -130,10 +140,21 @@ haveno_predownload_sig "$HAVENO_DEB_URL"
 # Tails em PT-BR o gpg diz "Assinatura correta de..." e o grep falha mesmo com a
 # assinatura boa (bug de locale, DIV-20260617-02 / DIV-20260607-02). Forca ingles.
 if ! LC_ALL=C bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
-  cd /
-  die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica salvo em ${WORK} para retomar."
+  if [ -f "./${DEB_BASENAME}" ] && haveno_deb_size_ok "./${DEB_BASENAME}"; then
+    y "  haveno-install.sh falhou apos .deb completo — tentando PGP local..."
+    haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "."
+    haveno_predownload_sig "$HAVENO_DEB_URL"
+    haveno_finalize_verified_deb_in_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" || {
+      cd /
+      die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica em ${WORK}."
+    }
+  else
+    cd /
+    die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica salvo em ${WORK} para retomar."
+  fi
 fi
-cd /; rm -rf "$WORK"
+fi
+cd /; rm -rf "$WORK" 2>/dev/null || true
 g "  Novo .deb verificado e preparado (dados preservados)."
 
 b "[6/6] install.sh (deps apt) + abrir Haveno..."

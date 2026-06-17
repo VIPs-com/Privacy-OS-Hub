@@ -6,8 +6,9 @@
 
 ## 2026-06-17 — Download `.download/` envenenado (119 B)
 
-- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs` remove `.deb` &lt; 1 MiB antes do `wget -c`; `haveno_has_install_deb` exige ≥ 100 MiB (ignora HTML do GitHub em `Install/`)
-- **`haveno-auto.sh` / `haveno-update.sh`:** purge automático + monitor em `.download/` e `Install/`
+- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs` remove `.deb` &lt; 1 MiB e `.sig` &lt; 400 B antes do `wget -c`; `haveno_has_install_deb` exige ≥ 100 MiB
+- **`haveno_predownload_sig`:** Tor primeiro + validação PGP; **`haveno_finalize_verified_deb_in_cwd`** promove `.deb` completo em `.download/` para `Install/` sem re-baixar
+- **`haveno-auto.sh` / `haveno-update.sh`:** atalho quando `.deb` já está completo; fallback PGP local se upstream falhar na `.sig`
 
 ---
 

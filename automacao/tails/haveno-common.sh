@@ -209,6 +209,8 @@ HAVENO_DEPS_MISSING=0
 HAVENO_DEB_MIN_BYTES="${HAVENO_DEB_MIN_BYTES:-104857600}"
 # Abaixo disto: pagina de erro do GitHub / wget -c envenenado (ex.: 119 B).
 HAVENO_DEB_POISON_MAX_BYTES="${HAVENO_DEB_POISON_MAX_BYTES:-1048576}"
+# Assinatura detached GPG real costuma ter centenas de bytes; 119 B = HTML de erro.
+HAVENO_SIG_MIN_BYTES="${HAVENO_SIG_MIN_BYTES:-400}"
 
 haveno_deb_size_ok() {
   local f="$1" sz
@@ -234,8 +236,15 @@ haveno_has_install_deb() {
   [ -n "$(haveno_find_install_deb)" ]
 }
 
+haveno_sig_size_ok() {
+  local f="$1" sz
+  [ -f "$f" ] || return 1
+  sz="$(stat -c%s "$f" 2>/dev/null || echo 0)"
+  [ "${sz:-0}" -ge "${HAVENO_SIG_MIN_BYTES}" ]
+}
+
 # Remove .deb/.part minusculos (erro HTML) que fazem wget -c travar em 119 B na .download/.
-# Mantem parciais >= 1 MiB para retomada legitima. Uso: haveno_purge_poisoned_partial_debs [expected] dir...
+# Remove tambem .sig envenenada (< 400 B). Mantem parciais de .deb >= 1 MiB.
 haveno_purge_poisoned_partial_debs() {
   local expected="${1:-0}" dir f s
   shift || true
@@ -256,6 +265,13 @@ haveno_purge_poisoned_partial_debs() {
         : # completo
       fi
     done < <(find "$dir" -maxdepth 1 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -type f -print0 2>/dev/null)
+    while IFS= read -r -d '' f; do
+      s="$(stat -c%s "$f" 2>/dev/null || echo 0)"
+      if [ "${s:-0}" -lt "${HAVENO_SIG_MIN_BYTES}" ]; then
+        y "  Assinatura .sig invalida removida (${s} bytes): ${f}"
+        rm -f "$f" 2>/dev/null || true
+      fi
+    done < <(find "$dir" -maxdepth 1 -name '*.sig' -type f -print0 2>/dev/null)
   done
 }
 
@@ -276,18 +292,84 @@ haveno_fetch_deb_expected_bytes() {
 # CHAMAR com a CWD ja na pasta de download (.download), antes de 'bash haveno-install.sh'.
 # Uso: haveno_predownload_sig "<URL_DO_DEB>"
 haveno_predownload_sig() {
-  local deb_url="${1:-}" deb_name sig_url
+  local deb_url="${1:-}" deb_name sig_url sz
   [ -n "$deb_url" ] || die "haveno_predownload_sig: URL do .deb vazia."
   deb_name="$(basename "$deb_url")"
   sig_url="${deb_url}.sig"
   y "  Garantindo a assinatura .sig na pasta de download (fail-closed)..."
-  rm -f "${deb_name}.sig" 2>/dev/null || true   # .sig e pequena: sempre fresca
-  if ! curl -fsSL --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
-    curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null \
-      || die "Nao baixei a assinatura .sig (${sig_url}). Sem ela o install.sh aborta no gpg (DIV-20260617-02). Confira a URL do release/Tor."
+  rm -f "${deb_name}.sig" 2>/dev/null || true
+  if ! curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
+    curl -fsSL --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null \
+      || die "Nao baixei a assinatura .sig (${sig_url}) pelo Tor. Confira a URL do release."
   fi
-  [ -s "${deb_name}.sig" ] || die "Assinatura .sig baixada vazia — abortando (fail-closed)."
-  g "  Assinatura .sig pronta (${deb_name}.sig)."
+  sz="$(stat -c%s "${deb_name}.sig" 2>/dev/null || echo 0)"
+  haveno_sig_size_ok "${deb_name}.sig" \
+    || die "Assinatura .sig suspeita (${sz} bytes) — provavel erro de rede/GitHub, nao PGP."
+  head -1 "${deb_name}.sig" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE' \
+    || die "Arquivo .sig nao parece assinatura PGP (conteudo invalido)."
+  g "  Assinatura .sig pronta (${deb_name}.sig, ${sz} bytes)."
+}
+
+haveno_ensure_reto_pgp_key() {
+  local fpr="${1:-}"
+  fpr="$(echo "$fpr" | tr -d ' ')"
+  [ -n "$fpr" ] || return 1
+  gpg --list-keys "$fpr" >/dev/null 2>&1 && return 0
+  y "  Importando chave PGP do release..."
+  local key_file tmp
+  tmp="$(mktemp)"
+  if curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 -o "$tmp" \
+      "https://retoswap.com/reto_public.asc" 2>/dev/null \
+    || curl -fsSL --max-time 120 -o "$tmp" "https://retoswap.com/reto_public.asc" 2>/dev/null; then
+    gpg --import "$tmp" >/dev/null 2>&1 || true
+  fi
+  rm -f "$tmp"
+  gpg --list-keys "$fpr" >/dev/null 2>&1 && return 0
+  key_file="${fpr: -16}.asc"
+  if curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 -o "$key_file" \
+      "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${fpr}" 2>/dev/null \
+    || curl -fsSL --max-time 120 -o "$key_file" \
+      "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${fpr}" 2>/dev/null; then
+    gpg --import "$key_file" >/dev/null 2>&1 || true
+  fi
+  gpg --list-keys "$fpr" >/dev/null 2>&1
+}
+
+haveno_verify_deb_sig() {
+  local deb="$1" sig="$2" fpr="$3" log
+  fpr="$(echo "$fpr" | tr -d ' ')"
+  log="$(mktemp)"
+  gpg --status-fd 1 --verify "$sig" "$deb" 2>/dev/null >"$log" || true
+  if grep -q "^\[GNUPG:\] VALIDSIG .*${fpr}" "$log"; then
+    rm -f "$log"
+    return 0
+  fi
+  rm -f "$log"
+  return 1
+}
+
+# Verifica PGP e promove .deb+.sig da CWD (ex.: .download/) para Install/.
+haveno_finalize_verified_deb_in_cwd() {
+  local deb_url="$1" pgp_fpr="$2"
+  local deb_name sig_path deb_path install_dir="${HAVENO_DIR}/Install" fpr
+  deb_name="$(basename "$deb_url")"
+  sig_path="./${deb_name}.sig"
+  deb_path="./${deb_name}"
+  [ -f "$deb_path" ] || deb_path="$(find . -maxdepth 1 -name '*.deb' -type f 2>/dev/null | head -1)"
+  [ -n "$deb_path" ] && [ -f "$deb_path" ] || return 1
+  haveno_deb_size_ok "$deb_path" || return 1
+  [ -f "$sig_path" ] || sig_path="${deb_path}.sig"
+  [ -f "$sig_path" ] && haveno_sig_size_ok "$sig_path" || return 1
+  fpr="$(echo "$pgp_fpr" | tr -d ' ')"
+  haveno_ensure_reto_pgp_key "$fpr" || die "Nao importei chave PGP ${fpr}."
+  haveno_verify_deb_sig "$deb_path" "$sig_path" "$fpr" \
+    || die "Assinatura PGP do .deb invalida — NAO instale."
+  mkdir -p "$install_dir" || die "Nao criei ${install_dir}/."
+  mv -f "$deb_path" "${install_dir}/$(basename "$deb_path")"
+  mv -f "$sig_path" "${install_dir}/$(basename "$sig_path")" 2>/dev/null || true
+  haveno_ensure_install_deb_link
+  g "  .deb verificado (VALIDSIG) e movido para ${install_dir}/."
+  return 0
 }
 
 # install.sh upstream espera Install/haveno.deb — cria symlink se so existir nome longo.

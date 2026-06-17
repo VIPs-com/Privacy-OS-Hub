@@ -60,6 +60,47 @@ Se o `.deb` já está em `~/Persistent/haveno/Install/` e falhou no passo de ins
 ~/Persistent/hub-scripts/haveno-setup.sh --install-only --qa-log
 ```
 
+Se o `.deb` está completo só em `~/Persistent/haveno/.download/` (ex.: ~266 MB) e falhou na **assinatura** (`.sig` de ~119 bytes):
+
+```bash
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
+./sync-hub-scripts.sh
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log
+```
+
+O sync traz o fix da `.sig` (DIV-20260617-02): remove `.sig` inválida, baixa de novo via Tor e promove o `.deb` sem baixar tudo outra vez.
+
+### Fallback atômico (se `haveno-setup` ainda falhar no [6/9])
+
+Caminho **validado em Tails real** (piloto 17/jun) — etapas em pedaços, mesma pasta do ZIP:
+
+```bash
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails/etapas/instalar-haveno
+chmod +x *.sh
+./01-pastas.sh
+./02-baixar-deb.sh          # curl + Tor → Install/ (deb + sig)
+./04-importar-chave.sh
+./05-verificar-assinatura.sh
+./06-deps-apt.sh
+./07-instalar-deb.sh
+./08-abrir-haveno.sh        # verde na janela
+```
+
+Se o `.deb` **já** está em `.download/` ou `Install/`:
+
+```bash
+# copiar .deb completo para Install/ se preciso
+cp ~/Persistent/haveno/.download/haveno-v1.6.0-linux-x86_64-installer.deb \
+   ~/Persistent/haveno/Install/
+# só a assinatura (Tor)
+curl -fsSL --socks5-hostname 127.0.0.1:9050 \
+  -o ~/Persistent/haveno/Install/haveno-v1.6.0-linux-x86_64-installer.deb.sig \
+  "https://github.com/retoaccess1/haveno-reto/releases/download/1.6.0-reto/haveno-v1.6.0-linux-x86_64-installer.deb.sig"
+./05-verificar-assinatura.sh && ./06-deps-apt.sh && ./07-instalar-deb.sh && ./08-abrir-haveno.sh
+```
+
+Depois de instalar pelo atômico, nos próximos boots use o **Passo 3** (`--boot`) normalmente.
+
 ---
 
 ## Passo 3 — Depois de reiniciar o Tails (toda sessão nova)
