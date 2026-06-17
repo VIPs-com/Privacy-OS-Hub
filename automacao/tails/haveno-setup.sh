@@ -14,6 +14,8 @@ set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PERSIST="/home/amnesia/Persistent"
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"   # traz sudo_one_password_start (modo --one-password)
 
 MODE="install"
 DO_FEATHER=0
@@ -26,6 +28,7 @@ while [ $# -gt 0 ]; do
     --feather) DO_FEATHER=1 ;;
     --skip-backup) SKIP_BACKUP=1 ;;
     --qa-log) export HAVENO_QA_LOG=1 ;;
+    --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x no fluxo todo
     *) echo "Opcao desconhecida: $1"; exit 1 ;;
   esac
   shift
@@ -67,6 +70,10 @@ FEATHER="${PERSIST}/feather-install-verify.sh"
 
 QA_ARGS=()
 [ "${HAVENO_QA_LOG:-0}" = "1" ] && QA_ARGS=(--qa-log)
+
+# Modo "uma senha so" (opt-in): este orquestrador e o DONO — ativa 1x agora e segura
+# ate o fim; os scripts-filhos (preflight/auto/boot) herdam e nao re-pedem senha.
+sudo_one_password_start
 
 run "$PREFLIGHT" "${QA_ARGS[@]}"
 

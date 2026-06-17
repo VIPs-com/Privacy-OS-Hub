@@ -25,6 +25,27 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
 > **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `tails-preflight.sh` só valida.
 
+### Senha de admin: digitar uma vez (`--one-password`, opcional)
+
+O Tails, **de propósito**, faz o `sudo` pedir a senha de admin a **cada** comando
+(`/etc/sudoers.d/always-ask-password` → `timestamp_timeout=0`). Por isso o fluxo
+normal pede a senha várias vezes. Se você preferir digitar **uma vez só**:
+
+```bash
+~/Persistent/hub-scripts/haveno-setup.sh --one-password          # 1ª vez
+~/Persistent/hub-scripts/haveno-setup.sh --boot --one-password   # cada sessão
+```
+
+A flag instala um ajuste **temporário de sessão** que mantém a senha em cache até o
+script terminar, e o **remove ao fim** (e ele some no reboot — o Tails é amnésico).
+Vale também em `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh`.
+
+> ⚠️ **Trade-off:** enquanto o script roda, isso **afrouxa** a proteção do Tails de
+> pedir a senha sempre. Por isso é **opt-in** — sem a flag, nada muda (padrão seguro).
+> Não há atalho para "rodar como root": os scripts exigem o usuário `amnesia` de
+> propósito (rodar como root quebraria permissões da Persistent e abriria a carteira
+> como root). Detalhe: FAQ Cap. 7.
+
 ## Matriz script ↔ trilha ↔ Playbook
 
 | Script | Passo hub | Playbook § | Função |

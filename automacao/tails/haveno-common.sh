@@ -19,6 +19,42 @@ y(){ echo -e "\033[1;33m$*\033[0m"; }
 r(){ echo -e "\033[0;31m$*\033[0m"; }
 die(){ r "ERRO: $*"; exit 1; }
 
+# --- Modo "uma senha so" (opt-in: --one-password) -----------------------------
+# O Tails embarca /etc/sudoers.d/always-ask-password (Defaults timestamp_timeout=0):
+# por design o sudo NUNCA cacheia a senha — cada 'sudo' re-pergunta. So quando o
+# operador pede (--one-password), instalamos um override de SESSAO que faz o sudo
+# cachear ate o fim do fluxo, e o REMOVEMOS ao sair (e some no reboot, pois o Tails
+# e amnesico). SEGURANCA: afrouxa temporariamente uma protecao do Tails -> e por
+# isso opt-in (padrao continua o seguro) e auto-removido. Nao relaxar o padrao.
+HAVENO_SUDOERS_DROPIN="${HAVENO_SUDOERS_DROPIN:-/etc/sudoers.d/zz-haveno-1session}"
+# zz- = lido DEPOIS do always-ask (Defaults posterior vence). SEM ponto no nome:
+# o sudo IGNORA arquivos de sudoers.d cujo nome contem '.'.
+
+sudo_one_password_start() {
+  [ "${HAVENO_ONE_PASSWORD:-0}" = "1" ] || return 0   # sem a flag = no-op (modo seguro)
+  [ "${HAVENO_SUDO_SESSION:-0}" = "1" ] && return 0   # ja ativo por um processo pai
+  y "  [--one-password] Voce vai digitar a senha de admin UMA vez agora."
+  y "  Ajuste TEMPORARIO de sessao (removido ao fim do script; some no reboot)."
+  sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true   # limpa sobra de run anterior
+  # UM unico sudo: autentica (1 prompt) + escreve + VALIDA o dropin (fail-closed).
+  if ! sudo bash -c "umask 0337; \
+        printf 'Defaults timestamp_timeout=-1\n' > '$HAVENO_SUDOERS_DROPIN'; \
+        visudo -cf '$HAVENO_SUDOERS_DROPIN' >/dev/null"; then
+    sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
+    die "Nao ativei o modo uma-senha (sudoers invalido). Rode sem --one-password."
+  fi
+  export HAVENO_SUDO_SESSION=1     # filhos detectam e NAO reinstalam/removem
+  HAVENO_SUDO_OWNER=1              # so o dono (este processo) remove no fim
+  trap 'sudo_one_password_stop' EXIT INT TERM
+  g "  [--one-password] Ativo: os proximos comandos nao pedem senha ate o fim."
+}
+
+sudo_one_password_stop() {
+  [ "${HAVENO_SUDO_OWNER:-0}" = "1" ] || return 0
+  sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
+  HAVENO_SUDO_OWNER=0
+}
+
 # Retorna 0 se OK; imprime falhas em stderr
 tails_preflight_check() {
   local fail=0

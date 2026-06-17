@@ -1381,6 +1381,33 @@ Confirme `loaded filter: haveno` no journalctl e reabra o Haveno.
 Validado em campo (jun/2026): com o filtro corrigido, o app conecta —
 *"Conectado a Mainnet de Monero (via Tor)"* + *"Nó da rede Tor criado"*.
 
+## 7.14 O Tails pede a senha de admin a cada comando — dá para digitar uma vez?
+
+**Não é bug — é proposital.** O Tails embarca `/etc/sudoers.d/always-ask-password`
+com `Defaults timestamp_timeout=0`, ou seja, o `sudo` **nunca** guarda a senha em
+cache; cada comando administrativo re-pergunta. É uma proteção do Tails.
+
+**Rodar como `root` não é o caminho:** os scripts exigem o usuário `amnesia` de
+propósito. Rodar tudo como root criaria arquivos de root na sua persistência (causa
+erros depois) e abriria a **carteira Haveno como root** — perigoso. Por isso a tela
+de erro ao tentar.
+
+**Se você quiser digitar a senha uma vez só**, todos os scripts aceitam a flag
+opcional **`--one-password`**:
+
+```bash
+~/Persistent/hub-scripts/haveno-setup.sh --one-password          # 1ª vez
+~/Persistent/hub-scripts/haveno-setup.sh --boot --one-password   # cada sessão
+```
+
+Ela instala um ajuste **temporário de sessão** (o `sudo` passa a guardar a senha até
+o script terminar) e o **remove automaticamente no fim**. Como o Tails é amnésico,
+o ajuste também some sozinho ao reiniciar.
+
+> ⚠️ **Trade-off de segurança:** enquanto o script roda, isso afrouxa a proteção do
+> Tails de pedir a senha sempre. Por isso é **opt-in** — sem a flag, o comportamento
+> seguro padrão continua. Use só se entender e aceitar essa troca.
+
 ---
 
 <a id="8-todos-os-links-referência-única"></a>

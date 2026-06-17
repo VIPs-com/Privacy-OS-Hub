@@ -65,15 +65,22 @@ while [ $# -gt 0 ]; do
     --update)   DO_UPDATE=1 ;;
     --install-only) INSTALL_ONLY=1; DO_CLOCK=0 ;;
     --boot-only) BOOT_ONLY=1 ;;
+    --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
     --watch)    shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;  # --watch N (sem N: mantem padrao)
     *)          [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
   esac
   shift
 done
 
+# --boot-only: delega a haveno-boot.sh ANTES de virar dono da sessao 1-senha — o
+# exec substitui este processo (perderia o trap de limpeza); quem ativa/limpa e o
+# boot.sh (herda HAVENO_ONE_PASSWORD pelo ambiente).
 if [ "$BOOT_ONLY" = "1" ]; then
   exec "${SCRIPT_DIR}/haveno-boot.sh" ${WATCH_MIN:+$WATCH_MIN}
 fi
+
+# Modo "uma senha so" (opt-in). No-op sem --one-password ou se um pai ja ativou.
+sudo_one_password_start
 
 # ----------------------------- Modo recuperacao (--install-only) -----------
 if [ "$INSTALL_ONLY" = "1" ]; then

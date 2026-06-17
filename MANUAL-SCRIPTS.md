@@ -212,6 +212,7 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 ~/Persistent/hub-scripts/haveno-auto.sh --update     # forca reinstall do .deb (dados preservados)
 ~/Persistent/hub-scripts/haveno-auto.sh --no-clock   # nao ajusta relogio via Tor
 ~/Persistent/hub-scripts/haveno-auto.sh --watch 15   # monitora log 15 min
+~/Persistent/hub-scripts/haveno-auto.sh --one-password # digitar a senha admin 1x (ver abaixo)
 ```
 
 | Flag | Quando | Seguro 2×? |
@@ -220,6 +221,15 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 | `--boot-only` | Já instalado; só esta sessão | Sim |
 | `--no-clock` | Relógio do Tails já OK | Sim |
 | `--install-only` | Já tem `.deb` em `Install/` — só deps apt + `install.sh` | Sim |
+| `--one-password` | Digitar a senha de admin **uma vez** no fluxo todo (ver nota) | Sim |
+
+**`--one-password` (digitar a senha uma vez):** o Tails, de propósito, faz o `sudo`
+pedir a senha a **cada** comando (`timestamp_timeout=0`). Esta flag — aceita por
+`haveno-setup.sh`, `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh` — instala
+um ajuste **temporário de sessão** que guarda a senha até o script terminar e o
+**remove ao fim** (some também no reboot, pois o Tails é amnésico). ⚠️ Enquanto roda,
+afrouxa a proteção do Tails de pedir a senha sempre — por isso é **opt-in** (sem a
+flag, nada muda). Detalhe e por que `root` é bloqueado: **FAQ Cap. 7.14**.
 
 **Atualizar scripts no Tails** (sem recomecar o piloto):
 

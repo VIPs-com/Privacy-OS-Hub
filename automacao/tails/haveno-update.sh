@@ -26,6 +26,10 @@
 
 set -uo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"   # traz sudo_one_password_start (modo --one-password)
+
 # ----------------------------- VALORES PADRAO (editar p/ nova versao) --------
 HAVENO_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/1.6.0-reto/haveno-v1.6.0-linux-x86_64-installer.deb"
 HAVENO_PGP_FPR="DAA24D878B8D36C90120A897CA02DAC12DAE2D0F"
@@ -50,6 +54,7 @@ while [ $# -gt 0 ]; do
     --pgp) shift; NEW_PGP="${1:-}" ;;
     --no-backup) DO_BACKUP=0 ;;
     --no-clock) ;;  # aceito por compatibilidade; sem efeito aqui
+    --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
     *) echo "Opcao desconhecida: $1 (ignorada)" ;;
   esac
   shift
@@ -63,6 +68,9 @@ g(){ echo -e "\033[1;32m$*\033[0m"; }
 y(){ echo -e "\033[1;33m$*\033[0m"; }
 r(){ echo -e "\033[0;31m$*\033[0m"; }
 die(){ r "ERRO: $*"; exit 1; }
+
+# Modo "uma senha so" (opt-in). No-op sem --one-password.
+sudo_one_password_start
 
 echo
 b "==============================================================="

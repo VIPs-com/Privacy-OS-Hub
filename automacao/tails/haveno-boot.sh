@@ -19,10 +19,14 @@ WATCH_MIN=0
 while [ $# -gt 0 ]; do
   case "$1" in
     --watch) shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
+    --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
     *) [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
   esac
   shift
 done
+
+# Modo "uma senha so" (opt-in). No-op sem --one-password ou se um pai ja ativou.
+sudo_one_password_start
 
 echo
 b "==============================================================="
