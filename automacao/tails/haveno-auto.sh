@@ -96,14 +96,18 @@ if [ "$INSTALL_ONLY" = "1" ]; then
   [ -f "${UTILS_DIR}/exec.sh" ] || die "exec.sh ausente."
   haveno_has_install_deb || die "Nenhum .deb em ${HAVENO_DIR}/Install/ — nao precisa recomecar do zero se ja copiou o .deb."
   g "  .deb na persistencia OK."
-  b "[7/9] Dependencias apt + install.sh + exec.sh..."
+  b "[7/9] Dependencias apt + install.sh + onion-grater + exec.sh..."
   chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
   haveno_run_install || die "install.sh falhou."
+  # cookie + onion-grater ANTES do exec.sh (senao o Haveno encerra com cookie
+  # ilegivel — DIV-20260611-01). Mesma ordem do haveno-boot.sh.
+  b "  Preparando onion-grater + cookie do Tor (antes de abrir)..."
+  haveno_fix_onion_grater || true
   nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
   HAVENO_BG=$!
   sleep 8
   g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
-  b "[8/9] Verificando onion-grater..."
+  b "[8/9] Confirmando onion-grater..."
   sleep 4
   if haveno_check_filter | grep -q "loaded filter: haveno"; then
     g "  loaded filter: haveno (OK)."
@@ -324,17 +328,23 @@ fi
 [ -f "${UTILS_DIR}/install.sh" ] || die "install.sh nao encontrado em ${UTILS_DIR}."
 [ -f "${UTILS_DIR}/haveno.yml" ] || die "haveno.yml nao encontrado em ${UTILS_DIR}."
 
-# ----------------------------- 7. install.sh + exec.sh (Playbook §7) ---------
-b "[7/9] Dependencias apt + install.sh + exec.sh (pode pedir senha admin)..."
+# ----------------------------- 7. install.sh + onion-grater + exec.sh --------
+b "[7/9] Dependencias apt + install.sh + onion-grater + exec.sh (pode pedir senha admin)..."
 chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
 haveno_run_install || die "install.sh falhou."
+# onion-grater + cookie do Tor ANTES de abrir o Haveno. O app le o cookie na
+# partida; se o 'chmod o+r' vier so DEPOIS (como estava no [8/9]), ele abre e
+# ENCERRA com 'torControlCookieFile ... is not readable' (DIV-20260611-01) — foi
+# o que travou em campo 2026-06-17. Mesma ordem do haveno-boot.sh (validada R31).
+b "  Preparando onion-grater + cookie do Tor (antes de abrir)..."
+haveno_fix_onion_grater || true
 nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
 HAVENO_BG=$!
 sleep 8
 g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
 
-# ----------------------------- 8. Verificar/corrigir filtro ------------------
-b "[8/9] Verificando perfil onion-grater (loaded filter)..."
+# ----------------------------- 8. Re-verificar o filtro ----------------------
+b "[8/9] Confirmando perfil onion-grater (loaded filter)..."
 sleep 4
 check_filter(){ haveno_check_filter; }
 

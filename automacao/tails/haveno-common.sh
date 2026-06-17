@@ -311,9 +311,13 @@ haveno_run_install() {
       if sudo dpkg -i --force-depends "${HAVENO_DIR}/Install/haveno.deb"; then
         sudo dpkg --configure -a 2>/dev/null || true
         g "  haveno instalado com --force-depends (DIV-20260610-02)."
-        # install.sh tambem cria atalhos/launcher — tenta de novo agora que o
-        # pacote esta instalado; se ainda falhar, segue (dpkg ja instalou).
-        sudo "${utils}/install.sh" 2>/dev/null || true
+        # NAO re-rodar o install.sh aqui (DIV-20260617): o 'dpkg -i' simples dele
+        # volta a DESCONFIGURAR o haveno pelas deps Ubuntu-only E sobrescreve o
+        # nosso onion-grater corrigido pelo yml do upstream (quebra o filtro PoW,
+        # 'loaded filter: haveno' nao carrega). O haveno fica "install ok installed"
+        # -> o exec.sh nao precisa re-rodar o install.sh. O app roda do binario
+        # /opt/haveno (runtime embutido); onion-grater + cookie ficam por conta do
+        # haveno_fix_onion_grater (chamado depois, com o yml certo).
         return 0
       fi
     fi
