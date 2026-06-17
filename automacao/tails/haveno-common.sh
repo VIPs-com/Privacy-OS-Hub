@@ -205,19 +205,65 @@ tails_preflight_check() {
 # que existirem e tolera as Ubuntu-only com dpkg --force-depends (o Haveno
 # embute o proprio runtime; validado em campo 2026-06-10/11).
 HAVENO_DEPS_MISSING=0
+# Tamanho minimo plausivel do .deb Haveno (~255 MiB no release 1.6.0-reto).
+HAVENO_DEB_MIN_BYTES="${HAVENO_DEB_MIN_BYTES:-104857600}"
+# Abaixo disto: pagina de erro do GitHub / wget -c envenenado (ex.: 119 B).
+HAVENO_DEB_POISON_MAX_BYTES="${HAVENO_DEB_POISON_MAX_BYTES:-1048576}"
+
+haveno_deb_size_ok() {
+  local f="$1" sz
+  [ -f "$f" ] || return 1
+  sz="$(stat -c%s "$f" 2>/dev/null || echo 0)"
+  [ "${sz:-0}" -ge "${HAVENO_DEB_MIN_BYTES}" ]
+}
 
 # Retorna caminho do .deb em Install/ (ou vazio).
 haveno_find_install_deb() {
-  local install_dir="${HAVENO_DIR}/Install"
-  if [ -f "${install_dir}/haveno.deb" ]; then
+  local install_dir="${HAVENO_DIR}/Install" f
+  if [ -f "${install_dir}/haveno.deb" ] && haveno_deb_size_ok "${install_dir}/haveno.deb"; then
     echo "${install_dir}/haveno.deb"
     return 0
   fi
-  find "$install_dir" -maxdepth 1 -name '*.deb' -type f 2>/dev/null | head -1
+  while IFS= read -r f; do
+    [ -n "$f" ] && haveno_deb_size_ok "$f" && { echo "$f"; return 0; }
+  done < <(find "$install_dir" -maxdepth 1 -name '*.deb' -type f 2>/dev/null)
+  return 1
 }
 
 haveno_has_install_deb() {
   [ -n "$(haveno_find_install_deb)" ]
+}
+
+# Remove .deb/.part minusculos (erro HTML) que fazem wget -c travar em 119 B na .download/.
+# Mantem parciais >= 1 MiB para retomada legitima. Uso: haveno_purge_poisoned_partial_debs [expected] dir...
+haveno_purge_poisoned_partial_debs() {
+  local expected="${1:-0}" dir f s
+  shift || true
+  local -a dirs=()
+  if [ "$#" -gt 0 ]; then
+    dirs=("$@")
+  else
+    dirs=("${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" ".")
+  fi
+  for dir in "${dirs[@]}"; do
+    [ -d "$dir" ] || continue
+    while IFS= read -r -d '' f; do
+      s="$(stat -c%s "$f" 2>/dev/null || echo 0)"
+      if [ "${s:-0}" -lt "${HAVENO_DEB_POISON_MAX_BYTES}" ]; then
+        y "  Lixo de download removido (${s} bytes): ${f}"
+        rm -f "$f" 2>/dev/null || true
+      elif [ "${expected:-0}" -gt 0 ] 2>/dev/null && [ "${s:-0}" -ge "${expected}" ]; then
+        : # completo
+      fi
+    done < <(find "$dir" -maxdepth 1 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -type f -print0 2>/dev/null)
+  done
+}
+
+haveno_fetch_deb_expected_bytes() {
+  local url="${1:-}"
+  [ -n "$url" ] || { echo 0; return 0; }
+  curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 45 "$url" 2>/dev/null \
+    | grep -i '^content-length:' | awk '{print $2}' | tr -d '\r' | head -1
 }
 
 # DIV-20260617-02: o haveno-install.sh upstream baixa a assinatura com 'wget -cq'

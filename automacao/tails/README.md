@@ -154,7 +154,7 @@ layout antigo soltos na raiz (sem tocar nos seus dados).
 
 Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma.**
 
-No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência** (`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime `[download] tamanho (~%)` a cada 30s. Se a rede cair ou você reiniciar, o download **retoma de onde parou** no próximo boot (antes, em `/tmp` = RAM, perdia tudo — corrigido em jun/2026).
+No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência** (`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime `[download] tamanho (~%)` a cada 30s. Se a rede cair ou você reiniciar, o download **retoma de onde parou** no próximo boot (antes, em `/tmp` = RAM, perdia tudo — corrigido em jun/2026). **Lixo de ~119 B** (erro do GitHub) é **apagado automaticamente** antes de cada tentativa — parciais reais (≥ 1 MiB) são mantidos para retomar.
 
 No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do `install.sh` upstream — idempotente a cada boot. FAQ Cap. **7.11**.
 

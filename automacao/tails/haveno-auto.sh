@@ -163,7 +163,7 @@ _fmt_bytes() {
 
 _haveno_deb_bytes_now() {
   local d size=0 f s
-  for d in "${HAVENO_DIR}/Install" "${HAVENO_DIR}"; do
+  for d in "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "${HAVENO_DIR}"; do
     [ -d "$d" ] || continue
     while IFS= read -r -d '' f; do
       s=$(stat -c%s "$f" 2>/dev/null || echo 0)
@@ -303,10 +303,10 @@ g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de proced
 
 if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; then
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."
+  EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
+  haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."
   y "  Download do .deb pelo Tor: pode levar 30-90 min. A linha 'Downloading Haveno from URL...' nao atualiza — normal."
-  y "  Progresso abaixo (atualiza a cada 30s); ou em outro terminal: watch -n 30 'ls -lh ${HAVENO_DIR}/Install/*.deb 2>/dev/null'"
-  EXPECTED_DEB_BYTES="$(curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 45 "$HAVENO_DEB_URL" 2>/dev/null \
-    | grep -i '^content-length:' | awk '{print $2}' | tr -d '\r')"
+  y "  Progresso abaixo (a cada 30s); ou: watch -n 30 'ls -lh ${HAVENO_DIR}/.download/ ${HAVENO_DIR}/Install/*.deb 2>/dev/null'"
   if [ -n "${EXPECTED_DEB_BYTES:-}" ] && [ "${EXPECTED_DEB_BYTES:-0}" -gt 0 ] 2>/dev/null; then
     y "  Tamanho esperado do .deb: $(_fmt_bytes "$EXPECTED_DEB_BYTES")"
   fi
@@ -328,7 +328,7 @@ if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; 
   kill "$MON_PID" 2>/dev/null || true
   wait "$MON_PID" 2>/dev/null || true
   if [ "$INSTALL_RC" -ne 0 ]; then
-    die "haveno-install.sh falhou (PGP/URL/rede). Confira release atual da Reto."
+    die "haveno-install.sh falhou (PGP/URL/rede). Se travou em ~119B, apague lixo: rm -f ${HAVENO_DIR}/.download/*.deb* e tente de novo — ou baixe o .deb pelo Tor Browser e rode --install-only."
   fi
   g "  Haveno preparado na persistencia."
 else
