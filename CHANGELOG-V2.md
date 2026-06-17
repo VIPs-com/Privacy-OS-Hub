@@ -4,11 +4,21 @@
 
 ---
 
-## 2026-06-17 — Download `.download/` envenenado (119 B)
+## 2026-06-17 — Download `.download/` + assinatura `.sig` (DIV-20260617-01/02)
 
-- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs` remove `.deb` &lt; 1 MiB e `.sig` &lt; 400 B antes do `wget -c`; `haveno_has_install_deb` exige ≥ 100 MiB
-- **`haveno_predownload_sig`:** Tor primeiro + validação PGP; **`haveno_finalize_verified_deb_in_cwd`** promove `.deb` completo em `.download/` para `Install/` sem re-baixar
-- **`haveno-auto.sh` / `haveno-update.sh`:** atalho quando `.deb` já está completo; fallback PGP local se upstream falhar na `.sig`
+**Commits:** `1dd2e47` · `1e8fe99`/`6acf2a1` (purge `.deb` ~119 B) · `42e9ff6` · merge `79a7dd3` · docs `1e4db26`
+
+| Fix | Sintoma | Correção |
+|-----|---------|----------|
+| **DIV-17-01** | `.deb` em `/tmp` (RAM); monitor sem %; perdia no reboot | Pasta persistente `~/Persistent/haveno/.download/` + `wget -c` retoma após reboot |
+| **DIV-17-02** | `.sig` de **119 B** (HTML GitHub); `Failed to download Haveno signature` com `.deb` completo (~266 MB) | Purge `.sig` &lt; 400 B; `haveno_predownload_sig` via **Tor** + `BEGIN PGP SIGNATURE`; promove `.deb` verificado para `Install/` sem re-baixar |
+
+- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs`, `haveno_sig_size_ok`, `haveno_finalize_verified_deb_in_cwd`
+- **`haveno-auto.sh` / `haveno-update.sh`:** atalho quando `.deb` já está completo em `.download/`; fallback PGP local se upstream falhar na `.sig`
+- **Docs aluno:** [TRES-PASSOS-HAVENO-TAILS.md](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) — recuperação + **fallback atômico**
+- **`automacao/tails/etapas/instalar-haveno/`** — scripts em pedaços no ZIP público (caminho validado em Tails 11/jun e 17/jun)
+
+> **Campo (17/jun):** purge do `.deb` confirmado (266 MB OK). Fix da `.sig` publicado em `main` — **validação Tails do caminho `haveno-setup` ainda pendente** após `sync-hub-scripts.sh`. Fallback atômico documentado até fechar verde no fluxo único.
 
 ---
 

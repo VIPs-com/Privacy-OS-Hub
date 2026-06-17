@@ -1,5 +1,7 @@
 # Três passos — Haveno no Tails (ZIP do GitHub)
 
+> **Atualizado:** 2026-06-17 · `main` com fix `.sig` 119 B (DIV-20260617-02) — rode `sync-hub-scripts.sh` após baixar ZIP novo.
+>
 > **Para o aluno:** só instalação e execução. Um script: `haveno-setup.sh`.  
 > **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).  
 > **Logs:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) · **Detalhe de flags:** [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md#comando-principal-haveno-setupsh)

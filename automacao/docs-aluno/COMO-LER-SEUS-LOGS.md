@@ -58,7 +58,7 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 | Arquivo (prefixo) | PASS se contém | FAIL se |
 |-------------------|----------------|---------|
 | `01-preflight-*` | `Tor conectado (IsTor: true)` + `RESULTADO: PASS` | `Preflight FALHOU` ou `RESULTADO: FAIL` |
-| `02-haveno-auto-*` | `Dependencias do .deb OK` + `RESULTADO: PASS` | `install.sh falhou` ou `RESULTADO: FAIL` |
+| `02-haveno-auto-*` | `Dependencias do .deb OK` + `RESULTADO: PASS` | `install.sh falhou`, `Failed to download Haveno signature`, `Assinatura .sig suspeita`, ou `RESULTADO: FAIL` |
 | `03-haveno-boot-*` / `07-haveno-boot-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal ou `RESULTADO: FAIL` |
 | `04-haveno-backup-*` | `Backup concluido:` + `RESULTADO: PASS` | `ERRO:` ou `RESULTADO: FAIL` |
 | `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` | qualquer `=NAO` |
@@ -100,9 +100,10 @@ Ver também: [README — trilha linear](../../README.md#trilha-linear).
 ## Se deu FAIL
 
 1. Leia a linha `ERRO:` ou `Preflight FALHOU` no `.txt`.  
-2. Volte ao passo certo em [README → Travou aqui?](../../README.md#travou-aqui) (cada situação → passo + processo P0x).  
-3. Corrija e rode de novo com `--qa-log`.  
-4. **Não** edite o `.txt` à mão para fingir PASS.
+2. **`02-haveno-auto` no [6/9] — assinatura:** se o `.deb` já tem ~266 MB em `.download/` mas falhou na `.sig`, rode `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` (fix jun/2026). Alternativa: [TRES-PASSOS — fallback atômico](TRES-PASSOS-HAVENO-TAILS.md).  
+3. Volte ao passo certo em [README → Travou aqui?](../../README.md#travou-aqui) (cada situação → passo + processo P0x).  
+4. Corrija e rode de novo com `--qa-log`.  
+5. **Não** edite o `.txt` à mão para fingir PASS.
 
 ---
 

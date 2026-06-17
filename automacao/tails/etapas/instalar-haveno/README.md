@@ -6,6 +6,8 @@
 > processo, imprime **PASS ou FAIL** com instrução do próximo passo, e pode ser
 > re-rodado sem estragar nada (idempotente). Quebrou? Você sabe exatamente qual
 > arquivo abrir e o que atualizar.
+>
+> **Guia do aluno (3 passos + fallback):** [TRES-PASSOS-HAVENO-TAILS.md](../../../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
 
 ## Como usar (uma etapa de cada vez — ritmo humano)
 
@@ -52,19 +54,28 @@ que é só uma lista de constantes, e o `TUDO.sh`, que é só a sequência).
   dependências de dentro do próprio .deb, mostra exatamente o que não existe e
   oferece o caminho documentado (`07 --force-depends`) — sem o `apt-get install -f`
   que removeria o pacote.
+- **`.sig` envenenada (~119 B)** (DIV-20260617-02): o `02` baixa `.sig` via Tor e
+  o `05` valida com `VALIDSIG`; o caminho público (`haveno-setup`) recebeu o mesmo
+  fix em `main` (jun/2026) — use esta pasta se o monolítico ainda falhar após `sync`.
+
+## Validação em campo
+
+| Data | Resultado |
+|------|-----------|
+| 2026-06-11 | Cookie Tor + filtro PoW (`08-abrir-haveno.sh`) — RetoSwap verde |
+| 2026-06-17 03:54 GMT | Passo 2 **VERDE** via `02-baixar-deb.sh` → `08` (piloto B+) |
+| 2026-06-17 ~11:50 GMT | `haveno-setup` público: `.deb` 266 MB OK; `.sig` 119 B — fix publicado, reteste pendente |
 
 ## Relação com os scripts antigos
 
-`haveno-auto.sh`, `haveno-setup.sh` etc. **continuam funcionando** e não foram
-alterados. Esta pasta é a **Rodada 1** da reorganização modular (processo:
-instalar Haveno = passo 2 do hub). Próximas rodadas (cada uma em sua pasta,
-uma por vez, depois de validar a anterior em campo):
+`haveno-setup.sh` / `haveno-auto.sh` **continuam sendo o caminho padrão** do aluno.
+Esta pasta é o **fallback** e a base da reorganização modular (Rodada 1).
 
-1. ✅ `instalar-haveno/` — esta pasta (validar no Tails antes de avançar!)
+1. ✅ `instalar-haveno/` — esta pasta (**validada** em Tails 11/jun e 17/jun)
 2. ⏳ `sessao-diaria/` — o que o `haveno-boot.sh` faz hoje
 3. ⏳ `backup/` — o que `haveno-backup.sh` faz hoje
 4. ⏳ `atualizar/` — o que `haveno-update.sh` faz hoje (com o fix do DIV-20260610-04)
 5. ⏳ aposentar os monolíticos (só quando TODAS as rodadas tiverem PASS em campo)
 
 ---
-*Rodada 1 da reorganização modular · criada na triagem de 2026-06-10 · ainda NÃO testada em Tails real*
+*Rodada 1 da reorganização modular · piloto B+ · validada em Tails real · jun/2026*

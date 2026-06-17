@@ -84,6 +84,7 @@ Vale também em `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh`.
 | `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (backup) |
 | `haveno-common.sh` | — | — | Biblioteca (source interno + `qa_log_*`) |
 | `haveno-onion-grater.yml` | 2, 7 | §8 | **Filtro Tor corrigido** p/ Haveno 1.6.0 (PoW) — ver abaixo |
+| `etapas/instalar-haveno/*.sh` | 2 | §5–6 | **Fallback atômico** (1 processo = 1 script) — ver abaixo |
 
 **Home Lab** ([`HomeLab/`](../homelab/README.md)) — Debian/Ubuntu, **não** Tails.
 
@@ -157,6 +158,21 @@ Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma
 No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência** (`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime `[download] tamanho (~%)` a cada 30s. Se a rede cair ou você reiniciar, o download **retoma de onde parou** no próximo boot (antes, em `/tmp` = RAM, perdia tudo — corrigido em jun/2026). **Lixo de ~119 B** (erro do GitHub) em `.deb` ou `.sig` é **apagado automaticamente**; se o `.deb` já estiver completo em `.download/`, o hub **só baixa a `.sig`**, verifica PGP e move para `Install/` sem re-baixar o pacote.
 
 No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do `install.sh` upstream — idempotente a cada boot. FAQ Cap. **7.11**.
+
+### Fallback atômico — se `haveno-setup` falhar no [6/9]
+
+Caminho **validado em Tails real** (piloto jun/2026). Cada etapa imprime PASS/FAIL — útil quando o fluxo monolítico quebra na assinatura ou no download.
+
+```bash
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails/etapas/instalar-haveno
+chmod +x *.sh
+./01-pastas.sh && ./02-baixar-deb.sh && ./04-importar-chave.sh
+./05-verificar-assinatura.sh && ./06-deps-apt.sh && ./07-instalar-deb.sh && ./08-abrir-haveno.sh
+```
+
+Detalhe: [`etapas/instalar-haveno/README.md`](etapas/instalar-haveno/README.md) · guia do aluno: [TRES-PASSOS-HAVENO-TAILS.md](../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) (§ recuperação e fallback).
+
+Se o `.deb` já está completo em `.download/` e só a `.sig` falhou (~119 B): rode `./sync-hub-scripts.sh` e `haveno-setup.sh --qa-log` de novo (fix DIV-20260617-02 em `main`).
 
 ### `haveno-onion-grater.yml` — filtro Tor corrigido (1.6.0)
 

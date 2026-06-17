@@ -264,7 +264,9 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ~/Persistent/hub-scripts/haveno-auto.sh --install-only
 ```
 
-**Durante o [6/9] (1ª vez):** o download do `.deb` pelo Tor pode levar **30–90 min**. A linha `Downloading Haveno from URL...` (script upstream) **não atualiza** — o `haveno-auto.sh` imprime `[download] … (~%)` a cada 30s. Não interrompa.
+**Durante o [6/9] (1ª vez):** o download do `.deb` pelo Tor pode levar **30–90 min**. A linha `Downloading Haveno from URL...` (script upstream) **não atualiza** — o `haveno-auto.sh` imprime `[download] … (~%)` a cada 30s. O arquivo cresce em `~/Persistent/haveno/.download/` (retoma após reboot). Arquivos de **~119 B** em `.deb` ou `.sig` são lixo de erro do GitHub e são **apagados automaticamente** antes de continuar. Não interrompa.
+
+**Falhou na assinatura (`.sig` ~119 B) com `.deb` completo?** Rode `./sync-hub-scripts.sh` e `haveno-setup.sh --qa-log` de novo (fix jun/2026). Se ainda falhar: [TRES-PASSOS — fallback atômico](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) ou `automacao/tails/etapas/instalar-haveno/`.
 
 **Relógio [5/9]:** se não houver `Date:` HTTP, o script mostra a hora atual e explica que `timedatectl` → `synchronized: no` é **normal no Tails** (sync via Tor, não NTP).
 
@@ -457,6 +459,10 @@ automacao/tails/          (sync-hub-scripts.sh copia tudo p/ ~/Persistent/hub-sc
 │   ├── haveno-update.sh
 │   ├── haveno-verify-deb.sh
 │   └── haveno-switch-network.sh
+│
+├── etapas/instalar-haveno/    ★ FALLBACK (passo 2 em pedaços — avançado)
+│   ├── 01-pastas.sh … 08-abrir-haveno.sh
+│   └── README.md
 │
 ├── Feather (carteira separada — passo 5 / M2)
 │   ├── feather-install-verify.sh
