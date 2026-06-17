@@ -1408,21 +1408,32 @@ o ajuste também some sozinho ao reiniciar.
 > Tails de pedir a senha sempre. Por isso é **opt-in** — sem a flag, o comportamento
 > seguro padrão continua. Use só se entender e aceitar essa troca.
 
-## 7.15 `gpg: can't open … No such file or directory` / "assinatura não veio" no install
+## 7.15 Instalação aborta na verificação PGP (`No such file or directory` ou `Verification failed`)
 
 Sintoma: durante o `[6/9]` (ou `haveno-update.sh`), o `.deb` baixa normalmente, mas
-na verificação aparece algo como `gpg: can't open '…deb.sig': No such file or
-directory` / `verify signatures failed` e o script aborta — **sem instalar**.
+na verificação o script aborta **sem instalar**, com uma destas mensagens:
 
-**Causa:** o `haveno-install.sh` upstream baixa a **assinatura (`.sig`)** com um
-`wget` que **não checa erro**; se a `.sig` não chega (URL do release/rede), o `gpg`
-não tem o arquivo e falha — mesmo com o `.deb` de ~255 MB já baixado e correto.
+- `gpg: can't open '…deb.sig': No such file or directory` / `verify signatures failed`
+- `Verification failed: …` (mesmo com a assinatura aparentemente boa)
 
-**Correção do hub (jun/2026):** os scripts agora **pré-baixam a `.sig`** (fail-closed,
-direto pelo Tor) antes de chamar o instalador, garantindo que a verificação tenha o
-arquivo. Basta ter os scripts atualizados (`./sync-hub-scripts.sh`). Se ainda assim
-falhar, é sinal de problema na **URL do release** ou no **Tor** — confira ambos e
-rode de novo (o `.deb` já baixado é retomado, não recomeça).
+**Duas causas (ambas no instalador `haveno-install.sh` upstream), corrigidas no hub (jun/2026):**
+
+1. **Assinatura ausente.** O upstream baixa a `.sig` com um `wget` que **não checa
+   erro**; se ela não chega, o `gpg` não tem o arquivo → "No such file or directory".
+   **Correção:** os scripts agora **pré-baixam a `.sig`** (fail-closed, pelo Tor) antes
+   de chamar o instalador.
+
+2. **Idioma (locale).** O upstream confere o resultado do gpg procurando a frase em
+   **inglês** `Good signature from`. Num Tails em **português**, o gpg responde
+   *"Assinatura correta de…"* — a frase não casa e o script diz `Verification failed`
+   **mesmo com a assinatura boa**. **Correção:** o hub roda o instalador com idioma
+   forçado em inglês (`LC_ALL=C`), então a verificação volta a casar. (A verificação
+   continua acontecendo — se o `.deb` estivesse corrompido, viria `BAD signature` e
+   abortaria, como deve ser.)
+
+Basta ter os scripts atualizados (`./sync-hub-scripts.sh`). Se ainda assim falhar, é
+problema na **URL do release** ou no **Tor** — confira ambos e rode de novo (o `.deb`
+já baixado é retomado, não recomeça).
 
 > **Nunca** instale um `.deb` cujo `.sig` não foi verificado. O fluxo aborta de
 > propósito (fail-closed) — é segurança, não bug.

@@ -299,7 +299,12 @@ if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; 
   # haveno-install.sh aborta com "No such file or directory" mesmo com o .deb OK.
   haveno_predownload_sig "$HAVENO_DEB_URL"
   b "  Rodando haveno-install.sh (verifica assinatura PGP)..."
-  bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" &
+  # LC_ALL=C: o haveno-install.sh upstream confere o gpg com grep "Good signature
+  # from" (string em INGLES). Num Tails em PT-BR o gpg imprime "Assinatura correta
+  # de..." e o grep falha -> "Verification failed" mesmo com a assinatura BOA
+  # (mesmo bug de locale da DIV-20260607-02). Forcamos ingles so nesta chamada;
+  # a verificacao continua acontecendo (fail-closed: .deb corrompido -> "BAD").
+  LC_ALL=C bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" &
   INSTALL_PID=$!
   _monitor_haveno_deb_download "$INSTALL_PID" "${EXPECTED_DEB_BYTES:-0}" &
   MON_PID=$!

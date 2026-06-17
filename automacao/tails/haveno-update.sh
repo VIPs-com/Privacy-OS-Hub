@@ -147,7 +147,10 @@ fi
 # Garante a .sig na CWD antes do upstream (DIV-20260617-02): sem ela o gpg do
 # haveno-install.sh aborta com "No such file or directory" mesmo com o .deb OK.
 haveno_predownload_sig "$HAVENO_DEB_URL"
-if ! bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+# LC_ALL=C: o upstream confere o gpg com grep "Good signature from" (ingles); num
+# Tails em PT-BR o gpg diz "Assinatura correta de..." e o grep falha mesmo com a
+# assinatura boa (bug de locale, DIV-20260617-02 / DIV-20260607-02). Forca ingles.
+if ! LC_ALL=C bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
   cd /
   die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica salvo em ${WORK} para retomar."
 fi
