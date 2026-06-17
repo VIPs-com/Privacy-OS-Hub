@@ -156,6 +156,30 @@ haveno_has_install_deb() {
   [ -n "$(haveno_find_install_deb)" ]
 }
 
+# DIV-20260617-02: o haveno-install.sh upstream baixa a assinatura com 'wget -cq'
+# SEM checar erro (e gera a URL da .sig por conta propria). Se a .sig nao vier
+# (URL/rede), o 'gpg --verify .sig .deb' do upstream aborta com
+# "No such file or directory" — e o .deb de ~255 MB ja baixado NAO e verificado
+# (visto em campo 2026-06-17: .download/ ficou so com .deb, sem .sig). Garantimos
+# a .sig (pequena) na PASTA ATUAL antes do upstream, fail-closed; o 'wget -c' do
+# upstream a acha completa e a verificacao roda. Espelha o atomico 02-baixar-deb.sh.
+# CHAMAR com a CWD ja na pasta de download (.download), antes de 'bash haveno-install.sh'.
+# Uso: haveno_predownload_sig "<URL_DO_DEB>"
+haveno_predownload_sig() {
+  local deb_url="${1:-}" deb_name sig_url
+  [ -n "$deb_url" ] || die "haveno_predownload_sig: URL do .deb vazia."
+  deb_name="$(basename "$deb_url")"
+  sig_url="${deb_url}.sig"
+  y "  Garantindo a assinatura .sig na pasta de download (fail-closed)..."
+  rm -f "${deb_name}.sig" 2>/dev/null || true   # .sig e pequena: sempre fresca
+  if ! curl -fsSL --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
+    curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null \
+      || die "Nao baixei a assinatura .sig (${sig_url}). Sem ela o install.sh aborta no gpg (DIV-20260617-02). Confira a URL do release/Tor."
+  fi
+  [ -s "${deb_name}.sig" ] || die "Assinatura .sig baixada vazia — abortando (fail-closed)."
+  g "  Assinatura .sig pronta (${deb_name}.sig)."
+}
+
 # install.sh upstream espera Install/haveno.deb — cria symlink se so existir nome longo.
 haveno_ensure_install_deb_link() {
   local install_dir="${HAVENO_DIR}/Install" deb real

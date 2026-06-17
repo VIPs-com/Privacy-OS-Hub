@@ -1408,6 +1408,25 @@ o ajuste também some sozinho ao reiniciar.
 > Tails de pedir a senha sempre. Por isso é **opt-in** — sem a flag, o comportamento
 > seguro padrão continua. Use só se entender e aceitar essa troca.
 
+## 7.15 `gpg: can't open … No such file or directory` / "assinatura não veio" no install
+
+Sintoma: durante o `[6/9]` (ou `haveno-update.sh`), o `.deb` baixa normalmente, mas
+na verificação aparece algo como `gpg: can't open '…deb.sig': No such file or
+directory` / `verify signatures failed` e o script aborta — **sem instalar**.
+
+**Causa:** o `haveno-install.sh` upstream baixa a **assinatura (`.sig`)** com um
+`wget` que **não checa erro**; se a `.sig` não chega (URL do release/rede), o `gpg`
+não tem o arquivo e falha — mesmo com o `.deb` de ~255 MB já baixado e correto.
+
+**Correção do hub (jun/2026):** os scripts agora **pré-baixam a `.sig`** (fail-closed,
+direto pelo Tor) antes de chamar o instalador, garantindo que a verificação tenha o
+arquivo. Basta ter os scripts atualizados (`./sync-hub-scripts.sh`). Se ainda assim
+falhar, é sinal de problema na **URL do release** ou no **Tor** — confira ambos e
+rode de novo (o `.deb` já baixado é retomado, não recomeça).
+
+> **Nunca** instale um `.deb` cujo `.sig` não foi verificado. O fluxo aborta de
+> propósito (fail-closed) — é segurança, não bug.
+
 ---
 
 <a id="8-todos-os-links-referência-única"></a>

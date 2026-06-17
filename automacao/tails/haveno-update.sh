@@ -144,6 +144,9 @@ cd "$WORK" || die "Nao entrei em ${WORK}."
 if ! curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
   curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
 fi
+# Garante a .sig na CWD antes do upstream (DIV-20260617-02): sem ela o gpg do
+# haveno-install.sh aborta com "No such file or directory" mesmo com o .deb OK.
+haveno_predownload_sig "$HAVENO_DEB_URL"
 if ! bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
   cd /
   die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica salvo em ${WORK} para retomar."

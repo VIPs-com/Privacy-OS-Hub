@@ -295,6 +295,9 @@ if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; 
   if [ -n "${EXPECTED_DEB_BYTES:-}" ] && [ "${EXPECTED_DEB_BYTES:-0}" -gt 0 ] 2>/dev/null; then
     y "  Tamanho esperado do .deb: $(_fmt_bytes "$EXPECTED_DEB_BYTES")"
   fi
+  # Garante a .sig na CWD antes do upstream (DIV-20260617-02): sem ela o gpg do
+  # haveno-install.sh aborta com "No such file or directory" mesmo com o .deb OK.
+  haveno_predownload_sig "$HAVENO_DEB_URL"
   b "  Rodando haveno-install.sh (verifica assinatura PGP)..."
   bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" &
   INSTALL_PID=$!
