@@ -14,17 +14,31 @@
 
 ---
 
-## Só estes comandos (iniciante)
+## Qual comando eu uso? (é só isto)
+
+> **Você só precisa de UM script: o `haveno-setup.sh`.** Ele chama os outros por
+> dentro sozinho. Não precisa decorar os demais `.sh`.
 
 Depois dos passos 1–4 manuais e de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`):
 
-| Situação | Comando |
-|----------|---------|
-| **1ª vez** (instalar Haveno) | `~/Persistent/hub-scripts/haveno-setup.sh` |
-| **Cada sessão** (novo boot no Tails) | `~/Persistent/hub-scripts/haveno-setup.sh --boot` |
-| **Feather** (passo 5 / pré-requisito M2) | `~/Persistent/hub-scripts/haveno-setup.sh --feather` ou `--boot --feather` |
+| Quando | O que você digita |
+|--------|-------------------|
+| 🟢 **Instalar a 1ª vez** (do zero até o indicador **verde**) | `~/Persistent/hub-scripts/haveno-setup.sh` |
+| 🔁 **Toda vez que voltar** (desliguei o Tails e liguei de novo) | `~/Persistent/hub-scripts/haveno-setup.sh --boot` |
+| 💰 **Abrir a carteira Feather** (passo 5 / pré-requisito do M2) | `~/Persistent/hub-scripts/haveno-setup.sh --feather` |
 
-Os outros arquivos `.sh` existem para **avançado** ou são chamados **automaticamente** pelo `haveno-setup.sh`. Detalhe de cada um: [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
+**Por que repetir o `--boot` toda vez que ligo o Tails?**
+O Tails **esquece tudo** quando desliga — só o que está em `~/Persistent` sobrevive.
+Então, a cada vez que você liga, é preciso **re-ligar** o Haveno na sessão. O `--boot`
+faz isso: é **rápido** e **não baixa nada de novo** (a carteira e o `.deb` já ficaram salvos).
+
+**Resumo de bolso:**
+- **Primeira vez na vida** → `haveno-setup.sh`
+- **Já instalei antes, voltei ao Tails** → `haveno-setup.sh --boot`
+
+Os outros arquivos `.sh` (`haveno-auto.sh`, `haveno-boot.sh`, etc.) são **internos** —
+chamados automaticamente pelo `haveno-setup.sh` — ou para uso **avançado**. Ficha de
+cada um: [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
 
 ---
 

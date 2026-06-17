@@ -6,17 +6,30 @@
 
 Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
 
-## Orquestrador (comece aqui após passos 1–4 manuais)
+## Você só usa 1 script: `haveno-setup.sh` (comece aqui após passos 1–4 manuais)
+
+**São só 2 situações:**
+
+| Quando | O que digitar |
+|--------|---------------|
+| 🟢 **Instalar a 1ª vez** (do zero até o **verde**) | `haveno-setup.sh` |
+| 🔁 **Toda vez que voltar** (liguei o Tails de novo) | `haveno-setup.sh --boot` |
+
+O Tails esquece tudo a cada boot (só `~/Persistent` sobrevive) — por isso o `--boot`
+toda vez. Ele é rápido e **não baixa nada de novo**.
 
 ```bash
-# instalar/atualizar (cria ~/Persistent/hub-scripts/ — raiz da Persistent fica limpa):
+# instalar/atualizar os scripts (cria ~/Persistent/hub-scripts/ — raiz da Persistent fica limpa):
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
 ~/Persistent/hub-scripts/haveno-setup.sh           # 1ª vez: install → verde → backup?
-~/Persistent/hub-scripts/haveno-setup.sh --boot    # cada sessão
+~/Persistent/hub-scripts/haveno-setup.sh --boot    # toda vez que voltar (já instalado)
 ~/Persistent/hub-scripts/haveno-setup.sh --feather # + Feather (passo 5 / M2)
 ~/Persistent/hub-scripts/haveno-setup.sh --qa-log  # grava evidencias em ~/Persistent/qa-logs/
 ```
+
+> **`haveno-auto.sh` e `haveno-boot.sh` são internos** — o `haveno-setup.sh` chama
+> eles sozinho. Você não precisa rodá-los direto (a tabela abaixo é referência técnica).
 
 > **Layout (jun/2026):** os scripts vivem em **`~/Persistent/hub-scripts/`** — uma
 > pasta só, fácil de achar e de apagar/recriar no update. Seus **dados** ficam fora
