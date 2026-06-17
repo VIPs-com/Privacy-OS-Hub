@@ -4,6 +4,13 @@
 
 ---
 
+## 2026-06-17 — Download `.download/` envenenado (119 B)
+
+- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs` remove `.deb` &lt; 1 MiB antes do `wget -c`; `haveno_has_install_deb` exige ≥ 100 MiB (ignora HTML do GitHub em `Install/`)
+- **`haveno-auto.sh` / `haveno-update.sh`:** purge automático + monitor em `.download/` e `Install/`
+
+---
+
 ## 2026-06-11 — Fixes de campo R29 (Tails real, Haveno 1.6.0)
 
 Dois bugs **Major** encontrados e validados ao vivo na trilha do passo 2/7:
