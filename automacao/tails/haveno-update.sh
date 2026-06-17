@@ -126,13 +126,19 @@ fi
 b "[5/6] Atualizando Haveno (verifica PGP)..."
 echo "  URL: $HAVENO_DEB_URL"
 echo "  PGP: $HAVENO_PGP_FPR"
-WORK="$(mktemp -d)"; cd "$WORK" || die "mktemp falhou."
+# Pasta de download PERSISTENTE (DIV-20260617-01): Tails e amnesico, /tmp = RAM.
+# Em ~/Persistent/haveno/.download o 'wget -c' do install.sh upstream retoma o .deb
+# no proximo boot em vez de perder o download em /tmp. Em FALHA NAO apagamos a
+# pasta (deixa o download retomar); so limpamos no sucesso. (Igual ao haveno-auto.sh.)
+WORK="${HAVENO_DIR}/.download"
+mkdir -p "$WORK" || die "Nao criei a pasta de download persistente (${WORK})."
+cd "$WORK" || die "Nao entrei em ${WORK}."
 if ! curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
-  curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; rm -rf "$WORK"; die "Nao baixei haveno-install.sh."; }
+  curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
 fi
 if ! bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
-  cd /; rm -rf "$WORK"
-  die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos."
+  cd /
+  die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica salvo em ${WORK} para retomar."
 fi
 cd /; rm -rf "$WORK"
 g "  Novo .deb verificado e preparado (dados preservados)."

@@ -162,9 +162,9 @@ _monitor_haveno_deb_download() {
       pct="$(awk -v n="$now" -v e="$expected" 'BEGIN{printf " (~%.0f%%)", (n/e)*100}')"
     fi
     if [ "$now" -gt 0 ]; then
-      printf "  [download] %s%s — aguardando haveno-install.sh...\n" "$human" "$pct"
+      printf "  [download] %s%s — baixando pelo Tor (retomavel; salvo na persistencia)...\n" "$human" "$pct"
     elif [ "$prev" -eq 0 ]; then
-      y "  [download] iniciando (upstream ainda nao criou o .deb em ${HAVENO_DIR}/Install/)..."
+      y "  [download] conectando ao servidor pelo Tor — o .deb aparece em instantes (isto NAO e erro)."
     fi
     prev=$now
     sleep 30
@@ -258,7 +258,16 @@ fi
 
 # ----------------------------- 6. Instalar Haveno (script oficial) -----------
 b "[6/9] Baixando e verificando Haveno (script oficial + PGP da Reto)..."
-WORK="$(mktemp -d)"; cd "$WORK" || die "mktemp falhou."
+# Pasta de download PERSISTENTE (DIV-20260617-01). O Tails e amnesico e /tmp = RAM:
+# um mktemp -d punha o download de 30-90 min do .deb em /tmp e, se a rede caisse
+# ou voce reiniciasse, TUDO se perdia (e o monitor parecia "erro de pasta tmp").
+# Em ~/Persistent/haveno/.download o 'wget -cq' do install.sh upstream RETOMA de
+# onde parou no proximo boot, e o monitor de progresso (que ja varre ${HAVENO_DIR})
+# enxerga o .deb crescendo. So e apagada no FINAL, em caso de sucesso (linha de
+# cleanup) — em falha fica para o download retomar.
+WORK="${HAVENO_DIR}/.download"
+mkdir -p "$WORK" || die "Nao criei a pasta de download persistente (${WORK})."
+cd "$WORK" || die "Nao entrei em ${WORK}."
 
 dl_ok=0
 if curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then dl_ok=1; fi
@@ -347,4 +356,6 @@ g "  Dados: ${HAVENO_DIR}/Data/"
 g "  ANTES DE TRADEAR: confirme a retomada nos canais oficiais da Reto"
 g "  e comece com valores pequenos (fix #2315 ja incluso na 1.6.0-reto)."
 g "==============================================================="
+# Chegou ate aqui = sucesso: o .deb ja foi movido para Install/. So agora limpamos
+# a pasta de download persistente (em falha, o script sai antes e ela fica para retomar).
 cd / ; rm -rf "$WORK" 2>/dev/null || true
