@@ -26,6 +26,6 @@
 | Processo | [P02](../../processos/m1-tor/P02-haveno-verde.md) |
 | Comandos | [P02](../../processos/m1-tor/P02-haveno-verde.md) |
 | Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
-| Manual novato | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) |
+| Manual novato | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) · [3 passos ZIP](../../automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) |
 
 **Anterior:** [passo-01.md](passo-01.md) · **Próximo:** [passo-03.md](passo-03.md)

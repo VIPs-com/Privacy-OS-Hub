@@ -128,6 +128,8 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 ## Comando principal: `haveno-setup.sh`
 
+> **Guia curto (ZIP + 1ª vez + reiniciar):** [TRES-PASSOS-HAVENO-TAILS.md](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
+
 Use este **orquestrador** se você é novato. Ele chama os outros scripts na ordem certa.
 
 ### Sem flags (1ª vez — Haveno ainda não instalado)

@@ -8,7 +8,7 @@
 | [tails/](tails/README.md) | Tails USB | 1–9, 12 (confirmações) |
 | [whonix-host/](whonix-host/README.md) | Linux host | 10 |
 | [homelab/](homelab/README.md) | Debian/Ubuntu | opcional |
-| [docs-aluno/](docs-aluno/COMO-LER-SEUS-LOGS.md) | Leitura | logs `--qa-log` |
+| [docs-aluno/](docs-aluno/COMO-LER-SEUS-LOGS.md) | Leitura | logs `--qa-log` · [3 passos Haveno](docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) |
 
 **Matriz passo ↔ script:** [trilha/referencia/scripts-matriz.md](../trilha/referencia/scripts-matriz.md)  
 **Novato:** [MANUAL-SCRIPTS.md](../MANUAL-SCRIPTS.md)

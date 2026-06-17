@@ -13,7 +13,7 @@ playbook_legacy: modulos/m1-tails-haveno/Playbooks/Playbooks.md
 
 > Segurança: exploit de trades (20/05/2026) **corrigido** na `1.6.0-reto`. Instalar: ok. Tradear: Cap. 4 do livro.
 
-**Antes de automatizar:** instale os scripts uma vez (`sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`) ([automacao/tails](../../automacao/tails/README.md) → "Ciclo de uso"). O `haveno-setup.sh` também **sincroniza** scripts mais novos do ZIP (ou rode `./sync-hub-scripts.sh` manualmente).
+**Antes de automatizar:** instale os scripts uma vez (`sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`) ([automacao/tails](../../automacao/tails/README.md) → "Ciclo de uso"). Guia curto: [3 passos (ZIP → 1ª vez → reiniciar)](../../automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md). O `haveno-setup.sh` também **sincroniza** scripts mais novos do ZIP (ou rode `./sync-hub-scripts.sh` manualmente).
 
 ```bash
 # Recomendado (depois do passo 4): preflight -> install -> verde -> backup?

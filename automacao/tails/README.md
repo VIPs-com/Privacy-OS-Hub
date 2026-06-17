@@ -2,6 +2,8 @@
 
 > **Validar sem adivinhar:** [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) — use `--qa-log` e abra os `.txt` em `~/Persistent/qa-logs/`.
 >
+> **Três passos (ZIP → 1ª vez → reiniciar):** [TRES-PASSOS-HAVENO-TAILS.md](../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
+>
 > **Novato?** Leia o [**MANUAL-SCRIPTS.md**](../../MANUAL-SCRIPTS.md) — [Apêndice A (cada arquivo)](../../MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) · flags · segurança ao rodar 2×.
 
 Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
