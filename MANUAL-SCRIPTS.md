@@ -138,9 +138,12 @@ Use este **orquestrador** se você é novato. Ele chama os outros scripts na ord
 
 **O que acontece:**
 
-1. `tails-preflight.sh` — valida passos 1–4  
-2. `haveno-auto.sh` — baixa (se preciso), instala, abre Haveno, corrige onion-grater  
-3. Pergunta se quer rodar **backup** agora (responda `s` ou `N`)
+1. (R29) Se o ZIP/repo tiver scripts mais novos, copia para `~/Persistent/`  
+2. `tails-preflight.sh` — valida passos 1–4  
+3. `haveno-auto.sh` — baixa (se preciso), instala, abre Haveno, corrige onion-grater (auto-resume `--install-only` se `.deb` já está em `Install/`)  
+4. Pergunta se quer rodar **backup** agora (responda `s` ou `N`)
+
+Com `--qa-log`, grava `01-preflight-*` **e** `02-haveno-auto-*` em `~/Persistent/qa-logs/`.
 
 **Quando usar:** passo **2** da trilha — primeira instalação até o verde.  
 **Rodar 2× por acidente:** na 2ª vez o Haveno **já está instalado** — o auto **pula** o download (não apaga `Data/`). Pode abrir **outra** janela do Haveno; feche duplicatas no menu. **Nada é sobrescrito** na pasta de dados.
@@ -487,7 +490,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Novato roda sozinho?** | **Sim** — é o script principal |
 | **O que faz** | Chama os outros na ordem: preflight → auto **ou** boot → (opcional) backup → (opcional) Feather |
 | **O que NÃO faz** | Não grava USB; não anota seed; não tradear |
-| **Comando** | `~/Persistent/hub-scripts/haveno-setup.sh` · `--boot` · `--feather` · `--skip-backup` · `--qa-log` |
+| **Comando** | `~/Persistent/hub-scripts/haveno-setup.sh` · `--boot` · `--install-only` · `--feather` · `--skip-backup` · `--no-sync` · `--qa-log` · `--one-password` |
 | **Rodar 2×** | **Seguro** — ver seção [Comando principal](#comando-principal-haveno-setupsh) |
 | **Disco** | Não apaga `~/Persistent/haveno/Data/` nem `feather/wallets/` |
 | **Flags** | [Comando principal](#comando-principal-haveno-setupsh) (neste manual) |

@@ -164,6 +164,16 @@ chmod +x ~/Persistent/*.sh
 
 ---
 
+## Orquestração `haveno-setup` R29 (2026-05-29)
+
+- **`haveno-setup.sh`:** sync repo→Persistent (mtime); `hub_resolve_script`; auto-resume `--install-only`; propaga `--qa-log` a preflight/auto/boot/backup/feather
+- **`haveno-auto.sh` / `haveno-boot.sh`:** QA-log `02-haveno-auto` / `03-haveno-boot`
+- **`haveno-update.sh`:** `haveno-common` + `haveno_run_install`; backup [4/6] skip amigável sem `Data/`
+- **Doc:** P02, `COMO-LER-SEUS-LOGS.md` (linha `02-haveno-auto-*`); gate local `check-script-orchestration.sh`
+- **Auditoria local:** `Auditoria/Rodada-29-Scripts-M1-Orquestracao.md`
+
+---
+
 ## Recuperação `--install-only` + sync R28b (2026-06-10)
 
 - **`haveno-auto.sh --install-only`:** continua do [7/9] sem re-download (deps + purge config-files + install)

@@ -66,7 +66,7 @@ while [ $# -gt 0 ]; do
     --install-only) INSTALL_ONLY=1; DO_CLOCK=0 ;;
     --boot-only) BOOT_ONLY=1 ;;
     --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
-    --qa-log)   export HAVENO_QA_LOG=1 ;;  # grava ~/Persistent/qa-logs/02-haveno-auto-*.txt
+    --qa-log) export HAVENO_QA_LOG=1 ;;  # grava ~/Persistent/qa-logs/02-haveno-auto-*.txt
     --watch)    shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;  # --watch N (sem N: mantem padrao)
     *)          [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
   esac
@@ -77,7 +77,11 @@ done
 # exec substitui este processo (perderia o trap de limpeza); quem ativa/limpa e o
 # boot.sh (herda HAVENO_ONE_PASSWORD pelo ambiente).
 if [ "$BOOT_ONLY" = "1" ]; then
-  exec "${SCRIPT_DIR}/haveno-boot.sh" ${WATCH_MIN:+$WATCH_MIN}
+  if [ "${HAVENO_QA_LOG:-0}" = "1" ]; then
+    exec "${SCRIPT_DIR}/haveno-boot.sh" --qa-log ${WATCH_MIN:+"$WATCH_MIN"}
+  else
+    exec "${SCRIPT_DIR}/haveno-boot.sh" ${WATCH_MIN:+"$WATCH_MIN"}
+  fi
 fi
 
 # QA log (--qa-log): tee de TODA a saida para ~/Persistent/qa-logs/ — captura ate

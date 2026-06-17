@@ -22,10 +22,11 @@ toda vez. Ele é rápido e **não baixa nada de novo**.
 # instalar/atualizar os scripts (cria ~/Persistent/hub-scripts/ — raiz da Persistent fica limpa):
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
-~/Persistent/hub-scripts/haveno-setup.sh           # 1ª vez: install → verde → backup?
-~/Persistent/hub-scripts/haveno-setup.sh --boot    # toda vez que voltar (já instalado)
-~/Persistent/hub-scripts/haveno-setup.sh --feather # + Feather (passo 5 / M2)
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log  # grava evidencias em ~/Persistent/qa-logs/
+~/Persistent/hub-scripts/haveno-setup.sh              # 1ª vez: install → verde → backup?
+~/Persistent/hub-scripts/haveno-setup.sh --install-only  # retoma [7-9] (.deb ja em Install/)
+~/Persistent/hub-scripts/haveno-setup.sh --boot       # toda vez que voltar (já instalado)
+~/Persistent/hub-scripts/haveno-setup.sh --feather    # + Feather (passo 5 / M2)
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log     # grava 01-preflight + 02-haveno-auto em qa-logs/
 ```
 
 > **`haveno-auto.sh` e `haveno-boot.sh` são internos** — o `haveno-setup.sh` chama
@@ -33,8 +34,8 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
 > **Layout (jun/2026):** os scripts vivem em **`~/Persistent/hub-scripts/`** — uma
 > pasta só, fácil de achar e de apagar/recriar no update. Seus **dados** ficam fora
-> dela: `haveno/` (carteira), `Backups/`, `feather/`, `qa-logs/`. Caminhos antigos
-> `~/Persistent/*.sh` em docs = layout anterior; os scripts funcionam nos dois.
+> dela: `haveno/` (carteira), `Backups/`, `feather/`, `qa-logs/`. O `haveno-setup`
+> sincroniza scripts novos do ZIP para `hub-scripts/` (use `--no-sync` para desligar).
 
 > **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `tails-preflight.sh` só valida.
 

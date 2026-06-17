@@ -55,6 +55,70 @@ sudo_one_password_stop() {
   HAVENO_SUDO_OWNER=0
 }
 
+# --- Orquestracao hub (R29): sync repo -> hub-scripts, resume install ------------
+HUB_SCRIPTS_DIR="${HUB_SCRIPTS_DIR:-${PERSIST}/hub-scripts}"
+
+hub_find_tails_source() {
+  local d setup_dir="${HUB_SETUP_DIR:-${SCRIPT_DIR}}"
+  for d in \
+      "$setup_dir" \
+      "${PERSIST}/Privacy-OS-Hub-main/automacao/tails" \
+      "${HUB_SCRIPTS_DIR}" \
+      "${PERSIST}"; do
+    [ -f "${d}/haveno-common.sh" ] && { echo "$d"; return 0; }
+  done
+  return 1
+}
+
+hub_sync_scripts_to_persistent() {
+  local src="${1:-}"
+  [ -n "$src" ] || return 0
+  [ -d "$src" ] || return 0
+  local src_common="${src}/haveno-common.sh"
+  local dst_common="${HUB_SCRIPTS_DIR}/haveno-common.sh"
+  [ -f "$src_common" ] || return 0
+  if [ ! -f "$dst_common" ] || [ "$src_common" -nt "$dst_common" ]; then
+    y "  Scripts do repo mais novos — sincronizando para ${HUB_SCRIPTS_DIR}/..."
+    mkdir -p "${HUB_SCRIPTS_DIR}" || return 1
+    cp -f "${src}"/*.sh "${HUB_SCRIPTS_DIR}/" 2>/dev/null || true
+    [ -f "${src}/haveno-onion-grater.yml" ] && cp -f "${src}/haveno-onion-grater.yml" "${HUB_SCRIPTS_DIR}/"
+    [ -f "${src}/haveno-backup.desktop" ] && cp -f "${src}/haveno-backup.desktop" "${HUB_SCRIPTS_DIR}/"
+    chmod +x "${HUB_SCRIPTS_DIR}"/*.sh 2>/dev/null || true
+    g "  Sync OK (${src} -> ${HUB_SCRIPTS_DIR})."
+  fi
+}
+
+hub_resolve_script() {
+  local name="$1"
+  local hub="${HUB_SCRIPTS_DIR}/${name}"
+  local persist="${PERSIST}/${name}"
+  local local="${SCRIPT_DIR}/${name}"
+  local pick="" best=""
+  for pick in "$hub" "$persist" "$local"; do
+    [ -x "$pick" ] || continue
+    if [ -z "${best:-}" ] || [ "$pick" -nt "$best" ]; then
+      best="$pick"
+    fi
+  done
+  [ -n "${best:-}" ] && { echo "$best"; return 0; }
+  return 1
+}
+
+haveno_pkg_installed_ok() {
+  dpkg-query -W -f='${Status}' haveno 2>/dev/null | grep -q 'install ok installed'
+}
+
+haveno_needs_install_only() {
+  haveno_has_install_deb || return 1
+  [ -f "${UTILS_DIR}/install.sh" ] || return 1
+  [ -f "${UTILS_DIR}/exec.sh" ] || return 1
+  if haveno_pkg_installed_ok; then
+    return 1
+  fi
+  return 0
+}
+
+
 # Retorna 0 se OK; imprime falhas em stderr
 tails_preflight_check() {
   local fail=0
