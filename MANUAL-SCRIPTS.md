@@ -213,6 +213,7 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 ~/Persistent/hub-scripts/haveno-auto.sh --no-clock   # nao ajusta relogio via Tor
 ~/Persistent/hub-scripts/haveno-auto.sh --watch 15   # monitora log 15 min
 ~/Persistent/hub-scripts/haveno-auto.sh --one-password # digitar a senha admin 1x (ver abaixo)
+~/Persistent/hub-scripts/haveno-auto.sh --qa-log     # grava o log em ~/Persistent/qa-logs/
 ```
 
 | Flag | Quando | Seguro 2×? |
@@ -222,6 +223,11 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 | `--no-clock` | Relógio do Tails já OK | Sim |
 | `--install-only` | Já tem `.deb` em `Install/` — só deps apt + `install.sh` | Sim |
 | `--one-password` | Digitar a senha de admin **uma vez** no fluxo todo (ver nota) | Sim |
+| `--qa-log` | Grava toda a saída (inclusive erros) em `~/Persistent/qa-logs/02-haveno-auto-*.txt` | Sim |
+
+> **`--qa-log` agora vale para `haveno-auto.sh` e `haveno-boot.sh` também** (antes só
+> `preflight`/`backup`/`feather`). Via `haveno-setup.sh --qa-log`, os scripts-filhos
+> herdam e cada um grava seu `.txt`. Exporte tudo ao fim com `qa-export-logs.sh --usb`.
 
 **`--one-password` (digitar a senha uma vez):** o Tails, de propósito, faz o `sudo`
 pedir a senha a **cada** comando (`timestamp_timeout=0`). Esta flag — aceita por

@@ -66,6 +66,7 @@ while [ $# -gt 0 ]; do
     --install-only) INSTALL_ONLY=1; DO_CLOCK=0 ;;
     --boot-only) BOOT_ONLY=1 ;;
     --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
+    --qa-log)   export HAVENO_QA_LOG=1 ;;  # grava ~/Persistent/qa-logs/02-haveno-auto-*.txt
     --watch)    shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;  # --watch N (sem N: mantem padrao)
     *)          [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
   esac
@@ -78,6 +79,11 @@ done
 if [ "$BOOT_ONLY" = "1" ]; then
   exec "${SCRIPT_DIR}/haveno-boot.sh" ${WATCH_MIN:+$WATCH_MIN}
 fi
+
+# QA log (--qa-log): tee de TODA a saida para ~/Persistent/qa-logs/ — captura ate
+# os erros de install (antes so dava print). No-op sem a flag. Depois do boot-only
+# (la quem loga e o boot.sh) e antes do resto, para registrar o fluxo inteiro.
+qa_log_tee_begin "02-haveno-auto"
 
 # Modo "uma senha so" (opt-in). No-op sem --one-password ou se um pai ja ativou.
 sudo_one_password_start
@@ -121,6 +127,7 @@ if [ "$INSTALL_ONLY" = "1" ]; then
     sleep 15
   done
   g "  Concluido --install-only. Dados: ${HAVENO_DIR}/Data/"
+  qa_log_finish 0
   exit 0
 fi
 
@@ -381,6 +388,7 @@ g "  Dados: ${HAVENO_DIR}/Data/"
 g "  ANTES DE TRADEAR: confirme a retomada nos canais oficiais da Reto"
 g "  e comece com valores pequenos (fix #2315 ja incluso na 1.6.0-reto)."
 g "==============================================================="
+qa_log_finish 0
 # Chegou ate aqui = sucesso: o .deb ja foi movido para Install/. So agora limpamos
 # a pasta de download persistente (em falha, o script sai antes e ela fica para retomar).
 cd / ; rm -rf "$WORK" 2>/dev/null || true

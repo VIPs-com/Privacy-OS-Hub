@@ -20,10 +20,14 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --watch) shift; [[ "${1:-}" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
     --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
+    --qa-log) export HAVENO_QA_LOG=1 ;;  # grava ~/Persistent/qa-logs/07-haveno-boot-*.txt
     *) [[ "$1" =~ ^[0-9]+$ ]] && WATCH_MIN="$1" ;;
   esac
   shift
 done
+
+# QA log (--qa-log): tee de TODA a saida para ~/Persistent/qa-logs/. No-op sem a flag.
+qa_log_tee_begin "07-haveno-boot"
 
 # Modo "uma senha so" (opt-in). No-op sem --one-password ou se um pai ja ativou.
 sudo_one_password_start
@@ -59,3 +63,4 @@ g "==============================================================="
 g "  Boot concluido. CONFIRME o indicador VERDE na janela do Haveno."
 g "  Amarelo 5–20 min na 1a vez e normal."
 g "==============================================================="
+qa_log_finish 0
