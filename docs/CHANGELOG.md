@@ -6,6 +6,8 @@
 
 ## 2026-06-18 — Fix validação `.sig`: aceitar assinatura PGP binária (Ed25519)
 
+**Commit:** `8729b58`
+
 | Mudança | Scripts | Detalhe |
 |---------|---------|---------|
 | **Causa raiz** | — | GitHub API + hex dump confirmam: `.sig` do release 1.6.0-reto é assinatura Ed25519 **binária** legítima (119 B, OpenPGP old-format `0x88`, fingerprint `DAA24D...ae2d0f`). Não é HTML. |
@@ -34,11 +36,13 @@
 
 | Mudança | Scripts | Detalhe |
 |---------|---------|---------|
-| **`.sig` só Tor** | `haveno-common.sh` | `curl -fsSL` como `02-baixar-deb.sh`; removido fallback clearnet que gravava lixo ~119 B |
+| **`.sig` só Tor** | `haveno-common.sh` | `curl -fsSL` como `02-baixar-deb.sh`; removido fallback clearnet que podia gravar HTML CDN |
 | **Retry `.sig`** | `haveno-common.sh` | Até 3 tentativas (15 s entre elas) antes de abortar |
 | **Recovery `.sig`** | `haveno_sig_download_failed_msg` | Explica pendrive/W11 OK; aponta Apêndice B §3 e fallback atômico |
 | **Mensagens obsoletas** | `haveno-auto.sh`, `README.md`, `MANUAL.md` | Cap. 7 / `Curso-Tails-OS-Expert.md` → **Apêndice B** do canônico |
-| **Validação `.sig`** | `02-baixar-deb.sh` | Mín. 400 B + header PGP (fail-closed antes do `.deb`) |
+| **Validação `.sig` (intermediária)** | `02-baixar-deb.sh` | Mín. 400 B + header PGP — **supersedida** no mesmo dia por `haveno_sig_valid_format` (`8729b58`) |
+
+> **Nota:** a `.sig` oficial do release 1.6.0-reto tem **119 B** por design (Ed25519 binário). O check `>= 400 B` era falso positivo — ver seção Ed25519 acima.
 
 ---
 
@@ -89,19 +93,19 @@
 
 ## 2026-06-17 — Download `.download/` + assinatura `.sig` (DIV-20260617-01/02)
 
-**Commits:** `1dd2e47` · `1e8fe99`/`6acf2a1` (purge `.deb` ~119 B) · `42e9ff6` · merge `79a7dd3` · docs `1e4db26`
+**Commits:** `1dd2e47` · `1e8fe99`/`6acf2a1` (purge `.deb` parcial) · `42e9ff6` · merge `79a7dd3` · docs `1e4db26` · refinamento **18/jun:** `8729b58`
 
 | Fix | Sintoma | Correção |
 |-----|---------|----------|
 | **DIV-17-01** | `.deb` em `/tmp` (RAM); monitor sem %; perdia no reboot | Pasta persistente `~/Persistent/haveno/.download/` + `wget -c` retoma após reboot |
-| **DIV-17-02** | `.sig` de **119 B** (HTML GitHub); `Failed to download Haveno signature` com `.deb` completo (~266 MB) | Purge `.sig` &lt; 400 B; `haveno_predownload_sig` via **Tor** + `BEGIN PGP SIGNATURE`; promove `.deb` verificado para `Install/` sem re-baixar |
+| **DIV-17-02** | `Failed to download Haveno signature` / bloqueio no [6/9] com `.sig` de **119 B** e `.deb` completo (~266 MB) | **17/jun:** purge `.sig` truncadas; `haveno_predownload_sig` via **Tor**; promove `.deb` verificado para `Install/`. **18/jun (`8729b58`):** causa raiz = falso positivo — `.sig` oficial é Ed25519 **binária** 119 B (`0x88`), não ASCII-armored; `haveno_sig_valid_format` + mín. 60 B |
 
-- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs`, `haveno_sig_size_ok`, `haveno_finalize_verified_deb_in_cwd`
+- **`haveno-common.sh`:** `haveno_purge_poisoned_partial_debs`, `haveno_sig_size_ok`, `haveno_finalize_verified_deb_in_cwd` → pós-`8729b58`: `haveno_sig_valid_format`
 - **`haveno-auto.sh` / `haveno-update.sh`:** atalho quando `.deb` já está completo em `.download/`; fallback PGP local se upstream falhar na `.sig`
 - **Docs aluno:** [TRES-PASSOS-HAVENO-TAILS.md](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) — recuperação + **fallback atômico**
 - **`automacao/tails/etapas/instalar-haveno/`** — scripts em pedaços no ZIP público (caminho validado em Tails 11/jun e 17/jun)
 
-> **Campo (17/jun):** purge do `.deb` confirmado (266 MB OK). Fix da `.sig` publicado em `main` — **validação Tails do caminho `haveno-setup` ainda pendente** após `sync-hub-scripts.sh`. Fallback atômico documentado até fechar verde no fluxo único.
+> **Campo (17/jun):** purge do `.deb` confirmado (266 MB OK). **Hipótese inicial** DIV-17-02: HTML GitHub ~119 B. **Refinamento (18/jun):** hex dump + API GitHub confirmam `.sig` legítima de 119 B; scripts com `>= 400 B` rejeitavam assinatura válida. Lixo CDN (HTML sem `0x88`) continua possível — distinguido por `haveno_sig_valid_format`. **Validação Tails** do fluxo `haveno-setup` @ `8729b58` ainda pendente após `sync-hub-scripts.sh`.
 
 ---
 
