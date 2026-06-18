@@ -585,10 +585,10 @@ chmod +x *.sh
 ./08-abrir-haveno.sh
 ```
 
-Se o `.deb` já está completo mas só a `.sig` falhou (~119 bytes):
+Se o `.deb` já está completo mas a `.sig` foi rejeitada (script desatualizado):
 
 ```bash
-# Atualize os scripts primeiro:
+# Atualize os scripts (corrige validação da .sig Ed25519 binária):
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
 ~/Persistent/hub-scripts/haveno-setup.sh --qa-log
@@ -1551,9 +1551,9 @@ sudo systemctl restart onion-grater
 
 ---
 
-#### 3. Download travado em `.sig` de ~119 bytes
+#### 3. `.sig` rejeitada com ~119 bytes (versão antiga do script)
 
-**Causa:** arquivo de assinatura corrompido/vazio (bug do GitHub CDN).
+**Causa:** a `.sig` do release 1.6.0-reto é uma assinatura **Ed25519 binária legítima** (119 B, magic byte `0x88`). Versões antigas do script esperavam ASCII-armored (`>= 400 B` + `BEGIN PGP SIGNATURE`) e descartavam a sig válida após 3 tentativas. A versão corrigida usa verificação de bytes OpenPGP (`0x88`/`0x89`/`0xC2`).
 
 ```bash
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
@@ -1561,7 +1561,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ~/Persistent/hub-scripts/haveno-setup.sh --qa-log
 ```
 
-O script atualizado remove a `.sig` inválida, baixa só ela e move o `.deb` sem re-baixar.
+O `sync-hub-scripts.sh` distribui a versão corrigida (`haveno_sig_valid_format`). Se o `.deb` já estiver completo em `Install/`, acrescente `--install-only`.
 
 ---
 

@@ -233,8 +233,10 @@ HAVENO_DEPS_MISSING=0
 HAVENO_DEB_MIN_BYTES="${HAVENO_DEB_MIN_BYTES:-104857600}"
 # Abaixo disto: pagina de erro do GitHub / wget -c envenenado (ex.: 119 B).
 HAVENO_DEB_POISON_MAX_BYTES="${HAVENO_DEB_POISON_MAX_BYTES:-1048576}"
-# Assinatura detached GPG real costuma ter centenas de bytes; 119 B = HTML de erro.
-HAVENO_SIG_MIN_BYTES="${HAVENO_SIG_MIN_BYTES:-400}"
+# Minimo para .sig: assinatura Ed25519 binaria (release 1.6.0-reto) tem exatamente
+# 119 bytes — OpenPGP old-format sig packet (0x88) + corpo Ed25519. 60 descarta
+# apenas arquivos visivelmente truncados; o formato e validado por haveno_sig_valid_format.
+HAVENO_SIG_MIN_BYTES="${HAVENO_SIG_MIN_BYTES:-60}"
 HAVENO_SIG_DOWNLOAD_RETRIES="${HAVENO_SIG_DOWNLOAD_RETRIES:-3}"
 
 haveno_deb_size_ok() {
@@ -268,8 +270,23 @@ haveno_sig_size_ok() {
   [ "${sz:-0}" -ge "${HAVENO_SIG_MIN_BYTES}" ]
 }
 
-# Remove .deb/.part minusculos (erro HTML) que fazem wget -c travar em 119 B na .download/.
-# Remove tambem .sig envenenada (< 400 B). Mantem parciais de .deb >= 1 MiB.
+# Aceita assinatura PGP binaria (0x88/0x89/0xC2 — Ed25519 ~119 B) OU ASCII-armored.
+# Rejeita HTML/texto/lixo sem magic byte OpenPGP.
+haveno_sig_valid_format() {
+  local f="$1" b1
+  [ -f "$f" ] || return 1
+  # ASCII-armored: comeca com "-----BEGIN PGP SIGNATURE-----"
+  head -c 27 "$f" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE' && return 0
+  # Binario OpenPGP: primeiro byte = header de pacote de assinatura
+  #   0x88 = old-format, sig, length < 192 bytes  (Ed25519 1.6.0-reto)
+  #   0x89 = old-format, sig, 2-byte length
+  #   0xC2 = new-format sig (RFC 4880 §4.2)
+  b1="$(od -A n -t x1 -N 1 "$f" 2>/dev/null | tr -d ' \n')"
+  [ "$b1" = "88" ] || [ "$b1" = "89" ] || [ "$b1" = "c2" ]
+}
+
+# Remove .deb/.part minusculos (erro HTML) que fazem wget -c travar em .download/.
+# Remove .sig invalida (< 60 B ou sem magic PGP). Mantem parciais de .deb >= 1 MiB.
 haveno_purge_poisoned_partial_debs() {
   local expected="${1:-0}" dir f s
   shift || true
@@ -515,7 +532,7 @@ haveno_predownload_sig() {
         -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
       sz="$(stat -c%s "${deb_name}.sig" 2>/dev/null || echo 0)"
       if haveno_sig_size_ok "${deb_name}.sig" \
-        && head -1 "${deb_name}.sig" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE'; then
+        && haveno_sig_valid_format "${deb_name}.sig"; then
         g "  Assinatura .sig pronta (${deb_name}.sig, ${sz} bytes)."
         return 0
       fi

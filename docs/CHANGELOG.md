@@ -4,6 +4,21 @@
 
 ---
 
+## 2026-06-18 — Fix validação `.sig`: aceitar assinatura PGP binária (Ed25519)
+
+| Mudança | Scripts | Detalhe |
+|---------|---------|---------|
+| **Causa raiz** | — | GitHub API + hex dump confirmam: `.sig` do release 1.6.0-reto é assinatura Ed25519 **binária** legítima (119 B, OpenPGP old-format `0x88`, fingerprint `DAA24D...ae2d0f`). Não é HTML. |
+| **`HAVENO_SIG_MIN_BYTES`** | `haveno-common.sh` | `400` → `60`; Ed25519 binário tem ~119 B por design |
+| **`haveno_sig_valid_format()`** | `haveno-common.sh` | Nova função: aceita `0x88`/`0x89`/`0xC2` (binário) **ou** `BEGIN PGP SIGNATURE` (armored); usa `od` portável |
+| **`haveno_predownload_sig`** | `haveno-common.sh` | Substituído `head -1 \| grep BEGIN PGP` por `haveno_sig_valid_format` |
+| **`02-baixar-deb.sh`** | `etapas/instalar-haveno/` | `400` → `60`, check `BEGIN PGP` → magic byte `0x88/0x89/0xC2` |
+| **`.hashes` (referência)** | — | SHA-256 oficial: `9c052b6348bbebbb7bb9c4346afa97e38bbc3e7304e51f172aaa7dfbf63faf69` |
+
+> **Campo:** erro `ERRO: Assinatura .sig invalida (0 bytes)` após 3 tentativas com `.sig` de 119 B — os checks de `>= 400 B` e `BEGIN PGP SIGNATURE` descartavam uma assinatura válida. GPG `--verify` aceita binário e armored automaticamente.
+
+---
+
 ## 2026-06-18 — `hub-aliases/` numerados + sync para `hub-scripts/aliases/`
 
 | Mudança | Detalhe |

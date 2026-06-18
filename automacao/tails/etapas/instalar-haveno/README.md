@@ -54,9 +54,12 @@ que é só uma lista de constantes, e o `TUDO.sh`, que é só a sequência).
   dependências de dentro do próprio .deb, mostra exatamente o que não existe e
   oferece o caminho documentado (`07 --force-depends`) — sem o `apt-get install -f`
   que removeria o pacote.
-- **`.sig` envenenada (~119 B)** (DIV-20260617-02): o `02` baixa `.sig` via Tor e
-  o `05` valida com `VALIDSIG`; o caminho público (`haveno-setup`) recebeu o mesmo
-  fix em `main` (jun/2026) — barra de progresso ASCII/curl, promoção `.download/` → `Install/`.
+- **`.sig` rejeitada por script antigo** (DIV-20260617-02 → fix 2026-06-18): a `.sig`
+  do release 1.6.0-reto é uma assinatura **Ed25519 binária legítima de 119 B** (OpenPGP
+  `0x88` + fingerprint `DAA24D...`). O script antigo esperava ASCII-armored (`>= 400 B` +
+  `BEGIN PGP SIGNATURE`) e descartava a sig válida. Fix: `HAVENO_SIG_MIN_BYTES=60` +
+  `haveno_sig_valid_format()` aceita `0x88/0x89/0xC2` ou armored. `sync-hub-scripts.sh`
+  distribui a versão corrigida.
 
 ## Validação em campo
 
@@ -64,7 +67,7 @@ que é só uma lista de constantes, e o `TUDO.sh`, que é só a sequência).
 |------|-----------|
 | 2026-06-11 | Cookie Tor + filtro PoW (`08-abrir-haveno.sh`) — RetoSwap verde |
 | 2026-06-17 03:54 GMT | Passo 2 **VERDE** via `02-baixar-deb.sh` → `08` (piloto B+) |
-| 2026-06-17 ~11:50 GMT | `haveno-setup` público: `.deb` 266 MB OK; `.sig` 119 B — fix publicado, reteste pendente |
+| 2026-06-18 | `.sig` Ed25519 binária (119 B) — script corrigido (`haveno_sig_valid_format`); `02-baixar-deb.sh` e `haveno-predownload_sig` PASS |
 
 ## Relação com os scripts antigos
 

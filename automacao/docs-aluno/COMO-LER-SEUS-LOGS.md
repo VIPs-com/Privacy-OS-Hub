@@ -58,7 +58,7 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 | Arquivo (prefixo) | PASS se contém | FAIL se |
 |-------------------|----------------|---------|
 | `01-preflight-*` | `Tor conectado (IsTor: true)` + `RESULTADO: PASS` | `Preflight FALHOU` ou `RESULTADO: FAIL` |
-| `02-haveno-auto-*` | `Dependencias do .deb OK` + `RESULTADO: PASS` | `install.sh falhou`, `Failed to download Haveno signature`, `Assinatura .sig suspeita`, ou `RESULTADO: FAIL` |
+| `02-haveno-auto-*` | `Dependencias do .deb OK` + `RESULTADO: PASS` | `install.sh falhou`, `Failed to download Haveno signature`, ou `RESULTADO: FAIL` |
 | `03-haveno-boot-*` / `07-haveno-boot-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal ou `RESULTADO: FAIL` |
 | `04-haveno-backup-*` | `Backup concluido:` + `RESULTADO: PASS` | `ERRO:` ou `RESULTADO: FAIL` |
 | `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` | qualquer `=NAO` |

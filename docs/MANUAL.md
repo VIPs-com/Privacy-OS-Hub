@@ -314,7 +314,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 A **assinatura `.sig`** baixa só via Tor (`curl -fsSL`), com até **3 tentativas** e validação de tamanho — igual ao `02-baixar-deb.sh`. Copiar os scripts do Windows/pendrive para o Tails **não** causa erro de `.sig`; o pacote Haveno (`.deb`/`.sig`) é sempre baixado **no Tails via Tor** ao rodar o setup.
 
-O `.deb` cresce em `~/Persistent/haveno/.download/` (staging retomável). Após verificação PGP (`VALIDSIG`), o pacote é **movido** para `~/Persistent/haveno/Install/` (symlink `haveno.deb` se o nome for longo). No sucesso total, `.download/` é apagada — o `.deb` em `Install/` **permanece**. Arquivos de **~119 B** em `.deb` ou `.sig` são lixo do GitHub e são **apagados automaticamente**. Não interrompa com Ctrl+C no meio do download (use o trap do script ou aguarde).
+O `.deb` cresce em `~/Persistent/haveno/.download/` (staging retomável). Após verificação PGP (`VALIDSIG`), o pacote é **movido** para `~/Persistent/haveno/Install/` (symlink `haveno.deb` se o nome for longo). No sucesso total, `.download/` é apagada — o `.deb` em `Install/` **permanece**. A `.sig` do release 1.6.0-reto é uma assinatura Ed25519 **binária** legítima (119 B, magic byte `0x88`) — o script aceita o formato correto. Arquivos de `.deb` com menos de 1 MB são apagados automaticamente (lixo de download). Não interrompa com Ctrl+C no meio do download (use o trap do script ou aguarde).
 
 | Pasta | Papel |
 |-------|--------|

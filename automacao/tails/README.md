@@ -157,7 +157,7 @@ e oferece limpar scripts do layout antigo soltos na raiz (sem tocar nos seus dad
 
 Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma.**
 
-No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência** (`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime barra **`[########----] NN%`** a cada **10s** (upstream) ou barra **curl** (quando `App/utils/` já existe). Se a rede cair ou você reiniciar, o download **retoma de onde parou** no próximo boot (antes, em `/tmp` = RAM, perdia tudo — corrigido em jun/2026). **Lixo de ~119 B** (erro do GitHub) em `.deb` ou `.sig` é **apagado automaticamente**; se o `.deb` já estiver completo em `.download/`, o hub **só baixa a `.sig`**, verifica PGP e **move** para `Install/` sem re-baixar o pacote.
+No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência** (`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime barra **`[########----] NN%`** a cada **10s** (upstream) ou barra **curl** (quando `App/utils/` já existe). Se a rede cair ou você reiniciar, o download **retoma de onde parou** no próximo boot (antes, em `/tmp` = RAM, perdia tudo — corrigido em jun/2026). A `.sig` do release 1.6.0-reto é uma assinatura Ed25519 **binária** legítima (119 B); o hub a aceita via `haveno_sig_valid_format` (magic byte `0x88`). Arquivos de `.deb` abaixo de 1 MB são apagados (lixo real). Se o `.deb` já estiver completo em `.download/`, o hub **só baixa a `.sig`**, verifica PGP e **move** para `Install/` sem re-baixar o pacote.
 
 | Pasta | Papel |
 |-------|--------|
@@ -179,7 +179,7 @@ chmod +x *.sh
 
 Detalhe: [`etapas/instalar-haveno/README.md`](etapas/instalar-haveno/README.md) · guia do aluno: [TRES-PASSOS-HAVENO-TAILS.md](../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) (§ recuperação e fallback).
 
-Se o `.deb` já está completo em `.download/` (falha na `.sig` ~119 B ou na promoção): rode `./sync-hub-scripts.sh` e `haveno-setup.sh --qa-log` — **não** `--install-only` (esse modo exige `.deb` em `Install/`). Se já em `Install/`: `haveno-setup.sh --install-only`.
+Se o `.deb` está completo em `.download/` mas a `.sig` foi rejeitada (script desatualizado): rode `./sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` — **não** `--install-only` (exige `.deb` em `Install/`). Se `.deb` já está em `Install/`: `haveno-setup.sh --install-only`.
 
 ### `haveno-onion-grater.yml` — filtro Tor corrigido (1.6.0)
 

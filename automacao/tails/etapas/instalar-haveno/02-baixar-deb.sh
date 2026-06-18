@@ -41,10 +41,15 @@ y "Baixando a assinatura (.sig)..."
 curl -fsSL --socks5-hostname "$TOR_SOCKS" --max-time 120 -o "$SIG" "$HAVENO_SIG_URL" \
   || fail "Nao baixei o .sig ($HAVENO_SIG_URL). Confira a URL do release em _config.sh."
 sz="$(stat -c%s "$SIG" 2>/dev/null || echo 0)"
-[ "${sz:-0}" -ge 400 ] \
-  || fail "Assinatura .sig suspeita (${sz} bytes) — lixo GitHub/rede. Apague ${SIG} e rode de novo."
-head -1 "$SIG" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE' \
-  || fail "Arquivo .sig nao parece PGP valido. Apague ${SIG} e rode de novo."
+[ "${sz:-0}" -ge 60 ] \
+  || fail "Assinatura .sig muito pequena (${sz} bytes) — truncada. Apague ${SIG} e rode de novo."
+# Aceita binario OpenPGP (0x88/0x89/0xC2 — Ed25519 ~119 B) OU ASCII-armored.
+b1="$(od -A n -t x1 -N 1 "$SIG" 2>/dev/null | tr -d ' \n')"
+case "$b1" in
+  88|89|c2) ;; # binario OpenPGP valido
+  *) head -c 27 "$SIG" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE' \
+       || fail "Arquivo .sig nao e PGP (binario nem armored). Apague ${SIG} e rode de novo." ;;
+esac
 g ".sig OK (${sz} bytes)."
 
 # --- .deb: pular se completo, retomar se parcial, baixar se nao existe --------

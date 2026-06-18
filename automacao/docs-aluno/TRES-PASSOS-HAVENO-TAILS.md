@@ -72,7 +72,7 @@ Tabela completa: [hub-aliases/README.md](../tails/hub-aliases/README.md).
 |--------------------|-------------|
 | **`Install/`** (≥ 100 MiB) + `App/utils/install.sh` existe | `haveno-setup.sh --install-only --qa-log` |
 | **Só em `.download/`** (ex.: ~266 MB), falhou assinatura ou promoção | `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` |
-| **`.sig` ~119 B** (lixo GitHub) com `.deb` completo | Idem — sync traz purge + `haveno_predownload_sig` via Tor |
+| **Erro `.sig` inválida** (versão antiga do script) | Faça `sync-hub-scripts.sh` — versão nova aceita assinatura binária Ed25519 |
 
 ```bash
 # Caso A — já em Install/
