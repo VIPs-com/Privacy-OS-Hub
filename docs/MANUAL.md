@@ -1,18 +1,93 @@
-# Manual dos scripts de automação
+# Manual do Privacy-OS-Hub — scripts e repositório
 
-> **Hub v2:** scripts no repo ficam em [`automacao/tails/`](../automacao/tails/README.md) — instale com `sync-hub-scripts.sh`, que os coloca em **`~/Persistent/hub-scripts/`**. Comandos por passo: [`processos/`](../processos/README.md).
-
-> **Para quem?** Aluno **novato** que quer usar os scripts com segurança — sem precisar ser expert em Linux.
+> **Para quem?** Quem usa os scripts `.sh`, mantém o repo ou quer mapa rápido em 5 minutos.
 >
-> **Não substitui** a [trilha linear](../README.md#trilha-linear) nem o [livro](MANUAL-DO-CURSO.md). Use este manual **junto** com o passo do hub em que você está.
->
-> **Primeira vez no hub?** Leia antes [README — Primeira visita?](../README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
+> **Novato no curso?** Ignore este arquivo — abra [`🛡️ Privacy-OS-Hub - Versão 1.0.md`](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) e siga os passos 1–12. Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
 
-**Mapa rápido:** [README — trilha script-first](../README.md#trilha-script-first) · [automacao/tails](../automacao/tails/README.md) · [automacao/whonix-host](../automacao/whonix-host/README.md) · [processos/](../processos/README.md) · [Matriz passo↔script](../trilha/referencia/scripts-matriz.md)
+**Partes:** [I — Mapa rápido](#parte-i--mapa-rápido) · [II — Scripts](#parte-ii--scripts-para-novato) · [III — Logs e export](#parte-iii--logs-validação-e-exportação)
 
-> **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os scripts em [`automacao/tails/`](../automacao/tails/README.md).
+Scripts no repo: [`automacao/tails/`](../automacao/tails/README.md) — instale com `sync-hub-scripts.sh` → **`~/Persistent/hub-scripts/`**.
+
+> **Viu muitos `.sh`?** [Apêndice A — Catálogo](#apêndice-a--catálogo-de-cada-arquivo-iniciante) · resumo no **Apêndice A** do [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md).
 
 ---
+
+<a id="parte-i--mapa-rápido"></a>
+
+## Parte I — Mapa rápido
+
+### Arquitetura v1.0
+
+```text
+Privacy-OS-Hub/
+├── 🛡️ Privacy-OS-Hub - Versão 1.0.md   ← curso completo (passos 1–12)
+├── 🏠 Home-Lab - Versão 1.0.md          ← opcional (Debian/Ubuntu)
+├── README.md
+├── automacao/                           ← scripts .sh → ~/Persistent/hub-scripts/
+└── docs/                                ← manifesto, changelog, este manual
+```
+
+### Passo → onde ler no canônico
+
+| Passo | Busque no canônico |
+|:-----:|--------------------|
+| 1 | `PASSO 1 — Bootstrap Tails` |
+| 2 | `PASSO 2 — Haveno até o Verde` |
+| 3 | `PASSO 3 — Cautela Pré-trade` |
+| 4 | `PASSO 4 — Backup e Seed em Papel` |
+| 5 | `PASSO 5 — Feather Wallet` |
+| 6 | `PASSO 6 — Folheto` |
+| 7 | `PASSO 7 — Rotina de Scripts` |
+| 8 | `PASSO 8 — Porteiro` |
+| 9 | `PASSO 9 — Ritual Seed` |
+| 10 | `PASSO 10 — Whonix PGP` |
+| 11 | `PASSO 11 — Modelo Frio-Quente` |
+| 12A / 12B | `PASSO 12A` ou `PASSO 12B` |
+
+Erros comuns: **Apêndice B** do canônico. Catálogo de scripts: **Apêndice A** do canônico + [Parte II](#parte-ii--scripts-para-novato) abaixo.
+
+### Trilha linear (compacta)
+
+| Passo | Foco |
+|:-----:|------|
+| 1–7 | Tails + Haveno verde + Feather + rotina |
+| 8–12 | Custódia fria (Whonix + cold-signing) |
+
+Pré-req passo 8: passos 1–7 (Feather no 5). Passo 9: Tor OK. Passo 12: **air-gap** (sem rede).
+
+### Opcionais (após 1–12)
+
+| Quer… | Abrir |
+|-------|--------|
+| Nó Monero + mineração | [`🏠 Home-Lab`](../🏠%20Home-Lab%20-%20Versão%201.0.md) |
+| Cofre / PGP / backup off-site | [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
+| Multisig manual | Apêndice F do canônico |
+
+### Constantes (conferir releases)
+
+| Item | Valor |
+|------|-------|
+| Tails mínimo | **7.8.1+** |
+| Haveno (turma) | RetoSwap **`1.6.0-reto`** |
+| PGP Reto | `DAA24D878B8D36C90120A897CA02DAC12DAE2D0F` |
+| Feather PGP | `8185E158A33330C7FD61BC0D1F76E155CEFBA71C` |
+| Whonix PGP | `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` |
+| Tor SOCKS (Tails) | **9050** |
+| Monero proxy Haveno | **9062** |
+
+### Scripts — superfície expert
+
+Orquestrador novato: `haveno-setup.sh`. Matriz técnica: [automacao/tails/README.md](../automacao/tails/README.md).
+
+### O que este hub não cobre
+
+Atualização do SO Tails por script · trades/disputas automatizados · cold-signing no lugar do humano · import automático de VM Whonix.
+
+---
+
+<a id="parte-ii--scripts-para-novato"></a>
+
+## Parte II — Scripts para novato
 
 ## Qual comando eu uso? (é só isto)
 
@@ -44,7 +119,7 @@ cada um: [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
 
 ## Antes de qualquer script (sempre manual)
 
-Nenhum script grava o pendrive nem cria a persistência por você. **Termine isto na mão** ([P01](../processos/m1-tor/P01-bootstrap-tails.md)):
+Nenhum script grava o pendrive nem cria a persistência por você. **Termine isto na mão** (Passo 1 do [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md)):
 
 | # | O quê | Por quê |
 |---|--------|---------|
@@ -55,40 +130,7 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 
 **Checagem automática:** `~/Persistent/hub-scripts/tails-preflight.sh` — só **lê** o ambiente; não altera nada.
 
-**Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
-
----
-
-## Validar com logs (recomendado)
-
-Depois de instalar os scripts (via `sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`):
-
-```bash
-chmod +x ~/Persistent/hub-scripts/*.sh
-
-# Exemplo — 1ª instalação com evidência:
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log
-
-# Após anotar seed no papel (passo 4):
-~/Persistent/hub-scripts/qa-confirm-seed-papel.sh
-
-# Passo 9 — duas cópias físicas (Tails pode estar com Tor):
-~/Persistent/hub-scripts/qa-confirm-passo9.sh
-
-# Passo 12 — depois do cold-signing offline:
-~/Persistent/hub-scripts/qa-confirm-passo12.sh
-
-# Entregar à equipe (2º pendrive):
-~/Persistent/hub-scripts/qa-export-logs.sh --usb
-```
-
-| O log **contém** | O log **nunca contém** |
-|------------------|------------------------|
-| `RESULTADO: PASS` ou `FAIL` | As 25 palavras da seed |
-| `Backup concluido:` · `Fingerprint OK:` | Senhas ou chaves completas |
-| `CONFIRMACAO_HUMANA: ...=SIM` | TX ID completo |
-
-**Glossário:** “offline” no hub pode ser **papel** (passo 4) ou **sem rede** (passo 12) — [README](../README.md#trilha-linear).
+**Validar com log:** [Parte III — Logs e export](#parte-iii--logs-validação-e-exportação) · [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
 
 ---
 
@@ -343,14 +385,14 @@ flowchart TD
   FW --> DONE
 ```
 
-| Etapa no fluxo | Passo hub | Processo |
+| Etapa no fluxo | Passo hub | Onde ler |
 |---------------|:---------:|----------|
-| Passos 1–4 manual | 1–4 | [P01](../processos/m1-tor/P01-bootstrap-tails.md) … [P04](../processos/m1-tor/P04-backup-seed.md) |
-| `tails-preflight` / setup / boot | 2, 7 | [P02](../processos/m1-tor/P02-haveno-verde.md) · [P07](../processos/m1-tor/P07-rotina-scripts.md) |
-| `haveno-backup` | 4 | [P04](../processos/m1-tor/P04-backup-seed.md) |
-| Feather (M2) | 5 | [P05](../processos/m1-tor/P05-feather.md) |
+| Passos 1–4 manual | 1–4 | Canônico — passos 1–4 |
+| `tails-preflight` / setup / boot | 2, 7 | Canônico — passos 2 e 7 |
+| `haveno-backup` | 4 | Canônico — passo 4 |
+| Feather (M2) | 5 | Canônico — passo 5 |
 
-Ordem oficial: [README — trilha linear](../README.md#trilha-linear).
+Ordem oficial: [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) · [README](../README.md).
 
 ---
 
@@ -403,11 +445,11 @@ Detalhe: [automacao/whonix-host/README.md](../automacao/whonix-host/README.md)
 
 ### Preflight falhou
 
-Corrija o item listado (Tor, Dotfiles, admin) em [P01](../processos/m1-tor/P01-bootstrap-tails.md). **Não** use `--no-backup` ou atalhos para “pular” preflight.
+Corrija o item listado (Tor, Dotfiles, admin) no **Passo 1** do [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md). **Não** use `--no-backup` ou atalhos para “pular” preflight.
 
 ### Haveno abriu mas não está verde
 
-Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: [P02 §8](../processos/m1-tor/P02-haveno-verde.md) ou Cap. 7 FAQ. Rodar `haveno-boot.sh` de novo é seguro.
+Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: **Apêndice B** do [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md). Rodar `haveno-boot.sh` de novo é seguro.
 
 ### Quero só Feather, Haveno já está verde
 
@@ -430,7 +472,7 @@ Ordem: preflight → boot Haveno → verificar Feather.
 
 ### Expert: posso ignorar este manual?
 
-Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [automacao/tails/README.md](../automacao/tails/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
+Sim. Use [Parte I](#parte-i--mapa-rápido) · [automacao/tails/README.md](../automacao/tails/README.md) · cabeçalhos `#!/bin/bash` de cada `.sh`.
 
 ---
 
@@ -519,7 +561,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Comando** | `~/Persistent/hub-scripts/tails-preflight.sh` |
 | **Rodar 2×** | **Sim** — só leitura; zero alteração em carteira |
 | **Disco** | Nenhuma pasta de dados Haveno/Feather |
-| **Se falhar** | Corrija [P01](../processos/m1-tor/P01-bootstrap-tails.md) antes de continuar |
+| **Se falhar** | Corrija o **Passo 1** do [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) antes de continuar |
 
 #### `post-session-check.sh`
 
@@ -759,6 +801,51 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 
 ---
 
+<a id="parte-iii--logs-validação-e-exportação"></a>
+
+## Parte III — Logs, validação e exportação
+
+Depois de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scripts/`):
+
+```bash
+chmod +x ~/Persistent/hub-scripts/*.sh
+
+# 1ª instalação com evidência:
+~/Persistent/hub-scripts/haveno-setup.sh --qa-log
+
+# Após anotar seed no papel (passo 4):
+~/Persistent/hub-scripts/qa-confirm-seed-papel.sh
+
+# Passo 9 — duas cópias físicas (Tails pode estar com Tor):
+~/Persistent/hub-scripts/qa-confirm-passo9.sh
+
+# Passo 12 — depois do cold-signing offline:
+~/Persistent/hub-scripts/qa-confirm-passo12.sh
+
+# Entregar à equipe (2º pendrive):
+~/Persistent/hub-scripts/qa-export-logs.sh --usb
+```
+
+| O log **contém** | O log **nunca contém** |
+|------------------|------------------------|
+| `RESULTADO: PASS` ou `FAIL` | As 25 palavras da seed |
+| `Backup concluido:` · `Fingerprint OK:` | Senhas ou chaves completas |
+| `CONFIRMACAO_HUMANA: ...=SIM` | TX ID completo |
+
+**Glossário:** “offline” no hub pode ser **papel** (passo 4) ou **sem rede** (passo 12) — ver [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md).
+
+**Como interpretar cada linha:** [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
+
+### Exportar logs (`qa-export-logs.sh`)
+
+| Campo | Detalhe |
+|-------|---------|
+| **Uso** | Copia `~/Persistent/qa-logs/*.txt` para pendrive `--usb` |
+| **Quando** | Piloto B+, entregar evidências à equipe ou outro PC |
+| **Comando** | `~/Persistent/hub-scripts/qa-export-logs.sh --usb` |
+
+---
+
 ## Checklist de segurança antes de depositar XMR
 
 - [ ] `tails-preflight.sh` OK  
@@ -767,8 +854,8 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 - [ ] **Seed** anotada no papel (Account → Wallet seed) — **fora** do backup automático  
 - [ ] `qa-confirm-seed-papel.sh` → log com 3 confirmações `=SIM`  
 - [ ] (M2) `qa-confirm-passo9.sh` antes de mover valor relevante  
-- [ ] Se for tradear: leu Cap. 4 (exploit) e canais oficiais da rede  
+- [ ] Se for tradear: leu **Passo 3** e canais oficiais da rede no [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md)
 
 ---
 
-*Manual dos scripts · Privacy-OS-Hub · jun/2026. Trilha: [README.md#trilha-linear](../README.md#trilha-linear).*
+*Manual · Privacy-OS-Hub · jun/2026 · [docs/MANUAL.md](MANUAL.md)*

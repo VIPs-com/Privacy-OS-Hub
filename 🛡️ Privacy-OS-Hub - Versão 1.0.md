@@ -18,7 +18,7 @@
 
 ## 📐 Para quem mantém este arquivo
 
-Este arquivo é gerado a partir das fontes em `processos/`, `modulos/`, `automacao/` e `meta/`. Para atualizar, leia cada fonte original e reescreva a seção correspondente mantendo a regra: sem links relativos internos, tudo inline. Links externos permitidos apenas para fontes oficiais (tails.net, haveno.exchange, featherwallet.org, whonix.org, getmonero.org) e fingerprints.
+Este arquivo é a **fonte única** do curso. Para scripts e mapa do repositório, veja `docs/MANUAL.md`. Para automação, `automacao/tails/README.md`. Links externos permitidos apenas para fontes oficiais (tails.net, haveno.exchange, featherwallet.org, whonix.org, getmonero.org) e fingerprints.
 
 ---
 
@@ -2094,11 +2094,9 @@ submit_multisig multisig_monero_tx
 9. Versões de software: verificar CLAUDE.md antes de afirmar versão.
 10. Fingerprints: verificar sempre as fontes oficiais antes de publicar.
 
-**Fontes canônicas para atualização:**
-- Processos: `processos/m1-tor/P01–P07`, `processos/porteiro/P08`, `processos/rituais/P09`, `processos/m2-quente/P10–P11`, `processos/m2-frio/P12a–P12b`
-- Módulos: `modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md`, `modulos/m2-whonix-custodia/Curso-Whonix-Online.md`
-- Scripts: `meta/MANUAL-SCRIPTS.md`
-- Automação: `automacao/tails/README.md`, `automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md`
+**Fontes para atualização:**
+- Curso: este arquivo (canônico)
+- Scripts: `docs/MANUAL.md` · `automacao/tails/README.md` · `automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md`
 - Fingerprints e versões: `CLAUDE.md` (camada local)
 
 ---

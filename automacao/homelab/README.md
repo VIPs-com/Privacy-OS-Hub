@@ -2,7 +2,7 @@
 
 > ⚠️ **Estes scripts NÃO rodam no Tails.** Eles são para o seu **home lab** — uma instalação **Debian/Ubuntu** normal, sempre ligada (mini PC, NUC, Raspberry Pi 4/5 com SSD). O Tails é o **cliente** (carteira/Haveno); o home lab é a **infraestrutura** (nó, mineração).
 >
-> Contexto: Volume I [`../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md`](../../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md) Cap. 6 · **Lab integrado:** Volume II [`../../modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md`](../../modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) Cap. 13.
+> Contexto: [`🏠 Home-Lab - Versão 1.0.md`](../../🏠%20Home-Lab%20-%20Versão%201.0.md) — trilha opcional após passos 1–12.
 
 Cada script é **independente** e cobre **uma modalidade**. Rode na ordem conforme o que quer explorar.
 

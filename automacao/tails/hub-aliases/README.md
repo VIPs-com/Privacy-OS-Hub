@@ -17,4 +17,4 @@ chmod +x ~/Persistent/hub*.sh
 | `hub09-seed-ritual.sh` | `qa-confirm-passo9.sh` | 9 |
 | `hub12-cold-signing.sh` | `qa-confirm-passo12.sh` | 12 |
 
-Matriz completa: [trilha/referencia/scripts-matriz.md](../../../trilha/referencia/scripts-matriz.md)
+Matriz completa: [tails/README.md](../README.md) · [docs/MANUAL.md](../../../docs/MANUAL.md#apêndice-a--catálogo-de-cada-arquivo-iniciante)

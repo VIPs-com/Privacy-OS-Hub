@@ -1,7 +1,6 @@
-# Automação — scripts do hub (Camada D)
+# Automação — scripts do hub
 
-> **Todos** os `.sh` do curso vivem aqui — separados do livro e dos playbooks.  
-> Copie para `~/Persistent/` no Tails (tails + qa) ou rode no host (whonix, homelab).
+> **Todos** os `.sh` do curso vivem aqui. Copie para `~/Persistent/hub-scripts/` no Tails (`sync-hub-scripts.sh`) ou rode no host (whonix, homelab).
 
 | Pasta | Ambiente | Passos hub |
 |-------|----------|:----------:|
@@ -10,8 +9,7 @@
 | [homelab/](homelab/README.md) | Debian/Ubuntu | opcional |
 | [docs-aluno/](docs-aluno/COMO-LER-SEUS-LOGS.md) | Leitura | logs `--qa-log` · [3 passos Haveno](docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) |
 
-**Matriz passo ↔ script:** [trilha/referencia/scripts-matriz.md](../trilha/referencia/scripts-matriz.md)  
-**Novato:** [MANUAL-SCRIPTS.md](../meta/MANUAL-SCRIPTS.md)
+**Matriz passo ↔ script:** [tails/README.md](tails/README.md) · **Manual:** [docs/MANUAL.md](../docs/MANUAL.md)
 
 ---
 
@@ -26,4 +24,4 @@ chmod +x ~/Persistent/hub-scripts/*.sh
 
 ---
 
-*automacao/ · Privacy-OS-Hub v2 · jun/2026*
+*automacao/ · Privacy-OS-Hub v1.0 · jun/2026*

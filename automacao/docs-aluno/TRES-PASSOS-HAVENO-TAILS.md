@@ -4,7 +4,7 @@
 >
 > **Para o aluno:** só instalação e execução. Um script: `haveno-setup.sh`.  
 > **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).  
-> **Logs:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) · **Detalhe de flags:** [MANUAL-SCRIPTS.md](../../meta/MANUAL-SCRIPTS.md#comando-principal-haveno-setupsh)
+> **Logs:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) · **Detalhe de flags:** [MANUAL.md](../../docs/MANUAL.md#comando-principal-haveno-setupsh)
 
 ---
 

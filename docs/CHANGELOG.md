@@ -1,6 +1,24 @@
-# CHANGELOG — Reorganização v2
+# CHANGELOG — Privacy-OS-Hub
 
-> **Tag:** `v2.0.0-beta` · **Data:** 2026-06-08 · **Branch:** `main`
+> **v1.0 canônica** · jun/2026 · branch `main`
+
+---
+
+## 2026-06-18 — `meta/` → `docs/` + `MANUAL.md` unificado
+
+| Mudança | Detalhe |
+|---------|---------|
+| **Pasta** | `meta/` renomeada para `docs/` (≠ stub v1 `docs/` removido em `f0dc197`) |
+| **MANUAL.md** | Unifica ex-`MANUAL-EXPERT`, ex-`MANUAL-SCRIPTS` e bloco logs/export em 3 partes |
+| **Removidos** | `MANUAL-EXPERT.md`, `MANUAL-DO-CURSO.md`, `MANUAL-SCRIPTS.md` |
+| **MANIFESTO** | §7 reescrito para arquitetura v1.0 canônica |
+| **Links** | README, `automacao/`, canônico apontam para `docs/` |
+
+---
+
+## Histórico v2 (beta)
+
+> **Tag:** `v2.0.0-beta` · **Data:** 2026-06-08
 
 ---
 

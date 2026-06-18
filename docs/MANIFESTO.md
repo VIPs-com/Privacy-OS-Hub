@@ -41,19 +41,19 @@ trades quentes (escrow multisig automático). **[Zero-Trust-Core](https://github
 (repositório **separado**) oferece baseline opcional — cofre, PGP, backup, SSH — que **complementa** este hub
 sem substituí-lo. Auditoria interna (rodadas documentadas) mantém o material vivo a cada release.
 
-## 7. Documentação em camadas (v2)
+## 7. Documentação em camadas (v1.0)
 
-O hub separa **ensino** de **execução** sem mudar a trilha 1–12:
+O hub separa **curso** de **automação** e **documentação de projeto**:
 
-| Camada | Pasta | Papel |
-|--------|-------|-------|
-| Porta | [README.md](../README.md) | Ordem oficial · primeira visita |
-| Navegação | [trilha/](../trilha/README.md) | Cartões por passo · glossário online/offline |
-| Execução | [processos/](../processos/README.md) | Comandos canônicos P01–P12 |
-| Ensino | [modulos/](../modulos/README.md) | Livros · folhetos · detalhe cold-signing |
-| Automação | [automacao/](../automacao/README.md) | Scripts `.sh` → cópia para `~/Persistent/` |
+| Camada | Onde | Papel |
+|--------|------|-------|
+| Porta | [README.md](../README.md) | Orientação inicial |
+| Curso | [🛡️ Privacy-OS-Hub - Versão 1.0.md](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) | Passos 1–12, tudo inline |
+| Home Lab | [🏠 Home-Lab - Versão 1.0.md](../🏠%20Home-Lab%20-%20Versão%201.0.md) | Opcional — Debian/Ubuntu |
+| Automação | [automacao/](../automacao/README.md) | Scripts → `~/Persistent/hub-scripts/` |
+| Projeto | [docs/](README.md) | Manifesto, changelog, [MANUAL.md](MANUAL.md) |
 
-**Regra:** livro = teoria · processo = comandos no **mesmo** passo. Migração v1→v2: [CHANGELOG-V2.md](CHANGELOG-V2.md).
+**Regra:** o canônico é a fonte do curso; `docs/MANUAL.md` complementa scripts e mapa do repo. Histórico: [CHANGELOG.md](CHANGELOG.md).
 
 ---
 

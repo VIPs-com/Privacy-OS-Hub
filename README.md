@@ -5,7 +5,7 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `pgp`
 
-> **v1.0 canônica** — material consolidado em arquivo único. [meta/CHANGELOG-V2.md](meta/CHANGELOG-V2.md)
+> **v1.0 canônica** — material consolidado em arquivo único. [docs/CHANGELOG.md](docs/CHANGELOG.md)
 
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e fontes oficiais.
 
@@ -67,10 +67,10 @@ Privacy-OS-Hub/
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
 │   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md
 │
-└── meta/                                ← licenças e documentação de projeto
+└── docs/                                ← licenças e documentação de projeto
     ├── LICENSE · LICENSE-DOCS.md
-    ├── MANIFESTO.md · CHANGELOG-V2.md
-    └── MANUAL-EXPERT.md · MANUAL-SCRIPTS.md · MANUAL-DO-CURSO.md
+    ├── MANIFESTO.md · CHANGELOG.md
+    └── MANUAL.md
 ```
 
 ---
@@ -81,8 +81,8 @@ Privacy-OS-Hub/
 |------------|------|
 | Começar do zero | [`🛡️ Privacy-OS-Hub - Versão 1.0.md`](🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) — Seção 0. ONBOARDING |
 | Ir direto a um passo | Mesmo arquivo — busque `PASSO N` |
-| Scripts (o que cada .sh faz) | [`meta/MANUAL-SCRIPTS.md`](meta/MANUAL-SCRIPTS.md) ou Apêndice A no canônico |
-| Mapa compacto para experts | [`meta/MANUAL-EXPERT.md`](meta/MANUAL-EXPERT.md) |
+| Scripts (o que cada .sh faz) | [`docs/MANUAL.md`](docs/MANUAL.md#parte-ii--scripts-para-novato) ou Apêndice A no canônico |
+| Mapa compacto para experts | [`docs/MANUAL.md`](docs/MANUAL.md#parte-i--mapa-rápido) |
 | Home Lab (nó + mineração) | [`🏠 Home-Lab - Versão 1.0.md`](🏠%20Home-Lab%20-%20Versão%201.0.md) |
 | Trilha script-first | Seção "Trilha script-first" no canônico |
 | Instalar Whonix por SO | Apêndice E no canônico |
@@ -116,5 +116,5 @@ Privacy-OS-Hub/
 
 ## Licença
 
-- **Scripts** (`*.sh`, `*.desktop`): **MIT** — [`meta/LICENSE`](meta/LICENSE)
-- **Documentação:** **CC BY-SA 4.0** — [`meta/LICENSE-DOCS.md`](meta/LICENSE-DOCS.md)
+- **Scripts** (`*.sh`, `*.desktop`): **MIT** — [`docs/LICENSE`](docs/LICENSE)
+- **Documentação:** **CC BY-SA 4.0** — [`docs/LICENSE-DOCS.md`](docs/LICENSE-DOCS.md)

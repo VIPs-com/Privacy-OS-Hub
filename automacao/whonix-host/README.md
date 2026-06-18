@@ -1,6 +1,6 @@
 # Scripts — Whonix Online (host Linux)
 
-> **Novato?** Seção Whonix em [**MANUAL-SCRIPTS.md**](../../meta/MANUAL-SCRIPTS.md).
+> **Novato?** Seção Whonix em [**MANUAL.md**](../../docs/MANUAL.md#whonix-host-linux--não-é-no-tails).
 
 > **Rode no host** (Debian/Ubuntu etc.) — **não** no Tails e **não** dentro das VMs.
 

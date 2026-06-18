@@ -4,7 +4,7 @@
 >
 > **Três passos (ZIP → 1ª vez → reiniciar):** [TRES-PASSOS-HAVENO-TAILS.md](../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
 >
-> **Novato?** Leia o [**MANUAL-SCRIPTS.md**](../../meta/MANUAL-SCRIPTS.md) — [Apêndice A (cada arquivo)](../../meta/MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) · flags · segurança ao rodar 2×.
+> **Novato?** Leia o [**MANUAL.md**](../../docs/MANUAL.md#parte-ii--scripts-para-novato) — [Apêndice A (cada arquivo)](../../docs/MANUAL.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) · flags · segurança ao rodar 2×.
 
 Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
 

@@ -192,7 +192,7 @@ tails_preflight_check() {
   if [ "$fail" = "1" ]; then
     r "Preflight FALHOU:"
     for msg in "${fails[@]}"; do r "  - $msg"; done
-    y "  Playbook: modulos/m1-tails-haveno/Playbooks/Playbooks.md §1–4"
+    y "  Doc: canônico PASSO 2 ou docs/MANUAL.md"
     return 1
   fi
   return 0
