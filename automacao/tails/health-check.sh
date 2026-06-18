@@ -22,7 +22,7 @@ WARN=0
 
 b "=== Health Check — Privacy-OS-Hub (automacao/tails) ==="
 
-b "[1/4] Sintaxe bash (-n)..."
+b "[1/5] Sintaxe bash (-n)..."
 while IFS= read -r -d '' script; do
   rel="${script#${SCRIPT_DIR}/}"
   printf "  %s... " "$rel"
@@ -34,7 +34,7 @@ while IFS= read -r -d '' script; do
   fi
 done < <(find "$SCRIPT_DIR" -name '*.sh' -type f -print0)
 
-b "[2/4] haveno-common.sh presente..."
+b "[2/5] haveno-common.sh presente..."
 if [ -f "${SCRIPT_DIR}/haveno-common.sh" ]; then
   g "  OK"
 else
@@ -42,7 +42,7 @@ else
   FAILED=$((FAILED + 1))
 fi
 
-b "[3/4] PGP fail-closed (VALIDSIG + fingerprint)..."
+b "[3/5] PGP fail-closed (VALIDSIG + fingerprint)..."
 for script in haveno-common.sh haveno-verify-deb.sh feather-install-verify.sh \
   etapas/instalar-haveno/05-verificar-assinatura.sh; do
   [ -f "$script" ] || continue
@@ -55,7 +55,7 @@ for script in haveno-common.sh haveno-verify-deb.sh feather-install-verify.sh \
   fi
 done
 
-b "[4/4] Backup cifrado com confirmacao de senha..."
+b "[4/5] Backup cifrado com confirmacao de senha..."
 for script in haveno-backup.sh feather-backup.sh haveno-common.sh; do
   [ -f "$script" ] || continue
   printf "  %s... " "$script"
@@ -66,6 +66,24 @@ for script in haveno-backup.sh feather-backup.sh haveno-common.sh; do
     WARN=$((WARN + 1))
   fi
 done
+
+b "[5/5] haveno-onion-grater.yml (YAML)..."
+ONION_YML="${SCRIPT_DIR}/haveno-onion-grater.yml"
+if [ ! -f "$ONION_YML" ]; then
+  r "  FAIL — haveno-onion-grater.yml ausente"
+  FAILED=$((FAILED + 1))
+elif command -v python3 >/dev/null 2>&1; then
+  printf "  haveno-onion-grater.yml... "
+  if python3 -c "import yaml; yaml.safe_load(open('${ONION_YML}'))" 2>/dev/null; then
+    g "OK"
+  else
+    r "FAIL"
+    FAILED=$((FAILED + 1))
+  fi
+else
+  y "  WARN — python3 ausente; pulando parse YAML"
+  WARN=$((WARN + 1))
+fi
 
 echo
 if [ "$FAILED" -eq 0 ]; then

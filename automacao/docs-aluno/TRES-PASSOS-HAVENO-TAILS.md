@@ -1,6 +1,6 @@
 # Três passos — Haveno no Tails (ZIP do GitHub)
 
-> **Atualizado:** 2026-06-17 · `main` com fix `.sig` 119 B (DIV-20260617-02) — rode `sync-hub-scripts.sh` após baixar ZIP novo.
+> **Atualizado:** 2026-06-18 · progresso com barra ASCII/curl · fluxo `.download/` → `Install/` · rode `sync-hub-scripts.sh` após baixar ZIP novo.
 >
 > **Para o aluno:** só instalação e execução. Um script: `haveno-setup.sh`.  
 > **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).  
@@ -56,21 +56,25 @@ chmod +x sync-hub-scripts.sh
 
 ### Recuperação (só se parou no meio)
 
-Se o `.deb` já está em `~/Persistent/haveno/Install/` e falhou no passo de instalar:
+| Onde está o `.deb` | O que fazer |
+|--------------------|-------------|
+| **`Install/`** (≥ 100 MiB) + `App/utils/install.sh` existe | `haveno-setup.sh --install-only --qa-log` |
+| **Só em `.download/`** (ex.: ~266 MB), falhou assinatura ou promoção | `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` |
+| **`.sig` ~119 B** (lixo GitHub) com `.deb` completo | Idem — sync traz purge + `haveno_predownload_sig` via Tor |
 
 ```bash
+# Caso A — já em Install/
 ~/Persistent/hub-scripts/haveno-setup.sh --install-only --qa-log
 ```
 
-Se o `.deb` está completo só em `~/Persistent/haveno/.download/` (ex.: ~266 MB) e falhou na **assinatura** (`.sig` de ~119 bytes):
-
 ```bash
+# Caso B — completo só em .download/ (ou .sig inválida)
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
 ~/Persistent/hub-scripts/haveno-setup.sh --qa-log
 ```
 
-O sync traz o fix da `.sig` (DIV-20260617-02): remove `.sig` inválida, baixa de novo via Tor e promove o `.deb` sem baixar tudo outra vez.
+O hub verifica PGP (`VALIDSIG`), **move** o `.deb` para `Install/` e cria `haveno.deb` (symlink se o nome for longo). **Não** use `--install-only` se o pacote ainda está só em `.download/`.
 
 ### Fallback atômico (se `haveno-setup` ainda falhar no [6/9])
 

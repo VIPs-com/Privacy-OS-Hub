@@ -56,7 +56,7 @@ que é só uma lista de constantes, e o `TUDO.sh`, que é só a sequência).
   que removeria o pacote.
 - **`.sig` envenenada (~119 B)** (DIV-20260617-02): o `02` baixa `.sig` via Tor e
   o `05` valida com `VALIDSIG`; o caminho público (`haveno-setup`) recebeu o mesmo
-  fix em `main` (jun/2026) — use esta pasta se o monolítico ainda falhar após `sync`.
+  fix em `main` (jun/2026) — barra de progresso ASCII/curl, promoção `.download/` → `Install/`.
 
 ## Validação em campo
 

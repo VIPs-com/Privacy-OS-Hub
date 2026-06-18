@@ -104,6 +104,8 @@ if [ "$INSTALL_ONLY" = "1" ]; then
   [ -d "$PERSIST" ] || die "Persistencia nao encontrada ($PERSIST)."
   [ -f "${UTILS_DIR}/install.sh" ] || die "install.sh ausente em ${UTILS_DIR}/."
   [ -f "${UTILS_DIR}/exec.sh" ] || die "exec.sh ausente."
+  INSTALL_SHA="$(sha256sum "${UTILS_DIR}/install.sh" 2>/dev/null | awk '{print $1}')"
+  g "  install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de procedencia em disco)"
   haveno_has_install_deb || die "Nenhum .deb em ${HAVENO_DIR}/Install/ — nao precisa recomecar do zero se ja copiou o .deb."
   g "  .deb na persistencia OK."
   b "[7/9] Dependencias apt + install.sh + onion-grater + exec.sh..."
@@ -146,51 +148,6 @@ _fetch_http_date() {
   local url="$1"
   curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 30 "$url" 2>/dev/null \
     | grep -i '^date:' | head -1 | sed -E 's/^[Dd]ate:[[:space:]]*//' | tr -d '\r'
-}
-
-_fmt_bytes() {
-  local b="${1:-0}"
-  if command -v numfmt >/dev/null 2>&1; then
-    numfmt --to=iec-i --suffix=B "$b" 2>/dev/null || echo "${b} B"
-  elif [ "$b" -ge 1048576 ] 2>/dev/null; then
-    awk -v n="$b" 'BEGIN{printf "%.1f MiB", n/1048576}'
-  elif [ "$b" -ge 1024 ] 2>/dev/null; then
-    awk -v n="$b" 'BEGIN{printf "%.1f KiB", n/1024}'
-  else
-    echo "${b} B"
-  fi
-}
-
-_haveno_deb_bytes_now() {
-  local d size=0 f s
-  for d in "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "${HAVENO_DIR}"; do
-    [ -d "$d" ] || continue
-    while IFS= read -r -d '' f; do
-      s=$(stat -c%s "$f" 2>/dev/null || echo 0)
-      [ "$s" -gt "$size" ] && size=$s
-    done < <(find "$d" -maxdepth 2 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -print0 2>/dev/null)
-  done
-  echo "$size"
-}
-
-_monitor_haveno_deb_download() {
-  local target_pid="$1" expected="${2:-0}" prev=0
-  mkdir -p "${HAVENO_DIR}/Install" 2>/dev/null || true
-  while kill -0 "$target_pid" 2>/dev/null; do
-    local now human pct=""
-    now=$(_haveno_deb_bytes_now)
-    human=$(_fmt_bytes "$now")
-    if [ "$expected" -gt 0 ] 2>/dev/null && [ "$now" -gt 0 ]; then
-      pct="$(awk -v n="$now" -v e="$expected" 'BEGIN{printf " (~%.0f%%)", (n/e)*100}')"
-    fi
-    if [ "$now" -gt 0 ]; then
-      printf "  [download] %s%s — baixando pelo Tor (retomavel; salvo na persistencia)...\n" "$human" "$pct"
-    elif [ "$prev" -eq 0 ]; then
-      y "  [download] conectando ao servidor pelo Tor — o .deb aparece em instantes (isto NAO e erro)."
-    fi
-    prev=$now
-    sleep 30
-  done
 }
 
 echo
@@ -305,48 +262,23 @@ if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; 
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."
   EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
   haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."
-  DEB_BASENAME="$(basename "$HAVENO_DEB_URL")"
   SKIP_UPSTREAM=0
-  if [ -f "./${DEB_BASENAME}" ] && haveno_deb_size_ok "./${DEB_BASENAME}" && [ -d "$UTILS_DIR" ]; then
-    y "  .deb completo em .download/ — verificando PGP e promovendo para Install/ (sem re-download)."
-    haveno_predownload_sig "$HAVENO_DEB_URL"
-    if haveno_finalize_verified_deb_in_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+  if haveno_try_promote_deb_from_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
+    SKIP_UPSTREAM=1
+  fi
+  if [ "$SKIP_UPSTREAM" = "0" ] && [ -d "$UTILS_DIR" ] && ! haveno_has_install_deb; then
+    if haveno_hub_download_and_promote_deb "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" "${EXPECTED_DEB_BYTES:-0}"; then
       SKIP_UPSTREAM=1
     fi
   fi
   if [ "$SKIP_UPSTREAM" = "0" ]; then
-  y "  Download do .deb pelo Tor: pode levar 30-90 min. A linha 'Downloading Haveno from URL...' nao atualiza — normal."
-  y "  Progresso abaixo (a cada 30s); ou: watch -n 30 'ls -lh ${HAVENO_DIR}/.download/ ${HAVENO_DIR}/Install/*.deb 2>/dev/null'"
+  y "  Download do .deb pelo Tor: pode levar 30-90 min."
+  y "  Progresso: barra ASCII a cada ${HAVENO_DOWNLOAD_MONITOR_SEC}s (upstream) ou barra curl (hub)."
   if [ -n "${EXPECTED_DEB_BYTES:-}" ] && [ "${EXPECTED_DEB_BYTES:-0}" -gt 0 ] 2>/dev/null; then
-    y "  Tamanho esperado do .deb: $(_fmt_bytes "$EXPECTED_DEB_BYTES")"
+    y "  Tamanho esperado do .deb: $(haveno_fmt_bytes "$EXPECTED_DEB_BYTES")"
   fi
-  # Garante a .sig na CWD antes do upstream (DIV-20260617-02): sem ela o gpg do
-  # haveno-install.sh aborta com "No such file or directory" mesmo com o .deb OK.
-  haveno_predownload_sig "$HAVENO_DEB_URL"
-  b "  Rodando haveno-install.sh (verifica assinatura PGP)..."
-  # LC_ALL=C: o haveno-install.sh upstream confere o gpg com grep "Good signature
-  # from" (string em INGLES). Num Tails em PT-BR o gpg imprime "Assinatura correta
-  # de..." e o grep falha -> "Verification failed" mesmo com a assinatura BOA
-  # (mesmo bug de locale da DIV-20260607-02). Forcamos ingles so nesta chamada;
-  # a verificacao continua acontecendo (fail-closed: .deb corrompido -> "BAD").
-  LC_ALL=C bash haveno-install.sh "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" &
-  INSTALL_PID=$!
-  _monitor_haveno_deb_download "$INSTALL_PID" "${EXPECTED_DEB_BYTES:-0}" &
-  MON_PID=$!
-  wait "$INSTALL_PID"
-  INSTALL_RC=$?
-  kill "$MON_PID" 2>/dev/null || true
-  wait "$MON_PID" 2>/dev/null || true
-  if [ "$INSTALL_RC" -ne 0 ]; then
-    if [ -f "./${DEB_BASENAME}" ] && haveno_deb_size_ok "./${DEB_BASENAME}"; then
-      y "  haveno-install.sh falhou apos o .deb completo — tentando verificar PGP localmente..."
-      haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "."
-      haveno_predownload_sig "$HAVENO_DEB_URL"
-      if haveno_finalize_verified_deb_in_cwd "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"; then
-        INSTALL_RC=0
-      fi
-    fi
-    [ "$INSTALL_RC" -eq 0 ] || die "haveno-install.sh falhou (PGP/URL/rede). Se .deb ja esta em .download/, rode: haveno-setup.sh --install-only apos copiar .deb+.sig para Install/."
+  if ! haveno_run_upstream_install_deb "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" "${EXPECTED_DEB_BYTES:-0}"; then
+    haveno_deb_download_failed_msg
   fi
   fi
   g "  Haveno preparado na persistencia."

@@ -100,7 +100,11 @@ Ver também: [README — trilha linear](../../README.md#trilha-linear).
 ## Se deu FAIL
 
 1. Leia a linha `ERRO:` ou `Preflight FALHOU` no `.txt`.  
-2. **`02-haveno-auto` no [6/9] — assinatura:** se o `.deb` já tem ~266 MB em `.download/` mas falhou na `.sig`, rode `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` (fix jun/2026). Alternativa: [TRES-PASSOS — fallback atômico](TRES-PASSOS-HAVENO-TAILS.md).  
+2. **`02-haveno-auto` no [6/9]:**
+   - **Progresso:** linhas `[download] [########----] NN%` (a cada 10s) ou barra curl no `.deb`/`.sig`.
+   - **`.deb` ~266 MB só em `.download/`:** `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` (promove para `Install/`).
+   - **Já em `Install/`:** `haveno-setup.sh --install-only`.
+   - Alternativa: [TRES-PASSOS — fallback atômico](TRES-PASSOS-HAVENO-TAILS.md).  
 3. Volte ao passo certo em [README → Travou aqui?](../../README.md#travou-aqui) (cada situação → passo + processo P0x).  
 4. Corrija e rode de novo com `--qa-log`.  
 5. **Não** edite o `.txt` à mão para fingir PASS.

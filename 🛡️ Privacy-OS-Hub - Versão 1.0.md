@@ -471,7 +471,11 @@ O script faz automaticamente:
 7. Abre o Haveno
 8. Pergunta se quer fazer backup
 
-🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` fica parada — normal. O script imprime progresso a cada 30s. **Não interrompa.**
+🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` do script upstream fica parada — normal. O hub imprime **barra de progresso** (`[########----] NN%` a cada 10s na 1ª vez, ou barra **curl** se `App/utils/` já existir). **Não interrompa** com Ctrl+C no meio do download.
+
+📎 **Onde ficam os arquivos:** o `.deb` baixa em `~/Persistent/haveno/.download/` (retomável). Depois da verificação PGP, vai para `~/Persistent/haveno/Install/` — com symlink `haveno.deb` se preciso. A pasta `.download/` só é apagada no **sucesso**; em falha, fica para retomar.
+
+📎 **Recuperação:** `.deb` completo só em `.download/` → `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log`. Já em `Install/` → `--install-only`.
 
 ---
 
@@ -1463,7 +1467,7 @@ Antes de considerar a trilha principal concluída:
 ~/Persistent/hub-scripts/haveno-auto.sh --boot-only  # igual haveno-boot.sh
 ~/Persistent/hub-scripts/haveno-auto.sh --update     # força reinstall do .deb (dados preservados)
 ~/Persistent/hub-scripts/haveno-auto.sh --no-clock   # não ajusta relógio via Tor
-~/Persistent/hub-scripts/haveno-auto.sh --install-only # só deps + install.sh (sem download)
+~/Persistent/hub-scripts/haveno-auto.sh --install-only # .deb ja em Install/ — deps + install.sh (sem download)
 ~/Persistent/hub-scripts/haveno-auto.sh --qa-log     # grava log em ~/Persistent/qa-logs/
 ~/Persistent/hub-scripts/haveno-auto.sh --one-password # senha admin uma vez só no fluxo
 ```

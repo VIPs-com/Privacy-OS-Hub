@@ -301,6 +301,175 @@ haveno_fetch_deb_expected_bytes() {
     | grep -i '^content-length:' | awk '{print $2}' | tr -d '\r' | head -1
 }
 
+HAVENO_DOWNLOAD_MONITOR_SEC="${HAVENO_DOWNLOAD_MONITOR_SEC:-10}"
+HAVENO_INSTALL_PID=
+HAVENO_MON_PID=
+
+haveno_fmt_bytes() {
+  local b="${1:-0}"
+  if command -v numfmt >/dev/null 2>&1; then
+    numfmt --to=iec-i --suffix=B "$b" 2>/dev/null || echo "${b} B"
+  elif [ "$b" -ge 1048576 ] 2>/dev/null; then
+    awk -v n="$b" 'BEGIN{printf "%.1f MiB", n/1048576}'
+  elif [ "$b" -ge 1024 ] 2>/dev/null; then
+    awk -v n="$b" 'BEGIN{printf "%.1f KiB", n/1024}'
+  else
+    echo "${b} B"
+  fi
+}
+
+haveno_deb_bytes_now() {
+  local d size=0 f s
+  for d in "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "${HAVENO_DIR}"; do
+    [ -d "$d" ] || continue
+    while IFS= read -r -d '' f; do
+      s=$(stat -c%s "$f" 2>/dev/null || echo 0)
+      [ "$s" -gt "$size" ] && size=$s
+    done < <(find "$d" -maxdepth 2 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -print0 2>/dev/null)
+  done
+  echo "$size"
+}
+
+haveno_render_progress_bar() {
+  local pct="${1:-0}" width="${2:-24}" filled empty i
+  pct="$(awk -v p="$pct" 'BEGIN{if(p<0)p=0;if(p>100)p=100;printf "%d", p}')"
+  filled=$(( pct * width / 100 ))
+  empty=$(( width - filled ))
+  printf "["
+  for ((i=0; i<filled; i++)); do printf "#"; done
+  for ((i=0; i<empty; i++)); do printf "-"; done
+  printf "] %3d%%" "$pct"
+}
+
+haveno_monitor_deb_download() {
+  local target_pid="$1" expected="${2:-0}" interval="${3:-${HAVENO_DOWNLOAD_MONITOR_SEC}}"
+  mkdir -p "${HAVENO_DIR}/Install" 2>/dev/null || true
+  local prev=0 now human bar pct_n
+  while kill -0 "$target_pid" 2>/dev/null; do
+    now=$(haveno_deb_bytes_now)
+    human=$(haveno_fmt_bytes "$now")
+    if [ "$expected" -gt 0 ] 2>/dev/null && [ "$now" -gt 0 ]; then
+      pct_n=$(awk -v n="$now" -v e="$expected" 'BEGIN{printf "%.0f", (n/e)*100}')
+      bar=$(haveno_render_progress_bar "$pct_n")
+      printf "  [download] %s · %s / %s (Tor; retomavel)\n" \
+        "$bar" "$human" "$(haveno_fmt_bytes "$expected")"
+    elif [ "$now" -gt 0 ]; then
+      printf "  [download] %s — baixando (retomavel na persistencia)...\n" "$human"
+    elif [ "$prev" -eq 0 ]; then
+      y "  [download] conectando ao Tor — o .deb aparece em instantes (NAO e erro)."
+    fi
+    prev=$now
+    sleep "$interval"
+  done
+}
+
+haveno_kill_download_children() {
+  [ -n "${HAVENO_INSTALL_PID:-}" ] && kill "$HAVENO_INSTALL_PID" 2>/dev/null || true
+  [ -n "${HAVENO_MON_PID:-}" ] && kill "$HAVENO_MON_PID" 2>/dev/null || true
+}
+
+haveno_download_interrupted() {
+  haveno_kill_download_children
+  qa_log_finish 130
+  exit 130
+}
+
+# Baixa .deb para a CWD (.download/) com barra curl — espelha 02-baixar-deb.sh.
+haveno_hub_download_deb_to_cwd() {
+  local deb_url="$1" expected="${2:-0}"
+  local deb_basename deb_path now=0
+  deb_basename="$(basename "$deb_url")"
+  deb_path="./${deb_basename}"
+  [ -f "$deb_path" ] && now=$(stat -c%s "$deb_path" 2>/dev/null || echo 0)
+  if haveno_deb_size_ok "$deb_path"; then
+    if [ "${expected:-0}" -le 0 ] 2>/dev/null || [ "$now" -ge "$expected" ]; then
+      g "  .deb ja completo em .download/ ($(haveno_fmt_bytes "$now"))."
+      return 0
+    fi
+  fi
+  if [ "$now" -gt 1048576 ] 2>/dev/null; then
+    y "  Retomando .deb parcial ($(haveno_fmt_bytes "$now"))..."
+  else
+    b "  Baixando .deb pelo Tor (barra abaixo; 30-90 min, retomavel)..."
+    if [ "${expected:-0}" -gt 0 ] 2>/dev/null; then
+      y "  Tamanho esperado: $(haveno_fmt_bytes "$expected")"
+    fi
+  fi
+  curl -fL -C - --socks5-hostname 127.0.0.1:9050 --progress-bar --max-time 0 \
+    -o "$deb_path" "$deb_url" \
+    || die "Download do .deb interrompido em .download/. Rode de novo — retoma automaticamente."
+  haveno_deb_size_ok "$deb_path" \
+    || die ".deb incompleto apos download ($(stat -c%s "$deb_path" 2>/dev/null || echo 0) bytes)."
+  g "  .deb completo em .download/ ($(haveno_fmt_bytes "$(stat -c%s "$deb_path")"))."
+}
+
+# .deb completo na CWD + App/utils/ prontos → verifica PGP e move para Install/.
+haveno_try_promote_deb_from_cwd() {
+  local deb_url="$1" pgp_fpr="$2"
+  local deb_basename
+  deb_basename="$(basename "$deb_url")"
+  [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}" || return 1
+  [ -d "$UTILS_DIR" ] || return 1
+  y "  .deb completo em .download/ — verificando PGP e promovendo para Install/ (sem re-download)."
+  haveno_predownload_sig "$deb_url"
+  haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"
+}
+
+# App/utils/ ja existe: curl com barra → verify → Install/ (sem upstream).
+haveno_hub_download_and_promote_deb() {
+  local deb_url="$1" pgp_fpr="$2" expected="${3:-0}"
+  [ -d "$UTILS_DIR" ] || return 1
+  haveno_hub_download_deb_to_cwd "$deb_url" "$expected"
+  haveno_predownload_sig "$deb_url"
+  haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"
+}
+
+# haveno-install.sh upstream + monitor ASCII + fallback PGP local.
+haveno_run_upstream_install_deb() {
+  local deb_url="$1" pgp_fpr="$2" expected="${3:-0}"
+  local deb_basename install_rc=0
+  deb_basename="$(basename "$deb_url")"
+  haveno_predownload_sig "$deb_url"
+  b "  Rodando haveno-install.sh (1a vez: cria App/utils/ + verifica PGP)..."
+  HAVENO_INSTALL_PID=
+  HAVENO_MON_PID=
+  trap 'haveno_download_interrupted' INT TERM
+  LC_ALL=C bash ./haveno-install.sh "$deb_url" "$pgp_fpr" &
+  HAVENO_INSTALL_PID=$!
+  haveno_monitor_deb_download "$HAVENO_INSTALL_PID" "$expected" &
+  HAVENO_MON_PID=$!
+  wait "$HAVENO_INSTALL_PID"
+  install_rc=$?
+  trap - INT TERM
+  haveno_kill_download_children
+  wait "$HAVENO_MON_PID" 2>/dev/null || true
+  HAVENO_INSTALL_PID=
+  HAVENO_MON_PID=
+  if [ "$install_rc" -eq 130 ] || [ "$install_rc" -eq 143 ]; then
+    qa_log_finish "$install_rc"
+    exit "$install_rc"
+  fi
+  if [ "$install_rc" -ne 0 ]; then
+    if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
+      y "  haveno-install.sh falhou apos o .deb completo — tentando verificar PGP localmente..."
+      haveno_purge_poisoned_partial_debs "${expected:-0}" "."
+      haveno_predownload_sig "$deb_url"
+      if haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"; then
+        install_rc=0
+      fi
+    fi
+  fi
+  return "$install_rc"
+}
+
+haveno_deb_download_failed_msg() {
+  r "ERRO: haveno-install.sh falhou (PGP/URL/rede)."
+  y "  · .deb COMPLETO so em .download/: sync-hub-scripts.sh + haveno-setup.sh --qa-log"
+  y "  · .deb+.sig ja em Install/ (App/utils/ OK): haveno-setup.sh --install-only"
+  y "  · Fallback: automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md"
+  exit 1
+}
+
 # DIV-20260617-02: o haveno-install.sh upstream baixa a assinatura com 'wget -cq'
 # SEM checar erro (e gera a URL da .sig por conta propria). Se a .sig nao vier
 # (URL/rede), o 'gpg --verify .sig .deb' do upstream aborta com
@@ -317,10 +486,12 @@ haveno_predownload_sig() {
   sig_url="${deb_url}.sig"
   y "  Garantindo a assinatura .sig na pasta de download (fail-closed)..."
   rm -f "${deb_name}.sig" 2>/dev/null || true
-  if ! curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
-    curl -fsSL --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null \
+  if ! curl -fL --socks5-hostname 127.0.0.1:9050 --progress-bar --max-time 180 \
+      -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
+    curl -fL --progress-bar --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null \
       || die "Nao baixei a assinatura .sig (${sig_url}) pelo Tor. Confira a URL do release."
   fi
+  echo
   sz="$(stat -c%s "${deb_name}.sig" 2>/dev/null || echo 0)"
   haveno_sig_size_ok "${deb_name}.sig" \
     || die "Assinatura .sig suspeita (${sz} bytes) — provavel erro de rede/GitHub, nao PGP."
@@ -418,7 +589,7 @@ haveno_fix_dpkg_state() {
       y "  haveno em estado config-files (comum apos apt install -f) — limpando..."
       sudo dpkg --purge haveno 2>/dev/null || true
       ;;
-    *"half-configured"*|*"unpacked"*)
+    *"half-configured"*|*"half-installed"*|*"unpacked"*)
       y "  haveno incompleto (${st%% *}...) — removendo para reinstalar..."
       sudo dpkg --remove --force-remove-reinstreq haveno 2>/dev/null \
         || sudo dpkg --purge haveno 2>/dev/null || true
