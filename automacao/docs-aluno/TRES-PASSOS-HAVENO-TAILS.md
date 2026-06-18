@@ -1,6 +1,8 @@
 # Três passos — Haveno no Tails (ZIP do GitHub)
 
-> **Atualizado:** 2026-06-18 · progresso com barra ASCII/curl · fluxo `.download/` → `Install/` · rode `sync-hub-scripts.sh` após baixar ZIP novo.
+> **Atualizado:** 2026-06-18 · `.sig` via Tor (3 tentativas) · fluxo `.download/` → `Install/` · rode `sync-hub-scripts.sh` após baixar ZIP novo.
+>
+> **Scripts do pendrive/Windows:** copiar os `.sh` para o Tails está **correto** (`sync-hub-scripts.sh` faz o mesmo). O **`.deb` e a `.sig` do Haveno** são baixados **no Tails via Tor** quando você roda o setup — não vêm do pendrive.
 >
 > **Para o aluno:** só instalação e execução. Um script: `haveno-setup.sh`.  
 > **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).  
@@ -23,7 +25,17 @@ chmod +x sync-hub-scripts.sh
 ./sync-hub-scripts.sh
 ```
 
-**Resultado:** scripts em `~/Persistent/hub-scripts/` (carteira e dados ficam em `~/Persistent/haveno/`, separado).
+**Resultado:** scripts em `~/Persistent/hub-scripts/` + atalhos em `~/Persistent/hub-scripts/aliases/` (carteira e dados ficam em `~/Persistent/haveno/`, separado).
+
+**Atalhos numerados (opcional):**
+
+```bash
+~/Persistent/hub-scripts/aliases/01-check-tails-environment.sh
+~/Persistent/hub-scripts/aliases/02-haveno-install.sh
+~/Persistent/hub-scripts/aliases/03-haveno-start.sh   # cada sessão
+```
+
+Tabela completa: [hub-aliases/README.md](../tails/hub-aliases/README.md).
 
 | Flag em `sync-hub-scripts.sh` | Quando |
 |-------------------------------|--------|

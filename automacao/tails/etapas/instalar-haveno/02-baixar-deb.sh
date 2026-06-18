@@ -40,7 +40,12 @@ fi
 y "Baixando a assinatura (.sig)..."
 curl -fsSL --socks5-hostname "$TOR_SOCKS" --max-time 120 -o "$SIG" "$HAVENO_SIG_URL" \
   || fail "Nao baixei o .sig ($HAVENO_SIG_URL). Confira a URL do release em _config.sh."
-g ".sig OK ($(stat -c%s "$SIG") bytes)."
+sz="$(stat -c%s "$SIG" 2>/dev/null || echo 0)"
+[ "${sz:-0}" -ge 400 ] \
+  || fail "Assinatura .sig suspeita (${sz} bytes) — lixo GitHub/rede. Apague ${SIG} e rode de novo."
+head -1 "$SIG" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE' \
+  || fail "Arquivo .sig nao parece PGP valido. Apague ${SIG} e rode de novo."
+g ".sig OK (${sz} bytes)."
 
 # --- .deb: pular se completo, retomar se parcial, baixar se nao existe --------
 NOW=0; [ -f "$DEB" ] && NOW="$(stat -c%s "$DEB")"

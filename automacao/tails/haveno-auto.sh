@@ -142,7 +142,12 @@ b(){ echo -e "\033[1;34m$*\033[0m"; }       # azul
 g(){ echo -e "\033[1;32m$*\033[0m"; }       # verde
 y(){ echo -e "\033[1;33m$*\033[0m"; }       # amarelo
 r(){ echo -e "\033[0;31m$*\033[0m"; }       # vermelho
-die(){ r "ERRO: $*"; echo "Abortando. Veja o Capitulo 7 (FAQ) do livro Curso-Tails-OS-Expert.md"; exit 1; }
+die(){
+  r "ERRO: $*"
+  echo "Abortando. Apendice B (erros comuns) no arquivo canonico do curso."
+  echo "  Recuperacao: automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md"
+  exit 1
+}
 
 _fetch_http_date() {
   local url="$1"
@@ -315,7 +320,7 @@ if check_filter | grep -q "loaded filter: haveno"; then
 else
   haveno_fix_onion_grater || true
   if check_filter | grep -qiE "bad yaml|invalid|traceback|profile" ; then
-    y "  Log do onion-grater menciona possivel erro de YAML/perfil — confira o Capitulo 7 (FAQ) do livro"
+    y "  Log do onion-grater menciona possivel erro de YAML/perfil — confira Apendice B erros 1-2 e 13 no canonico"
   fi
 fi
 

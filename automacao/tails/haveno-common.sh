@@ -103,6 +103,11 @@ hub_sync_scripts_to_persistent() {
     [ -f "${src}/haveno-onion-grater.yml" ] && cp -f "${src}/haveno-onion-grater.yml" "${HUB_SCRIPTS_DIR}/"
     [ -f "${src}/haveno-backup.desktop" ] && cp -f "${src}/haveno-backup.desktop" "${HUB_SCRIPTS_DIR}/"
     chmod +x "${HUB_SCRIPTS_DIR}"/*.sh 2>/dev/null || true
+    if [ -d "${src}/hub-aliases" ]; then
+      mkdir -p "${HUB_SCRIPTS_DIR}/aliases" || return 1
+      cp -f "${src}/hub-aliases"/*.sh "${HUB_SCRIPTS_DIR}/aliases/" 2>/dev/null || true
+      chmod +x "${HUB_SCRIPTS_DIR}/aliases"/*.sh 2>/dev/null || true
+    fi
     g "  Sync OK (${src} -> ${HUB_SCRIPTS_DIR})."
   fi
 }
@@ -230,6 +235,7 @@ HAVENO_DEB_MIN_BYTES="${HAVENO_DEB_MIN_BYTES:-104857600}"
 HAVENO_DEB_POISON_MAX_BYTES="${HAVENO_DEB_POISON_MAX_BYTES:-1048576}"
 # Assinatura detached GPG real costuma ter centenas de bytes; 119 B = HTML de erro.
 HAVENO_SIG_MIN_BYTES="${HAVENO_SIG_MIN_BYTES:-400}"
+HAVENO_SIG_DOWNLOAD_RETRIES="${HAVENO_SIG_DOWNLOAD_RETRIES:-3}"
 
 haveno_deb_size_ok() {
   local f="$1" sz
@@ -467,6 +473,18 @@ haveno_deb_download_failed_msg() {
   y "  · .deb COMPLETO so em .download/: sync-hub-scripts.sh + haveno-setup.sh --qa-log"
   y "  · .deb+.sig ja em Install/ (App/utils/ OK): haveno-setup.sh --install-only"
   y "  · Fallback: automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md"
+  y "  · Apendice B (erros comuns) no arquivo canonico do curso"
+  exit 1
+}
+
+haveno_sig_download_failed_msg() {
+  local sz="${1:-0}" sig_url="${2:-}"
+  r "ERRO: Assinatura .sig invalida (${sz} bytes) — provavel erro de rede/GitHub, nao PGP."
+  y "  Scripts .sh no pendrive/W11 estao OK — o .deb e a .sig baixam NO Tails via Tor."
+  y "  · Aguarde 2-3 min e rode: sync-hub-scripts.sh + haveno-setup.sh --qa-log"
+  y "  · Fallback atomico: etapas/instalar-haveno/02-baixar-deb.sh"
+  y "  · Apendice B erro 3 no arquivo canonico · TRES-PASSOS-HAVENO-TAILS.md"
+  [ -n "$sig_url" ] && y "  URL: $sig_url"
   exit 1
 }
 
@@ -480,24 +498,35 @@ haveno_deb_download_failed_msg() {
 # CHAMAR com a CWD ja na pasta de download (.download), antes de 'bash haveno-install.sh'.
 # Uso: haveno_predownload_sig "<URL_DO_DEB>"
 haveno_predownload_sig() {
-  local deb_url="${1:-}" deb_name sig_url sz
+  local deb_url="${1:-}" deb_name sig_url sz attempt max_attempts
   [ -n "$deb_url" ] || die "haveno_predownload_sig: URL do .deb vazia."
   deb_name="$(basename "$deb_url")"
   sig_url="${deb_url}.sig"
-  y "  Garantindo a assinatura .sig na pasta de download (fail-closed)..."
+  max_attempts="${HAVENO_SIG_DOWNLOAD_RETRIES:-3}"
+  y "  Garantindo a assinatura .sig (Tor, fail-closed — espelha 02-baixar-deb.sh)..."
   rm -f "${deb_name}.sig" 2>/dev/null || true
-  if ! curl -fL --socks5-hostname 127.0.0.1:9050 --progress-bar --max-time 180 \
-      -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
-    curl -fL --progress-bar --max-time 180 -o "${deb_name}.sig" "$sig_url" 2>/dev/null \
-      || die "Nao baixei a assinatura .sig (${sig_url}) pelo Tor. Confira a URL do release."
-  fi
-  echo
+  for (( attempt=1; attempt<=max_attempts; attempt++ )); do
+    if [ "$attempt" -gt 1 ]; then
+      y "  Tentativa ${attempt}/${max_attempts} da .sig (aguarde Tor/GitHub)..."
+      sleep 15
+      rm -f "${deb_name}.sig" 2>/dev/null || true
+    fi
+    if curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 \
+        -o "${deb_name}.sig" "$sig_url" 2>/dev/null; then
+      sz="$(stat -c%s "${deb_name}.sig" 2>/dev/null || echo 0)"
+      if haveno_sig_size_ok "${deb_name}.sig" \
+        && head -1 "${deb_name}.sig" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE'; then
+        g "  Assinatura .sig pronta (${deb_name}.sig, ${sz} bytes)."
+        return 0
+      fi
+      y "  .sig suspeita (${sz} bytes) nesta tentativa — descartando."
+      rm -f "${deb_name}.sig" 2>/dev/null || true
+    else
+      y "  curl nao baixou a .sig nesta tentativa."
+    fi
+  done
   sz="$(stat -c%s "${deb_name}.sig" 2>/dev/null || echo 0)"
-  haveno_sig_size_ok "${deb_name}.sig" \
-    || die "Assinatura .sig suspeita (${sz} bytes) — provavel erro de rede/GitHub, nao PGP."
-  head -1 "${deb_name}.sig" 2>/dev/null | grep -q 'BEGIN PGP SIGNATURE' \
-    || die "Arquivo .sig nao parece assinatura PGP (conteudo invalido)."
-  g "  Assinatura .sig pronta (${deb_name}.sig, ${sz} bytes)."
+  haveno_sig_download_failed_msg "${sz:-0}" "$sig_url"
 }
 
 haveno_ensure_reto_pgp_key() {
@@ -661,7 +690,7 @@ haveno_ensure_deb_deps() {
     b "  Instalando ${#instalaveis[@]} dependencia(s) disponiveis: ${instalaveis[*]}"
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${instalaveis[@]}" || {
       r "  apt nao instalou: ${instalaveis[*]}"
-      y "  Veja Cap. 7 FAQ 7.11 ou ative Software adicional na persistencia."
+      y "  Veja Apendice B erro 11 (dependencias apt) no canonico ou ative Software adicional na persistencia."
       return 1
     }
   fi

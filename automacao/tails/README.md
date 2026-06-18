@@ -60,7 +60,7 @@ Vale também em `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh`.
 > pedir a senha sempre. Por isso é **opt-in** — sem a flag, nada muda (padrão seguro).
 > Não há atalho para "rodar como root": os scripts exigem o usuário `amnesia` de
 > propósito (rodar como root quebraria permissões da Persistent e abriria a carteira
-> como root). Detalhe: FAQ Cap. 7.
+> como root). Detalhe: **Apêndice B erro 14** no arquivo canônico do curso.
 
 ## Matriz script ↔ trilha ↔ Playbook
 
@@ -88,7 +88,7 @@ Vale também em `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh`.
 
 **Home Lab** ([`HomeLab/`](../homelab/README.md)) — Debian/Ubuntu, **não** Tails.
 
-**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — wrappers `hubNN-*.sh` por passo do hub.
+**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — atalhos numerados em `hub-scripts/aliases/` (ex. `02-haveno-install.sh`).
 
 ## Ciclo de uso
 
@@ -122,8 +122,8 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ```
 
 Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os `.sh` + o filtro
-`haveno-onion-grater.yml` + o atalho `.desktop`, e oferece limpar scripts do
-layout antigo soltos na raiz (sem tocar nos seus dados).
+`haveno-onion-grater.yml` + o atalho `.desktop` + pasta **`aliases/`** (atalhos numerados),
+e oferece limpar scripts do layout antigo soltos na raiz (sem tocar nos seus dados).
 
 **Mantenedor (host Linux):** `./health-check.sh` — sintaxe `bash -n` + checks estaticos (nao substitui Tails real).
 
@@ -164,7 +164,7 @@ No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na pe
 | `.download/` | Staging — download em andamento (apagada só no sucesso total) |
 | `Install/` | `.deb` + `.sig` verificados; `haveno.deb` (arquivo ou symlink → nome longo) |
 
-No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do `install.sh` upstream — idempotente a cada boot. FAQ Cap. **7.11**.
+No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do `install.sh` upstream — idempotente a cada boot. **Apêndice B erro 11** no canônico.
 
 ### Fallback atômico — se `haveno-setup` falhar no [6/9]
 
@@ -188,7 +188,7 @@ com os parâmetros PoW que o Haveno **1.6.0** passou a enviar — o onion-grater
 bloqueia (`Command filtered`) e o app cai com *"A conexão com a rede do Haveno
 falhou"*. Este arquivo é a versão corrigida (validada em campo 2026-06-11);
 os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
-**Copie-o junto com os `.sh`.** Detalhe do erro: FAQ Cap. **7.12–7.13**.
+**Copie-o junto com os `.sh`.** Detalhe do erro: **Apêndice B erros 12–13** no canônico.
 
 ### Como ler os logs (depurar sem adivinhar)
 

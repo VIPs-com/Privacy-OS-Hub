@@ -297,7 +297,7 @@ pedir a senha a **cada** comando (`timestamp_timeout=0`). Esta flag — aceita p
 um ajuste **temporário de sessão** que guarda a senha até o script terminar e o
 **remove ao fim** (some também no reboot, pois o Tails é amnésico). ⚠️ Enquanto roda,
 afrouxa a proteção do Tails de pedir a senha sempre — por isso é **opt-in** (sem a
-flag, nada muda). Detalhe e por que `root` é bloqueado: **FAQ Cap. 7.14**.
+flag, nada muda). Detalhe e por que `root` é bloqueado: **Apêndice B erro 14** no canônico.
 
 **Atualizar scripts no Tails** (sem recomecar o piloto):
 
@@ -310,7 +310,9 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 **Durante o [6/9] (1ª vez):** o download do `.deb` pelo Tor pode levar **30–90 min**. A linha `Downloading Haveno from URL...` (script upstream) **não atualiza** — o hub mostra:
 
 - **Barra ASCII** `[########----] NN%` a cada **10s** (1ª instalação, via `haveno-install.sh` upstream);
-- **Barra curl** (`--progress-bar`) quando `App/utils/` já existe ou na baixa da `.sig` (~1 s).
+- **Barra curl** (`--progress-bar`) quando `App/utils/` já existe (download do `.deb`).
+
+A **assinatura `.sig`** baixa só via Tor (`curl -fsSL`), com até **3 tentativas** e validação de tamanho — igual ao `02-baixar-deb.sh`. Copiar os scripts do Windows/pendrive para o Tails **não** causa erro de `.sig`; o pacote Haveno (`.deb`/`.sig`) é sempre baixado **no Tails via Tor** ao rodar o setup.
 
 O `.deb` cresce em `~/Persistent/haveno/.download/` (staging retomável). Após verificação PGP (`VALIDSIG`), o pacote é **movido** para `~/Persistent/haveno/Install/` (symlink `haveno.deb` se o nome for longo). No sucesso total, `.download/` é apagada — o `.deb` em `Install/` **permanece**. Arquivos de **~119 B** em `.deb` ou `.sig` são lixo do GitHub e são **apagados automaticamente**. Não interrompa com Ctrl+C no meio do download (use o trap do script ou aguarde).
 

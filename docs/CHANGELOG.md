@@ -4,6 +4,29 @@
 
 ---
 
+## 2026-06-18 — `hub-aliases/` numerados + sync para `hub-scripts/aliases/`
+
+| Mudança | Detalhe |
+|---------|---------|
+| **21 aliases** | `00`–`20` com nomes descritivos e flags fixas (`--qa-log`, `--boot`, etc.) |
+| **sync** | `sync-hub-scripts.sh` e `hub_sync_scripts_to_persistent` copiam `aliases/` |
+| **Wrappers** | Resolvem `HUB=..` (pai = `hub-scripts/`) — funciona no Tails após sync |
+| **Stubs** | `00-tails-install` / `00-bootstrap-tails` = passos manuais (exit 1 + orientação) |
+
+---
+
+## 2026-06-18 — `.sig` via Tor (espelha `02-baixar-deb.sh`) + mensagens Apêndice B
+
+| Mudança | Scripts | Detalhe |
+|---------|---------|---------|
+| **`.sig` só Tor** | `haveno-common.sh` | `curl -fsSL` como `02-baixar-deb.sh`; removido fallback clearnet que gravava lixo ~119 B |
+| **Retry `.sig`** | `haveno-common.sh` | Até 3 tentativas (15 s entre elas) antes de abortar |
+| **Recovery `.sig`** | `haveno_sig_download_failed_msg` | Explica pendrive/W11 OK; aponta Apêndice B §3 e fallback atômico |
+| **Mensagens obsoletas** | `haveno-auto.sh`, `README.md`, `MANUAL.md` | Cap. 7 / `Curso-Tails-OS-Expert.md` → **Apêndice B** do canônico |
+| **Validação `.sig`** | `02-baixar-deb.sh` | Mín. 400 B + header PGP (fail-closed antes do `.deb`) |
+
+---
+
 ## 2026-06-18 — Download: barra de progresso + fluxo `.download/` → `Install/`
 
 | Mudança | Scripts | Detalhe |

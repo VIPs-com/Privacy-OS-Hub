@@ -6,7 +6,8 @@
 #   cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 #   ./sync-hub-scripts.sh
 #
-# Copia *.sh desta pasta + haveno-common.sh (obrigatorio para deps apt).
+# Copia *.sh desta pasta + haveno-common.sh (obrigatorio para deps apt)
+# + hub-aliases/*.sh -> DEST/aliases/
 ###############################################################################
 
 set -euo pipefail
@@ -30,6 +31,13 @@ cp -v "${SCRIPT_DIR}"/*.sh "$DEST/"
 [ -f "${SCRIPT_DIR}/haveno-onion-grater.yml" ] && cp -v "${SCRIPT_DIR}/haveno-onion-grater.yml" "$DEST/"
 [ -f "${SCRIPT_DIR}/haveno-backup.desktop" ] && cp -v "${SCRIPT_DIR}/haveno-backup.desktop" "$DEST/"
 chmod +x "${DEST}"/*.sh
+
+if [ -d "${SCRIPT_DIR}/hub-aliases" ]; then
+  mkdir -p "${DEST}/aliases"
+  cp -v "${SCRIPT_DIR}"/hub-aliases/*.sh "${DEST}/aliases/"
+  chmod +x "${DEST}/aliases"/*.sh
+  g "Aliases em: ${DEST}/aliases/  (ex.: aliases/02-haveno-install.sh)"
+fi
 
 # Limpeza opcional: scripts antigos soltos na raiz da Persistent (layout antigo)
 ANTIGOS=$(ls "${PERSIST}"/haveno-*.sh "${PERSIST}"/feather-*.sh "${PERSIST}"/qa-*.sh \
