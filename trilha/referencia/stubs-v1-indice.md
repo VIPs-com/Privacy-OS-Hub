@@ -10,7 +10,7 @@
 | [Whonix-Online/](../../Whonix-Online/README.md) | [modulos/m2-whonix-custodia/](../../modulos/m2-whonix-custodia/README.md) |
 | [Whonix-Online/Scripts/](../../Whonix-Online/Scripts/README.md) | [automacao/whonix-host/](../../automacao/whonix-host/README.md) |
 
-**Trilha oficial:** [README — trilha linear](../../README.md#trilha-linear) · **Comandos:** [processos/](../../processos/README.md) · **Migração:** [CHANGELOG-V2.md](../../CHANGELOG-V2.md)
+**Trilha oficial:** [README — trilha linear](../../README.md#trilha-linear) · **Comandos:** [processos/](../../processos/README.md) · **Migração:** [CHANGELOG-V2.md](../../meta/CHANGELOG-V2.md)
 
 ---
 

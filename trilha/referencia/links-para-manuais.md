@@ -5,10 +5,10 @@ A pasta `trilha/` **não substitui** estes arquivos — apenas facilita chegar n
 | Arquivo | Quando usar | Link |
 |---------|-------------|------|
 | **README.md** | Ordem oficial 1–12 · primeira visita | [trilha linear](../../README.md#trilha-linear) |
-| **MANUAL-SCRIPTS.md** | Novato · automação · Apêndice A | [abrir](../../MANUAL-SCRIPTS.md) |
-| **MANUAL-EXPERT.md** | Mapa compacto · 5 min | [abrir](../../MANUAL-EXPERT.md) |
-| **MANUAL-DO-CURSO.md** | Índice capítulo a capítulo | [abrir](../../MANUAL-DO-CURSO.md) |
-| **MANIFESTO.md** | Princípios pedagógicos | [abrir](../../MANIFESTO.md) |
+| **MANUAL-SCRIPTS.md** | Novato · automação · Apêndice A | [abrir](../../meta/MANUAL-SCRIPTS.md) |
+| **MANUAL-EXPERT.md** | Mapa compacto · 5 min | [abrir](../../meta/MANUAL-EXPERT.md) |
+| **MANUAL-DO-CURSO.md** | Índice capítulo a capítulo | [abrir](../../meta/MANUAL-DO-CURSO.md) |
+| **MANIFESTO.md** | Princípios pedagógicos | [abrir](../../meta/MANIFESTO.md) |
 
 ---
 

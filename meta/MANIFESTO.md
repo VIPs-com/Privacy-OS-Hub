@@ -47,14 +47,14 @@ O hub separa **ensino** de **execução** sem mudar a trilha 1–12:
 
 | Camada | Pasta | Papel |
 |--------|-------|-------|
-| Porta | [README.md](README.md) | Ordem oficial · primeira visita |
-| Navegação | [trilha/](trilha/README.md) | Cartões por passo · glossário online/offline |
-| Execução | [processos/](processos/README.md) | Comandos canônicos P01–P12 |
-| Ensino | [modulos/](modulos/README.md) | Livros · folhetos · detalhe cold-signing |
-| Automação | [automacao/](automacao/README.md) | Scripts `.sh` → cópia para `~/Persistent/` |
+| Porta | [README.md](../README.md) | Ordem oficial · primeira visita |
+| Navegação | [trilha/](../trilha/README.md) | Cartões por passo · glossário online/offline |
+| Execução | [processos/](../processos/README.md) | Comandos canônicos P01–P12 |
+| Ensino | [modulos/](../modulos/README.md) | Livros · folhetos · detalhe cold-signing |
+| Automação | [automacao/](../automacao/README.md) | Scripts `.sh` → cópia para `~/Persistent/` |
 
 **Regra:** livro = teoria · processo = comandos no **mesmo** passo. Migração v1→v2: [CHANGELOG-V2.md](CHANGELOG-V2.md).
 
 ---
 
-*Privacy-OS-Hub · [README.md](README.md) · [MANIFESTO](MANIFESTO.md) · Licença: [LICENSE-DOCS.md](LICENSE-DOCS.md) (CC BY-SA 4.0)*
+*Privacy-OS-Hub · [README.md](../README.md) · [MANIFESTO](MANIFESTO.md) · Licença: [LICENSE-DOCS.md](LICENSE-DOCS.md) (CC BY-SA 4.0)*

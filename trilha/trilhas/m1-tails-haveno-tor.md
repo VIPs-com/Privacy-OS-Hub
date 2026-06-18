@@ -27,7 +27,7 @@ chmod +x ~/Persistent/hub-scripts/*.sh
 ~/Persistent/hub-scripts/haveno-setup.sh --feather --qa-log    # + Feather
 ```
 
-Manual: [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md)
+Manual: [MANUAL-SCRIPTS.md](../../meta/MANUAL-SCRIPTS.md)
 
 ---
 

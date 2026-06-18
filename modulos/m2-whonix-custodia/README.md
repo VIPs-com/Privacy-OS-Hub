@@ -31,7 +31,7 @@ Lado **online persistente** do hub: Whonix (Gateway + Workstation via Tor) + cus
 | O quê | Onde |
 |-------|------|
 | Livro M2 | [Curso-Whonix-Online.md](Curso-Whonix-Online.md) |
-| Índice completo (opcional) | [MANUAL-DO-CURSO.md](../../MANUAL-DO-CURSO.md) |
+| Índice completo (opcional) | [MANUAL-DO-CURSO.md](../../meta/MANUAL-DO-CURSO.md) |
 | Travou? | [README#travou-aqui](../../README.md#travou-aqui) |
 
 > **Status:** 🟡 **v1** (mesmo rótulo do [README raiz](../../README.md#módulos)) — conteúdo auditado rodadas 15–18; **prints 2/5** em [screenshots-whonix/](imagens/screenshots-whonix/README.md) (passos textuais bastam).

@@ -2,9 +2,9 @@
 
 > **Para quem?** Já conhece Tails, Monero, Tor ou Whonix — quer **orientação em 5 minutos**: o que há no repo, ordem das trilhas e atalhos.
 >
-> **Novato?** Use [README — Primeira visita?](README.md#primeira-visita) e [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md). **Capítulos:** [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md).
+> **Novato?** Use [README — Primeira visita?](../README.md#primeira-visita) e [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md). **Capítulos:** [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md).
 
-**Porta única da ordem:** [README.md#trilha-linear](README.md#trilha-linear) · **Princípios:** [MANIFESTO.md](MANIFESTO.md) · **v2:** [CHANGELOG-V2.md](CHANGELOG-V2.md)
+**Porta única da ordem:** [README.md#trilha-linear](../README.md#trilha-linear) · **Princípios:** [MANIFESTO.md](MANIFESTO.md) · **v2:** [CHANGELOG-V2.md](CHANGELOG-V2.md)
 
 ---
 
@@ -12,7 +12,7 @@
 
 ## Arquitetura do repositório
 
-> **Diagrama visual (FIG-4):** [README — Como o hub está organizado](README.md#como-o-hub-esta-organizado-v2) · Índice: [FIG-1…4](trilha/referencia/diagramas-indice.md)
+> **Diagrama visual (FIG-4):** [README — Como o hub está organizado](../README.md#como-o-hub-esta-organizado-v2) · Índice: [FIG-1…4](../trilha/referencia/diagramas-indice.md)
 
 ```text
 Privacy-OS-Hub/
@@ -47,7 +47,7 @@ Privacy-OS-Hub/
 
 | Tipo | Onde | Quando abrir |
 |------|------|--------------|
-| **Trilha** | [README.md#trilha-linear](README.md#trilha-linear) | Sempre — ordem 1–12 |
+| **Trilha** | [README.md#trilha-linear](../README.md#trilha-linear) | Sempre — ordem 1–12 |
 | **Livro** | `Curso-*.md` | Teoria, telas, modelo de ameaças |
 | **Processo** | `processos/P0x-*.md` | Comandos canônicos por passo (v2) |
 | **Playbook** | `Playbooks/*.md` (índice), trilhas A/B (detalhe) | Legado v1 / cold-signing expandido |
@@ -60,48 +60,48 @@ Regra do hub: **Livro + processo no mesmo passo** — abra `processos/P0x` para 
 
 ## Trilha linear — visão compacta
 
-Ordem fixa. Detalhe completo: [README — tabela](README.md#trilha-linear).
+Ordem fixa. Detalhe completo: [README — tabela](../README.md#trilha-linear).
 
 | Passo | Foco | Processo | Módulo |
 |:-----:|------|----------|--------|
-| **1** | Tails USB · Tor · persistência | [P01](processos/m1-tor/P01-bootstrap-tails.md) | M1 |
-| **2** | Haveno → **verde** | [P02](processos/m1-tor/P02-haveno-verde.md) | M1 |
-| **3** | Cautela pré-trade | [P03](processos/m1-tor/P03-pre-trade.md) | M1 |
-| **4** | Backup · seed papel | [P04](processos/m1-tor/P04-backup-seed.md) | M1 |
-| **5** | Feather · trades opcional | [P05](processos/m1-tor/P05-feather.md) | M1 / Vol II |
-| **6** | Folheto golpes | [P06](processos/m1-tor/P06-folheto.md) | M1 |
-| **7** | Rotina scripts | [P07](processos/m1-tor/P07-rotina-scripts.md) | M1 |
-| **8** | Escolher trilha **A ou B** | [P08](processos/porteiro/P08-porteiro-trilha-ab.md) | M2 |
-| **9** | Ritual 2× seed (Tor OK) | [P09](processos/rituais/P09-ritual-seed.md) | M2 |
-| **10** | Whonix PGP + VMs | [P10](processos/m2-quente/P10-whonix-pgp.md) | M2 |
-| **11** | Modelo frio↔quente | [P11](processos/m2-quente/P11-modelo-frio-quente.md) | M2 |
-| **12** | Cold-signing air-gap | [P12A](processos/m2-frio/P12a-feather-offline.md) / [P12B](processos/m2-frio/P12b-cli-offline.md) | M2 |
+| **1** | Tails USB · Tor · persistência | [P01](../processos/m1-tor/P01-bootstrap-tails.md) | M1 |
+| **2** | Haveno → **verde** | [P02](../processos/m1-tor/P02-haveno-verde.md) | M1 |
+| **3** | Cautela pré-trade | [P03](../processos/m1-tor/P03-pre-trade.md) | M1 |
+| **4** | Backup · seed papel | [P04](../processos/m1-tor/P04-backup-seed.md) | M1 |
+| **5** | Feather · trades opcional | [P05](../processos/m1-tor/P05-feather.md) | M1 / Vol II |
+| **6** | Folheto golpes | [P06](../processos/m1-tor/P06-folheto.md) | M1 |
+| **7** | Rotina scripts | [P07](../processos/m1-tor/P07-rotina-scripts.md) | M1 |
+| **8** | Escolher trilha **A ou B** | [P08](../processos/porteiro/P08-porteiro-trilha-ab.md) | M2 |
+| **9** | Ritual 2× seed (Tor OK) | [P09](../processos/rituais/P09-ritual-seed.md) | M2 |
+| **10** | Whonix PGP + VMs | [P10](../processos/m2-quente/P10-whonix-pgp.md) | M2 |
+| **11** | Modelo frio↔quente | [P11](../processos/m2-quente/P11-modelo-frio-quente.md) | M2 |
+| **12** | Cold-signing air-gap | [P12A](../processos/m2-frio/P12a-feather-offline.md) / [P12B](../processos/m2-frio/P12b-cli-offline.md) | M2 |
 
 **Pré-req passo 8:** M1 passos **1–7** concluídos (Feather no passo **5**) — **não** exige trade.
 
-**Online × offline:** [README — glossário](README.md#trilha-linear) · **Logs QA:** `--qa-log` → `~/Persistent/qa-logs/` · [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
+**Online × offline:** [README — glossário](../README.md#trilha-linear) · **Logs QA:** `--qa-log` → `~/Persistent/qa-logs/` · [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
-**Contingência:** [README#travou-aqui](README.md#travou-aqui) · **Mapa repo:** [FIG-4](README.md#como-o-hub-esta-organizado-v2) · **Bookmarks v1:** [stubs-v1-indice](trilha/referencia/stubs-v1-indice.md)
+**Contingência:** [README#travou-aqui](../README.md#travou-aqui) · **Mapa repo:** [FIG-4](../README.md#como-o-hub-esta-organizado-v2) · **Bookmarks v1:** [stubs-v1-indice](../trilha/referencia/stubs-v1-indice.md)
 
 ---
 
 ## Trilhas opcionais (depois de 1–12)
 
-Não misturar com a trilha principal. [README — opcionais](README.md#trilhas-opcionais).
+Não misturar com a trilha principal. [README — opcionais](../README.md#trilhas-opcionais).
 
 | Quer… | Abrir |
 |-------|--------|
-| Nó Monero + `.onion` + P2Pool / xmrig | [automacao/homelab/](automacao/homelab/README.md) |
-| Multisig 2-de-3 manual (educacional) | [Multisig CLI](modulos/m1-tails-haveno/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) |
-| Hardware wallet | [Curso M2 §5.6](modulos/m2-whonix-custodia/Curso-Whonix-Online.md#56-hardware-wallet-opcional) |
-| Baseline cofre / PGP / backup 3-2-1 | [Baseline de proteção](trilha/trilhas/opcionais-zero-trust-baseline.md) → [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
+| Nó Monero + `.onion` + P2Pool / xmrig | [automacao/homelab/](../automacao/homelab/README.md) |
+| Multisig 2-de-3 manual (educacional) | [Multisig CLI](../modulos/m1-tails-haveno/Expansao-Curso/Multisig-2-de-3-criacao-manual-CLI.md) |
+| Hardware wallet | [Curso M2 §5.6](../modulos/m2-whonix-custodia/Curso-Whonix-Online.md#56-hardware-wallet-opcional) |
+| Baseline cofre / PGP / backup 3-2-1 | [Baseline de proteção](../trilha/trilhas/opcionais-zero-trust-baseline.md) → [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) |
 
 ### Cold-signing (passo 12) — escolha UMA
 
 | Trilha | Processo | Detalhe |
 |--------|----------|---------|
-| **A — Feather GUI** | [P12A](processos/m2-frio/P12a-feather-offline.md) | [Playbook-Feather-GUI](modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) |
-| **B — CLI** | [P12B](processos/m2-frio/P12b-cli-offline.md) | [Playbook CLI](modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
+| **A — Feather GUI** | [P12A](../processos/m2-frio/P12a-feather-offline.md) | [Playbook-Feather-GUI](../modulos/m2-whonix-custodia/Trilha-A-Feather/Playbook-Feather-GUI.md) |
+| **B — CLI** | [P12B](../processos/m2-frio/P12b-cli-offline.md) | [Playbook CLI](../modulos/m2-whonix-custodia/Trilha-B-CLI/Playbook-monero-wallet-cli.md) |
 
 ---
 
@@ -124,7 +124,7 @@ Orquestrador novato: `haveno-setup.sh`. Expert pode chamar **direto**:
 | `qa-confirm-passo12.sh` | Pós cold-signing offline |
 | `qa-export-logs.sh` | Copia `qa-logs/` → pendrive USB |
 
-Copiar no Tails: `cp automacao/tails/*.sh automacao/tails/hub-aliases/*.sh ~/Persistent/` · Matriz: [automacao/tails/README.md](automacao/tails/README.md) · Novato: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) · Logs: [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
+Copiar no Tails: `cp automacao/tails/*.sh automacao/tails/hub-aliases/*.sh ~/Persistent/` · Matriz: [automacao/tails/README.md](../automacao/tails/README.md) · Novato: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) · Logs: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
 **Dados persistentes:** `~/Persistent/haveno/Data/` · Feather: `~/Persistent/feather/wallets/` · **Seed ≠ backup automático.**
 
@@ -159,13 +159,13 @@ Copiar no Tails: `cp automacao/tails/*.sh automacao/tails/hub-aliases/*.sh ~/Per
 
 | Objetivo | Vá direto a |
 |----------|-------------|
-| Ordem oficial | [Trilha linear](README.md#trilha-linear) |
-| Comandos por passo | [processos/](processos/README.md) |
-| Rede / Feather / trade | [P05](processos/m1-tor/P05-feather.md) · [Vol II](modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) |
-| Whonix + cold-signing | [P08–P12](processos/README.md) · [Curso M2](modulos/m2-whonix-custodia/Curso-Whonix-Online.md) |
-| FAQ erros Haveno | [Vol I Cap. 7](modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) |
+| Ordem oficial | [Trilha linear](../README.md#trilha-linear) |
+| Comandos por passo | [processos/](../processos/README.md) |
+| Rede / Feather / trade | [P05](../processos/m1-tor/P05-feather.md) · [Vol II](../modulos/m1-tails-haveno/Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) |
+| Whonix + cold-signing | [P08–P12](../processos/README.md) · [Curso M2](../modulos/m2-whonix-custodia/Curso-Whonix-Online.md) |
+| FAQ erros Haveno | [Vol I Cap. 7](../modulos/m1-tails-haveno/Curso-Tails-OS-Expert.md#7-faq--erros-possíveis-após-rodar-os-scripts) |
 | Índice todos capítulos | [MANUAL-DO-CURSO](MANUAL-DO-CURSO.md) |
 
 ---
 
-*Manual Expert · Privacy-OS-Hub · jun/2026. Ordem de estudo: sempre [trilha linear](README.md#trilha-linear).*
+*Manual Expert · Privacy-OS-Hub · jun/2026. Ordem de estudo: sempre [trilha linear](../README.md#trilha-linear).*

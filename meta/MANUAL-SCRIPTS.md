@@ -1,16 +1,16 @@
 # Manual dos scripts de automação
 
-> **Hub v2:** scripts no repo ficam em [`automacao/tails/`](automacao/tails/README.md) — instale com `sync-hub-scripts.sh`, que os coloca em **`~/Persistent/hub-scripts/`**. Comandos por passo: [`processos/`](processos/README.md).
+> **Hub v2:** scripts no repo ficam em [`automacao/tails/`](../automacao/tails/README.md) — instale com `sync-hub-scripts.sh`, que os coloca em **`~/Persistent/hub-scripts/`**. Comandos por passo: [`processos/`](../processos/README.md).
 
 > **Para quem?** Aluno **novato** que quer usar os scripts com segurança — sem precisar ser expert em Linux.
 >
-> **Não substitui** a [trilha linear](README.md#trilha-linear) nem o [livro](MANUAL-DO-CURSO.md). Use este manual **junto** com o passo do hub em que você está.
+> **Não substitui** a [trilha linear](../README.md#trilha-linear) nem o [livro](MANUAL-DO-CURSO.md). Use este manual **junto** com o passo do hub em que você está.
 >
-> **Primeira vez no hub?** Leia antes [README — Primeira visita?](README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
+> **Primeira vez no hub?** Leia antes [README — Primeira visita?](../README.md#primeira-visita). Só use scripts **depois** dos passos **1–4** manuais (Tails no USB, Tor, persistência, admin).
 
-**Mapa rápido:** [README — trilha script-first](README.md#trilha-script-first) · [automacao/tails](automacao/tails/README.md) · [automacao/whonix-host](automacao/whonix-host/README.md) · [processos/](processos/README.md) · [Matriz passo↔script](trilha/referencia/scripts-matriz.md)
+**Mapa rápido:** [README — trilha script-first](../README.md#trilha-script-first) · [automacao/tails](../automacao/tails/README.md) · [automacao/whonix-host](../automacao/whonix-host/README.md) · [processos/](../processos/README.md) · [Matriz passo↔script](../trilha/referencia/scripts-matriz.md)
 
-> **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os scripts em [`automacao/tails/`](automacao/tails/README.md).
+> **Viu muitos `.sh` no gerenciador de Arquivos?** Abra o [**Apêndice A — Catálogo de cada arquivo**](#apêndice-a--catálogo-de-cada-arquivo-iniciante) — ficha de **todos** os scripts em [`automacao/tails/`](../automacao/tails/README.md).
 
 ---
 
@@ -44,7 +44,7 @@ cada um: [Apêndice A](#apêndice-a--catálogo-de-cada-arquivo-iniciante).
 
 ## Antes de qualquer script (sempre manual)
 
-Nenhum script grava o pendrive nem cria a persistência por você. **Termine isto na mão** ([P01](processos/m1-tor/P01-bootstrap-tails.md)):
+Nenhum script grava o pendrive nem cria a persistência por você. **Termine isto na mão** ([P01](../processos/m1-tor/P01-bootstrap-tails.md)):
 
 | # | O quê | Por quê |
 |---|--------|---------|
@@ -55,7 +55,7 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 
 **Checagem automática:** `~/Persistent/hub-scripts/tails-preflight.sh` — só **lê** o ambiente; não altera nada.
 
-**Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
+**Validar com log:** rode com `--qa-log` (ou `haveno-setup.sh --qa-log`) e leia os `.txt` em `~/Persistent/qa-logs/` — [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md).
 
 ---
 
@@ -88,7 +88,7 @@ chmod +x ~/Persistent/hub-scripts/*.sh
 | `Backup concluido:` · `Fingerprint OK:` | Senhas ou chaves completas |
 | `CONFIRMACAO_HUMANA: ...=SIM` | TX ID completo |
 
-**Glossário:** “offline” no hub pode ser **papel** (passo 4) ou **sem rede** (passo 12) — [README](README.md#trilha-linear).
+**Glossário:** “offline” no hub pode ser **papel** (passo 4) ou **sem rede** (passo 12) — [README](../README.md#trilha-linear).
 
 ---
 
@@ -128,7 +128,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 ## Comando principal: `haveno-setup.sh`
 
-> **Guia curto (ZIP + 1ª vez + reiniciar):** [TRES-PASSOS-HAVENO-TAILS.md](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
+> **Guia curto (ZIP + 1ª vez + reiniciar):** [TRES-PASSOS-HAVENO-TAILS.md](../automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
 
 Use este **orquestrador** se você é novato. Ele chama os outros scripts na ordem certa.
 
@@ -266,7 +266,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 **Durante o [6/9] (1ª vez):** o download do `.deb` pelo Tor pode levar **30–90 min**. A linha `Downloading Haveno from URL...` (script upstream) **não atualiza** — o `haveno-auto.sh` imprime `[download] … (~%)` a cada 30s. O arquivo cresce em `~/Persistent/haveno/.download/` (retoma após reboot). Arquivos de **~119 B** em `.deb` ou `.sig` são lixo de erro do GitHub e são **apagados automaticamente** antes de continuar. Não interrompa.
 
-**Falhou na assinatura (`.sig` ~119 B) com `.deb` completo?** Rode `./sync-hub-scripts.sh` e `haveno-setup.sh --qa-log` de novo (fix jun/2026). Se ainda falhar: [TRES-PASSOS — fallback atômico](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) ou `automacao/tails/etapas/instalar-haveno/`.
+**Falhou na assinatura (`.sig` ~119 B) com `.deb` completo?** Rode `./sync-hub-scripts.sh` e `haveno-setup.sh --qa-log` de novo (fix jun/2026). Se ainda falhar: [TRES-PASSOS — fallback atômico](../automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) ou `automacao/tails/etapas/instalar-haveno/`.
 
 **Relógio [5/9]:** se não houver `Date:` HTTP, o script mostra a hora atual e explica que `timedatectl` → `synchronized: no` é **normal no Tails** (sync via Tor, não NTP).
 
@@ -345,12 +345,12 @@ flowchart TD
 
 | Etapa no fluxo | Passo hub | Processo |
 |---------------|:---------:|----------|
-| Passos 1–4 manual | 1–4 | [P01](processos/m1-tor/P01-bootstrap-tails.md) … [P04](processos/m1-tor/P04-backup-seed.md) |
-| `tails-preflight` / setup / boot | 2, 7 | [P02](processos/m1-tor/P02-haveno-verde.md) · [P07](processos/m1-tor/P07-rotina-scripts.md) |
-| `haveno-backup` | 4 | [P04](processos/m1-tor/P04-backup-seed.md) |
-| Feather (M2) | 5 | [P05](processos/m1-tor/P05-feather.md) |
+| Passos 1–4 manual | 1–4 | [P01](../processos/m1-tor/P01-bootstrap-tails.md) … [P04](../processos/m1-tor/P04-backup-seed.md) |
+| `tails-preflight` / setup / boot | 2, 7 | [P02](../processos/m1-tor/P02-haveno-verde.md) · [P07](../processos/m1-tor/P07-rotina-scripts.md) |
+| `haveno-backup` | 4 | [P04](../processos/m1-tor/P04-backup-seed.md) |
+| Feather (M2) | 5 | [P05](../processos/m1-tor/P05-feather.md) |
 
-Ordem oficial: [README — trilha linear](README.md#trilha-linear).
+Ordem oficial: [README — trilha linear](../README.md#trilha-linear).
 
 ---
 
@@ -373,7 +373,7 @@ chmod +x whonix-verify-image.sh
 | **Rodar 2×** | **Sim** — só verifica de novo; não altera a imagem |
 | **OK se** | `Good signature` (ou `Assinatura válida` em PT-BR) + fingerprint `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` com seus olhos |
 
-Detalhe: [automacao/whonix-host/README.md](automacao/whonix-host/README.md)
+Detalhe: [automacao/whonix-host/README.md](../automacao/whonix-host/README.md)
 
 ---
 
@@ -403,11 +403,11 @@ Detalhe: [automacao/whonix-host/README.md](automacao/whonix-host/README.md)
 
 ### Preflight falhou
 
-Corrija o item listado (Tor, Dotfiles, admin) em [P01](processos/m1-tor/P01-bootstrap-tails.md). **Não** use `--no-backup` ou atalhos para “pular” preflight.
+Corrija o item listado (Tor, Dotfiles, admin) em [P01](../processos/m1-tor/P01-bootstrap-tails.md). **Não** use `--no-backup` ou atalhos para “pular” preflight.
 
 ### Haveno abriu mas não está verde
 
-Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: [P02 §8](processos/m1-tor/P02-haveno-verde.md) ou Cap. 7 FAQ. Rodar `haveno-boot.sh` de novo é seguro.
+Amarelo 5–20 min na 1ª vez é **normal**. Se persistir: [P02 §8](../processos/m1-tor/P02-haveno-verde.md) ou Cap. 7 FAQ. Rodar `haveno-boot.sh` de novo é seguro.
 
 ### Quero só Feather, Haveno já está verde
 
@@ -430,7 +430,7 @@ Ordem: preflight → boot Haveno → verificar Feather.
 
 ### Expert: posso ignorar este manual?
 
-Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [automacao/tails/README.md](automacao/tails/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
+Sim. Use [MANUAL-EXPERT.md](MANUAL-EXPERT.md) (mapa do hub) · [automacao/tails/README.md](../automacao/tails/README.md) (matriz técnica) · cabeçalhos `#!/bin/bash` de cada `.sh`.
 
 ---
 
@@ -519,7 +519,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Comando** | `~/Persistent/hub-scripts/tails-preflight.sh` |
 | **Rodar 2×** | **Sim** — só leitura; zero alteração em carteira |
 | **Disco** | Nenhuma pasta de dados Haveno/Feather |
-| **Se falhar** | Corrija [P01](processos/m1-tor/P01-bootstrap-tails.md) antes de continuar |
+| **Se falhar** | Corrija [P01](../processos/m1-tor/P01-bootstrap-tails.md) antes de continuar |
 
 #### `post-session-check.sh`
 
@@ -587,7 +587,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Passo hub** | **4**, **7** |
 | **Novato roda sozinho?** | Opcional — clique no menu em vez do terminal |
 | **O que faz** | Atalho que chama `haveno-backup.sh` (igual ao script) |
-| **Comando** | Instalar atalho: ver [automacao/tails/README](automacao/tails/README.md) |
+| **Comando** | Instalar atalho: ver [automacao/tails/README](../automacao/tails/README.md) |
 | **Rodar 2×** | Igual ao `haveno-backup.sh` |
 | **Disco** | Igual ao backup |
 
@@ -681,7 +681,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Passo hub** | Trilha opcional (nó, P2Pool, mineração) |
 | **Novato no Tails?** | **Ignore** na 1ª passagem — **não roda no Tails** |
 | **O que contém** | `00-verificar-requisitos.sh` … `04-setup-xmrig.sh` |
-| **Onde ler** | [automacao/homelab/README.md](automacao/homelab/README.md) |
+| **Onde ler** | [automacao/homelab/README.md](../automacao/homelab/README.md) |
 
 ---
 
@@ -693,7 +693,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 |-------|---------|
 | **Grupo** | Whonix (PC host) |
 | **Passo hub** | **10** |
-| **Onde fica** | `automacao/whonix-host/` — **não** copie para `~/Persistent/` do Tails |
+| **Onde fica** | `../automacao/whonix-host/` — **não** copie para `~/Persistent/` do Tails |
 | **Novato roda sozinho?** | Sim, no Linux onde vai instalar VirtualBox/KVM |
 | **O que faz** | PGP da imagem `.ova` ou `.libvirt.xz` |
 | **O que NÃO faz** | Não importa VM; não configura Tor na Gateway |
@@ -736,7 +736,7 @@ automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
 | **Uso** | Copia `~/Persistent/qa-logs/*.txt` para pendrive `--usb` |
 | **Quando** | Entregar evidências à equipe ou outro PC |
 
-Guia completo: [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
+Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md)
 
 ---
 
@@ -771,4 +771,4 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.m
 
 ---
 
-*Manual dos scripts · Privacy-OS-Hub · jun/2026. Trilha: [README.md#trilha-linear](README.md#trilha-linear).*
+*Manual dos scripts · Privacy-OS-Hub · jun/2026. Trilha: [README.md#trilha-linear](../README.md#trilha-linear).*

@@ -5,7 +5,7 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `2fa` · `pgp`
 
-> **v2.0.0-beta** — reorganização em `trilha/` · `modulos/` · `processos/` · `automacao/`. [CHANGELOG-V2.md](CHANGELOG-V2.md)
+> **v2.0.0-beta** — reorganização em `trilha/` · `modulos/` · `processos/` · `automacao/`. [CHANGELOG-V2.md](meta/CHANGELOG-V2.md)
 
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e
 > fontes oficiais.
@@ -30,7 +30,7 @@ experiência e ensina **processo + ferramentas** na ordem certa.
 | # | Faça isto | Para quê |
 |:-:|-----------|----------|
 | **1** | Abra a [trilha linear](#trilha-linear) e comece no **passo 1** → [tabela dos 12 passos](#trilha-linear) | Um passo de cada vez — Livro (teoria/telas) + Comandos (mão na massa) |
-| **2** | Nos passos **2** e **7**, se quiser automação: [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) | Dois comandos bastam (`haveno-setup.sh` e `--boot`); [Apêndice A](MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) explica cada `.sh` |
+| **2** | Nos passos **2** e **7**, se quiser automação: [MANUAL-SCRIPTS.md](meta/MANUAL-SCRIPTS.md) | Dois comandos bastam (`haveno-setup.sh` e `--boot`); [Apêndice A](meta/MANUAL-SCRIPTS.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) explica cada `.sh` |
 | **3** | Só avance quando o **OK se** do passo atual for verdadeiro | Evita pular backup, seed ou pré-requisito do Módulo 2 |
 | **4** | (Opcional) Valide com **log**: `haveno-setup.sh --qa-log` → leia `~/Persistent/qa-logs/*.txt` | [COMO-LER-SEUS-LOGS.md](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) — sem expor seed |
 
@@ -42,7 +42,7 @@ Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B)
 
 | Pode **ignorar** no início | Por quê |
 |-----------------------------|---------|
-| [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) | Índice de **todos** os capítulos — use só se quiser aprofundar |
+| [MANUAL-DO-CURSO.md](meta/MANUAL-DO-CURSO.md) | Índice de **todos** os capítulos — use só se quiser aprofundar |
 | Trades (Vol II Caps. 7–8) | **Instalar ≠ tradear** — só se for usar a rede de troca |
 | [Zero-Trust-Core](https://github.com/VIPs-com/Zero-Trust-Core) | Baseline extra — depois da trilha principal |
 | Pasta `HomeLab/` nos Scripts | Roda em **outro PC** (Debian/Ubuntu), não no Tails |
@@ -51,7 +51,7 @@ Feather (pré-requisito M2) · Whonix verificado · cold-signing (trilha A ou B)
 para anotar a seed (nunca só no computador).
 
 Perdeu o fio? [Mapa do repo (FIG-4)](#como-o-hub-esta-organizado-v2) · [Travou aqui](#travou-aqui) · Quer só scripts? [Trilha script-first](#trilha-script-first) ·
-Princípios do hub: [MANIFESTO.md](MANIFESTO.md).
+Princípios do hub: [MANIFESTO.md](meta/MANIFESTO.md).
 
 ---
 
@@ -59,11 +59,11 @@ Princípios do hub: [MANIFESTO.md](MANIFESTO.md).
 
 Tails, Monero, Tor ou Whonix — **sem hand-holding:** mapa do repo, trilha compacta, opcionais e scripts diretos.
 
-→ **[MANUAL-EXPERT.md](MANUAL-EXPERT.md)** (5 min)
+→ **[MANUAL-EXPERT.md](meta/MANUAL-EXPERT.md)** (5 min)
 
 | Novato | Expert |
 |--------|--------|
-| [Primeira visita?](#primeira-visita) · [MANUAL-SCRIPTS](MANUAL-SCRIPTS.md) | [MANUAL-EXPERT](MANUAL-EXPERT.md) · [trilha linear](#trilha-linear) |
+| [Primeira visita?](#primeira-visita) · [MANUAL-SCRIPTS](meta/MANUAL-SCRIPTS.md) | [MANUAL-EXPERT](meta/MANUAL-EXPERT.md) · [trilha linear](#trilha-linear) |
 
 ---
 
@@ -149,14 +149,14 @@ flowchart LR
 | Objetivo | Comece no passo | Pasta |
 |----------|-----------------|-------|
 | **Primeira vez no hub** (não conheço as ferramentas) | [Primeira visita?](#primeira-visita) → [1](#trilha-linear) | este README |
-| **Já expert** (mapa do hub em 5 min) | [MANUAL-EXPERT.md](MANUAL-EXPERT.md) | raiz |
+| **Já expert** (mapa do hub em 5 min) | [MANUAL-EXPERT.md](meta/MANUAL-EXPERT.md) | raiz |
 | **Tails + Haveno verde** no pendrive (portable) | [1](#trilha-linear) | `modulos/m1-tails-haveno/` |
 | **Montar lab** (nó Monero, Tor, mineração) | [Trilhas opcionais](#trilhas-opcionais) · passo 5+ | `automacao/homelab/` |
 | **Carteira Monero + backup + boas práticas** | [4](#trilha-linear) → [5](#trilha-linear) | `modulos/m1-tails-haveno/Expansao-Curso/` |
 | **Tradear no Haveno** (com cautela) | [5](#trilha-linear) | `modulos/m1-tails-haveno/Expansao-Curso/` |
 | **Whonix online + custódia frio↔quente** | [8](#trilha-linear) (M1: passos 1–4 + Feather) | `modulos/m2-whonix-custodia/` |
-| **Automação** (instalar / backup / atualizar) | [7](#trilha-linear) · [MANUAL-SCRIPTS](MANUAL-SCRIPTS.md) | [automacao/](automacao/README.md) |
-| **Índice capítulo a capítulo** | [MANUAL-DO-CURSO.md](MANUAL-DO-CURSO.md) | raiz |
+| **Automação** (instalar / backup / atualizar) | [7](#trilha-linear) · [MANUAL-SCRIPTS](meta/MANUAL-SCRIPTS.md) | [automacao/](automacao/README.md) |
+| **Índice capítulo a capítulo** | [MANUAL-DO-CURSO.md](meta/MANUAL-DO-CURSO.md) | raiz |
 
 ---
 
@@ -221,7 +221,7 @@ Para quem quer **mão na massa** com o mínimo de teoria — **depois** dos pass
 
 > **~35–40%** dos comandos repetíveis têm script; rituais de custódia (seed em papel, USB frio, assinar offline) são **humanos** — os scripts `qa-confirm-*` só registram confirmações **sem** gravar segredos.
 
-**Manual completo (novato):** [MANUAL-SCRIPTS.md](MANUAL-SCRIPTS.md) — o que cada script faz, flags (`--boot`, `--feather`, …), quando rodar e o que acontece se executar 2×.
+**Manual completo (novato):** [MANUAL-SCRIPTS.md](meta/MANUAL-SCRIPTS.md) — o que cada script faz, flags (`--boot`, `--feather`, …), quando rodar e o que acontece se executar 2×.
 
 Detalhe técnico: [automacao/tails/README.md](automacao/tails/README.md) · [automacao/whonix-host](automacao/whonix-host/README.md) · [matriz passo×script](trilha/referencia/scripts-matriz.md).
 
@@ -302,5 +302,5 @@ Use **depois** dos passos 1–12 se quiser cofres, PGP air-gap, backup off-site 
 
 ## Licença
 
-- **Scripts** (`*.sh`, `*.desktop`): **MIT** — [`LICENSE`](LICENSE).
-- **Documentação:** **CC BY-SA 4.0** — [`LICENSE-DOCS.md`](LICENSE-DOCS.md).
+- **Scripts** (`*.sh`, `*.desktop`): **MIT** — [`LICENSE`](meta/LICENSE).
+- **Documentação:** **CC BY-SA 4.0** — [`LICENSE-DOCS.md`](meta/LICENSE-DOCS.md).

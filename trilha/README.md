@@ -40,10 +40,10 @@ trilha/
 | Arquivo | Função |
 |---------|--------|
 | [README.md](../README.md) | Porta única · trilha 1–12 |
-| [MANUAL-SCRIPTS.md](../MANUAL-SCRIPTS.md) | Automação para novato |
-| [MANUAL-EXPERT.md](../MANUAL-EXPERT.md) | Mapa compacto expert |
-| [MANUAL-DO-CURSO.md](../MANUAL-DO-CURSO.md) | Índice capítulo a capítulo |
-| [MANIFESTO.md](../MANIFESTO.md) | Princípios pedagógicos |
+| [MANUAL-SCRIPTS.md](../meta/MANUAL-SCRIPTS.md) | Automação para novato |
+| [MANUAL-EXPERT.md](../meta/MANUAL-EXPERT.md) | Mapa compacto expert |
+| [MANUAL-DO-CURSO.md](../meta/MANUAL-DO-CURSO.md) | Índice capítulo a capítulo |
+| [MANIFESTO.md](../meta/MANIFESTO.md) | Princípios pedagógicos |
 
 ---
 

@@ -26,7 +26,7 @@ Material do curso **Haveno no Tails OS**. Este README é o **zoom** do Módulo 1
 |-------|------|
 | Volume I | [Curso-Tails-OS-Expert.md](Curso-Tails-OS-Expert.md) · [Playbooks](Playbooks/Playbooks.md) |
 | Volume II | [Expansao-Curso/](Expansao-Curso/Curso-Rede-Descentralizada-Extensao.md) · [Playbooks Vol II](Expansao-Curso/Playbooks-Rede-Descentralizada.md) |
-| Índice completo (opcional) | [MANUAL-DO-CURSO.md](../../MANUAL-DO-CURSO.md) |
+| Índice completo (opcional) | [MANUAL-DO-CURSO.md](../../meta/MANUAL-DO-CURSO.md) |
 
 ## Estrutura da pasta
 

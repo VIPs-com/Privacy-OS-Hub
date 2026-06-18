@@ -26,7 +26,7 @@
 | Livro | [Scripts — ciclo de uso](../../automacao/tails/README.md) |
 | Processo | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
 | Comandos | [P07](../../processos/m1-tor/P07-rotina-scripts.md) |
-| Manual | [MANUAL-SCRIPTS.md](../../MANUAL-SCRIPTS.md) |
+| Manual | [MANUAL-SCRIPTS.md](../../meta/MANUAL-SCRIPTS.md) |
 | Diagrama | [FIG-1](../mapa-modos/diagrama-mestre.md) |
 | Matriz | [scripts-matriz.md](../referencia/scripts-matriz.md) |
 
