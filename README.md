@@ -34,15 +34,26 @@ Tudo em um único arquivo: passos 1–12 completos, comandos, checkpoints, apên
 
 ## O que você vai aprender (12 passos)
 
+```text
+PARTE 1 (1–7)                         PARTE 2 (8–12)
+┌─ Passos 1–3: Haveno 🟢 ─┐         Custódia fria 🔵
+│ 1 Tails → 2 Verde → 3   │  ───►   8–12 · Trilha A ou B
+└─ Passos 4–7: Pré-M2 🟡 ─┘
+  4 seed · 5 Feather · 6–7 rotina
+```
+
 | # | Passo | Ferramenta | Resultado |
 |:-:|-------|-----------|-----------|
+| | **Passos 1–3 — Núcleo Haveno** | | |
 | 1 | Bootstrap Tails | Tails Installer | USB pronto · Tor ativo · Persistência |
 | 2 | Haveno Verde | Haveno 1.6.0-reto | Indicador ● VERDE |
 | 3 | Cautela pré-trade | — | Regras e golpes internalizados |
+| | **Passos 4–7 — Pré-M2** | | |
 | 4 | Backup Seed | haveno-backup.sh | Seed em papel + backup cifrado |
 | 5 | Feather Wallet | Feather AppImage | Carteira verificada por PGP |
 | 6 | Folheto | — | Regras de ouro impressas |
 | 7 | Rotina de scripts | haveno-setup.sh | Boot automatizado em < 5 min |
+| | **Passos 8–12 — Custódia fria** | | |
 | 8 | Porteiro: Trilha A ou B | — | Trilha escolhida conscientemente |
 | 9 | Ritual Seed | qa-confirm-passo9.sh | 2 cópias físicas em locais separados |
 | 10 | Whonix + PGP | VirtualBox/KVM | "Tor Connected" no Workstation |

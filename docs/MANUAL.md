@@ -50,8 +50,9 @@ Erros comuns: **Apêndice B** do canônico. Catálogo de scripts: **Apêndice A*
 
 | Passo | Foco |
 |:-----:|------|
-| 1–7 | Tails + Haveno verde + Feather + rotina |
-| 8–12 | Custódia fria (Whonix + cold-signing) |
+| **1–3** | Núcleo Haveno: Tails (1) → verde (2) → pré-trade (3) |
+| **4–7** | Pré-M2: seed · Feather · folheto · rotina `--boot` |
+| **8–12** | Custódia fria (Whonix + cold-signing) |
 
 Pré-req passo 8: passos 1–7 (Feather no 5). Passo 9: Tor OK. Passo 12: **air-gap** (sem rede).
 

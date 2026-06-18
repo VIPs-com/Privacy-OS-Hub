@@ -81,11 +81,34 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
               ┌───────────────┴───────────────┐
               ▼                               ▼
      ┌─────────────────┐           ┌─────────────────┐
-     │  PASSOS 1–7     │           │  PASSOS 8–12    │
-     │  Tails + Haveno │  ──────►  │  Custódia Fria  │
-     │  🟢 Padrão      │           │  🔵 Expert      │
-     └─────────────────┘           └────────┬────────┘
-                                            │
+     │   PARTE 1       │           │   PARTE 2       │
+     │   Passos 1–7    │  ──────►  │   Passos 8–12   │
+     │   🟢 Padrão     │           │   🔵 Custódia   │
+     └────────┬────────┘           └────────┬────────┘
+              │                             │
+     ┌────────┴────────┐                    │
+     ▼                 ▼                    ▼
+┌──────────────┐  ┌──────────────┐   (Trilhas A/B
+│ PASSOS 1–3   │  │ PASSOS 4–7   │    passo 12)
+│ Haveno       │  │ Pré-M2       │
+│ 🟢 Núcleo    │  │ Feather+seed │
+└──────┬───────┘  └──────┬───────┘
+       │                 │
+       │  1 Tails        │  4 Backup seed
+       │  2 ● VERDE      │  5 Feather PGP
+       │  3 Pré-trade    │  6 Folheto
+       │                 │  7 Rotina --boot
+       └────────┬────────┘
+                ▼
+         🏁 CHECKPOINT 1
+                │
+                ▼
+     ┌─────────────────┐
+     │  PASSOS 8–12    │
+     │  Custódia Fria  │
+     │  🔵 Expert      │
+     └────────┬────────┘
+              │
                           ┌─────────────────┴─────────────────┐
                           ▼                                     ▼
                ┌────────────────────┐               ┌────────────────────┐
@@ -96,6 +119,14 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
                  Passo 12A                             Passo 12B
                  (escolha UMA — nunca misture)
 ```
+
+| Faixa | Passos | Foco |
+|-------|--------|------|
+| **Núcleo Haveno** | **1–3** | Tails (1) → Haveno verde (2) → cautela pré-trade (3) |
+| **Pré-M2** | **4–7** | Seed · Feather · folheto · rotina `haveno-setup.sh --boot` |
+| **Custódia fria** | **8–12** | Whonix · air-gap · cold-signing (trilha A ou B) |
+
+📎 **Passos 2–3** são o bloco “somente Haveno” (instalar + regras). O **passo 1** é pré-requisito Tails; **4–7** preparam o M2 sem ser só instalação.
 
 ### ⚖️ Manifesto (7 princípios)
 
@@ -140,7 +171,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 | **Signed tx** | Transação assinada (fria) pronta para transmitir |
 | **Trilha A** | Cold-signing com Feather GUI (recomendado) |
 | **Trilha B** | Cold-signing com monero-wallet-cli (avançado) |
-| **M1** | Módulo 1: Tails + Haveno (passos 1–7) |
+| **M1** | Módulo 1: Haveno (passos 1–7) — núcleo 1–3 · pré-M2 4–7 |
 | **M2** | Módulo 2: Whonix + Custódia fria (passos 8–12) |
 
 ### 🚨 12 Regras de Ouro da Custódia Monero
@@ -1745,7 +1776,7 @@ Ela instala um ajuste **temporário de sessão** (o `sudo` guarda a senha até o
 | **Persistência** | Armazenamento criptografado no USB do Tails | 1 |
 | **Trilha A** | Cold-signing com Feather GUI (recomendado) | 12 |
 | **Trilha B** | Cold-signing com monero-wallet-cli (avançado) | 12 |
-| **M1** | Módulo 1: Tails + Haveno (passos 1–7) | 1–7 |
+| **M1** | Módulo 1: Haveno (passos 1–7) — núcleo 1–3 · pré-M2 4–7 | 1–7 |
 | **M2** | Módulo 2: Whonix + Custódia fria (passos 8–12) | 8–12 |
 | **home lab** | Infraestrutura opcional em Debian/Ubuntu (nó, mineração) | Opcional |
 | **KYC** | Know Your Customer — verificação de identidade (evitar) | 6 |
