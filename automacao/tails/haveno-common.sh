@@ -287,6 +287,8 @@ haveno_sig_valid_format() {
 
 # Remove .deb/.part minusculos (erro HTML) que fazem wget -c travar em .download/.
 # Remove .sig invalida (< 60 B ou sem magic PGP). Mantem parciais de .deb >= 1 MiB.
+# NOTA: *.sig EXCLUIDO do loop de .deb — o padrao *.deb.* casava com *.deb.sig
+# (119 B) e apagava a assinatura valida como "lixo" (DIV-20260618-01).
 haveno_purge_poisoned_partial_debs() {
   local expected="${1:-0}" dir f s
   shift || true
@@ -306,7 +308,7 @@ haveno_purge_poisoned_partial_debs() {
       elif [ "${expected:-0}" -gt 0 ] 2>/dev/null && [ "${s:-0}" -ge "${expected}" ]; then
         : # completo
       fi
-    done < <(find "$dir" -maxdepth 1 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -type f -print0 2>/dev/null)
+    done < <(find "$dir" -maxdepth 1 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) ! -name '*.sig' -type f -print0 2>/dev/null)
     while IFS= read -r -d '' f; do
       s="$(stat -c%s "$f" 2>/dev/null || echo 0)"
       if [ "${s:-0}" -lt "${HAVENO_SIG_MIN_BYTES}" ]; then
@@ -474,11 +476,26 @@ haveno_run_upstream_install_deb() {
   fi
   if [ "$install_rc" -ne 0 ]; then
     if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
-      y "  haveno-install.sh falhou apos o .deb completo — tentando verificar PGP localmente..."
-      haveno_purge_poisoned_partial_debs "${expected:-0}" "."
-      haveno_predownload_sig "$deb_url"
-      if haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"; then
-        install_rc=0
+      local _deb_now
+      _deb_now="$(stat -c%s "./${deb_basename}" 2>/dev/null || echo 0)"
+      # .deb parcial: upstream baixou mas falhou antes do fim (ex.: circuito Tor
+      # substituido). Se o esperado e maior que o recebido e App/utils/ ja existe
+      # (criado pelo upstream), retoma com hub (curl -C-) antes de tentar PGP.
+      if [ "${expected:-0}" -gt 0 ] 2>/dev/null && [ "$_deb_now" -lt "$expected" ] \
+          && [ -d "$UTILS_DIR" ]; then
+        y "  .deb parcial ($(haveno_fmt_bytes "$_deb_now") de $(haveno_fmt_bytes "$expected")) — retomando via hub (curl resume)..."
+        if haveno_hub_download_and_promote_deb "$deb_url" "$pgp_fpr" "$expected"; then
+          return 0
+        fi
+      fi
+      # .deb parece completo (ou sem tamanho esperado): tentar PGP localmente.
+      if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
+        y "  haveno-install.sh falhou apos o .deb completo — tentando verificar PGP localmente..."
+        haveno_purge_poisoned_partial_debs "${expected:-0}" "."
+        haveno_predownload_sig "$deb_url"
+        if haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"; then
+          install_rc=0
+        fi
       fi
     fi
   fi

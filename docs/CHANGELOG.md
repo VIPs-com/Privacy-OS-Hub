@@ -4,6 +4,19 @@
 
 ---
 
+## 2026-06-18 — Fix download: `.sig` apagada como lixo + retomada `.deb` parcial (DIV-20260618-01)
+
+**Campo:** `02-haveno-auto-20260618-074604.txt` — upstream `haveno-install.sh` falhou com `Failed to download Haveno binary` após ~210 MiB (circuito Tor substituído). Dois bugs encadeados impediram a recuperação automática.
+
+| Bug | Localização | Causa | Fix |
+|-----|-------------|-------|-----|
+| **DIV-20260618-01a** | `haveno_purge_poisoned_partial_debs` | Padrão `*.deb.*` casava com `*.deb.sig` (119 B) → apagado como "lixo" | `! -name '*.sig'` excluído do `find` do primeiro loop |
+| **DIV-20260618-01b** | `haveno_run_upstream_install_deb` (fallback) | `.deb` parcial (> 100 MiB min) passava `haveno_deb_size_ok` mas era incompleto → PGP falhava | Detecta `size < expected` → retoma via `haveno_hub_download_and_promote_deb` (curl `-C-`) antes de tentar PGP; `App/utils/` já existe neste ponto |
+
+> **Nota:** o `.sig` deletado era re-baixado imediatamente pelo `haveno_predownload_sig`, mas a verificação falhava porque o `.deb` estava incompleto, não por causa do `.sig`. O fix correto combina os dois: não apagar o `.sig` válido E retomar o `.deb` antes de verificar.
+
+---
+
 ## 2026-06-18 — Fix validação `.sig`: aceitar assinatura PGP binária (Ed25519)
 
 **Commit:** `8729b58`
