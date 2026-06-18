@@ -173,21 +173,151 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 
 ## 🗺️ 1. MAPA DO CURSO (VISÃO GERAL)
 
-| Passo | Nome | Ferramenta | Rede | Tempo estimado |
-|:-----:|------|-----------|:----:|:--------------:|
-| 1 | Bootstrap Tails | Tails Installer | Tor | 1–2h (gravação + boot) |
-| 2 | Haveno Verde | Haveno 1.6.0-reto | Tor | 30–90 min (download) |
-| 3 | Pré-trade (segurança) | — | Tor | 15 min (leitura) |
-| 4 | Backup Seed | Scripts hub | Tor | 20 min |
-| 5 | Feather Wallet | Feather AppImage | Tor | 30 min |
-| 6 | Folheto (imprimir) | — | — | 10 min |
-| 7 | Rotina Scripts | haveno-setup.sh | Tor | 5 min/sessão |
-| 8 | Porteiro: Trilha A ou B? | — | — | 10 min |
-| 9 | Ritual Seed (2× físicas) | qa-confirm-passo9.sh | Tor OK | 20 min |
-| 10 | Whonix PGP + Import | VirtualBox/KVM | Host | 1–2h |
-| 11 | Modelo Frio-Quente (teoria) | — | — | 20 min (leitura) |
-| 12A | Feather Offline (Trilha A) | Feather (frio + quente) | Air-gap | 30–60 min |
-| 12B | CLI Offline (Trilha B) | monero-wallet-cli | Air-gap | 30–60 min |
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│          🛡️ Privacy-OS-Hub – VERSÃO 1.0 (canônica)                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+│
+├── 📌 0. ONBOARDING (O que você vê antes de começar)
+│   ├── 🎓 Carta do Professor/Mantenedor
+│   ├── 🎯 Resultados Esperados (12 passos → habilidade + nível)
+│   ├── 👤 Perfil do Aluno & Pré-requisitos
+│   ├── 🛠️ Checklist de Ferramentas (Tails · Haveno · Feather · Whonix)
+│   ├── 🎯 Escolha seu Caminho (Trilha A: Feather GUI × Trilha B: CLI)
+│   ├── ⚖️ Manifesto (7 princípios)
+│   ├── 📖 Glossário Rápido (1 minuto)
+│   └── 🚨 12 Regras de Ouro da Custódia Monero
+│
+├── 🗺️ 1. MAPA DO CURSO (Você está aqui)
+│
+├── 🔴🟡🟢🔵 LEGENDA DE CORES
+│
+├── 🟢 PARTE 1 — TAILS + HAVENO (Passos 1–7) · 3–6h total
+│   │
+│   ├── 📋 PASSO 1 — Bootstrap Tails (USB · Tor · Persistência · Admin)
+│   │   ├── ▸ COMANDO 1.1: verificar hash do Tails ISO
+│   │   ├── ▸ COMANDO 1.2: gravar USB (balenaEtcher / dd)
+│   │   ├── ▸ COMANDO 1.3: boot Tails + conectar ao Tor
+│   │   ├── ▸ COMANDO 1.4: ativar Persistência + Dotfiles
+│   │   ├── ▸ COMANDO 1.5: habilitar senha de Admin
+│   │   └── ✅ OK SE: Tails iniciado · Tor ativo · Persistência verde
+│   │
+│   ├── 📋 PASSO 2 — Haveno Verde
+│   │   ├── ▸ COMANDO 2.1: baixar .deb + .sig via Tor
+│   │   ├── ▸ COMANDO 2.2: verificar PGP (fail-closed · FPR inline)
+│   │   ├── ▸ COMANDO 2.3: instalar via haveno-auto.sh
+│   │   ├── ▸ COMANDO 2.4: iniciar Haveno e aguardar sincronização
+│   │   └── ✅ OK SE: indicador de rede ● VERDE
+│   │
+│   ├── 📋 PASSO 3 — Cautela Pré-trade
+│   │   ├── 📎 Exploit corrigido na 1.6.0-reto (PR #2315)
+│   │   ├── 📎 Regras: instalar ≠ tradear · valores mínimos · sem KYC/agregadores
+│   │   ├── 📎 TOP golpes no Haveno (11 tipos documentados)
+│   │   └── ✅ OK SE: regras lidas + compreendidas
+│   │
+│   ├── 📋 PASSO 4 — Backup Seed
+│   │   ├── ▸ COMANDO 4.1: backup cifrado da Data/ (haveno-backup.sh)
+│   │   ├── ▸ COMANDO 4.2: seed em papel (qa-confirm-seed-papel.sh)
+│   │   ├── 🔴 NUNCA: seed em arquivo digital, foto, nuvem ou e-mail
+│   │   └── ✅ OK SE: seed física legível + backup cifrado em pendrive separado
+│   │
+│   ├── 📋 PASSO 5 — Feather Wallet (obrigatório para M2)
+│   │   ├── ▸ COMANDO 5.1: baixar AppImage + assinatura via Tor
+│   │   ├── ▸ COMANDO 5.2: feather-install-verify.sh (PGP fail-closed)
+│   │   ├── ▸ COMANDO 5.3: primeira execução + backup wallets/
+│   │   └── ✅ OK SE: Feather abre · "Good signature" · backup feito
+│   │
+│   ├── 📋 PASSO 6 — Folheto: Regras de Ouro e Golpes
+│   │   ├── 📎 Regras de ouro impressas (ou lidas integralmente)
+│   │   ├── 📎 Golpes mais comuns: chargeback, mediação falsa, phishing
+│   │   └── ✅ OK SE: folheto impresso ou lido + em local acessível
+│   │
+│   ├── 📋 PASSO 7 — Rotina de Scripts (cada sessão)
+│   │   ├── ▸ COMANDO 7.1: haveno-setup.sh --boot (a cada boot)
+│   │   ├── ▸ COMANDO 7.2: haveno-setup.sh --feather (Feather + Haveno)
+│   │   ├── ▸ COMANDO 7.3: haveno-setup.sh --update (atualizar versão)
+│   │   ├── 📎 sync-hub-scripts.sh: sincronizar scripts para ~/Persistent/
+│   │   ├── 📎 tails-preflight.sh: validar ambiente antes de automatizar
+│   │   └── ✅ OK SE: Haveno verde em < 5 min após boot
+│   │
+│   └── 🏁 CHECKPOINT 1 — Haveno Verde + Seed Salva
+│       ├── ✅ Tails 7.8.1+ · Tor ativo · Persistência configurada
+│       ├── ✅ Haveno ● VERDE · .deb verificado por PGP
+│       ├── ✅ Seed em papel (2 vias) · backup cifrado em pendrive
+│       └── ✅ Feather instalado e verificado · scripts em ~/Persistent/
+│
+├── 🔵 PARTE 2 — CUSTÓDIA FRIA (Passos 8–12) · 3–5h total
+│   │
+│   ├── 📋 PASSO 8 — Porteiro: Trilha A ou B?
+│   │   ├── 🟢 TRILHA A — Feather GUI (padrão · recomendado para maioria)
+│   │   ├── 🔵 TRILHA B — monero-wallet-cli (avançado · mais controle)
+│   │   ├── 📎 Diferença: GUI vs terminal · mesma segurança air-gap
+│   │   └── ✅ OK SE: trilha escolhida conscientemente (pode trocar depois)
+│   │
+│   ├── 📋 PASSO 9 — Ritual Seed (2× Cópias Físicas)
+│   │   ├── ▸ COMANDO 9.1: qa-confirm-passo9.sh (validação ritual completa)
+│   │   ├── 📎 Regra inviolável: 2 cópias · 2 locais físicos separados
+│   │   ├── 📎 Tor OK neste passo (ainda online)
+│   │   └── ✅ OK SE: qa-confirm-passo9.sh → PASS
+│   │
+│   ├── 📋 PASSO 10 — Whonix PGP + Import VMs
+│   │   ├── ▸ COMANDO 10.1: baixar Whonix-LXQt-18.1.4.2.ova + .asc
+│   │   ├── ▸ COMANDO 10.2: whonix-verify-image.sh --qa-log (fail-closed)
+│   │   ├── ▸ COMANDO 10.3: import .ova no VirtualBox ou KVM
+│   │   ├── ▸ COMANDO 10.4: iniciar Gateway → Workstation
+│   │   ├── 📎 FPR Whonix: 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
+│   │   └── ✅ OK SE: "Tor Connected" no Whonix Workstation
+│   │
+│   ├── 📋 PASSO 11 — Modelo Frio-Quente (teoria)
+│   │   ├── 📎 Cold = Tails sem rede (assinar) · Hot = Whonix online (transmitir)
+│   │   ├── 📎 Fluxo: criar tx offline → exportar → importar → transmitir
+│   │   ├── 📎 Air-gap é o padrão · hardware wallet = opcional/custo extra
+│   │   └── ✅ OK SE: diagrama frio↔quente internalizado
+│   │
+│   ├── 📋 PASSO 12A — Feather Offline (Trilha A — padrão)
+│   │   ├── ▸ COMANDO 12A.1: Tails sem rede + abrir Feather (modo frio)
+│   │   ├── ▸ COMANDO 12A.2: criar ou importar carteira offline
+│   │   ├── ▸ COMANDO 12A.3: construir + assinar transação (TXID pendente)
+│   │   ├── ▸ COMANDO 12A.4: exportar tx assinada → pendrive USB
+│   │   ├── ▸ COMANDO 12A.5: importar pendrive no Whonix (hot) + broadcast
+│   │   └── ✅ OK SE: qa-confirm-passo12.sh PASS · tx confirmada na rede
+│   │
+│   ├── 📋 PASSO 12B — CLI Offline (Trilha B — avançado)
+│   │   ├── ▸ COMANDO 12B.1: monero-wallet-cli --offline (Tails sem rede)
+│   │   ├── ▸ COMANDO 12B.2: gerar tx + export_outputs + sign_transfer
+│   │   ├── ▸ COMANDO 12B.3: exportar arquivo assinado → pendrive
+│   │   ├── ▸ COMANDO 12B.4: submit_transfer via Whonix (hot)
+│   │   └── ✅ OK SE: tx submetida · saldo atualizado no Whonix
+│   │
+│   └── 🏁 CHECKPOINT 2 — Cold-Signing ao Vivo
+│       ├── ✅ Tails offline (sem rede) · carteira aberta · tx assinada
+│       ├── ✅ Transmissão confirmada via Whonix (hot)
+│       ├── ✅ qa-confirm-passo12.sh → PASS
+│       └── ✅ Modelo frio↔quente executado do início ao fim
+│
+└── 📚 APÊNDICES
+    │
+    ├── APÊNDICE A — Scripts: Catálogo Completo (15+ scripts)
+    │   └── haveno-setup.sh · haveno-auto.sh · haveno-boot.sh · feather-install-verify.sh · …
+    │
+    ├── APÊNDICE B — Erros Comuns (TOP 10)
+    │
+    ├── APÊNDICE C — Fingerprints Oficiais (inline · sem links externos)
+    │   ├── RetoSwap : DAA24D878B8D36C90120A897CA02DAC12DAE2D0F
+    │   ├── Feather  : 8185E158A33330C7FD61BC0D1F76E155CEFBA71C
+    │   └── Whonix   : 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
+    │
+    ├── APÊNDICE D — Glossário Completo
+    ├── APÊNDICE E — Instalar Whonix por SO (Windows · macOS · Linux)
+    ├── APÊNDICE F — Trades Hands-on (Rede Descentralizada — resumo)
+    ├── Anexo (mantenedor): orientações editoriais
+    └── 🏁 CONCLUSÃO
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        ROADMAP 2025–2030                                    │
+│             (Cronograma de Evolução do Privacy-OS-Hub)                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
 ## 🔴🟡🟢🔵 LEGENDA DE CORES
 
@@ -1686,6 +1816,47 @@ Rede de terceiros (Reto):
 - Em trade normal: você + contraparte (árbitro não entra)
 - Em disputa: você ou contraparte + árbitro decide
 - O árbitro **nunca** pede sua seed — age apenas dentro do app
+
+---
+
+## 📅 ROADMAP 2025–2030
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        ROADMAP 2025–2030                                    │
+│             (Cronograma de Evolução do Privacy-OS-Hub)                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+  2025                2026                2027–2028           2029–2030
+   │                   │                   │                   │
+   ▼                   ▼                   ▼                   ▼
+┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────────┐
+│  v1 base │      │ v2 beta  │      │   v2.1   │      │     v3.0     │
+│          │      │          │      │          │      │              │
+│ • M1     │  →   │ • M1+M2  │  →   │ • Serenó │  →   │ • Haveno 2.x │
+│   Tails  │      │ • trilha │      │   funds  │      │ • Post-      │
+│   Haveno │      │   1–12   │      │ • HW     │      │   quantum    │
+│          │      │ • scripts│      │   wallet │      │   Monero     │
+│          │      │   QA     │      │   docs   │      │ • Tails next │
+└──────────┘      └──────────┘      └──────────┘      └──────────────┘
+                       ↑
+               [VOCÊ ESTÁ AQUI]
+               Versão 1.0 · jun/2026
+```
+
+| Horizonte | Item | Status | Impacto |
+|-----------|------|:------:|:-------:|
+| **2026 Q3** | Screenshots reais PI-8 (Haveno UI no Tails) | 🟡 Pendente | Didático |
+| **2026 Q3** | Screenshots reais PI-1 (Whonix no repo público) | 🟡 Pendente | Didático |
+| **2026 Q3** | Piloto campo Nível B+ (trilha 1–12 + HW wallet) | 🟡 Em andamento | Validação |
+| **2026 Q4** | v2.0.0 estável (tag após B+ PASS) | 🔵 Planejado | Release |
+| **2027** | Serenó Funds (custódia institucional Monero) | 🔵 Acompanhar | Expansão |
+| **2027** | Hardware wallet — YubiKey / Ledger docs | 🔵 Planejado | Opcional |
+| **2028** | Haveno 2.x (nova versão upstream) | ⚫ Horizonte | Upgrade |
+| **2028–2030** | Monero pós-quântico (FCMP++, Seraphis) | ⚫ Horizonte | Protocolo |
+| **2030** | Privacy-OS-Hub v3.0 (novo baseline) | ⚫ Horizonte | Reescrita |
+
+> **⚫ Horizonte:** planejado para longo prazo ou dependente de upstream — não bloqueia o curso atual.
 
 ---
 
