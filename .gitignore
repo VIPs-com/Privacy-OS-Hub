@@ -5,7 +5,7 @@ CLAUDE.md
 Auditoria/
 
 # --- Doc interna equipe dev · prefixo do repo evita colisão em backups mistos ---
-Privacy-OS-Hub-equipe-dev/
+Hub-equipe-dev/
 
 # --- Agentes internos Claude Code (ficam só no disco local) ---
 agents/
