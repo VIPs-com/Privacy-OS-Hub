@@ -182,6 +182,43 @@ sudo systemctl restart monerod
 
 ---
 
+### Alternativa — nó em Docker (opcional)
+
+Se você prefere containers em vez de systemd, é possível rodar o nó com **docker compose**. Crie `docker-compose.yml`:
+
+```yaml
+services:
+  monerod:
+    image: sethsimmons/simple-monerod:latest   # imagem comunitária popular
+    container_name: monerod
+    restart: unless-stopped
+    volumes:
+      - bitmonero:/home/monero                 # blockchain persistente (use um SSD)
+    ports:
+      - "18080:18080"                          # P2P
+      - "127.0.0.1:18089:18089"                # RPC restrito só local (Tor publica)
+    command: >
+      --prune-blockchain --sync-pruned-blocks
+      --rpc-restricted-bind-ip=0.0.0.0 --rpc-restricted-bind-port=18089
+      --no-igd --enable-dns-blocklist
+
+volumes:
+  bitmonero:
+```
+
+```bash
+docker compose up -d        # sobe o nó
+docker compose logs -f      # acompanha o sync
+```
+
+📎 **Para nó full** (necessário para P2Pool/mineração), remova `--prune-blockchain --sync-pruned-blocks`. O `torrc` do passo HL-2 continua igual — aponta para `127.0.0.1:18089`.
+
+📎 **Sobre `0.0.0.0` no compose:** dentro do container, `0.0.0.0` significa "todas as interfaces do container" — o que restringe ao host é o mapeamento `ports: 127.0.0.1:18089:18089`. Para fora, quem publica o RPC é só o hidden service Tor (passo HL-2).
+
+🟡 **Docker vs. systemd:** o script automático (`01-setup-monero-node.sh`) usa systemd. O compose é para quem já administra containers e prefere essa abordagem. Ambos resultam no mesmo serviço.
+
+---
+
 ## PASSO HL-2 — Tor Hidden Service (publicar o nó via Tor)
 
 **Requer root. Pré-requisito: monerod rodando (HL-1).**
@@ -255,6 +292,56 @@ sudo MINI=0 WALLET=4xxxx... ./03-setup-p2pool.sh
 
 ---
 
+### Flags do monerod necessárias para P2Pool
+
+O script `01-setup-monero-node.sh` com `PRUNED=0` injeta essas flags automaticamente. Se você instalou o monerod manualmente ou quer ajustar, estas são as flags exigidas pelo P2Pool (adicione ao `ExecStart` do serviço ou ao `monerod.conf`):
+
+```text
+--zmq-pub tcp://127.0.0.1:18083
+--out-peers 32 --in-peers 64
+--add-priority-node=p2pmd.xmrvsbeast.com:18080
+--add-priority-node=nodes.hashvault.pro:18080
+--enable-dns-blocklist --enforce-dns-checkpointing
+--rpc-bind-ip=127.0.0.1 --rpc-bind-port=18081
+```
+
+📎 Se sua banda de **upload** for menor que 10 Mbit, troque `--out-peers 32 --in-peers 64` por `--out-peers 8 --in-peers 16`. O P2Pool conversa com o monerod pelo RPC local **18081** e pelo **ZMQ 18083**.
+
+---
+
+### Unit systemd p2pool.service (referência manual)
+
+O script `03-setup-p2pool.sh` cria o serviço automaticamente. Se precisar criar ou ajustar manualmente, crie `/etc/systemd/system/p2pool.service`:
+
+```ini
+[Unit]
+Description=P2Pool (Monero)
+After=monerod.service
+Wants=monerod.service
+
+[Service]
+User=monero
+Group=monero
+Type=simple
+WorkingDirectory=/var/lib/p2pool
+ExecStart=/usr/local/bin/p2pool --host 127.0.0.1 --rpc-port 18081 --zmq-port 18083 --wallet SEU_ENDERECO_PRIMARIO_4xxxxx --mini
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+```
+
+🔴 **SUBSTITUA** `SEU_ENDERECO_PRIMARIO_4xxxxx` pelo seu endereço Monero **primário** (começa com `4`). O `--mini` usa a sidechain p2pool-mini (ideal para PC doméstico com hashrate menor).
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now p2pool
+journalctl -u p2pool -f       # aguarde a sincronização do P2Pool
+```
+
+---
+
 ### Verificação de binário (fail-closed)
 
 O P2Pool publica a lista de hashes como arquivo assinado (`sha256sums.txt.asc`). O script:
@@ -323,6 +410,44 @@ sudo STRATUM=127.0.0.1:3333 ./04-setup-xmrig.sh
 9AC4 CEA8 E66E 35A5 C7CD  DC1B 446A 5363 8BE9 4409
 ```
 Fonte: https://xmrig.com/docs/gpg-key
+
+---
+
+### Unit systemd xmrig.service (referência manual)
+
+O script `04-setup-xmrig.sh` cria o serviço automaticamente. Se precisar criar ou ajustar manualmente, crie `/etc/systemd/system/xmrig.service`:
+
+```ini
+[Unit]
+Description=xmrig (minerador RandomX)
+After=p2pool.service
+Wants=p2pool.service
+
+[Service]
+User=monero
+Group=monero
+Type=simple
+ExecStart=/usr/local/bin/xmrig -o 127.0.0.1:3333 -u x --no-color
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
+```
+
+| Campo | Explicação |
+|-------|------------|
+| `-o 127.0.0.1:3333` | Conecta ao stratum do P2Pool local |
+| `-u x` | Usuário qualquer — o endereço do xmrig é ignorado; quem paga é o `--wallet` do P2Pool |
+| (opcional) `-u x+50000` | Define dificuldade fixa só para estatísticas (não muda recompensa) |
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now xmrig
+journalctl -u xmrig -f        # deve mostrar "accepted" shares
+```
+
+📎 **Tuning (opcional):** para máximo hashrate o xmrig recomenda **hugepages** e ajustes de **MSR** (precisam de root). Sem isso ele minera igual, só um pouco mais devagar.
 
 ---
 

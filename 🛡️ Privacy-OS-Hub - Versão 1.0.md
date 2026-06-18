@@ -1598,6 +1598,103 @@ O fingerprint `916B8D99…2EEACCDA` não mudou — só reimporte.
 
 ---
 
+#### 11. `install.sh` falhou — dependências do `.deb` (`não tem candidato para instalação`)
+
+**Causa (validada em campo jun/2026):** o `.deb` do haveno-reto **1.6.0** declara dependências com **nomes de bibliotecas do Ubuntu** — no Debian 13 do Tails esses pacotes não existem com esses nomes (`libicu74`, `libavcodec60`, `libjpeg-turbo8`...). Não adianta tentar `apt-get install libicu74` — vai falhar sempre. Não é problema do seu Tor nem do Tails.
+
+**Por que funciona mesmo assim:** o app embute o próprio runtime (Java/JavaFX); as libs declaradas não fazem falta na prática.
+
+**Correção automática (scripts atualizados):** o hub instala só o que existe no Tails e aplica `--force-depends` para os nomes Ubuntu-only. Você não precisa fazer nada — rode `./sync-hub-scripts.sh` se ainda não fez.
+
+**Recuperação manual** (apenas se os scripts não estiverem disponíveis):
+
+```bash
+sudo apt-get update
+sudo dpkg -i --force-depends ~/Persistent/haveno/Install/haveno.deb
+sudo ~/Persistent/haveno/App/utils/install.sh
+```
+
+🔴 **NUNCA rode `sudo apt-get install -f` com o Haveno desconfigurado** — propõe remover o Haveno em vez de consertar.
+
+📎 Cada sessão re-registra o `.deb` (rápido, sem novo download — o `.deb` de 264 MB fica em `Install/`). A carteira em `Data/` nunca é reinstalada.
+
+---
+
+#### 12. `torControlCookieFile ... is not readable` (Haveno fecha na hora)
+
+**Causa:** o `chmod o+r` no cookie do Tor se perde a **cada boot** (Tails é amnésico). Sem leitura no cookie, o Haveno aborta antes de abrir a janela.
+
+Sintoma em `/tmp/haveno-exec.log`:
+```text
+haveno.common.config.ConfigException: problem parsing option 'torControlCookieFile':
+File [/var/run/tor/control.authcookie] is not readable
+```
+
+**Correção:**
+
+```bash
+sudo chmod o+r /var/run/tor/control.authcookie
+```
+
+📎 Os scripts do hub (atualizados em jun/2026) reaplicam esse `chmod` automaticamente em toda sessão, antes de abrir o Haveno.
+
+---
+
+#### 13. `Command filtered` — "A conexão com a rede do Haveno falhou" (1.6.0)
+
+**Causa (bug do instalador upstream 1.6.0):** o Haveno 1.6.0 passou a publicar o hidden service com parâmetros **PoW** (anti-DoS) no `ADD_ONION`, mas o `haveno.yml` que vem dentro do instalador só autoriza o comando sem esses parâmetros — o onion-grater (corretamente fail-closed) bloqueia.
+
+Sintoma em `journalctl -u onion-grater -b`:
+```text
+command filtered: ADD_ONION NEW:BEST PoWQueueBurst=100 PoWDefensesEnabled=1 PoWQueueRate=10 Port=9999,...
+```
+
+**Correção:**
+
+```bash
+sudo cp ~/Persistent/haveno-onion-grater.yml /etc/onion-grater.d/haveno.yml
+sudo systemctl restart onion-grater
+```
+
+Confirme `loaded filter: haveno` no journalctl e reabra o Haveno. O `sync-hub-scripts.sh` copia o filtro corrigido automaticamente.
+
+✅ OK SE: Haveno mostra *"Conectado a Mainnet de Monero (via Tor)"* + *"Nó da rede Tor criado"*.
+
+---
+
+#### 14. O Tails pede a senha de admin a cada comando — dá para digitar uma vez?
+
+**Não é bug — é proposital.** O Tails embarca `Defaults timestamp_timeout=0`, ou seja, o `sudo` nunca guarda a senha em cache. É uma proteção do Tails.
+
+🔴 **Não rode tudo como root:** criaria arquivos de root na persistência e abriria a carteira Haveno como root — perigoso.
+
+**Se quiser digitar a senha uma vez só**, todos os scripts aceitam a flag opcional **`--one-password`**:
+
+```bash
+~/Persistent/hub-scripts/haveno-setup.sh --one-password          # 1ª vez
+~/Persistent/hub-scripts/haveno-setup.sh --boot --one-password   # cada sessão
+```
+
+Ela instala um ajuste **temporário de sessão** (o `sudo` guarda a senha até o script terminar) e o **remove automaticamente no fim**. O Tails é amnésico — o ajuste some ao reiniciar.
+
+> ⚠️ **Trade-off:** enquanto o script roda, a proteção de pedir senha sempre fica afrouxada. É **opt-in** — sem a flag, o comportamento seguro padrão continua.
+
+---
+
+#### 15. Instalação aborta na verificação PGP (`No such file or directory` ou `Verification failed`)
+
+**Duas causas** (ambas no instalador upstream, corrigidas no hub em jun/2026):
+
+1. **Assinatura ausente:** o upstream baixa a `.sig` sem checar erro; se ela não chega, o gpg não tem o arquivo. **Correção:** scripts agora pré-baixam a `.sig` (fail-closed, pelo Tor) antes de chamar o instalador.
+
+2. **Locale:** o upstream procura `Good signature from` em inglês; num Tails em português o gpg responde *"Assinatura correta de…"* e o script diz `Verification failed` mesmo com assinatura boa. **Correção:** o hub roda o instalador com `LC_ALL=C`.
+
+**Solução:** rode `./sync-hub-scripts.sh` para ter os scripts atualizados. Se ainda assim falhar, confira a URL do release e o Tor — o `.deb` já baixado é retomado sem recomeçar.
+
+🔴 Nunca instale um `.deb` cujo `.sig` não foi verificado. O fluxo aborta de propósito (fail-closed).
+
+---
+
 ### APÊNDICE C — Fingerprints Oficiais
 
 🔴 **Confira com os seus próprios olhos antes de qualquer verificação.** Não copie de lugares não confiáveis.
@@ -1758,6 +1855,23 @@ gpg --verify-options show-notations --verify Whonix-*.libvirt.xz.asc Whonix-*.li
 
 ---
 
+### USB passthrough — pendrive de trânsito frio↔quente
+
+Para as **Trilhas A/B** (cold-signing, passos 12A/12B), o pendrive de trânsito precisa ser visível na **Whonix-Workstation**. Se usar hardware wallet opcional, o dispositivo USB também.
+
+**VirtualBox:**
+
+1. Instale o **VirtualBox Extension Pack** (mesma versão do VirtualBox instalado).
+2. Com a **Whonix-Workstation desligada**: Settings → USB → habilite USB 2.0/3.0.
+3. Adicione um **filtro USB** para o pendrive (ou dispositivo) — assim a VM captura o device ao plugar.
+4. Inicie a Workstation **depois** de plugar o pendrive (ou use o ícone USB na barra lateral para anexar em tempo real).
+
+**KVM:** anexe o dispositivo via `virt-manager` (*USB redirection*) ou configure política do host — ver guia oficial do Whonix se o passthrough falhar: https://www.whonix.org/wiki/KVM
+
+📎 O pendrive de trânsito **nunca** deve ser usado na máquina quente com carteira **completa** — só arquivos de outputs/tx entre frio e quente.
+
+---
+
 ### APÊNDICE F — Trades Hands-on (Rede Descentralizada — Resumo)
 
 > **Lembre:** Instalar ≠ tradear. Este apêndice é para quem já concluiu os passos 1–7 e quer usar o Haveno para comprar/vender XMR. Comece sempre com **valores pequenos**.
@@ -1816,6 +1930,111 @@ Rede de terceiros (Reto):
 - Em trade normal: você + contraparte (árbitro não entra)
 - Em disputa: você ou contraparte + árbitro decide
 - O árbitro **nunca** pede sua seed — age apenas dentro do app
+
+---
+
+### Multisig 2-de-3 manual via CLI (educacional — laboratório)
+
+> **Para trades no Haveno:** o app cria o escrow 2-de-3 **automaticamente** — você não precisa deste fluxo. Este bloco é para quem quer **entender o protocolo** ou criar uma carteira multisig Monero manual fora do Haveno.
+>
+> 🔴 **Use stagenet/testnet para praticar.** Mainnet só após dominar o fluxo completo.
+
+#### Quando usar vs. quando NÃO
+
+| Situação | Precisa deste fluxo? |
+|----------|----------------------|
+| Tradear no Haveno (escrow por trade) | **Não** — o protocolo cria 2-de-3 sozinho |
+| Entender como 2-de-3 funciona na prática | **Sim** — leitura + exercício em testnet/stagenet |
+| Carteira multisig Monero fora do Haveno (2-of-3 entre pessoas) | **Sim** — fluxo completo abaixo |
+
+#### Avisos load-bearing (leia antes)
+
+- Multisig no Monero é **experimental** no CLI. Antes de qualquer comando: `set enable-multisig-experimental 1`
+- A doc oficial lista riscos: fundos podem ficar **irrecuperáveis**, gastos duplos ou roubo por participante malicioso se o setup falhar.
+- `prepare_multisig` **inclui a view key privada** na string `MultisigV1…` — troque só por **canal seguro** entre os participantes da **mesma** carteira multisig.
+- Nunca misture strings de participantes de **outras** carteiras ou em ordens erradas.
+
+#### Onde rodar no hub (Cold-Tails / Hot-Whonix)
+
+| Papel | Máquina | Por quê |
+|-------|---------|---------|
+| Participante que **assina** gastos | **Tails offline** | Spend keys não tocam rede |
+| Sincronizar / montar tx (opcional) | **Whonix Workstation** | Tor + nó `.onion` — só se view-only ou participante quente acordado |
+
+#### Fluxo completo 2-de-3 (três participantes, threshold 2)
+
+**Passo A — `prepare_multisig` (cada participante):**
+
+```bash
+monero-wallet-cli --stagenet --daemon-address <URL_DO_DAEMON>
+```
+
+Dentro do CLI, cada um executa:
+
+```text
+set enable-multisig-experimental 1
+set inactivity-lock-timeout 0
+prepare_multisig
+```
+
+Saída: string longa começando com `MultisigV1…` — **copie e troque com os outros 2 participantes por canal seguro.**
+
+**Passo B — `make_multisig` (cada participante):**
+
+```text
+make_multisig 2 <MultisigV1_participante_B> <MultisigV1_participante_C>
+```
+
+(substitua pelos dados dos **outros dois** — não a sua string)
+
+Saída: nova string para troca.
+
+**Passo C — `exchange_multisig_keys` (cada participante — duas rodadas em 2-de-3):**
+
+Rodada 1:
+```text
+exchange_multisig_keys <nova_string_B> <nova_string_C>
+```
+
+Troque as novas strings de saída. Rodada 2:
+```text
+exchange_multisig_keys <string_rodada2_B> <string_rodada2_C>
+```
+
+Repita até o CLI indicar que a troca está completa para os três.
+
+✅ OK SE: `wallet info` mostra multisig **2/3** e mesmo endereço nos três CLIs.
+
+**Receber fundos:**
+
+```text
+address
+```
+
+Envie teste mínimo antes do grosso.
+
+**Gastar (2 assinaturas necessárias):**
+
+```text
+# Participante que monta a transação:
+transfer <ENDERECO> <VALOR>
+
+# Cada co-signatário exporta e troca por canal seguro:
+export_multisig_info multisig_info.txt
+import_multisig_info multisig_info_do_outro.txt
+
+# Assinar:
+sign_multisig multisig_monero_tx
+
+# Transmitir (quando threshold atingido):
+submit_multisig multisig_monero_tx
+```
+
+✅ OK SE: tx confirmada on-chain; saldo atualizado nos três CLIs.
+
+**Referências:**
+- Doc oficial: https://docs.getmonero.org/multisignature/
+- Whonix + multisig: https://www.whonix.org/wiki/Monero_Multisig
 
 ---
 
