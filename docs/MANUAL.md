@@ -77,7 +77,7 @@ Pré-req passo 8: passos 1–7 (Feather no 5). Passo 9: Tor OK. Passo 12: **air-
 
 ### Scripts — superfície expert
 
-Orquestrador novato: `haveno-setup.sh`. Matriz técnica: [automacao/tails/README.md](../automacao/tails/README.md).
+Orquestrador novato: `haveno-setup.sh`. Matriz técnica: [automacao/tails/README.md](../automacao/tails/README.md). Validação estática: `health-check.sh` (host Linux; não substitui Tails real).
 
 ### O que este hub não cobre
 
@@ -346,6 +346,8 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 | Rodar backup 10× seguidas | **Não** — 10 arquivos diferentes (ocupa espaço) |
 
 **Sempre feche o Haveno** antes do backup (o script avisa se o app estiver aberto).
+
+**Senha:** o script pede a senha **duas vezes** antes de cifrar (evita `.gpg` irrecuperável por typo).
 
 #### `haveno-update.sh`
 

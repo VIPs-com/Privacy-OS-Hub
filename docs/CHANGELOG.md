@@ -4,6 +4,20 @@
 
 ---
 
+## 2026-06-18 — Scripts 10/10 (auditoria R31+)
+
+| Fix | Scripts | Detalhe |
+|-----|---------|---------|
+| **Backup senha confirmada** | `haveno-common.sh`, `haveno-backup.sh`, `feather-backup.sh`, `haveno-update.sh` | `haveno_gpg_symmetric_encrypt` — dupla entrada antes do GPG |
+| **Onion-grater loop 30s** | `haveno-common.sh`, `08-abrir-haveno.sh` | `haveno_wait_onion_grater_filter` substitui sleep fixo |
+| **PGP etapas alinhado** | `05-verificar-assinatura.sh` | `grep VALIDSIG` como no fluxo principal |
+| **Feather fallback** | `feather-install-verify.sh` | `FEATHER_VERSION_FALLBACK` (env) se scrape falhar |
+| **LC_ALL=C deps** | `haveno-common.sh`, `06-deps-apt.sh` | locale neutro em apt |
+| **TX ID hex** | `qa-confirm-passo12.sh` | valida 8 caracteres hex |
+| **Health-check** | `health-check.sh` | validacao estatica (sintaxe + checks) |
+
+---
+
 ## 2026-06-18 — `meta/` → `docs/` + `MANUAL.md` unificado
 
 | Mudança | Detalhe |

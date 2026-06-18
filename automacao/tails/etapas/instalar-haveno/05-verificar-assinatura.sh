@@ -27,10 +27,8 @@ gpg --list-keys "$HAVENO_PGP_FPR" >/dev/null 2>&1 || fail "Chave da Reto nao imp
 y "Verificando assinatura (independe do idioma do sistema)..."
 STATUS="$(gpg --status-fd 1 --verify "$SIG" "$DEB" 2>/dev/null)"
 
-# VALIDSIG: ultimo campo = fingerprint da chave PRIMARIA (a assinatura pode vir
-# de uma subchave — por isso nao se compara o primeiro campo).
-if echo "$STATUS" | awk -v fpr="$HAVENO_PGP_FPR" \
-     '$1=="[GNUPG:]" && $2=="VALIDSIG" && $NF==fpr {ok=1} END {exit !ok}'; then
+# VALIDSIG amarrado ao fingerprint (mesmo criterio de haveno-common.sh).
+if echo "$STATUS" | grep -q "^\[GNUPG:\] VALIDSIG .*${HAVENO_PGP_FPR}"; then
   g "Assinatura VALIDA, amarrada a chave primaria ${HAVENO_PGP_FPR}."
   y "(Em PT-BR o gpg escreve 'Assinatura valida' = 'Good signature'. Aviso TOFU e normal.)"
   pass ".deb autentico. Proximo: ./06-deps-apt.sh"

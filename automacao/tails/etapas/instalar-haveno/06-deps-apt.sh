@@ -12,6 +12,7 @@
 #         evidencia para a divergencia DIV-20260610-02).
 ###############################################################################
 set -uo pipefail
+export LC_ALL=C LANG=C LANGUAGE=C
 DIR="$(cd "$(dirname "$0")" && pwd)"; source "${DIR}/_config.sh"
 g(){ echo -e "\033[1;32m$*\033[0m"; }; y(){ echo -e "\033[1;33m$*\033[0m"; }
 r(){ echo -e "\033[0;31m$*\033[0m"; }

@@ -23,11 +23,17 @@ if [ -f "${UTILS_DIR}/haveno.yml" ]; then
   y "Aplicando perfil onion-grater..."
   sudo cp "${UTILS_DIR}/haveno.yml" "$ONION_GRATER_DST" || fail "Nao copiei haveno.yml (senha admin ativa?)."
   sudo systemctl restart onion-grater || y "Nao reiniciei o onion-grater — pode ja estar ativo."
-  sleep 3
-  if sudo journalctl -u onion-grater -b --no-pager 2>/dev/null | tail -20 | grep -q "loaded filter: haveno"; then
-    g "loaded filter: haveno (OK)."
-  else
-    y "Filtro nao confirmado no log ainda — siga; se o Haveno nao conectar, veja o Cap. 7 (FAQ)."
+  _wait_filter=0
+  for _i in $(seq 1 30); do
+    if sudo journalctl -u onion-grater -b --no-pager 2>/dev/null | tail -20 | grep -q "loaded filter: haveno"; then
+      g "loaded filter: haveno (OK)."
+      _wait_filter=1
+      break
+    fi
+    sleep 1
+  done
+  if [ "$_wait_filter" -eq 0 ]; then
+    y "Filtro nao confirmado apos 30s — siga; se o Haveno nao conectar, veja Apendice B do canonico."
   fi
 else
   y "Sem ${UTILS_DIR}/haveno.yml — o Haveno pode nao conectar ao Tor. (Esse arquivo vem do instalador upstream.)"

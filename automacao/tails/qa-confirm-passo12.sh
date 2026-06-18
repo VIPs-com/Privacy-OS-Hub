@@ -47,9 +47,13 @@ _confirm "tx_transmitida_depois" "TX transmitida depois em ambiente online (Whon
 
 printf "Primeiros 8 caracteres do TX ID (resto omitido): "
 read -r tx_prefix
-if [ -n "${tx_prefix:-}" ]; then
+if [[ "${tx_prefix:-}" =~ ^[0-9a-fA-F]{8}$ ]]; then
   qa_log_line "TX_ID_PREFIX: ${tx_prefix}[BORRADO]"
   ok=$((ok+1))
+elif [ -n "${tx_prefix:-}" ]; then
+  y "  AVISO: '${tx_prefix}' nao parece TX ID valido (8 caracteres hex)."
+  qa_log_line "TX_ID_PREFIX: INVALIDO"
+  r "  TX ID prefixo invalido"
 else
   qa_log_line "TX_ID_PREFIX: AUSENTE"
   r "  TX ID prefixo ausente"

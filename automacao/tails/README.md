@@ -125,6 +125,8 @@ Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os `.sh` + o filtro
 `haveno-onion-grater.yml` + o atalho `.desktop`, e oferece limpar scripts do
 layout antigo soltos na raiz (sem tocar nos seus dados).
 
+**Mantenedor (host Linux):** `./health-check.sh` — sintaxe `bash -n` + checks estaticos (nao substitui Tails real).
+
 ### Método B — manual
 
 1. Copie **todos** os `*.sh` + `haveno-onion-grater.yml` + `haveno-backup.desktop` desta pasta → `~/Persistent/hub-scripts/`.

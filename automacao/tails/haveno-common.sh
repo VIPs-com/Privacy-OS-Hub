@@ -19,6 +19,25 @@ y(){ echo -e "\033[1;33m$*\033[0m"; }
 r(){ echo -e "\033[0;31m$*\033[0m"; }
 die(){ r "ERRO: $*"; exit 1; }
 
+# --- Backup cifrado: confirmar senha antes do gpg (evita .gpg irrecuperavel) -
+haveno_gpg_symmetric_encrypt() {
+  local outfile="$1" infile="$2" pass1 pass2
+  [ -f "$infile" ] || die "haveno_gpg_symmetric_encrypt: arquivo inexistente: $infile"
+  while true; do
+    read -s -p "Senha do backup (forte — guarde-a): " pass1; echo
+    read -s -p "Confirmar senha: " pass2; echo
+    [ -n "$pass1" ] || die "Senha vazia — cancelado."
+    if [ "$pass1" = "$pass2" ]; then
+      break
+    fi
+    r "Senhas nao conferem. Tente de novo."
+  done
+  printf '%s' "$pass1" | gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 0 \
+    -o "$outfile" "$infile" \
+    || { unset pass1 pass2; die "Falha ao cifrar."; }
+  unset pass1 pass2
+}
+
 # --- Modo "uma senha so" (opt-in: --one-password) -----------------------------
 # O Tails embarca /etc/sudoers.d/always-ask-password (Defaults timestamp_timeout=0):
 # por design o sudo NUNCA cacheia a senha — cada 'sudo' re-pergunta. So quando o
@@ -409,6 +428,7 @@ haveno_fix_dpkg_state() {
 }
 
 haveno_ensure_deb_deps() {
+  export LC_ALL=C LANG=C LANGUAGE=C
   if ! command -v apt-get >/dev/null 2>&1; then
     y "  apt-get ausente — ambiente nao-Debian; pulando deps."
     return 0
@@ -528,6 +548,19 @@ haveno_check_filter() {
   sudo journalctl -u onion-grater -b --no-pager 2>/dev/null | tail -40
 }
 
+haveno_wait_onion_grater_filter() {
+  local max_wait="${1:-30}" i
+  y "  Aguardando onion-grater recarregar (ate ${max_wait}s)..."
+  for (( i=1; i<=max_wait; i++ )); do
+    if haveno_check_filter | grep -q "loaded filter: haveno"; then
+      g "  loaded filter: haveno (OK)."
+      return 0
+    fi
+    sleep 1
+  done
+  return 1
+}
+
 haveno_fix_onion_grater() {
   local utils="${UTILS_DIR}"
   # Cookie do Tor: chmod se perde a cada boot (Tails amnesico) — aplicar SEMPRE,
@@ -555,12 +588,11 @@ haveno_fix_onion_grater() {
     sudo cp "$yml_src" "$ONION_GRATER_DST"
   fi
   sudo systemctl restart onion-grater 2>/dev/null || true
-  sleep 4
-  if haveno_check_filter | grep -q "loaded filter: haveno"; then
+  if haveno_wait_onion_grater_filter 30; then
     g "  Corrigido: loaded filter: haveno."
     return 0
   fi
-  y "  Ainda sem 'loaded filter: haveno'. Veja Playbooks §8 ou Cap. 7 FAQ."
+  y "  Ainda sem 'loaded filter: haveno'. Veja Apendice B do canonico ou docs/MANUAL.md."
   return 1
 }
 

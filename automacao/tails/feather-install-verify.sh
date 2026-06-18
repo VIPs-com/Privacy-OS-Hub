@@ -31,6 +31,8 @@ FEATHER_DIR="${PERSIST}/feather"
 WALLETS_DIR="${FEATHER_DIR}/wallets"
 DOWNLOADS="${HOME}/Tor Browser/Browser/Downloads"
 FEATHER_FPR="8185E158A33330C7FD61BC0D1F76E155CEFBA71C"
+# Fallback se scrape falhar: export FEATHER_VERSION_FALLBACK=x.y.z (validar em featherwallet.org)
+FEATHER_VERSION_FALLBACK="${FEATHER_VERSION_FALLBACK:-}"
 # URLs da chave, em ordem de preferencia (a do GitHub master morreu — 404,
 # DIV-20260611-03). A 2a e o keyserver pinado pelo fingerprint completo.
 FEATHER_KEY_URLS=(
@@ -86,6 +88,11 @@ if [ "${#appimages[@]}" -eq 0 ]; then
   FEATHER_VER="$(curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 120 "https://featherwallet.org/download/" 2>/dev/null \
     | grep -oE 'linux-appimage/feather-[0-9]+\.[0-9]+(\.[0-9]+)?\.AppImage' \
     | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)"
+  if [ -z "$FEATHER_VER" ] && [ -n "$FEATHER_VERSION_FALLBACK" ]; then
+    y "  Scrape falhou — usando FEATHER_VERSION_FALLBACK=${FEATHER_VERSION_FALLBACK}"
+    y "  Confira a versao em https://featherwallet.org/download antes de confiar."
+    FEATHER_VER="$FEATHER_VERSION_FALLBACK"
+  fi
   [ -n "$FEATHER_VER" ] || die "Nao descobri a versao atual. Baixe pelo Tor Browser: featherwallet.org/download -> mova para ${FEATHER_DIR}"
   g "  Versao atual: ${FEATHER_VER}"
   FEATHER_BASE="https://featherwallet.org/files/releases/linux-appimage/feather-${FEATHER_VER}.AppImage"

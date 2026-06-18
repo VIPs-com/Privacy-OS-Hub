@@ -171,9 +171,9 @@ g "  OK (${SIZE})."
 
 # Cifrar
 if [ "$ENCRYPT" = "1" ]; then
-  b "[3/4] Cifrando com GPG (defina uma senha forte; guarde-a)..."
+  b "[3/4] Cifrando com GPG (senha forte — confirme duas vezes)..."
   OUT="${DEST}/${BASE}.tar.gz.gpg"
-  gpg -c --cipher-algo AES256 -o "$OUT" "$TARFILE" || { rm -rf "$TMP"; die "Falha ao cifrar."; }
+  haveno_gpg_symmetric_encrypt "$OUT" "$TARFILE" || { rm -rf "$TMP"; die "Falha ao cifrar."; }
 else
   y "[3/4] --no-encrypt: salvando SEM cifrar (NAO recomendado)."
   OUT="${DEST}/${BASE}.tar.gz"

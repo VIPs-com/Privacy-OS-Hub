@@ -97,7 +97,8 @@ if [ "$DO_BACKUP" = "1" ]; then
       STAMP="$(date +%Y%m%d-%H%M%S)"; mkdir -p "${PERSIST}/Backups"
       TMP="$(mktemp -d)"
       tar -czf "${TMP}/haveno-data-${STAMP}.tar.gz" -C "$HAVENO_DIR" Data || { rm -rf "$TMP"; die "Falha ao compactar."; }
-      gpg -c -o "${PERSIST}/Backups/haveno-data-${STAMP}.tar.gz.gpg" "${TMP}/haveno-data-${STAMP}.tar.gz" \
+      haveno_gpg_symmetric_encrypt "${PERSIST}/Backups/haveno-data-${STAMP}.tar.gz.gpg" \
+        "${TMP}/haveno-data-${STAMP}.tar.gz" \
         || { rm -rf "$TMP"; die "Falha ao cifrar backup."; }
       rm -rf "$TMP"
       g "  Backup em ${PERSIST}/Backups/haveno-data-${STAMP}.tar.gz.gpg"

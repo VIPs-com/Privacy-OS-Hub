@@ -8,6 +8,10 @@
 
 set -uo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=haveno-common.sh
+source "${SCRIPT_DIR}/haveno-common.sh"
+
 PERSIST="/home/amnesia/Persistent"
 DATA_DIR="${PERSIST}/feather/wallets"
 DEFAULT_DEST="${PERSIST}/Backups"
@@ -93,7 +97,7 @@ tar -tzf "$TARFILE" >/dev/null 2>&1 || die "Tar corrompido."
 
 if [ "$ENCRYPT" = "1" ]; then
   OUT="${DEST}/${BASE}.tar.gz.gpg"
-  gpg -c --cipher-algo AES256 -o "$OUT" "$TARFILE" || die "Falha ao cifrar."
+  haveno_gpg_symmetric_encrypt "$OUT" "$TARFILE" || die "Falha ao cifrar."
 else
   OUT="${DEST}/${BASE}.tar.gz"
   cp "$TARFILE" "$OUT"
