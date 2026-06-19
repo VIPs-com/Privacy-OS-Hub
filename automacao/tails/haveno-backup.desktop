@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Haveno — Backup da carteira
 Comment=Backup cifrado da carteira Haveno (persistencia ou USB)
-Exec=bash -c "S=/home/amnesia/Persistent/hub-scripts/haveno-backup.sh; [ -x \"$S\" ] || S=/home/amnesia/Persistent/haveno-backup.sh; \"$S\"; echo; read -n1 -r -p 'Pressione uma tecla para fechar...'"
+Exec=bash -c "/home/amnesia/Persistent/hub-scripts/hub.sh backup; echo; read -n1 -r -p 'Pressione uma tecla para fechar...'"
 Icon=/home/amnesia/Persistent/haveno/App/utils/icon.png
 Terminal=true
 Type=Application

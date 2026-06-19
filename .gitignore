@@ -6,6 +6,7 @@ Auditoria/
 
 # --- Doc interna equipe dev · prefixo do repo evita colisão em backups mistos ---
 Hub-equipe-dev/
+MANIFEST.txt
 
 # --- Agentes internos Claude Code (ficam só no disco local) ---
 agents/

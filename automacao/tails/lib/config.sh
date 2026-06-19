@@ -1,0 +1,29 @@
+#!/bin/bash
+###############################################################################
+# lib/config.sh — ÚNICA FONTE DE VERDADE
+#
+# NOVO RELEASE: edite SOMENTE as 3 linhas do bloco "Release".
+# Não há mais URL/PGP hardcoded em haveno-auto.sh, haveno-update.sh, etc.
+###############################################################################
+
+# ----- Release da rede (RetoSwap 1.6.0-reto) — EDITE AQUI no próximo release -
+HAVENO_VERSION="1.6.0-reto"
+HAVENO_PGP_FPR="DAA24D878B8D36C90120A897CA02DAC12DAE2D0F"
+RETO_KEY_URL="https://retoswap.com/reto_public.asc"
+
+# ----- Derivados do release (não editar) -------------------------------------
+HAVENO_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/${HAVENO_VERSION}/haveno-v${HAVENO_VERSION}-linux-x86_64-installer.deb"
+HAVENO_SIG_URL="${HAVENO_DEB_URL}.sig"
+DEB_NAME="$(basename "$HAVENO_DEB_URL")"
+INSTALL_SCRIPT_URL="https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh"
+
+# ----- Caminhos no Tails (não editar) ----------------------------------------
+PERSIST="/home/amnesia/Persistent"
+HAVENO_DIR="${PERSIST}/haveno"
+INSTALL_DIR="${HAVENO_DIR}/Install"
+DATA_DIR="${HAVENO_DIR}/Data"
+UTILS_DIR="${HAVENO_DIR}/App/utils"
+DOTFILES_DIR="${DOTFILES_DIR:-/live/persistence/TailsData_unlocked/dotfiles}"
+TOR_SOCKS="127.0.0.1:9050"
+ONION_GRATER_DST="/etc/onion-grater.d/haveno.yml"
+TOR_COOKIE="${TOR_COOKIE:-/var/run/tor/control.authcookie}"
