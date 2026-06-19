@@ -204,5 +204,5 @@ y "Lembrete: anote tambem a SEED (Account > Wallet seed) em papel/metal,"
 y "guardada separada deste arquivo. Seed != backup completo."
 qa_log_line "Backup concluido: $OUT"
 qa_log_line "REDE: tails_online_tor_esperado=SIM"
-y "Apos anotar a seed no papel, rode: qa-confirm-seed-papel.sh (ou adicione CONFIRMACAO no log manualmente)."
+y "Apos anotar a seed no papel, rode: ~/Persistent/hub-scripts/qa/confirm-seed.sh"
 qa_log_finish 0

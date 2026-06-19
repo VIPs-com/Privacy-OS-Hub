@@ -104,7 +104,7 @@ Ver também: [README — trilha linear](../../README.md#trilha-linear).
    - **`.deb` ~266 MB só em `.download/`:** `sync-hub-scripts.sh` + `hub.sh install --qa-log` (promove para `Install/`).
    - **Já em `Install/`:** `hub.sh install --install-only`.
    - Alternativa: [TRES-PASSOS — fallback atômico](TRES-PASSOS-HAVENO-TAILS.md).  
-3. Volte ao passo certo em [README → Travou aqui?](../../README.md#travou-aqui) (cada situação → passo + processo P0x).  
+3. Consulte `automacao/tails/docs/TROUBLESHOOTING.md` — tabela de diagnóstico por mensagem de erro.  
 4. Corrija e rode de novo com `--qa-log`.  
 5. **Não** edite o `.txt` à mão para fingir PASS.
 

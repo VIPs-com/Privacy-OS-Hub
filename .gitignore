@@ -2,7 +2,6 @@
 # (O Claude Code lê o CLAUDE.md do disco mesmo gitignorado.)
 CLAUDE.md
 .claude/
-Auditoria/
 
 # --- Doc interna equipe dev · prefixo do repo evita colisão em backups mistos ---
 Hub-equipe-dev/

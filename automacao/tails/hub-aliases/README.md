@@ -47,7 +47,7 @@ Pass-through: flags extras vão para o script alvo (`"$@"`), exceto onde o alias
 | `01-check-tails-environment.sh` | `system/preflight.sh` | `--qa-log` | 1–4 |
 | `02-haveno-install.sh` | `hub.sh install` | `--qa-log` | 2 |
 | `03-haveno-start.sh` | `hub.sh boot` | `--qa-log` | 7 |
-| `04-daily-routine.sh` | `haveno/boot.sh` | `--qa-log` | 7 |
+| `04-daily-routine.sh` | `hub.sh boot` | `--qa-log` | 7 |
 | `05-haveno-network-check.sh` | `system/post-session.sh` | `--qa-log` | pós-upgrade |
 | `06-security-check.sh` | `haveno/verify-deb.sh` | — | 5 |
 | `07-backup-carteira.sh` | `haveno/backup.sh` | `--qa-log` | 4, 7 |

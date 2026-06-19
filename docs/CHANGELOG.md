@@ -4,6 +4,60 @@
 
 ---
 
+## 2026-06-19 — Auditoria multi-agent: hardening + 16 fixes cirúrgicos
+
+> **Método:** 4 agentes especializados em paralelo (técnico · segurança · pedagógico · consistência).  
+> **Contexto incorporado:** no Tails, todo TCP vai pelo Tor via iptables kernel — "clearnet fallback" no código é Tor transparente (TransPort 9040), não clearnet real. Variação 4–90 min no download = circuito Tor diferente.
+
+### Fixes de scripts (9 itens)
+
+| Arquivo | Linha | Fix |
+|---------|:-----:|-----|
+| `automacao/tails/docs/QUICKSTART.md` | 57 | `etapas/` removida (pasta deletada na Phase 3) |
+| `automacao/tails/haveno/backup.sh` | 207 | `qa-confirm-seed-papel.sh` → `qa/confirm-seed.sh` |
+| `automacao/tails/feather/install.sh` | 198 | `feather-backup.sh` → `feather/backup.sh` |
+| `automacao/tails/hub-aliases/04-daily-routine.sh` | 2–4 | Chamava `haveno/boot.sh` diretamente (bypass de preflight); roteado via `hub.sh boot` |
+| `automacao/docs-aluno/COMO-LER-SEUS-LOGS.md` | 107 | Link morto `README.md#travou-aqui` + referência a `processos/P0x` → `TROUBLESHOOTING.md` |
+| `automacao/tails/haveno/install.sh` | 6–44 | Cabeçalho reescrito: citava `haveno-auto.sh`, `haveno-common.sh`, `haveno-boot.sh` (todos deletados) |
+| `automacao/tails/hub-aliases/README.md` | 50 | `04-daily-routine.sh` documentado como `haveno/boot.sh` → corrigido para `hub.sh boot` |
+| `automacao/tails/qa/confirm-seed.sh` | 3–6 | Cabeçalho: `qa-confirm-seed-papel.sh` → `qa/confirm-seed.sh`; uso atualizado |
+| `.gitignore` | 5 | Entrada `Auditoria/` (pasta inexistente) removida |
+
+### Hardening de segurança e robustez (4 itens)
+
+| Arquivo | Fix |
+|---------|-----|
+| `automacao/tails/lib/common.sh` | `haveno_ensure_reto_pgp_key()`: fallback clearnet removido; fluxo Tor→keyserver Tor→`die()` explícito; fingerprint verificado após import |
+| `automacao/tails/lib/config.sh` | Campo `INSTALL_SCRIPT_HASH=""` adicionado — vazio=só loga sha256; preenchido=verifica fail-closed a cada release |
+| `automacao/tails/haveno/install.sh` | Lógica de verificação de hash do `haveno-install.sh` upstream; `die()` local chama `qa_log_finish 1` (QA log sempre finalizado); download via Tor primeiro (consistência com base de código) |
+| `docs/CHANGELOG.md` | Banner `⚠️ Nota histórica` na seção `## Histórico v2 (beta)` — contexto para mantenedores |
+
+### Melhorias pedagógicas (3 itens)
+
+| Arquivo | Fix |
+|---------|-----|
+| `automacao/tails/docs/QUICKSTART.md` | `--install-only` com nota de pré-requisito: `.deb` deve estar em `Install/`, não só em `.download/` |
+| `🛡️ Privacy-OS-Hub - Versão 1.0.md` | Link para `TROUBLESHOOTING.md` adicionado no §2.2, próximo ao bloco de recuperação do download |
+| `automacao/tails/hub-aliases/README.md` | Tabela atualizada: `04-daily-routine` → `hub.sh boot` |
+
+### Verificado como correto (sem alteração)
+
+- Verificação PGP do `.deb` — fail-closed confirmado (`VALIDSIG` → `mv` → `dpkg`)
+- `INSTALL_SCRIPT_HASH=""` — lógica `[ -n "" ]` falsa → só loga ✅
+- Seed nunca exposta em log, variável ou arquivo ✅
+- Onion-grater — portas restritas ao mínimo do Haveno ✅
+- Sourcing chain `hub.sh → lib/common.sh → lib/config.sh` chega a todos os scripts ✅
+
+---
+
+## 2026-06-19 — Reorganização por produto (Phase 3) + auditoria de documentação
+
+> Commit `6d1a831` · `254c23b`
+
+Scripts movidos de raiz plana para pastas por produto (`haveno/` · `feather/` · `system/` · `qa/`). Scripts legados deletados. Todos os `.md` públicos atualizados para `hub.sh`. Zero referências a `haveno-setup.sh`, `haveno-auto.sh`, `etapas/instalar-haveno/` em qualquer arquivo público.
+
+---
+
 ## 2026-06-18 — Fix download: `.sig` apagada como lixo + retomada `.deb` parcial (DIV-20260618-01)
 
 **Campo:** `02-haveno-auto-20260618-074604.txt` — upstream `haveno-install.sh` falhou com `Failed to download Haveno binary` após ~210 MiB (circuito Tor substituído). Dois bugs encadeados impediram a recuperação automática.
@@ -99,6 +153,13 @@
 ---
 
 ## Histórico v2 (beta)
+
+> **⚠️ Nota histórica para mantenedores**  
+> Esta seção documenta o estado do repositório **antes** da reorganização de 2026-06-19.  
+> Os scripts mencionados abaixo (`haveno-auto.sh`, `haveno-boot.sh`, `haveno-common.sh`,  
+> `haveno-setup.sh`, `etapas/instalar-haveno/`) foram **removidos ou renomeados**.  
+> Estrutura atual: `hub.sh` → `haveno/` · `feather/` · `system/` · `lib/` · `steps/`  
+> Ver: `automacao/tails/docs/MIGRATION.md` para o mapa completo antes → depois.
 
 > **Tag:** `v2.0.0-beta` · **Data:** 2026-06-08
 

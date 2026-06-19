@@ -195,7 +195,7 @@ g "==============================================================="
 g "  Feather verificado${DO_LAUNCH:+ e aberto}."
 g "  ${APPIMAGE}"
 g "  Wallets: ${WALLETS_DIR}/"
-g "  Backup depois (feche o Feather antes): ~/Persistent/hub-scripts/feather-backup.sh"
+g "  Backup depois (feche o Feather antes): ~/Persistent/hub-scripts/feather/backup.sh"
 g "==============================================================="
 qa_log_line "REDE: tails_online_tor_esperado=SIM"
 qa_log_finish 0

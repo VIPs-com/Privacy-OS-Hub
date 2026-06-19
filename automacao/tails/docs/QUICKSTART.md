@@ -25,7 +25,7 @@ hub.sh install --qa-log
 # Digitar a senha de admin só uma vez no fluxo
 hub.sh install --one-password
 
-# Retomar instalação quando o .deb já está em Install/
+# Retomar instalação quando o .deb já está em Install/ (não apenas em .download/)
 hub.sh install --install-only
 
 # Instalar o Feather Wallet (passo 5 do curso)
@@ -54,4 +54,4 @@ HAVENO_VERSION="X.Y.Z-reto"
 HAVENO_PGP_FPR="NOVA_FINGERPRINT"
 ```
 
-Todos os scripts — `hub.sh`, `steps/`, `etapas/` — leem automaticamente de `lib/config.sh`.
+Todos os scripts — `hub.sh`, `steps/` — leem automaticamente de `lib/config.sh`.

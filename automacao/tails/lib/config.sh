@@ -16,6 +16,7 @@ HAVENO_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/${H
 HAVENO_SIG_URL="${HAVENO_DEB_URL}.sig"
 DEB_NAME="$(basename "$HAVENO_DEB_URL")"
 INSTALL_SCRIPT_URL="https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh"
+INSTALL_SCRIPT_HASH=""  # sha256 do haveno-install.sh — vazio=só loga; preenchido=verifica fail-closed (atualizar a cada release)
 
 # ----- Caminhos no Tails (não editar) ----------------------------------------
 PERSIST="/home/amnesia/Persistent"

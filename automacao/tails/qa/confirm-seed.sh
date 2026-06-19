@@ -1,9 +1,9 @@
 #!/bin/bash
 ###############################################################################
-# qa-confirm-seed-papel.sh — confirmações humanas pós passo 4 (SEM gravar seed)
+# qa/confirm-seed.sh — confirmações humanas pós passo 4 (SEM gravar seed)
 #
-# Rode DEPOIS de anotar a seed em papel e de haveno-backup.sh --qa-log
-# USO: ~/Persistent/qa-confirm-seed-papel.sh
+# Rode DEPOIS de anotar a seed em papel e de hub.sh backup --qa-log
+# USO: ~/Persistent/hub-scripts/qa/confirm-seed.sh
 ###############################################################################
 
 set -uo pipefail

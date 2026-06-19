@@ -4,15 +4,15 @@
 # Comando do aluno: hub.sh install
 # =================================================================
 ###############################################################################
-# haveno-auto.sh  —  Automação Haveno no Tails (rede Reto / turma)
+# haveno/install.sh — 1ª instalação do Haveno no Tails (rede RetoSwap)
 #
-# O QUE FAZ (depois de você já ter criado a Persistência + Dotfiles):
+# O QUE FAZ (depois de criar a Persistência + Dotfiles):
 #   1. Confere que está no Tails, usuario amnesia, com senha admin ativa
 #   2. Confere persistencia e Dotfiles
 #   3. Garante fuso horario UTC (privacidade: nao revela localizacao)
 #   4. Espera o Tor conectar (IsTor + cross-check 'Bootstrapped 100%' no boot atual)
 #   5. (Opcional) Ajusta o relogio pela hora obtida ATRAVES do Tor (sem vazar local)
-#   6. Baixa e roda o haveno-install.sh oficial com URL + PGP REAIS da Reto
+#   6. Baixa o haveno-install.sh oficial via Tor e verifica PGP (fingerprint RetoSwap)
 #   7. Instala/configura via exec.sh (pkexec) e abre o Haveno
 #   8. Verifica 'loaded filter: haveno'; se vier 'None', corrige onion-grater sozinho
 #   9. Monitora ate o filtro ficar OK e orienta sobre o indicador VERDE
@@ -21,27 +21,25 @@
 # SEGURANCA: exploit de 20/05/2026 CORRIGIDO na 1.6.0-reto (24/05/2026, fix #2315).
 #            Use 1.6.0-reto+; antes de tradear confirme a retomada nos canais oficiais.
 #
-# USO:
-#   1. Salve este arquivo em ~/Persistent (armazenamento persistente)
-#   2. No Terminal:
-#        chmod +x ~/Persistent/haveno-auto.sh
-#        ~/Persistent/haveno-auto.sh
-#   Opcoes:
-#        --no-clock   nao tenta ajustar o relogio pelo Tor
-#        --watch N    monitora o log por N minutos (padrao 8)
-#        --update     forca reinstalar/atualizar o .deb (mesmo se ja instalado)
-#        --install-only  so [7-9]: deps apt + install.sh (sem download; recuperacao)
-#        --boot-only  delega a haveno-boot.sh (sessao; sem download)
+# USO: nao execute diretamente — use hub.sh:
+#        hub.sh install              # 1ª vez (recomendado)
+#        hub.sh install --qa-log     # 1ª vez + log para suporte
+#        hub.sh install --install-only  # retoma apos download OK
+#   Opcoes repassadas por hub.sh:
+#        --no-clock      nao tenta ajustar o relogio pelo Tor
+#        --watch N       monitora o log por N minutos (padrao 8)
+#        --install-only  so [7-9]: deps apt + install.sh (sem download)
+#        --boot-only     delega a haveno/boot.sh (sessao; sem download)
 #
 # ATUALIZAR PARA VERSAO NOVA:
 #   1. Edite HAVENO_VERSION e HAVENO_PGP_FPR em lib/config.sh (unico lugar)
-#   2. Rode:  ~/Persistent/hub-scripts/hub.sh update
+#   2. Rode:  hub.sh update
 #   (Os dados em ~/Persistent/haveno/Data/ sao preservados.)
 ###############################################################################
 
 set -uo pipefail
 
-# URL, PGP, caminhos — todos vêm de lib/config.sh via haveno-common.sh
+# URL, PGP, caminhos — todos vêm de lib/config.sh via lib/common.sh
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=../lib/common.sh
 source "${SCRIPT_DIR}/../lib/common.sh"
@@ -139,6 +137,7 @@ die(){
   r "ERRO: $*"
   echo "Abortando. Apendice B (erros comuns) no arquivo canonico do curso."
   echo "  Recuperacao: automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md"
+  qa_log_finish 1 2>/dev/null || true
   exit 1
 }
 
@@ -247,14 +246,26 @@ mkdir -p "$WORK" || die "Nao criei a pasta de download persistente (${WORK})."
 cd "$WORK" || die "Nao entrei em ${WORK}."
 
 dl_ok=0
-if curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then dl_ok=1; fi
+y "  Baixando haveno-install.sh via Tor..."
+if curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then dl_ok=1; fi
 if [ "$dl_ok" = "0" ]; then
-  y "  Tentando baixar o script via Tor..."
-  curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
+  y "  Tor falhou — tentando via TransPort do Tails..."
+  curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
 fi
 [ "$dl_ok" = "1" ] || die "Nao baixei haveno-install.sh (rede/Tor)."
 INSTALL_SHA="$(sha256sum haveno-install.sh 2>/dev/null | awk '{print $1}')"
-g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de procedencia)"
+if [ -n "${INSTALL_SCRIPT_HASH:-}" ]; then
+  EXPECTED_SCRIPT_HASH="${INSTALL_SCRIPT_HASH#sha256:}"
+  if [ "$INSTALL_SHA" != "$EXPECTED_SCRIPT_HASH" ]; then
+    r "ERRO: hash do haveno-install.sh diferente do esperado."
+    r "  Esperado: ${EXPECTED_SCRIPT_HASH}"
+    r "  Obtido:   ${INSTALL_SHA}"
+    die "Script upstream modificado. Nao execute. Reporte a equipe."
+  fi
+  g "  haveno-install.sh sha256: OK (${INSTALL_SHA:0:16}...)"
+else
+  g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de procedencia; INSTALL_SCRIPT_HASH vazio)"
+fi
 
 if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; then
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."

@@ -508,6 +508,8 @@ O script faz automaticamente:
 
 📎 **Recuperação:** `.deb` completo só em `.download/` → `sync-hub-scripts.sh` + `hub.sh install --qa-log`. Já em `Install/` → `hub.sh install --install-only --qa-log`.
 
+📎 **Erro ou mensagem inesperada?** Consulte `automacao/tails/docs/TROUBLESHOOTING.md` — tabela de diagnóstico por mensagem. Em último caso: `steps/run-all.sh` (fallback atômico, seção 2.5).
+
 ---
 
 #### 2.2-A — Instalação manual (se preferir sem script)

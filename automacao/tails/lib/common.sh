@@ -549,24 +549,33 @@ haveno_ensure_reto_pgp_key() {
   fpr="$(echo "$fpr" | tr -d ' ')"
   [ -n "$fpr" ] || return 1
   gpg --list-keys "$fpr" >/dev/null 2>&1 && return 0
-  y "  Importando chave PGP do release..."
-  local key_file tmp
+
+  y "  Importando chave PGP do release via Tor..."
+  local tmp
   tmp="$(mktemp)"
-  if curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 -o "$tmp" \
-      "${RETO_KEY_URL}" 2>/dev/null \
-    || curl -fsSL --max-time 120 -o "$tmp" "${RETO_KEY_URL}" 2>/dev/null; then
+
+  # Tentativa 1: URL oficial via Tor (sem fallback clearnet)
+  if curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 \
+      -o "$tmp" "${RETO_KEY_URL}" 2>/dev/null; then
     gpg --import "$tmp" >/dev/null 2>&1 || true
-  fi
-  rm -f "$tmp"
-  gpg --list-keys "$fpr" >/dev/null 2>&1 && return 0
-  key_file="${fpr: -16}.asc"
-  if curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 -o "$key_file" \
-      "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${fpr}" 2>/dev/null \
-    || curl -fsSL --max-time 120 -o "$key_file" \
-      "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${fpr}" 2>/dev/null; then
+    rm -f "$tmp"
+  else
+    rm -f "$tmp"
+    # Tentativa 2: keyserver via Tor — sem fallback clearnet
+    local key_file="${fpr: -16}.asc"
+    y "  URL oficial falhou — tentando keyserver via Tor..."
+    if ! curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 120 \
+        -o "$key_file" \
+        "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x${fpr}" 2>/dev/null; then
+      rm -f "$key_file"
+      die "Nao consegui importar a chave PGP via Tor. Verifique a conexao Tor e tente de novo."
+    fi
     gpg --import "$key_file" >/dev/null 2>&1 || true
+    rm -f "$key_file"
   fi
-  gpg --list-keys "$fpr" >/dev/null 2>&1
+
+  gpg --list-keys "$fpr" >/dev/null 2>&1 || \
+    die "Chave importada mas fingerprint nao confere (${fpr}). PARE e registre divergencia."
 }
 
 haveno_verify_deb_sig() {

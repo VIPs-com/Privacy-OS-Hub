@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-# aliases — Passo 7: ritual de sessao direto (haveno-boot.sh)
+# aliases — Passo 7: ritual de sessao (via hub.sh boot — inclui preflight)
 HUB="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-exec "${HUB}/haveno/boot.sh" --qa-log "$@"
+exec "${HUB}/hub.sh" boot --qa-log "$@"
