@@ -123,7 +123,7 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 | Faixa | Passos | Foco |
 |-------|--------|------|
 | **Núcleo Haveno** | **1–3** | Tails (1) → Haveno verde (2) → cautela pré-trade (3) |
-| **Pré-M2** | **4–7** | Seed · Feather · folheto · rotina `haveno-setup.sh --boot` |
+| **Pré-M2** | **4–7** | Seed · Feather · folheto · rotina `hub.sh boot` |
 | **Custódia fria** | **8–12** | Whonix · air-gap · cold-signing (trilha A ou B) |
 
 📎 **Passos 2–3** são o bloco “somente Haveno” (instalar + regras). O **passo 1** é pré-requisito Tails; **4–7** preparam o M2 sem ser só instalação.
@@ -143,7 +143,7 @@ Caminhos avançados existem em apêndices dedicados (CLI, multisig manual, home 
 O curso é educacional. Não promete segurança absoluta nem substitui julgamento humano. Seed em papel, duas cópias offline, teste com valor mínimo, e migração quando a carteira deixa de ser fria — regras repetidas nos momentos certos, não como marketing.
 
 **5. Transparência sobre limites**
-RetoSwap (TOFU), P2Pool (reproducible builds), relógio no haveno-auto.sh — cada compromisso de confiança é nomeado com mitigação. Golpes, exploit corrigido, KYC agregadores: explícitos nos passos certos.
+RetoSwap (TOFU), P2Pool (reproducible builds), relógio no hub.sh — cada compromisso de confiança é nomeado com mitigação. Golpes, exploit corrigido, KYC agregadores: explícitos nos passos certos.
 
 **6. Ecossistema**
 Tails guarda o grosso e assina offline (passo 12). Whonix online vê, monta e transmite. Haveno é a ponte para trades quentes (escrow multisig automático). Home Lab (nó, mineração) é opcional, em outro PC.
@@ -236,7 +236,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   ├── 📋 PASSO 2 — Haveno Verde
 │   │   ├── ▸ COMANDO 2.1: baixar .deb + .sig via Tor
 │   │   ├── ▸ COMANDO 2.2: verificar PGP (fail-closed · FPR inline)
-│   │   ├── ▸ COMANDO 2.3: instalar via haveno-auto.sh
+│   │   ├── ▸ COMANDO 2.3: instalar via hub.sh install
 │   │   ├── ▸ COMANDO 2.4: iniciar Haveno e aguardar sincronização
 │   │   └── ✅ OK SE: indicador de rede ● VERDE
 │   │
@@ -247,14 +247,14 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: regras lidas + compreendidas
 │   │
 │   ├── 📋 PASSO 4 — Backup Seed
-│   │   ├── ▸ COMANDO 4.1: backup cifrado da Data/ (haveno-backup.sh)
-│   │   ├── ▸ COMANDO 4.2: seed em papel (qa-confirm-seed-papel.sh)
+│   │   ├── ▸ COMANDO 4.1: backup cifrado da Data/ (hub.sh backup)
+│   │   ├── ▸ COMANDO 4.2: seed em papel (qa/confirm-seed.sh)
 │   │   ├── 🔴 NUNCA: seed em arquivo digital, foto, nuvem ou e-mail
 │   │   └── ✅ OK SE: seed física legível + backup cifrado em pendrive separado
 │   │
 │   ├── 📋 PASSO 5 — Feather Wallet (obrigatório para M2)
 │   │   ├── ▸ COMANDO 5.1: baixar AppImage + assinatura via Tor
-│   │   ├── ▸ COMANDO 5.2: feather-install-verify.sh (PGP fail-closed)
+│   │   ├── ▸ COMANDO 5.2: hub.sh feather (PGP fail-closed)
 │   │   ├── ▸ COMANDO 5.3: primeira execução + backup wallets/
 │   │   └── ✅ OK SE: Feather abre · "Good signature" · backup feito
 │   │
@@ -264,11 +264,11 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: folheto impresso ou lido + em local acessível
 │   │
 │   ├── 📋 PASSO 7 — Rotina de Scripts (cada sessão)
-│   │   ├── ▸ COMANDO 7.1: haveno-setup.sh --boot (a cada boot)
-│   │   ├── ▸ COMANDO 7.2: haveno-setup.sh --feather (Feather + Haveno)
-│   │   ├── ▸ COMANDO 7.3: haveno-setup.sh --update (atualizar versão)
+│   │   ├── ▸ COMANDO 7.1: hub.sh boot (a cada boot)
+│   │   ├── ▸ COMANDO 7.2: hub.sh feather (Feather Wallet)
+│   │   ├── ▸ COMANDO 7.3: hub.sh update (atualizar versão)
 │   │   ├── 📎 sync-hub-scripts.sh: sincronizar scripts para ~/Persistent/
-│   │   ├── 📎 tails-preflight.sh: validar ambiente antes de automatizar
+│   │   ├── 📎 system/preflight.sh: validar ambiente antes de automatizar
 │   │   └── ✅ OK SE: Haveno verde em < 5 min após boot
 │   │
 │   └── 🏁 CHECKPOINT 1 — Haveno Verde + Seed Salva
@@ -286,10 +286,10 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: trilha escolhida conscientemente (pode trocar depois)
 │   │
 │   ├── 📋 PASSO 9 — Ritual Seed (2× Cópias Físicas)
-│   │   ├── ▸ COMANDO 9.1: qa-confirm-passo9.sh (validação ritual completa)
+│   │   ├── ▸ COMANDO 9.1: qa/confirm-step9.sh (validação ritual completa)
 │   │   ├── 📎 Regra inviolável: 2 cópias · 2 locais físicos separados
 │   │   ├── 📎 Tor OK neste passo (ainda online)
-│   │   └── ✅ OK SE: qa-confirm-passo9.sh → PASS
+│   │   └── ✅ OK SE: qa/confirm-step9.sh → PASS
 │   │
 │   ├── 📋 PASSO 10 — Whonix PGP + Import VMs
 │   │   ├── ▸ COMANDO 10.1: baixar Whonix-LXQt-18.1.4.2.ova + .asc
@@ -311,7 +311,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   ├── ▸ COMANDO 12A.3: construir + assinar transação (TXID pendente)
 │   │   ├── ▸ COMANDO 12A.4: exportar tx assinada → pendrive USB
 │   │   ├── ▸ COMANDO 12A.5: importar pendrive no Whonix (hot) + broadcast
-│   │   └── ✅ OK SE: qa-confirm-passo12.sh PASS · tx confirmada na rede
+│   │   └── ✅ OK SE: qa/confirm-step12.sh PASS · tx confirmada na rede
 │   │
 │   ├── 📋 PASSO 12B — CLI Offline (Trilha B — avançado)
 │   │   ├── ▸ COMANDO 12B.1: monero-wallet-cli --offline (Tails sem rede)
@@ -323,13 +323,13 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   └── 🏁 CHECKPOINT 2 — Cold-Signing ao Vivo
 │       ├── ✅ Tails offline (sem rede) · carteira aberta · tx assinada
 │       ├── ✅ Transmissão confirmada via Whonix (hot)
-│       ├── ✅ qa-confirm-passo12.sh → PASS
+│       ├── ✅ qa/confirm-step12.sh → PASS
 │       └── ✅ Modelo frio↔quente executado do início ao fim
 │
 └── 📚 APÊNDICES
     │
     ├── APÊNDICE A — Scripts: Catálogo Completo (15+ scripts)
-    │   └── haveno-setup.sh · haveno-auto.sh · haveno-boot.sh · feather-install-verify.sh · …
+    │   └── hub.sh · haveno/ · feather/ · system/ · qa/ · lib/ · steps/ · …
     │
     ├── APÊNDICE B — Erros Comuns (TOP 10)
     │
@@ -450,7 +450,7 @@ sudo echo ok
 #### 1.5 — Validação com script (após instalar os scripts no Passo 2)
 
 ```bash
-~/Persistent/hub-scripts/tails-preflight.sh --qa-log
+~/Persistent/hub-scripts/system/preflight.sh --qa-log
 ```
 
 Log salvo em: `~/Persistent/qa-logs/01-preflight-*.txt`
@@ -489,7 +489,7 @@ chmod +x sync-hub-scripts.sh
 
 ```bash
 # Método recomendado (orquestrador):
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log
+~/Persistent/hub-scripts/hub.sh install --qa-log
 ```
 
 O script faz automaticamente:
@@ -506,7 +506,7 @@ O script faz automaticamente:
 
 📎 **Onde ficam os arquivos:** o `.deb` baixa em `~/Persistent/haveno/.download/` (retomável). Depois da verificação PGP, vai para `~/Persistent/haveno/Install/` — com symlink `haveno.deb` se preciso. A pasta `.download/` só é apagada no **sucesso**; em falha, fica para retomar.
 
-📎 **Recuperação:** `.deb` completo só em `.download/` → `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log`. Já em `Install/` → `--install-only`.
+📎 **Recuperação:** `.deb` completo só em `.download/` → `sync-hub-scripts.sh` + `hub.sh install --qa-log`. Já em `Install/` → `hub.sh install --install-only --qa-log`.
 
 ---
 
@@ -574,15 +574,15 @@ sudo systemctl restart onion-grater
 
 ```bash
 # Caminho validado em Tails real (piloto jun/2026):
-cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails/etapas/instalar-haveno
+cd ~/Persistent/hub-scripts/steps
 chmod +x *.sh
-./01-pastas.sh
-./02-baixar-deb.sh
-./04-importar-chave.sh
-./05-verificar-assinatura.sh
-./06-deps-apt.sh
-./07-instalar-deb.sh
-./08-abrir-haveno.sh
+./01-setup-dirs.sh
+./02-download-deb.sh
+./04-import-key.sh
+./05-verify-sig.sh
+./06-check-deps.sh
+./07-install-deb.sh
+./08-open-haveno.sh
 ```
 
 Se o `.deb` já está completo mas a `.sig` foi rejeitada (script desatualizado):
@@ -591,7 +591,7 @@ Se o `.deb` já está completo mas a `.sig` foi rejeitada (script desatualizado)
 # Atualize os scripts (corrige validação da .sig Ed25519 binária):
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log
+~/Persistent/hub-scripts/hub.sh install --qa-log
 ```
 
 **OK se:** "Haveno installation setup completed successfully." · pastas App Data Install criadas · ícone em Aplicações → Outros · indicador verde.
@@ -626,24 +626,24 @@ ls ~/Persistent/haveno/Install/
 
 ### 📋 PASSO 4 — Backup e Seed em Papel
 
-**Rede:** Online (Tor) | **Ferramentas:** haveno-backup.sh, qa-confirm-seed-papel.sh | **Tempo:** 20 min
+**Rede:** Online (Tor) | **Ferramentas:** hub.sh backup, qa/confirm-seed.sh | **Tempo:** 20 min
 
 **Contexto:** A seed (25 palavras) recupera os fundos. O backup cifrado de Data/ recupera histórico, contas e trades. São coisas diferentes — você precisa dos dois.
 
 ```bash
 # FECHE o Haveno antes do backup
-~/Persistent/hub-scripts/haveno-backup.sh --qa-log
+~/Persistent/hub-scripts/hub.sh backup --qa-log
 ```
 
 ```bash
 # Variações úteis:
-~/Persistent/hub-scripts/haveno-backup.sh --usb     # salvar em pendrive separado
-~/Persistent/hub-scripts/haveno-backup.sh --dest /caminho/pasta  # pasta específica
+~/Persistent/hub-scripts/hub.sh backup --usb     # salvar em pendrive separado
+~/Persistent/hub-scripts/hub.sh backup --dest /caminho/pasta  # pasta específica
 ```
 
 ```bash
 # Após anotar a seed no papel (Account → Wallet seed no Haveno):
-~/Persistent/hub-scripts/qa-confirm-seed-papel.sh
+~/Persistent/hub-scripts/qa/confirm-seed.sh
 ```
 
 **Ritual da seed:**
@@ -741,12 +741,12 @@ UI do Feather:
 
 ```bash
 # Automatizado (faz tudo: download + PGP + abre UI):
-~/Persistent/hub-scripts/feather-install-verify.sh --qa-log
+~/Persistent/hub-scripts/hub.sh feather --qa-log
 ```
 
 ```bash
 # Backup da carteira Feather após criar:
-~/Persistent/hub-scripts/feather-backup.sh
+~/Persistent/hub-scripts/feather/backup.sh
 ```
 
 **OK se:** Feather abre, sincroniza, saldo visível (0 XMR no início é normal) · PGP OK com fingerprint correto · seed em papel separado do Haveno.
@@ -808,9 +808,9 @@ UI do Feather:
 
 ### 📋 PASSO 7 — Rotina de Scripts (cada sessão)
 
-**Rede:** Online (Tor) | **Ferramenta:** haveno-setup.sh | **Tempo:** 5 min por sessão
+**Rede:** Online (Tor) | **Ferramenta:** hub.sh | **Tempo:** 5 min por sessão
 
-**Contexto:** O Tails é amnésico — esquece tudo ao desligar. A cada boot, é preciso re-ligar o Haveno na sessão. O `--boot` faz isso: é rápido e não baixa nada de novo.
+**Contexto:** O Tails é amnésico — esquece tudo ao desligar. A cada boot, é preciso re-ligar o Haveno na sessão. O `hub.sh boot` faz isso: é rápido e não baixa nada de novo.
 
 ---
 
@@ -818,7 +818,7 @@ UI do Feather:
 
 ```bash
 # O comando de toda sessão:
-~/Persistent/hub-scripts/haveno-setup.sh --boot --qa-log
+~/Persistent/hub-scripts/hub.sh boot --qa-log
 ```
 
 Manual (equivalente):
@@ -829,7 +829,7 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 
 ```bash
 # Verificação pós-sessão:
-~/Persistent/hub-scripts/post-session-check.sh --qa-log
+~/Persistent/hub-scripts/system/post-session.sh --qa-log
 ```
 
 **OK se:** Haveno abre e fica verde. Indicador amarelo por 5–20 min no primeiro boot da sessão é normal.
@@ -839,7 +839,8 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 #### 7.2 — Com Feather também (passo 5 + boot)
 
 ```bash
-~/Persistent/hub-scripts/haveno-setup.sh --boot --feather --qa-log
+~/Persistent/hub-scripts/hub.sh boot --qa-log
+~/Persistent/hub-scripts/hub.sh feather --qa-log
 ```
 
 ---
@@ -848,40 +849,47 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 
 ```bash
 # Sempre faça backup antes:
-~/Persistent/hub-scripts/haveno-backup.sh
+~/Persistent/hub-scripts/hub.sh backup
 
-# Atualizar (substitua URL e fingerprint pelo release novo da SUA rede):
-~/Persistent/hub-scripts/haveno-update.sh \
+# Atualizar (lê versão e fingerprint de lib/config.sh — atualizado pelo mantenedor):
+~/Persistent/hub-scripts/hub.sh update
+```
+
+```bash
+# Avançado — forçar URL e fingerprint manualmente (edita lib/config.sh antes):
+~/Persistent/hub-scripts/haveno/update.sh \
   --url "https://github.com/retoaccess1/haveno-reto/releases/download/VERSAO-NOVA/haveno-vVERSAO-linux-x86_64-installer.deb" \
   --pgp "FINGERPRINT_DA_MESMA_REDE"
 ```
 
-🔴 **Nunca** use `--no-backup` no `haveno-update.sh`. Se o backup falhar, a atualização aborta — isso é intencional.
+🔴 **Nunca** use `--no-backup` no `haveno/update.sh`. Se o backup falhar, a atualização aborta — isso é intencional.
 
 ---
 
 #### 7.4 — Tabela de scripts (referência rápida)
 
-| Script | Quando usar | Seguro rodar 2×? |
-|--------|-------------|:----------------:|
-| `haveno-setup.sh` | 1ª vez ou `--boot` a cada sessão | Sim |
-| `haveno-setup.sh --boot` | Cada sessão após instalação | Sim |
-| `haveno-setup.sh --feather` | + Feather na mesma sessão | Sim |
-| `haveno-backup.sh` | Antes do 1º depósito; periodicamente | Sim (cria arquivo novo com timestamp) |
-| `haveno-update.sh` | Release novo da rede | Sim (backup obrigatório antes) |
-| `feather-install-verify.sh` | Passo 5 | Sim (re-verifica) |
-| `feather-backup.sh` | Após criar carteira Feather | Sim |
-| `tails-preflight.sh` | Antes de qualquer script | Sim (só leitura) |
-| `post-session-check.sh` | Após atualizar o Tails (SO) | Sim |
-| `qa-confirm-seed-papel.sh` | Após passo 4 | Sim |
-| `qa-confirm-passo9.sh` | Passo 9 | Sim |
-| `qa-confirm-passo12.sh` | Após cold-signing | Sim |
-| `qa-export-logs.sh --usb` | Entregar logs para equipe | Sim |
-| `haveno-common.sh` | **NUNCA execute diretamente** | N/A |
+| Comando | Quando usar | Seguro rodar 2×? |
+|---------|-------------|:----------------:|
+| `hub.sh install` | 1ª vez (instalar Haveno) | Sim |
+| `hub.sh install --qa-log` | 1ª vez com log de evidência | Sim |
+| `hub.sh install --install-only` | .deb já em Install/ (sem download) | Sim |
+| `hub.sh boot` | Cada sessão após instalação | Sim |
+| `hub.sh boot --qa-log` | Cada sessão com log | Sim |
+| `hub.sh backup` | Antes do 1º depósito; periodicamente | Sim (cria arquivo novo com timestamp) |
+| `hub.sh backup --usb` | Salvar em pendrive separado | Sim |
+| `hub.sh update` | Release novo da rede | Sim (backup automático antes) |
+| `hub.sh feather` | Passo 5 (instala + verifica PGP) | Sim (re-verifica) |
+| `hub.sh feather --qa-log` | Passo 5 com log | Sim |
+| `system/preflight.sh` | Antes de qualquer script | Sim (só leitura) |
+| `system/post-session.sh` | Após atualizar o Tails (SO) | Sim |
+| `qa/confirm-seed.sh` | Após passo 4 | Sim |
+| `qa/confirm-step9.sh` | Passo 9 | Sim |
+| `qa/confirm-step12.sh` | Após cold-signing | Sim |
+| `qa/export-logs.sh --usb` | Entregar logs para equipe | Sim |
 
 **Resumo de bolso:**
-- **Primeira vez na vida** → `haveno-setup.sh`
-- **Já instalei antes, voltei ao Tails** → `haveno-setup.sh --boot`
+- **Primeira vez na vida** → `hub.sh install`
+- **Já instalei antes, voltei ao Tails** → `hub.sh boot`
 
 ---
 
@@ -897,10 +905,10 @@ Antes de continuar para a Parte 2, confirme cada item:
 - [ ] **Segunda cópia** da seed em local físico separado
 - [ ] **Restore height** anotado junto com a seed
 - [ ] Backup cifrado de `Data/` feito (`04-haveno-backup-*.txt` → PASS)
-- [ ] `qa-confirm-seed-papel.sh` → 3× SIM
+- [ ] `qa/confirm-seed.sh` → 3× SIM
 - [ ] Feather Wallet instalado, PGP verificado (`8185E158…CEFBA71C`)
 - [ ] Folheto lido — regras de ouro e golpes memorizados
-- [ ] `haveno-setup.sh --boot` funciona em nova sessão
+- [ ] `hub.sh boot` funciona em nova sessão
 
 🔴 **Não continue para a Parte 2 sem todos os itens acima.** O Módulo 2 exige M1 completo.
 
@@ -983,7 +991,7 @@ Ao criar a conta (já feito no Passo 4):
 #### 9.2 — Confirmação com script
 
 ```bash
-~/Persistent/hub-scripts/qa-confirm-passo9.sh
+~/Persistent/hub-scripts/qa/confirm-step9.sh
 ```
 
 **OK se:** `09-seed-confirmacao-*.txt` → 3× SIM · duas cópias em locais separados.
@@ -1292,7 +1300,7 @@ Saldo antigo não aparece? Restore height muito alto — recrie com a altura cor
 #### Após assinar offline
 
 ```bash
-~/Persistent/hub-scripts/qa-confirm-passo12.sh
+~/Persistent/hub-scripts/qa/confirm-step12.sh
 ```
 
 **OK se:** Tails sem rede antes de abrir carteira · `12-cold-signing-*.txt` → `tails_offline_airgap=SIM`.
@@ -1392,7 +1400,7 @@ submit_transfer
 #### Após assinar offline
 
 ```bash
-~/Persistent/hub-scripts/qa-confirm-passo12.sh
+~/Persistent/hub-scripts/qa/confirm-step12.sh
 ```
 
 **OK se:** mesmo critério do 12A — air-gap real · `12-cold-signing-*.txt` → `tails_offline_airgap=SIM`.
@@ -1433,84 +1441,92 @@ Antes de considerar a trilha principal concluída:
 ```text
 ~/Persistent/hub-scripts/
 │
-├── haveno-setup.sh          ★ COMECE AQUI (novato)
+├── hub.sh                   ★ COMECE AQUI (único ponto de entrada do aluno)
 │
-├── Tails (ambiente)
-│   ├── tails-preflight.sh
-│   └── post-session-check.sh
+├── lib/                     (biblioteca interna — NÃO execute diretamente)
+│   ├── config.sh            (HAVENO_VERSION + HAVENO_PGP_FPR — fonte única)
+│   ├── common.sh            (funções compartilhadas, qa_log_*, sig validation)
+│   └── onion-grater.yml     (filtro Tor corrigido p/ 1.6.0)
 │
-├── Haveno (carteira / app)
-│   ├── haveno-auto.sh
-│   ├── haveno-boot.sh
-│   ├── haveno-backup.sh
-│   ├── haveno-backup.desktop   (atalho de menu — opcional)
-│   ├── haveno-update.sh
-│   ├── haveno-verify-deb.sh
-│   ├── haveno-switch-network.sh
-│   └── haveno-onion-grater.yml  (filtro Tor corrigido p/ 1.6.0)
+├── haveno/                  (Haveno — carteira / app)
+│   ├── install.sh           (Download + PGP + install + verde)
+│   ├── boot.sh              (install.sh + exec.sh + onion-grater)
+│   ├── backup.sh            (backup cifrado Data/ com GPG)
+│   ├── update.sh            (atualizar .deb com PGP — backup obrigatório)
+│   ├── verify-deb.sh        (verificar assinatura GPG do .deb — avançado)
+│   └── switch-network.sh    (trocar rede Haveno — avançado)
 │
-├── etapas/instalar-haveno/    ★ FALLBACK (passo 2 em pedaços — avançado)
-│   ├── 01-pastas.sh … 08-abrir-haveno.sh
-│   └── TUDO.sh
+├── feather/                 (Feather — passo 5 / M2)
+│   ├── install.sh           (PGP fail-closed + abre UI)
+│   └── backup.sh            (backup cifrado wallets/)
 │
-├── Feather (passo 5 / M2)
-│   ├── feather-install-verify.sh
-│   └── feather-backup.sh
+├── system/                  (Tails — ambiente)
+│   ├── preflight.sh         (valida Tails/Tor/persistência/admin)
+│   ├── post-session.sh      (Tor + onion-grater pós-upgrade Tails)
+│   └── health-check.sh      (validação estática — equipe)
 │
-├── haveno-common.sh         ✗ NÃO EXECUTE (biblioteca interna)
+├── qa/                      (Validação / QA)
+│   ├── confirm-seed.sh      (confirma seed no papel — sem gravar palavras)
+│   ├── confirm-step9.sh     (confirma 2 cópias físicas separadas)
+│   ├── confirm-step12.sh    (confirma cold-signing offline)
+│   └── export-logs.sh       (copia qa-logs/ para pendrive)
 │
-├── Validação / QA
-│   ├── qa-confirm-seed-papel.sh
-│   ├── qa-confirm-passo9.sh
-│   ├── qa-confirm-passo12.sh
-│   └── qa-export-logs.sh
+├── steps/                   ★ FALLBACK atômico (passo 2 em pedaços — avançado)
+│   ├── 01-setup-dirs.sh
+│   ├── 02-download-deb.sh
+│   ├── 04-import-key.sh
+│   ├── 05-verify-sig.sh
+│   ├── 06-check-deps.sh
+│   ├── 07-install-deb.sh
+│   ├── 08-open-haveno.sh
+│   └── run-all.sh           (executa 01→08, para no 1º FAIL)
 │
 └── sync-hub-scripts.sh      (instala/atualiza esta pasta)
 ```
 
 #### Fichas dos scripts principais
 
-| Script | Passo hub | O que faz | Quando usar | Rodar 2×? |
-|--------|:---------:|-----------|-------------|:---------:|
-| `haveno-setup.sh` | 2, 7 | Orquestrador: preflight → auto ou boot → backup? | 1ª vez e cada sessão | Seguro |
-| `haveno-setup.sh --boot` | 7 | Preflight → boot Haveno na sessão | Cada sessão após instalar | Seguro |
-| `haveno-setup.sh --feather` | 5 | + instalar/verificar Feather | Junto com install ou boot | Seguro |
-| `haveno-auto.sh` | 2 | Download + PGP + install + verde | Direto sem orquestrador | Seguro (pula se já instalado) |
-| `haveno-boot.sh` | 7 | install.sh + exec.sh + onion-grater | Cada sessão direto | Seguro (pode abrir 2 janelas) |
-| `haveno-backup.sh` | 4, 7 | Backup cifrado Data/ com GPG | Antes do 1º depósito; periodicamente | Seguro (cria arquivo novo com timestamp) |
-| `haveno-update.sh` | 7 | Atualizar .deb com PGP (backup obrigatório antes) | Release novo da rede | Cuidado — faz backup automático |
-| `haveno-verify-deb.sh` | 5 | Verificar assinatura GPG do .deb | Dúvida sobre autenticidade | Seguro (só leitura) |
-| `haveno-switch-network.sh` | 5 | Trocar rede Haveno (backup + update) | Mudar para outra rede | Cuidado — feche trades antes |
-| `feather-install-verify.sh` | 5 | Feather: PGP fail-closed + abre UI | Após download no Tor Browser | Seguro (não mexe em wallets/) |
-| `feather-backup.sh` | 5 | Backup cifrado wallets/ | Após criar carteira Feather | Seguro (timestamp) |
-| `tails-preflight.sh` | 1–4 | Valida Tails/Tor/persistência/admin | Antes de qualquer script | Seguro (só leitura) |
-| `post-session-check.sh` | 7 | Tor + onion-grater pós-upgrade Tails | Após atualizar o SO Tails | Seguro |
-| `qa-confirm-seed-papel.sh` | 4 | Confirma seed no papel (sem gravar palavras) | Após passo 4 | Seguro |
-| `qa-confirm-passo9.sh` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
-| `qa-confirm-passo12.sh` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
-| `qa-export-logs.sh --usb` | — | Copia qa-logs/ para pendrive | Entregar evidências | Seguro |
-| `haveno-common.sh` | — | **NUNCA execute diretamente** (biblioteca) | N/A | N/A |
+| Comando / Script | Passo hub | O que faz | Quando usar | Rodar 2×? |
+|-----------------|:---------:|-----------|-------------|:---------:|
+| `hub.sh install` | 2 | Orquestrador: preflight → download + PGP + install + verde | 1ª vez | Seguro |
+| `hub.sh install --qa-log` | 2 | Idem com log de evidência | 1ª vez (recomendado) | Seguro |
+| `hub.sh install --install-only` | 2 | .deb já em Install/ — deps + install.sh (sem download) | Retomar após download OK | Seguro |
+| `hub.sh install --one-password` | 2 | Senha admin uma vez só no fluxo | Conforto (opt-in) | Seguro |
+| `hub.sh boot` | 7 | Preflight → boot Haveno na sessão | Cada sessão após instalar | Seguro |
+| `hub.sh boot --qa-log` | 7 | Idem com log | Cada sessão (recomendado) | Seguro |
+| `hub.sh backup` | 4, 7 | Backup cifrado Data/ com GPG | Antes do 1º depósito; periodicamente | Seguro (timestamp) |
+| `hub.sh backup --usb` | 4 | Salvar backup em pendrive separado | Mídia extra | Seguro |
+| `hub.sh backup --dest /caminho` | 4 | Pasta específica | Destino personalizado | Seguro |
+| `hub.sh backup --restore ARQUIVO` | — | Restaura Data/ (pede confirmação) | Recuperação | Cuidado — sobrescreve |
+| `hub.sh update` | 7 | Atualizar .deb com PGP (backup automático antes) | Release novo da rede | Seguro |
+| `hub.sh feather` | 5 | Feather: PGP fail-closed + abre UI | Passo 5 | Seguro (não mexe em wallets/) |
+| `hub.sh feather --qa-log` | 5 | Idem com log | Passo 5 (recomendado) | Seguro |
+| `haveno/verify-deb.sh` | — | Verificar assinatura GPG do .deb | Dúvida sobre autenticidade | Seguro (só leitura) |
+| `haveno/switch-network.sh` | — | Trocar rede Haveno (backup + update) | Mudar para outra rede | Cuidado — feche trades antes |
+| `system/preflight.sh` | 1–4 | Valida Tails/Tor/persistência/admin | Antes de qualquer script | Seguro (só leitura) |
+| `system/post-session.sh` | 7 | Tor + onion-grater pós-upgrade Tails | Após atualizar o SO Tails | Seguro |
+| `qa/confirm-seed.sh` | 4 | Confirma seed no papel (sem gravar palavras) | Após passo 4 | Seguro |
+| `qa/confirm-step9.sh` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
+| `qa/confirm-step12.sh` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
+| `qa/export-logs.sh --usb` | — | Copia qa-logs/ para pendrive | Entregar evidências | Seguro |
 
-#### Flags do haveno-auto.sh
+#### Flags do hub.sh install
 
 ```bash
-~/Persistent/hub-scripts/haveno-auto.sh              # padrão: install se necessário + abrir
-~/Persistent/hub-scripts/haveno-auto.sh --boot-only  # igual haveno-boot.sh
-~/Persistent/hub-scripts/haveno-auto.sh --update     # força reinstall do .deb (dados preservados)
-~/Persistent/hub-scripts/haveno-auto.sh --no-clock   # não ajusta relógio via Tor
-~/Persistent/hub-scripts/haveno-auto.sh --install-only # .deb ja em Install/ — deps + install.sh (sem download)
-~/Persistent/hub-scripts/haveno-auto.sh --qa-log     # grava log em ~/Persistent/qa-logs/
-~/Persistent/hub-scripts/haveno-auto.sh --one-password # senha admin uma vez só no fluxo
+~/Persistent/hub-scripts/hub.sh install              # padrão: download + PGP + install + abrir
+~/Persistent/hub-scripts/hub.sh install --qa-log     # grava log em ~/Persistent/qa-logs/
+~/Persistent/hub-scripts/hub.sh install --one-password # senha admin uma vez só no fluxo
+~/Persistent/hub-scripts/hub.sh install --install-only # .deb já em Install/ — deps + install.sh (sem download)
 ```
 
-#### Flags do haveno-backup.sh
+#### Flags do hub.sh backup
 
 ```bash
-~/Persistent/hub-scripts/haveno-backup.sh                    # cifrado em ~/Persistent/Backups/
-~/Persistent/hub-scripts/haveno-backup.sh --usb              # escolhe USB montado
-~/Persistent/hub-scripts/haveno-backup.sh --dest /caminho    # pasta específica
-~/Persistent/hub-scripts/haveno-backup.sh --no-encrypt       # NÃO recomendado
-~/Persistent/hub-scripts/haveno-backup.sh --restore ARQUIVO  # SOBRESCREVE Data/ — pede confirmação
+~/Persistent/hub-scripts/hub.sh backup                    # cifrado em ~/Persistent/Backups/
+~/Persistent/hub-scripts/hub.sh backup --usb              # escolhe USB montado
+~/Persistent/hub-scripts/hub.sh backup --dest /caminho    # pasta específica
+~/Persistent/hub-scripts/hub.sh backup --no-encrypt       # NÃO recomendado
+~/Persistent/hub-scripts/hub.sh backup --restore ARQUIVO  # SOBRESCREVE Data/ — pede confirmação
 ```
 
 #### O que NÃO tem script (e por quê — sempre manual)
@@ -1558,10 +1574,10 @@ sudo systemctl restart onion-grater
 ```bash
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log
+~/Persistent/hub-scripts/hub.sh install --qa-log
 ```
 
-O `sync-hub-scripts.sh` distribui a versão corrigida (`haveno_sig_valid_format`). Se o `.deb` já estiver completo em `Install/`, acrescente `--install-only`.
+O `sync-hub-scripts.sh` distribui a versão corrigida (`haveno_sig_valid_format`). Se o `.deb` já estiver completo em `Install/`, use `hub.sh install --install-only --qa-log`.
 
 ---
 
@@ -1687,7 +1703,7 @@ command filtered: ADD_ONION NEW:BEST PoWQueueBurst=100 PoWDefensesEnabled=1 PoWQ
 **Correção:**
 
 ```bash
-sudo cp ~/Persistent/haveno-onion-grater.yml /etc/onion-grater.d/haveno.yml
+sudo cp ~/Persistent/hub-scripts/lib/onion-grater.yml /etc/onion-grater.d/haveno.yml
 sudo systemctl restart onion-grater
 ```
 
@@ -1706,8 +1722,8 @@ Confirme `loaded filter: haveno` no journalctl e reabra o Haveno. O `sync-hub-sc
 **Se quiser digitar a senha uma vez só**, todos os scripts aceitam a flag opcional **`--one-password`**:
 
 ```bash
-~/Persistent/hub-scripts/haveno-setup.sh --one-password          # 1ª vez
-~/Persistent/hub-scripts/haveno-setup.sh --boot --one-password   # cada sessão
+~/Persistent/hub-scripts/hub.sh install --one-password   # 1ª vez
+~/Persistent/hub-scripts/hub.sh boot --one-password      # cada sessão
 ```
 
 Ela instala um ajuste **temporário de sessão** (o `sudo` guarda a senha até o script terminar) e o **remove automaticamente no fim**. O Tails é amnésico — o ajuste some ao reiniciar.

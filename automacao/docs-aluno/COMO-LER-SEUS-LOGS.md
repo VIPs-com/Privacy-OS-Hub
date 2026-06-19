@@ -11,27 +11,26 @@
 | **Tails** | `~/Persistent/qa-logs/*.txt` |
 | **Host Linux (Whonix)** | `~/whonix-download/qa-logs/*.txt` (com `--qa-log`) |
 
-Ative gravação com **`--qa-log`** nos scripts (ou `haveno-setup.sh --qa-log`).
+Ative gravação com **`--qa-log`** nos scripts (ou `hub.sh install --qa-log`).
 
 ---
 
 ## Como rodar
 
 ```bash
-chmod +x ~/Persistent/hub-scripts/*.sh
-
 # Exemplos (Tails com Tor):
-~/Persistent/hub-scripts/tails-preflight.sh --qa-log
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log
-~/Persistent/hub-scripts/haveno-backup.sh --qa-log
-~/Persistent/hub-scripts/feather-install-verify.sh --qa-log
-~/Persistent/hub-scripts/post-session-check.sh --qa-log
-~/Persistent/hub-scripts/qa-confirm-seed-papel.sh    # apos anotar seed no papel
-~/Persistent/hub-scripts/qa-confirm-passo9.sh        # passo 9 — 2 copias fisicas
-~/Persistent/hub-scripts/qa-confirm-passo12.sh       # passo 12 — Tails SEM rede
+~/Persistent/hub-scripts/hub.sh install --qa-log          # 1ª vez
+~/Persistent/hub-scripts/hub.sh boot --qa-log             # cada sessão
+~/Persistent/hub-scripts/hub.sh backup --qa-log           # backup carteira
+~/Persistent/hub-scripts/hub.sh feather --qa-log          # Feather (passo 5)
+~/Persistent/hub-scripts/system/preflight.sh --qa-log     # só validar ambiente
+~/Persistent/hub-scripts/system/post-session.sh --qa-log  # pós-upgrade Tails
+~/Persistent/hub-scripts/qa/confirm-seed.sh               # após anotar seed no papel
+~/Persistent/hub-scripts/qa/confirm-step9.sh              # passo 9 — 2 cópias físicas
+~/Persistent/hub-scripts/qa/confirm-step12.sh             # passo 12 — Tails SEM rede
 
 # Exportar para equipe / outro PC:
-~/Persistent/hub-scripts/qa-export-logs.sh --usb
+~/Persistent/hub-scripts/qa/export-logs.sh --usb
 ```
 
 **Host Debian (passo 10):**
@@ -102,8 +101,8 @@ Ver também: [README — trilha linear](../../README.md#trilha-linear).
 1. Leia a linha `ERRO:` ou `Preflight FALHOU` no `.txt`.  
 2. **`02-haveno-auto` no [6/9]:**
    - **Progresso:** linhas `[download] [########----] NN%` (a cada 10s) ou barra curl no `.deb`/`.sig`.
-   - **`.deb` ~266 MB só em `.download/`:** `sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` (promove para `Install/`).
-   - **Já em `Install/`:** `haveno-setup.sh --install-only`.
+   - **`.deb` ~266 MB só em `.download/`:** `sync-hub-scripts.sh` + `hub.sh install --qa-log` (promove para `Install/`).
+   - **Já em `Install/`:** `hub.sh install --install-only`.
    - Alternativa: [TRES-PASSOS — fallback atômico](TRES-PASSOS-HAVENO-TAILS.md).  
 3. Volte ao passo certo em [README → Travou aqui?](../../README.md#travou-aqui) (cada situação → passo + processo P0x).  
 4. Corrija e rode de novo com `--qa-log`.  

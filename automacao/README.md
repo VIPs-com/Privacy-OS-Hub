@@ -16,10 +16,10 @@
 ## Copiar para o Tails (uma vez)
 
 ```bash
-# Do clone no pendrive persistente:
-cp automacao/tails/*.sh automacao/tails/hub-aliases/*.sh ~/Persistent/
-cp automacao/tails/haveno-backup.desktop ~/Persistent/
-chmod +x ~/Persistent/hub-scripts/*.sh
+# Do clone/ZIP no pendrive persistente:
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
+./sync-hub-scripts.sh
+# Cria ~/Persistent/hub-scripts/ com haveno/ feather/ system/ qa/ lib/ steps/ aliases/
 ```
 
 ---

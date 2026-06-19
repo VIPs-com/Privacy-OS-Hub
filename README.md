@@ -49,13 +49,13 @@ PARTE 1 (1–7)                         PARTE 2 (8–12)
 | 2 | Haveno Verde | Haveno 1.6.0-reto | Indicador ● VERDE |
 | 3 | Cautela pré-trade | — | Regras e golpes internalizados |
 | | **Passos 4–7 — Pré-M2** | | |
-| 4 | Backup Seed | haveno-backup.sh | Seed em papel + backup cifrado |
+| 4 | Backup Seed | hub.sh backup | Seed em papel + backup cifrado |
 | 5 | Feather Wallet | Feather AppImage | Carteira verificada por PGP |
 | 6 | Folheto | — | Regras de ouro impressas |
-| 7 | Rotina de scripts | haveno-setup.sh | Boot automatizado em < 5 min |
+| 7 | Rotina de scripts | hub.sh boot | Boot automatizado em < 5 min |
 | | **Passos 8–12 — Custódia fria** | | |
 | 8 | Porteiro: Trilha A ou B | — | Trilha escolhida conscientemente |
-| 9 | Ritual Seed | qa-confirm-passo9.sh | 2 cópias físicas em locais separados |
+| 9 | Ritual Seed | qa/confirm-step9.sh | 2 cópias físicas em locais separados |
 | 10 | Whonix + PGP | VirtualBox/KVM | "Tor Connected" no Workstation |
 | 11 | Modelo frio↔quente | — | Air-gap internalizado |
 | 12A | Feather Offline *(Trilha A)* | Feather (air-gap) | Cold-signing completo |
@@ -73,7 +73,7 @@ Privacy-OS-Hub/
 ├── README.md                            ← você está aqui
 │
 ├── automacao/                           ← scripts .sh para Tails e Whonix
-│   ├── tails/                           ·  haveno-setup.sh · feather-install-verify.sh · …
+│   ├── tails/                           ·  hub.sh · haveno/ feather/ system/ qa/ lib/ steps/
 │   ├── whonix-host/                     ·  whonix-verify-image.sh
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
 │   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md

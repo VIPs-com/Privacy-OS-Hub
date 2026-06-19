@@ -1,45 +1,44 @@
 # Scripts — Tails OS Expert
 
-> **Validar sem adivinhar:** [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) — use `--qa-log` e abra os `.txt` em `~/Persistent/qa-logs/`.
+> **Validar sem adivinhar:** use `--qa-log` e abra os `.txt` em `~/Persistent/qa-logs/`. Guia: [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md)
 >
 > **Três passos (ZIP → 1ª vez → reiniciar):** [TRES-PASSOS-HAVENO-TAILS.md](../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
 >
-> **Novato?** Leia o [**MANUAL.md**](../../docs/MANUAL.md#parte-ii--scripts-para-novato) — [Apêndice A (cada arquivo)](../../docs/MANUAL.md#apêndice-a--catálogo-de-cada-arquivo-iniciante) · flags · segurança ao rodar 2×.
+> **Novato?** Leia o [**MANUAL.md**](../../docs/MANUAL.md) — flags, segurança ao rodar 2×.
 
-Automação do curso. **Dois conjuntos** no Tails + Home Lab (bônus).
+Automação do curso. **Dois conjuntos:** Tails (Haveno + Feather) + Home Lab (bônus Debian/Ubuntu).
 
-## Você só usa 1 script: `haveno-setup.sh` (comece aqui após passos 1–4 manuais)
+## Você só usa 1 script: `hub.sh` (comece aqui após passos 1–4 manuais)
 
 **São só 2 situações:**
 
 | Quando | O que digitar |
 |--------|---------------|
-| 🟢 **Instalar a 1ª vez** (do zero até o **verde**) | `haveno-setup.sh` |
-| 🔁 **Toda vez que voltar** (liguei o Tails de novo) | `haveno-setup.sh --boot` |
+| 🟢 **Instalar a 1ª vez** (do zero até o **verde**) | `hub.sh install` |
+| 🔁 **Toda vez que voltar** (liguei o Tails de novo) | `hub.sh boot` |
 
-O Tails esquece tudo a cada boot (só `~/Persistent` sobrevive) — por isso o `--boot`
+O Tails esquece tudo a cada boot (só `~/Persistent` sobrevive) — por isso o `hub.sh boot`
 toda vez. Ele é rápido e **não baixa nada de novo**.
 
 ```bash
-# instalar/atualizar os scripts (cria ~/Persistent/hub-scripts/ — raiz da Persistent fica limpa):
+# 1. Sincronizar scripts do ZIP para ~/Persistent/hub-scripts/:
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
-~/Persistent/hub-scripts/haveno-setup.sh              # 1ª vez: install → verde → backup?
-~/Persistent/hub-scripts/haveno-setup.sh --install-only  # retoma [7-9] (.deb ja em Install/)
-~/Persistent/hub-scripts/haveno-setup.sh --boot       # toda vez que voltar (já instalado)
-~/Persistent/hub-scripts/haveno-setup.sh --feather    # + Feather (passo 5 / M2)
-~/Persistent/hub-scripts/haveno-setup.sh --qa-log     # grava 01-preflight + 02-haveno-auto em qa-logs/
+# 2. Usar:
+~/Persistent/hub-scripts/hub.sh install              # 1ª vez: preflight → download → instala → abre
+~/Persistent/hub-scripts/hub.sh install --install-only  # retoma: .deb já em Install/
+~/Persistent/hub-scripts/hub.sh install --qa-log     # 1ª vez + log para suporte
+~/Persistent/hub-scripts/hub.sh boot                 # toda sessão (já instalado)
+~/Persistent/hub-scripts/hub.sh feather              # Feather Wallet (passo 5)
+~/Persistent/hub-scripts/hub.sh backup               # backup cifrado da carteira
+~/Persistent/hub-scripts/hub.sh update               # novo release (backup antes)
 ```
 
-> **`haveno-auto.sh` e `haveno-boot.sh` são internos** — o `haveno-setup.sh` chama
-> eles sozinho. Você não precisa rodá-los direto (a tabela abaixo é referência técnica).
+> **Scripts internos não precisam ser rodados diretamente.** `haveno/install.sh`,
+> `haveno/boot.sh`, `feather/install.sh` etc. são chamados pelo `hub.sh` automaticamente.
+> A tabela abaixo é referência técnica.
 
-> **Layout (jun/2026):** os scripts vivem em **`~/Persistent/hub-scripts/`** — uma
-> pasta só, fácil de achar e de apagar/recriar no update. Seus **dados** ficam fora
-> dela: `haveno/` (carteira), `Backups/`, `feather/`, `qa-logs/`. O `haveno-setup`
-> sincroniza scripts novos do ZIP para `hub-scripts/` (use `--no-sync` para desligar).
-
-> **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `tails-preflight.sh` só valida.
+> **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `system/preflight.sh` só valida.
 
 ### Senha de admin: digitar uma vez (`--one-password`, opcional)
 
@@ -48,13 +47,13 @@ O Tails, **de propósito**, faz o `sudo` pedir a senha de admin a **cada** coman
 normal pede a senha várias vezes. Se você preferir digitar **uma vez só**:
 
 ```bash
-~/Persistent/hub-scripts/haveno-setup.sh --one-password          # 1ª vez
-~/Persistent/hub-scripts/haveno-setup.sh --boot --one-password   # cada sessão
+~/Persistent/hub-scripts/hub.sh install --one-password          # 1ª vez
+~/Persistent/hub-scripts/hub.sh boot --one-password             # cada sessão
+~/Persistent/hub-scripts/hub.sh update --one-password           # novo release
 ```
 
 A flag instala um ajuste **temporário de sessão** que mantém a senha em cache até o
 script terminar, e o **remove ao fim** (e ele some no reboot — o Tails é amnésico).
-Vale também em `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh`.
 
 > ⚠️ **Trade-off:** enquanto o script roda, isso **afrouxa** a proteção do Tails de
 > pedir a senha sempre. Por isso é **opt-in** — sem a flag, nada muda (padrão seguro).
@@ -64,51 +63,47 @@ Vale também em `haveno-auto.sh`, `haveno-boot.sh` e `haveno-update.sh`.
 
 ## Matriz script ↔ trilha ↔ Playbook
 
-| Script | Passo hub | Playbook § | Função |
-|--------|-----------|------------|--------|
-| `tails-preflight.sh` | 1–4 | §1–4 | Valida ambiente antes de automatizar |
-| **`haveno-setup.sh`** | **2, 7** | §5–7 | **Orquestrador** (1ª vez / `--boot`) |
-| `haveno-auto.sh` | 2 | §5–6 | Install → verde (1ª vez) |
-| `haveno-boot.sh` | 7 | §7 | `install.sh` + `exec.sh` cada sessão |
-| `haveno-backup.sh` | 4, 7 | §9 | Backup cifrado `Data/` |
-| `haveno-update.sh` | 7 | §10 | Atualizar `.deb` (backup antes) |
-| `feather-install-verify.sh` | 5 | Vol II §2 | Feather PGP + AppImage |
-| `feather-backup.sh` | 5 | Vol II §2 | Backup `feather/wallets/` |
-| `haveno-verify-deb.sh` | 5 | Vol II §3 | Auditar `.deb` em `Install/` |
-| `haveno-switch-network.sh` | 5 | Vol II §8 | Trocar rede (backup + update) |
-| `post-session-check.sh` | 7 | §11 pós-Tails | Tor + onion-grater pós-upgrade |
-| `qa-confirm-seed-papel.sh` | 4 | — | Confirmações humanas seed (sem gravar palavras) |
-| `qa-confirm-passo9.sh` | 9 | Playbook backup | Ritual 2× cópias físicas |
-| `qa-confirm-passo12.sh` | 12 | Trilha A | Cold-signing offline (confirmações) |
-| `qa-export-logs.sh` | — | — | Copia `qa-logs/` → pendrive USB |
-| `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (backup) |
-| `haveno-common.sh` | — | — | Biblioteca (source interno + `qa_log_*`) |
-| `haveno-onion-grater.yml` | 2, 7 | §8 | **Filtro Tor corrigido** p/ Haveno 1.6.0 (PoW) — ver abaixo |
-| `etapas/instalar-haveno/*.sh` | 2 | §5–6 | **Fallback atômico** (1 processo = 1 script) — ver abaixo |
+| Script / comando | Passo hub | Playbook § | Função |
+|------------------|-----------|------------|--------|
+| **`hub.sh install`** | **2** | §5–7 | **1ª vez: preflight → download → instala → abre** |
+| **`hub.sh boot`** | **7** | §7 | **Cada sessão: deps → filtro Tor → abre** |
+| `hub.sh backup` | 4, 7 | §9 | Backup cifrado `Data/` |
+| `hub.sh update` | 7 | §10 | Novo release (backup automático antes) |
+| `hub.sh feather` | 5 | Vol II §2 | Feather PGP + AppImage |
+| `haveno/verify-deb.sh` | 5 | Vol II §3 | Auditar `.deb` em `Install/` (AVANÇADO) |
+| `haveno/switch-network.sh` | 5 | Vol II §8 | Trocar rede (backup + update) (AVANÇADO) |
+| `system/preflight.sh` | 1–4 | §1–4 | Valida ambiente antes de automatizar |
+| `system/post-session.sh` | 7 | §11 pós-Tails | Tor + onion-grater pós-upgrade |
+| `qa/confirm-seed.sh` | 4 | — | Confirmações humanas seed (sem gravar palavras) |
+| `qa/confirm-step9.sh` | 9 | Playbook backup | Ritual 2× cópias físicas |
+| `qa/confirm-step12.sh` | 12 | Trilha A | Cold-signing offline (confirmações) |
+| `qa/export-logs.sh` | — | — | Copia `qa-logs/` → pendrive USB |
+| `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (chama `hub.sh backup`) |
+| `steps/run-all.sh` | 2 | §5–6 | **Fallback Haveno-only** (1 processo = 1 script) — ver abaixo |
 
 **Home Lab** ([`HomeLab/`](../homelab/README.md)) — Debian/Ubuntu, **não** Tails.
 
-**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — atalhos numerados em `hub-scripts/aliases/` (ex. `02-haveno-install.sh`).
+**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — atalhos numerados em `hub-scripts/aliases/` (ex. `02-haveno-install.sh` → `hub.sh install`).
 
 ## Ciclo de uso
 
 ```mermaid
 flowchart LR
-  M["Passos 1–4 manual"] --> P["tails-preflight"]
-  P --> S["haveno-setup 1a vez"]
-  S --> B["haveno-setup --boot"]
-  B --> BK["haveno-backup"]
-  BK --> U["haveno-update"]
+  M["Passos 1–4 manual"] --> P["system/preflight"]
+  P --> S["hub.sh install  (1ª vez)"]
+  S --> B["hub.sh boot  (cada sessão)"]
+  B --> BK["hub.sh backup"]
+  BK --> U["hub.sh update"]
 ```
 
 | Quando | Rode |
 |--------|------|
-| Antes de qualquer script | `tails-preflight.sh` (ou via `haveno-setup.sh`) |
-| **1ª vez** Haveno | `haveno-setup.sh` ou `haveno-auto.sh` |
-| **Cada sessão** | `haveno-setup.sh --boot` ou `haveno-boot.sh` |
-| Backup / restore | `haveno-backup.sh` |
-| Release novo | `haveno-update.sh` |
-| Feather (M2 pré-req) | `feather-install-verify.sh` → UI carteira |
+| Antes de qualquer coisa (valida ambiente) | `hub.sh install` já roda o preflight |
+| **1ª vez** Haveno | `hub.sh install` |
+| **Cada sessão** | `hub.sh boot` |
+| Backup / restore | `hub.sh backup` |
+| Release novo | `hub.sh update` |
+| Feather (M2 pré-req) | `hub.sh feather` |
 
 ---
 
@@ -121,74 +116,106 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
 ```
 
-Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os `.sh` + o filtro
-`haveno-onion-grater.yml` + o atalho `.desktop` + pasta **`aliases/`** (atalhos numerados),
-e oferece limpar scripts do layout antigo soltos na raiz (sem tocar nos seus dados).
+Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os scripts organizados por produto
+(`haveno/`, `feather/`, `system/`, `qa/`, `steps/`, `aliases/`) + biblioteca `lib/`
+(inclui o filtro Tor `onion-grater.yml`) + o atalho `.desktop`.
+Oferece limpar scripts do layout antigo soltos na raiz (sem tocar nos seus dados).
 
-**Mantenedor (host Linux):** `./health-check.sh` — sintaxe `bash -n` + checks estaticos (nao substitui Tails real).
+**Validação estática (equipe/host Linux):** `system/health-check.sh` — sintaxe `bash -n` + checks estáticos (não substitui teste no Tails real).
 
 ### Método B — manual
 
-1. Copie **todos** os `*.sh` + `haveno-onion-grater.yml` + `haveno-backup.desktop` desta pasta → `~/Persistent/hub-scripts/`.
-2. `chmod +x ~/Persistent/hub-scripts/*.sh`
+A estrutura tem subpastas por produto. Use o `sync-hub-scripts.sh` — é muito mais
+fácil do que copiar manualmente. Em caso de emergência absoluta:
+
+```bash
+# copia a estrutura toda para ~/Persistent/hub-scripts/
+cp -r ~/Persistent/Privacy-OS-Hub-main/automacao/tails/ ~/Persistent/hub-scripts/
+chmod +x ~/Persistent/hub-scripts/**/*.sh ~/Persistent/hub-scripts/*.sh
+```
 
 ---
 
-## Scripts principais
+## Scripts em detalhe
 
-### `haveno-setup.sh` — um comando
-
-- **1ª vez:** preflight → `haveno-auto.sh` → pergunta backup
-- **`--boot`:** preflight → `haveno-boot.sh`
-- **`--feather`:** encadeia `feather-install-verify.sh`
-- **`--skip-backup`:** pula prompt de backup
-
-### `haveno-auto.sh` — install até verde
+### `hub.sh install` — 1ª vez até o verde
 
 ```bash
-~/Persistent/hub-scripts/haveno-auto.sh
-~/Persistent/hub-scripts/haveno-auto.sh --boot-only   # delega a haveno-boot.sh
-~/Persistent/hub-scripts/haveno-auto.sh --update
-~/Persistent/hub-scripts/haveno-auto.sh --no-clock
-~/Persistent/hub-scripts/haveno-auto.sh --install-only   # recuperacao: deps + install (sem download)
+hub.sh install                        # padrão
+hub.sh install --install-only         # .deb já em Install/ — pula download
+hub.sh install --one-password         # senha admin só 1 vez
+hub.sh install --skip-backup          # pula backup pós-instalação
+hub.sh install --qa-log               # + log em qa-logs/
 ```
 
-**Atualizar scripts do ZIP para `~/Persistent/`:** `./sync-hub-scripts.sh` (nesta pasta).
-
-Roda `install.sh` + `exec.sh` (Playbook §7). **Verde na janela = você confirma.**
-
-No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência** (`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...` do script upstream fica parada — o hub imprime barra **`[########----] NN%`** a cada **10s** (upstream) ou barra **curl** (quando `App/utils/` já existe). Se a rede cair ou você reiniciar, o download **retoma de onde parou** no próximo boot (antes, em `/tmp` = RAM, perdia tudo — corrigido em jun/2026). A `.sig` do release 1.6.0-reto é uma assinatura Ed25519 **binária** legítima (119 B); o hub a aceita via `haveno_sig_valid_format` (magic byte `0x88`). Arquivos de `.deb` abaixo de 1 MB são apagados (lixo real). Se o `.deb` já estiver completo em `.download/`, o hub **só baixa a `.sig`**, verifica PGP e **move** para `Install/` sem re-baixar o pacote.
+No **[6/9]** (1ª vez), o `.deb` baixa pelo Tor (**30–90 min**) **direto na persistência**
+(`~/Persistent/haveno/.download/`), não em `/tmp`. A linha `Downloading Haveno from URL...`
+fica parada — o hub imprime barra **`[########----] NN%`** a cada **10s** (upstream)
+ou barra **curl** (quando `App/utils/` já existe). Se a rede cair ou você reiniciar,
+o download **retoma de onde parou** no próximo boot.
 
 | Pasta | Papel |
 |-------|--------|
-| `.download/` | Staging — download em andamento (apagada só no sucesso total) |
-| `Install/` | `.deb` + `.sig` verificados; `haveno.deb` (arquivo ou symlink → nome longo) |
+| `.download/` | Staging — download em andamento (apagada só no sucesso) |
+| `Install/` | `.deb` + `.sig` verificados; `haveno.deb` → nome longo |
 
-No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do `install.sh` upstream — idempotente a cada boot. **Apêndice B erro 11** no canônico.
+A `.sig` do release 1.6.0-reto é uma assinatura Ed25519 **binária** legítima (119 B);
+o hub a aceita via `haveno_sig_valid_format` (magic byte `0x88`).
 
-### Fallback atômico — se `haveno-setup` falhar no [6/9]
+No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **antes** do
+`install.sh` upstream — idempotente a cada boot. **Apêndice B erro 11** no canônico.
 
-Caminho **validado em Tails real** (piloto jun/2026). Cada etapa imprime PASS/FAIL — útil quando o fluxo monolítico quebra na assinatura ou no download.
+### `hub.sh boot` — cada sessão (Playbook §7)
 
 ```bash
-cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails/etapas/instalar-haveno
-chmod +x *.sh
-./01-pastas.sh && ./02-baixar-deb.sh && ./04-importar-chave.sh
-./05-verificar-assinatura.sh && ./06-deps-apt.sh && ./07-instalar-deb.sh && ./08-abrir-haveno.sh
+hub.sh boot                 # padrão
+hub.sh boot --one-password  # senha admin só 1 vez
+hub.sh boot --qa-log        # + log para diagnóstico
 ```
 
-Detalhe: [`etapas/instalar-haveno/README.md`](etapas/instalar-haveno/README.md) · guia do aluno: [TRES-PASSOS-HAVENO-TAILS.md](../docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) (§ recuperação e fallback).
+Roda `install.sh` + `exec.sh`. **Verde na janela = você confirma.**
 
-Se o `.deb` está completo em `.download/` mas a `.sig` foi rejeitada (script desatualizado): rode `./sync-hub-scripts.sh` + `haveno-setup.sh --qa-log` — **não** `--install-only` (exige `.deb` em `Install/`). Se `.deb` já está em `Install/`: `haveno-setup.sh --install-only`.
+### `hub.sh feather` — Feather Wallet (passo 5)
 
-### `haveno-onion-grater.yml` — filtro Tor corrigido (1.6.0)
+```bash
+hub.sh feather              # baixa (Tor) + verifica PGP + abre
+hub.sh feather --qa-log     # + log
+```
+
+Atalho gerado em `~/Persistent/feather/feather.desktop`.
+
+### `hub.sh backup` / Feather backup
+
+```bash
+hub.sh backup               # backup cifrado da carteira Haveno (Data/)
+hub.sh backup --usb         # salva direto no USB
+hub.sh backup --restore     # restaura
+```
+
+Para Feather: `feather/backup.sh` (mesma interface: `--usb`, `--dest`, `--restore`). **Seed não entra no arquivo.**
+
+### lib/onion-grater.yml — filtro Tor (interno, automático)
 
 O `haveno.yml` que vem **dentro do instalador upstream** não autoriza o `ADD_ONION`
 com os parâmetros PoW que o Haveno **1.6.0** passou a enviar — o onion-grater
-bloqueia (`Command filtered`) e o app cai com *"A conexão com a rede do Haveno
-falhou"*. Este arquivo é a versão corrigida (validada em campo 2026-06-11);
-os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
-**Copie-o junto com os `.sh`.** Detalhe do erro: **Apêndice B erros 12–13** no canônico.
+bloqueia e o app cai com *"A conexão com a rede do Haveno falhou"*.
+
+O filtro corrigido fica em `lib/onion-grater.yml` e é **copiado automaticamente**
+pelo `sync-hub-scripts.sh` para `hub-scripts/lib/`. Os scripts o usam sem intervenção.
+Detalhe do erro: **Apêndice B erros 12–13** no canônico.
+
+### Fallback atômico — se `hub.sh install` falhar
+
+Use `steps/` — 8 scripts atômicos, um passo de cada vez. **Haveno-only** (não Feather).
+
+```bash
+cd ~/Persistent/hub-scripts/steps
+./run-all.sh          # roda 01→08, para no 1º FAIL com a causa exata
+```
+
+Ou passo isolado para diagnóstico: `./steps/02-download-deb.sh`, `./steps/05-verify-sig.sh`, etc.
+
+Detalhe completo: [`steps/README.md`](steps/README.md).
 
 ### Como ler os logs (depurar sem adivinhar)
 
@@ -197,29 +224,7 @@ os scripts usam-no automaticamente se ele estiver junto em `~/Persistent/`.
 | Saída do script | terminal | `PASS`/`FAIL` por etapa, em verde/vermelho |
 | `--qa-log` | `~/Persistent/qa-logs/*.txt` | Evidência por execução — [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) |
 | Haveno (app) | `/tmp/haveno-exec.log` | Erros de partida (ex.: cookie do Tor, `Command filtered`) |
-| onion-grater | `sudo journalctl -u onion-grater -b` | Filtro carregado? Comando bloqueado aparece como `command filtered: ...` |
-
-### `haveno-boot.sh` — cada sessão (Playbook §7)
-
-```bash
-~/Persistent/hub-scripts/haveno-boot.sh
-~/Persistent/hub-scripts/haveno-boot.sh --watch 8
-```
-
-### `feather-install-verify.sh`
-
-Baixa (via Tor) + verifica PGP fail-closed + **abre** o Feather (como o Haveno após install):
-
-```bash
-~/Persistent/hub-scripts/feather-install-verify.sh --qa-log
-~/Persistent/hub-scripts/feather-install-verify.sh --no-launch   # so re-auditar PGP
-```
-
-Atalho gerado em `~/Persistent/feather/feather.desktop` (e `~/Desktop/` se existir).
-
-### `haveno-backup.sh` / `feather-backup.sh`
-
-Mesma interface: `--usb`, `--dest`, `--restore`, GPG. **Seed não entra no arquivo.**
+| onion-grater | `sudo journalctl -u onion-grater -b` | Filtro carregado? Bloqueio aparece como `command filtered: ...` |
 
 ---
 

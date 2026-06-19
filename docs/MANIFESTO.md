@@ -30,7 +30,7 @@ repetidas nos momentos certos, não como marketing.
 
 ## 5. Transparência sobre limites
 
-RetoSwap (TOFU), P2Pool (reproducible builds), relógio no `haveno-auto.sh`, `p2p-bind` no home lab — cada
+RetoSwap (TOFU), P2Pool (reproducible builds), relógio no `hub.sh install`, `p2p-bind` no home lab — cada
 compromisso de confiança é **nomeado** com mitigação. Golpes, exploit corrigido, KYC agregadores: explícitos
 no Volume I e no Folheto.
 
