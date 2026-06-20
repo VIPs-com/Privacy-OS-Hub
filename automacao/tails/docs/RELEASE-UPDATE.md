@@ -21,11 +21,13 @@ Tudo o mais é derivado automaticamente:
 **Não editar:** `RETO_KEY_URL`, caminhos de pasta, derivados.
 
 > **⚠️ Convenção TAG × nome de arquivo (RetoSwap):**  
-> A **TAG do GitHub** usa `HAVENO_VERSION` completo — ex.: `1.6.0-reto` (parte do caminho do release).  
-> O **nome do binário** omite o sufixo de rede — ex.: `haveno-v1.6.0-linux-x86_64-installer.deb` (sem `-reto`).  
-> O template em `config.sh` deriva isso via `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"`.  
-> Antes de publicar um novo release, confirme no GitHub qual é o nome exato do `.deb` —  
-> se o padrão mudar (ex.: tag `v1.8.0-reto` com prefixo `v`, ou filename com `-reto`), ajuste o template.
+> A **TAG do GitHub** usa `HAVENO_VERSION` completo — ex.: `1.6.0-reto` ou `v1.8.0-reto` (inclui ou não prefixo `v`).  
+> O **nome do binário** omite o prefixo `v` e o sufixo de rede — ex.: `haveno-v1.8.0-linux-x86_64-installer.deb` (sem `-reto`).  
+> O template em `config.sh` deriva isso em dois passos:  
+> `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"` → remove `-reto` (ex.: `v1.8.0-reto` → `v1.8.0`)  
+> `_HAVENO_VER_NUM="${_HAVENO_VER_NUM#v}"` → remove `v` inicial (ex.: `v1.8.0` → `1.8.0`)  
+> Resultado final: `haveno-v1.8.0-linux-x86_64-installer.deb` ✅  
+> Antes de publicar, confirme no GitHub o nome exato do `.deb` — confirme que o padrão não mudou.
 
 ---
 
@@ -63,7 +65,9 @@ gpg --fingerprint NOME_OU_ID_DA_CHAVE
   # Deve retornar Content-Length com o tamanho do .deb (não 404)
   # Se 404: verificar no GitHub o nome exato do binário — lembre que a TAG usa
   # "X.Y.Z-reto" mas o arquivo costuma ser "haveno-vX.Y.Z-linux-x86_64-installer.deb"
-  # O template remove o sufixo automaticamente via: _HAVENO_VER_NUM="${HAVENO_VERSION%-*}"
+  # Template remove sufixo e prefixo "v" em dois passos:
+  # _HAVENO_VER_NUM="${HAVENO_VERSION%-*}"  → "v1.8.0-reto" → "v1.8.0"
+  # _HAVENO_VER_NUM="${_HAVENO_VER_NUM#v}"  → "v1.8.0" → "1.8.0"
   ```
 
 ### 3.2 Testar no Tails real (obrigatório antes de publicar)

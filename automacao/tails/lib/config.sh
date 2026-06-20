@@ -12,9 +12,10 @@ HAVENO_PGP_FPR="DAA24D878B8D36C90120A897CA02DAC12DAE2D0F"
 RETO_KEY_URL="https://retoswap.com/reto_public.asc"
 
 # ----- Derivados do release (não editar) -------------------------------------
-# TAG do GitHub: HAVENO_VERSION completo (ex: "1.6.0-reto")
-# Nome do arquivo: só o número, sem sufixo de rede (ex: "1.6.0")
-_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"
+# TAG do GitHub: HAVENO_VERSION completo (ex: "1.6.0-reto", "v1.8.0-reto")
+# Nome do arquivo: só o número, sem prefixo "v" ou sufixo de rede (ex: "1.6.0", "1.8.0")
+_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"   # remove sufixo "-reto": "v1.8.0-reto" → "v1.8.0"
+_HAVENO_VER_NUM="${_HAVENO_VER_NUM#v}"  # remove prefixo "v" se existir: "v1.8.0" → "1.8.0"
 HAVENO_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/${HAVENO_VERSION}/haveno-v${_HAVENO_VER_NUM}-linux-x86_64-installer.deb"
 HAVENO_SIG_URL="${HAVENO_DEB_URL}.sig"
 DEB_NAME="$(basename "$HAVENO_DEB_URL")"
