@@ -733,7 +733,7 @@ cd ~/Persistent/hub-scripts/steps
 |-------|---------|
 | **Grupo** | Biblioteca interna |
 | **Novato roda sozinho?** | **Nunca** — não são programas; outros scripts carregam via `source` |
-| **O que fazem** | `config.sh`: constantes (`HAVENO_VERSION`, `HAVENO_PGP_FPR`). `common.sh`: funções compartilhadas (preflight, onion-grater, boot, `haveno_sig_valid_format()`) |
+| **O que fazem** | `config.sh`: constantes (`HAVENO_VERSION`, `HAVENO_PGP_FPR`). Deriva URLs via `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"` — TAG usa sufixo de rede (`1.6.0-reto`), nome do binário usa só o número (`1.6.0`). `common.sh`: funções compartilhadas (preflight, onion-grater, boot, `haveno_sig_valid_format()`) |
 | **Rodar 2×** | N/A — não rode diretamente |
 
 #### `automacao/homelab/` (pasta)

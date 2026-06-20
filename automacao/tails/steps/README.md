@@ -87,3 +87,8 @@ com falhas de rede ou PGP.
 
 Para novo release, edite **somente** `lib/config.sh` (2 linhas: `HAVENO_VERSION` +
 `HAVENO_PGP_FPR`) — todos os scripts aqui lêem as constantes de lá via `_config.sh`.
+
+> **Convenção de nome:** a TAG do GitHub usa o sufixo de rede (ex.: `1.6.0-reto`), mas o
+> binário omite esse sufixo (ex.: `haveno-v1.6.0-linux-x86_64-installer.deb`). O `config.sh`
+> extrai o número via `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"`. Ao atualizar, confira no
+> GitHub que o padrão do nome do arquivo não mudou — ver `docs/RELEASE-UPDATE.md §1`.

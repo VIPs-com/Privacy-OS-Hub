@@ -20,6 +20,13 @@ Tudo o mais é derivado automaticamente:
 
 **Não editar:** `RETO_KEY_URL`, caminhos de pasta, derivados.
 
+> **⚠️ Convenção TAG × nome de arquivo (RetoSwap):**  
+> A **TAG do GitHub** usa `HAVENO_VERSION` completo — ex.: `1.6.0-reto` (parte do caminho do release).  
+> O **nome do binário** omite o sufixo de rede — ex.: `haveno-v1.6.0-linux-x86_64-installer.deb` (sem `-reto`).  
+> O template em `config.sh` deriva isso via `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"`.  
+> Antes de publicar um novo release, confirme no GitHub qual é o nome exato do `.deb` —  
+> se o padrão mudar (ex.: tag `v1.8.0-reto` com prefixo `v`, ou filename com `-reto`), ajuste o template.
+
 ---
 
 ## 2. Onde obter os dados do novo release
@@ -53,7 +60,10 @@ gpg --fingerprint NOME_OU_ID_DA_CHAVE
   echo "$HAVENO_DEB_URL"
   echo "$HAVENO_SIG_URL"
   curl -sI "$HAVENO_DEB_URL" | grep -i content-length
-  # Deve retornar o tamanho esperado do .deb (não 404)
+  # Deve retornar Content-Length com o tamanho do .deb (não 404)
+  # Se 404: verificar no GitHub o nome exato do binário — lembre que a TAG usa
+  # "X.Y.Z-reto" mas o arquivo costuma ser "haveno-vX.Y.Z-linux-x86_64-installer.deb"
+  # O template remove o sufixo automaticamente via: _HAVENO_VER_NUM="${HAVENO_VERSION%-*}"
   ```
 
 ### 3.2 Testar no Tails real (obrigatório antes de publicar)
@@ -125,4 +135,4 @@ hub.sh update
 
 ---
 
-*docs/RELEASE-UPDATE.md · Privacy-OS-Hub · atualizado 2026-06-19*
+*docs/RELEASE-UPDATE.md · Privacy-OS-Hub · atualizado 2026-06-20*

@@ -55,3 +55,9 @@ HAVENO_PGP_FPR="NOVA_FINGERPRINT"
 ```
 
 Todos os scripts — `hub.sh`, `steps/` — leem automaticamente de `lib/config.sh`.
+
+> **Atenção ao nome do binário:** a TAG do GitHub inclui o sufixo de rede (`X.Y.Z-reto`),
+> mas o **nome do arquivo** normalmente omite esse sufixo (`haveno-vX.Y.Z-linux-x86_64-installer.deb`).
+> O template em `config.sh` usa `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"` para derivar isso.
+> Ao publicar um novo release, valide a URL antes com `curl -sI $HAVENO_DEB_URL | grep content-length`.
+> Guia completo: `docs/RELEASE-UPDATE.md`.
