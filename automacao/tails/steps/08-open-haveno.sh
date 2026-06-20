@@ -20,7 +20,13 @@ ST="$(dpkg-query -W -f='${Status}' haveno 2>/dev/null || true)"
 
 if [ -f "${UTILS_DIR}/haveno.yml" ]; then
   y "Aplicando perfil onion-grater..."
-  sudo cp "${UTILS_DIR}/haveno.yml" "$ONION_GRATER_DST" || fail "Não copiei haveno.yml (senha admin ativa?)."
+  HUB_ONION_YML="${DIR}/../lib/onion-grater.yml"
+  YML_SRC="${UTILS_DIR}/haveno.yml"
+  if [ -f "$HUB_ONION_YML" ]; then
+    YML_SRC="$HUB_ONION_YML"
+    y "  Usando filtro corrigido do hub (com PoW do Haveno 1.6.0)."
+  fi
+  sudo cp "$YML_SRC" "$ONION_GRATER_DST" || fail "Não copiei o filtro onion-grater (senha admin ativa?)."
   sudo systemctl restart onion-grater || y "Não reiniciei o onion-grater — pode já estar ativo."
   _wait_filter=0
   for _i in $(seq 1 30); do

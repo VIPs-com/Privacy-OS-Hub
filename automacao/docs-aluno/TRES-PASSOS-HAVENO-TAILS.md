@@ -35,7 +35,7 @@ chmod +x sync-hub-scripts.sh
 ~/Persistent/hub-scripts/aliases/03-haveno-start.sh        # = hub.sh boot --qa-log (cada sessão)
 ```
 
-Tabela completa: [hub-aliases/README.md](../tails/hub-aliases/README.md).
+Tabela completa: `~/Persistent/hub-scripts/hub-aliases/README.md` (no Tails) ou [hub-aliases/README.md](../tails/hub-aliases/README.md) (GitHub).
 
 | Flag em `sync-hub-scripts.sh` | Quando |
 |-------------------------------|--------|
@@ -125,7 +125,7 @@ curl -fsSL --socks5-hostname 127.0.0.1:9050 \
 ```
 
 Depois de instalar pelo atômico, nos próximos boots use o **Passo 3** (`hub.sh boot`) normalmente.
-Detalhe completo: [steps/README.md](../tails/steps/README.md).
+Detalhe completo: `~/Persistent/hub-scripts/steps/README.md` (no Tails) ou [steps/README.md](../tails/steps/README.md) (GitHub).
 
 ---
 

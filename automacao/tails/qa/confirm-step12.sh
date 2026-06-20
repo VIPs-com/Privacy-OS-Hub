@@ -1,9 +1,9 @@
 #!/bin/bash
 ###############################################################################
-# qa-confirm-passo12.sh — passo 12 cold-signing (Tails SEM rede)
+# qa/confirm-step12.sh — passo 12 cold-signing (Tails SEM rede)
 #
 # Preencha DEPOIS do ritual air-gap. Nunca cole TX ID completo nem seed.
-# USO: ~/Persistent/qa-confirm-passo12.sh
+# USO: ~/Persistent/hub-scripts/qa/confirm-step12.sh
 ###############################################################################
 
 set -uo pipefail
@@ -38,8 +38,8 @@ _confirm() {
 }
 
 ok=0
-qa_log_line "REDE: tails_offline_airgap=SIM"
 _confirm "tails_sem_rede" "Tails estava sem Wi-Fi/cabo ao assinar" && ok=$((ok+1)) || true
+qa_log_line "REDE: tails_offline_airgap=$([ "$ok" -ge 1 ] && echo SIM || echo NAO)"
 _confirm "feather_abriu_offline" "Feather abriu no Tails offline" && ok=$((ok+1)) || true
 _confirm "tx_assinada_offline" "Transacao assinada offline" && ok=$((ok+1)) || true
 _confirm "tx_exportada_pendrive" "TX assinada exportada para pendrive transitorio" && ok=$((ok+1)) || true

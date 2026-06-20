@@ -11,16 +11,12 @@
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PERSIST="/home/amnesia/Persistent"
+# shellcheck source=../lib/common.sh
+source "${SCRIPT_DIR}/../lib/common.sh"
 UPDATE="${HUB_SCRIPTS_DIR}/haveno/update.sh"
 BACKUP="${HUB_SCRIPTS_DIR}/haveno/backup.sh"
 [ -x "$UPDATE" ] || UPDATE="${SCRIPT_DIR}/update.sh"
 [ -x "$BACKUP" ] || BACKUP="${SCRIPT_DIR}/backup.sh"
-
-b(){ echo -e "\033[1;34m$*\033[0m"; }
-y(){ echo -e "\033[1;33m$*\033[0m"; }
-r(){ echo -e "\033[0;31m$*\033[0m"; }
-die(){ r "ERRO: $*"; exit 1; }
 
 URL=""
 PGP=""

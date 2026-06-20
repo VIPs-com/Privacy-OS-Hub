@@ -39,19 +39,25 @@ while [ $# -gt 0 ]; do
     --pgp) shift; NEW_PGP="${1:-}" ;;
     --no-backup) DO_BACKUP=0 ;;
     --no-clock) ;;  # aceito por compatibilidade; sem efeito aqui
+    --qa-log) export HAVENO_QA_LOG=1 ;;
     --one-password) export HAVENO_ONE_PASSWORD=1 ;;  # digitar a senha admin 1x (ver haveno-common.sh)
     *) y "Opcao desconhecida: $1 (ignorada)" ;;
   esac
   shift
 done
 [ -n "$NEW_URL" ] && HAVENO_DEB_URL="$NEW_URL"
-[ -n "$NEW_PGP" ] && HAVENO_PGP_FPR="$NEW_PGP"
+if [ -n "$NEW_PGP" ]; then
+  echo "$NEW_PGP" | grep -qE '^[0-9A-Fa-f]{40}$' \
+    || die "--pgp fingerprint invalido (deve ter 40 hex). Verifique a fonte oficial."
+  HAVENO_PGP_FPR="$NEW_PGP"
+fi
 
 BACKUP_SCRIPT="${HUB_SCRIPTS_DIR}/haveno/backup.sh"
 [ -x "$BACKUP_SCRIPT" ] || BACKUP_SCRIPT="${SCRIPT_DIR}/backup.sh"
 
 # Modo "uma senha so" (opt-in). No-op sem --one-password.
 sudo_one_password_start
+qa_log_tee_begin "06-haveno-update"
 
 echo
 b "==============================================================="
@@ -116,12 +122,12 @@ echo "  PGP: $HAVENO_PGP_FPR"
 # Pasta de download PERSISTENTE (DIV-20260617-01): Tails e amnesico, /tmp = RAM.
 # Em ~/Persistent/haveno/.download o 'wget -c' do install.sh upstream retoma o .deb
 # no proximo boot em vez de perder o download em /tmp. Em FALHA NAO apagamos a
-# pasta (deixa o download retomar); so limpamos no sucesso. (Igual ao haveno-auto.sh.)
+# pasta (deixa o download retomar); so limpamos no sucesso.
 WORK="${HAVENO_DIR}/.download"
 mkdir -p "$WORK" || die "Nao criei a pasta de download persistente (${WORK})."
 cd "$WORK" || die "Nao entrei em ${WORK}."
-if ! curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
-  curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
+if ! curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
+  curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
 fi
 EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
 haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."
@@ -138,7 +144,7 @@ if [ "$DEB_READY" = "0" ]; then
   y "  Download pelo Tor (barra a cada ${HAVENO_DOWNLOAD_MONITOR_SEC}s ou curl)..."
   if ! haveno_run_upstream_install_deb "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR" "${EXPECTED_DEB_BYTES:-0}"; then
     cd /
-    die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica em ${WORK} para retomar. Se .deb completo so em .download/: sync-hub-scripts.sh + hub.sh install --qa-log."
+    die "Atualizacao falhou (PGP/URL/rede). Seus dados em ${DATA_DIR} estao intactos. O download fica em ${WORK} para retomar. Se .deb completo so em .download/: sync-hub-scripts.sh + hub.sh install --install-only --qa-log."
   fi
 fi
 cd /; rm -rf "$WORK" 2>/dev/null || true
@@ -161,3 +167,5 @@ g "  Atualizacao do Haveno concluida."
 g "  CONFIRME o indicador VERDE na janela do Haveno."
 g "  Dados preservados em: ${DATA_DIR}"
 g "==============================================================="
+qa_log_line "REDE: tails_online_tor_esperado=SIM"
+qa_log_finish 0

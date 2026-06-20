@@ -1,10 +1,11 @@
 #!/bin/bash
 ###############################################################################
-# feather-install-verify.sh — Feather no Tails (Vol II Playbook §2)
+# feather/install.sh — Feather no Tails (passo 5)
 #
 # NAO FAZ: criar carteira, anotar seed, trades (isso e na UI — humano).
-# USO: ~/Persistent/hub-scripts/feather-install-verify.sh [--qa-log] [--no-launch]
-#      Baixa chave + AppImage via Tor se ausentes; PGP fail-closed; abre a UI (como Haveno).
+# USO (via hub): hub.sh feather [--qa-log] [--no-launch]
+# USO (direto): ~/Persistent/hub-scripts/feather/install.sh [--qa-log] [--no-launch]
+#      Baixa chave + AppImage via Tor se ausentes; PGP fail-closed; abre a UI.
 #      --no-launch  so re-verifica PGP sem abrir janela.
 #      Fallback manual: Tor Browser -> featherwallet.org/download -> ~/Persistent/feather/
 ###############################################################################
@@ -88,10 +89,25 @@ if [ "${#appimages[@]}" -eq 0 ]; then
   FEATHER_VER="$(curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 120 "https://featherwallet.org/download/" 2>/dev/null \
     | grep -oE 'linux-appimage/feather-[0-9]+\.[0-9]+(\.[0-9]+)?\.AppImage' \
     | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)"
+  if [ -z "$FEATHER_VER" ]; then
+    y "  Scrape da pagina falhou — tentando GitHub API via Tor..."
+    FEATHER_VER="$(curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 120 \
+      "https://api.github.com/repos/feather-wallet/feather/releases/latest" 2>/dev/null \
+      | grep '"tag_name"' | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)"
+    [ -n "$FEATHER_VER" ] && g "  Versao descoberta via GitHub API: ${FEATHER_VER}"
+  fi
   if [ -z "$FEATHER_VER" ] && [ -n "$FEATHER_VERSION_FALLBACK" ]; then
-    y "  Scrape falhou — usando FEATHER_VERSION_FALLBACK=${FEATHER_VERSION_FALLBACK}"
-    y "  Confira a versao em https://featherwallet.org/download antes de confiar."
-    FEATHER_VER="$FEATHER_VERSION_FALLBACK"
+    r "  ============================================================"
+    r "  AVISO: scrape + API falharam — usando FEATHER_VERSION_FALLBACK=${FEATHER_VERSION_FALLBACK}"
+    r "  Esta versao pode estar DESATUALIZADA se a variavel foi definida ha muito tempo."
+    y "  Confirme a versao atual em featherwallet.org/download antes de continuar."
+    r "  ============================================================"
+    printf "  Continuar instalando versao %s? (sim/N): " "$FEATHER_VERSION_FALLBACK"
+    read -r _ack
+    case "${_ack:-N}" in
+      sim|SIM) FEATHER_VER="$FEATHER_VERSION_FALLBACK" ;;
+      *) die "Abortado. Baixe o AppImage pelo Tor Browser e mova para ${FEATHER_DIR}/" ;;
+    esac
   fi
   [ -n "$FEATHER_VER" ] || die "Nao descobri a versao atual. Baixe pelo Tor Browser: featherwallet.org/download -> mova para ${FEATHER_DIR}"
   g "  Versao atual: ${FEATHER_VER}"
@@ -148,11 +164,14 @@ g "  Confirmado humano em $(date -u '+%Y-%m-%d %H:%M UTC')."
 
 # Fail-closed locale-independente: amarra a assinatura ao fingerprint (status-fd + VALIDSIG).
 # Nao usar grep "Good signature" (quebra em PT-BR: "Assinatura valida") nem aceita chave de mesmo User ID.
-gpg --status-fd 1 --verify "$ASCFILE" "$APPIMAGE" > /tmp/feather-gpg.log 2>&1 || true
-if ! grep -q "^\[GNUPG:\] VALIDSIG .*${FEATHER_FPR}" /tmp/feather-gpg.log; then
-  cat /tmp/feather-gpg.log >&2
+_FEATHER_GPG_LOG="$(mktemp)"
+gpg --status-fd 1 --verify "$ASCFILE" "$APPIMAGE" > "$_FEATHER_GPG_LOG" 2>&1 || true
+if ! grep -q "^\[GNUPG:\] VALIDSIG .*${FEATHER_FPR}" "$_FEATHER_GPG_LOG"; then
+  cat "$_FEATHER_GPG_LOG" >&2
+  rm -f "$_FEATHER_GPG_LOG"
   die "Assinatura GPG FALHOU ou nao casa o fingerprint ${FEATHER_FPR}. NAO execute o AppImage."
 fi
+rm -f "$_FEATHER_GPG_LOG"
 g "  VALIDSIG ${FEATHER_FPR} (assinatura amarrada ao fingerprint)."
 
 b "[5/6] Executavel..."

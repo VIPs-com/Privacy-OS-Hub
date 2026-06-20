@@ -1,7 +1,7 @@
 # Troubleshooting — hub.sh e steps/
 
 > **Para o suporte:** use este documento para orientar alunos quando `hub.sh` falha.  
-> **Para o aluno:** você está aqui porque o suporte te mandou. Siga as instruções da seção que se aplica ao seu caso.
+> **Para o aluno:** use este documento diretamente quando `hub.sh` falha — sem precisar do suporte. Siga a seção do seu erro.
 
 ---
 
@@ -9,6 +9,7 @@
 
 | hub.sh parou em... | Mensagem típica | Step a rodar | O que o FAIL indica |
 |---|---|---|---|
+| Baixando a assinatura | `Failed to download Haveno signature` | `steps/02-download-deb.sh` | URL do .sig desatualizada ou circuito Tor instável (ver erro 7) |
 | Baixando o .deb | `[download] NNB` ou `Failed to download resource` | `steps/02-download-deb.sh` | Rede Tor instável ou URL do release desatualizada |
 | Verificando assinatura | `Assinatura invalida` ou `NO_PUBKEY` | `steps/05-verify-sig.sh` | .sig corrompida, chave não importada ou fingerprint errado |
 | Instalando dependências | `NAO EXISTE` em vermelho | `steps/06-check-deps.sh` | Libs Ubuntu-only ausentes no Tails/Debian (ver erro 1 abaixo) |
@@ -69,6 +70,8 @@ Em seguida, reporte à equipe com o log de `/tmp/haveno-exec.log`.
 Failed to download resource (exec.sh).
 ERRO: haveno-install.sh falhou (PGP/URL/rede).
 ```
+
+> **O que é "119B"?** É o tamanho do arquivo auxiliar `exec.sh` do instalador upstream — arquivo pequeno, tamanho normal. O problema **não** é o `.deb` (que tem ~266 MB), mas a tentativa de baixar esse script auxiliar via Tor.
 
 **Causa:** O `haveno-install.sh` do upstream tentou baixar um recurso auxiliar via Tor e falhou. Problema de rede ou URL do upstream — não é erro do hub.
 

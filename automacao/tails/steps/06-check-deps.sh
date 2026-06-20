@@ -64,7 +64,12 @@ echo
 
 if [ "${#INSTALAVEIS[@]}" -gt 0 ]; then
   y "Instalando ${#INSTALAVEIS[@]} dependência(s) via apt (update pelo Tor: 3-6 min)..."
-  sudo apt-get update || y "apt-get update falhou — tentando instalar mesmo assim."
+  _apt_ok=0
+  for _tent in 1 2 3; do
+    if sudo apt-get update; then _apt_ok=1; break; fi
+    [ "$_tent" -lt 3 ] && { y "apt-get update falhou (tentativa ${_tent}/3) — aguardando 30s (Tor)..."; sleep 30; }
+  done
+  [ "$_apt_ok" = "0" ] && y "apt-get update falhou 3x — instalando do cache (pacotes podem estar desatualizados)."
   sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${INSTALAVEIS[@]}" \
     || fail "apt não instalou: ${INSTALAVEIS[*]} — copie esta tela para a equipe."
 fi

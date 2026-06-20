@@ -26,12 +26,12 @@ curl -s --socks5-hostname "$TOR_SOCKS" --max-time 30 https://check.torproject.or
   || fail "Tor não respondeu. Conecte pelo assistente 'Conexão à rede Tor' e rode de novo."
 g "Tor OK."
 
-EXPECTED="$(curl -sIL --socks5-hostname "$TOR_SOCKS" --max-time 60 "$HAVENO_DEB_URL" 2>/dev/null \
+EXPECTED="$(curl -sIL --socks5-hostname "$TOR_SOCKS" --max-time 90 "$HAVENO_DEB_URL" 2>/dev/null \
   | tr -d '\r' | grep -i '^content-length:' | tail -1 | awk '{print $2}')"
 if [ -n "${EXPECTED:-}" ]; then
   y "Tamanho esperado do .deb: $EXPECTED bytes (~$((EXPECTED / 1048576)) MiB)."
 else
-  y "Não consegui ler o tamanho esperado (segue mesmo assim)."
+  y "Não consegui ler o tamanho esperado via Tor (timeout) — segue sem validar tamanho."
 fi
 
 y "Baixando a assinatura (.sig)..."

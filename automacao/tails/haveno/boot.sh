@@ -4,13 +4,13 @@
 # Comando do aluno: hub.sh boot
 # =================================================================
 ###############################################################################
-# haveno-boot.sh — ritual Playbook §7 (cada sessao apos passos 1–4)
+# haveno/boot.sh — boot de sessao (cada vez que o Tails reinicia)
 #
 # O QUE FAZ: preflight -> install.sh -> exec.sh -> onion-grater
-# NAO FAZ: download/reinstall do .deb (use haveno-auto.sh na 1a vez)
+# NAO FAZ: download/reinstall do .deb (use hub.sh install na 1a vez)
 #
-# USO: ~/Persistent/haveno-boot.sh
-#      ~/Persistent/haveno-boot.sh --watch 8
+# USO (via hub): hub.sh boot [--watch MIN] [--qa-log] [--one-password]
+# USO (direto): ~/Persistent/hub-scripts/haveno/boot.sh [--watch MIN]
 ###############################################################################
 
 set -uo pipefail

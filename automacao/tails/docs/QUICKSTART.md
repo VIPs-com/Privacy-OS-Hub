@@ -41,7 +41,7 @@ cd ~/Persistent/hub-scripts/steps/
 
 Leia o `FAIL` — ele diz exatamente o que fazer. Corrija, rode o passo sozinho, depois volte ao `run-all.sh`.
 
-Consulte também: `steps/README.md` — tabela de diagnóstico por passo.
+Consulte também: `docs/TROUBLESHOOTING.md` — diagnóstico por mensagem de erro.
 
 ---
 

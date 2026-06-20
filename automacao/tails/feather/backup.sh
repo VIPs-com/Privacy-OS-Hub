@@ -33,6 +33,8 @@ while [ $# -gt 0 ]; do
     --dest) shift; DEST="${1:-}" ;;
     --no-encrypt) ENCRYPT=0 ;;
     --restore) shift; RESTORE_FILE="${1:-}" ;;
+    --list) ls -lht "${DEFAULT_DEST}"/feather-*.gpg 2>/dev/null | head -10 \
+              || y "Nenhum backup Feather em ${DEFAULT_DEST}/"; exit 0 ;;
     *) y "Opcao desconhecida: $1" ;;
   esac
   shift

@@ -20,7 +20,7 @@ WARN=0
 
 b "=== Health Check — Privacy-OS-Hub (automacao/tails) ==="
 
-b "[1/4] Sintaxe bash (-n)..."
+b "[1/5] Sintaxe bash (-n)..."
 while IFS= read -r -d '' script; do
   rel="${script#${TAILS_DIR}/}"
   printf "  %s... " "$rel"
@@ -32,7 +32,7 @@ while IFS= read -r -d '' script; do
   fi
 done < <(find "$TAILS_DIR" -name '*.sh' -type f -not -path '*/hub-aliases/*' -print0)
 
-b "[2/4] PGP fail-closed (VALIDSIG + fingerprint)..."
+b "[2/5] PGP fail-closed (VALIDSIG + [GNUPG:] + fingerprint)..."
 for script in \
   "${TAILS_DIR}/lib/common.sh" \
   "${TAILS_DIR}/haveno/verify-deb.sh" \
@@ -41,7 +41,7 @@ for script in \
   [ -f "$script" ] || continue
   rel="${script#${TAILS_DIR}/}"
   printf "  %s... " "$rel"
-  if grep -q 'VALIDSIG' "$script" && grep -qE 'VALIDSIG \.\*\$\{' "$script"; then
+  if grep -qE 'GNUPG.*VALIDSIG \.\*\$\{' "$script"; then
     g "OK"
   else
     y "WARN"
@@ -49,7 +49,7 @@ for script in \
   fi
 done
 
-b "[3/4] Backup cifrado com confirmação de senha..."
+b "[3/5] Backup cifrado com confirmação de senha..."
 for script in \
   "${TAILS_DIR}/haveno/backup.sh" \
   "${TAILS_DIR}/feather/backup.sh" \
@@ -65,7 +65,7 @@ for script in \
   fi
 done
 
-b "[4/4] lib/onion-grater.yml (YAML)..."
+b "[4/5] lib/onion-grater.yml (YAML)..."
 ONION_YML="${TAILS_DIR}/lib/onion-grater.yml"
 if [ ! -f "$ONION_YML" ]; then
   r "  FAIL — lib/onion-grater.yml ausente"
@@ -83,10 +83,25 @@ else
   WARN=$((WARN + 1))
 fi
 
+b "[5/5] steps/08 usa filtro corrigido do hub (onion-grater com PoW)..."
+script_08="${TAILS_DIR}/steps/08-open-haveno.sh"
+if [ -f "$script_08" ]; then
+  rel="${script_08#${TAILS_DIR}/}"
+  printf "  %s... " "$rel"
+  if grep -qE 'HUB_ONION_YML|lib/onion-grater' "$script_08"; then
+    g "OK"
+  else
+    r "FAIL — steps/08 nao usa lib/onion-grater.yml (filtro sem PoW fix do Haveno 1.6.0)"
+    FAILED=$((FAILED + 1))
+  fi
+else
+  y "  steps/08-open-haveno.sh ausente — pulando."
+fi
+
 echo
 if [ "$FAILED" -eq 0 ]; then
-  g "Sintaxe: PASS (${WARN} aviso(s) informativos)."
+  g "Health check: PASS (${WARN} aviso(s) informativos)."
   exit 0
 fi
-r "FAIL — ${FAILED} erro(s) de sintaxe."
+r "FAIL — ${FAILED} erro(s). Corrija antes de rodar com alunos."
 exit 1

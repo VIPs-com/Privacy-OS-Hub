@@ -46,7 +46,7 @@ sudo_one_password_start() {
   y "  Ajuste TEMPORARIO de sessao (removido ao fim do script; some no reboot)."
   sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
   if ! sudo bash -c "umask 0337; \
-        printf 'Defaults timestamp_timeout=-1\n' > '$HAVENO_SUDOERS_DROPIN'; \
+        printf 'Defaults timestamp_timeout=30\n' > '$HAVENO_SUDOERS_DROPIN'; \
         visudo -cf '$HAVENO_SUDOERS_DROPIN' >/dev/null"; then
     sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
     die "Nao ativei o modo uma-senha (sudoers invalido). Rode sem --one-password."
@@ -443,6 +443,37 @@ haveno_hub_download_and_promote_deb() {
   haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"
 }
 
+haveno_check_install_script_hash() {
+  local script_path="${1:-./haveno-install.sh}"
+  [ -f "$script_path" ] || die "haveno-install.sh nao encontrado para verificacao de hash."
+  local actual
+  actual="$(sha256sum "$script_path" | awk '{print $1}')"
+  qa_log_line "haveno-install.sh sha256: ${actual}"
+  if [ -n "${INSTALL_SCRIPT_HASH:-}" ]; then
+    if [ "$actual" = "$INSTALL_SCRIPT_HASH" ]; then
+      g "  [OK] haveno-install.sh verificado (sha256 confere)."
+    else
+      r "  ERRO: sha256 do haveno-install.sh NAO CONFERE."
+      r "  Esperado: ${INSTALL_SCRIPT_HASH}"
+      r "  Obtido:   ${actual}"
+      die "haveno-install.sh comprometido ou alterado — abortando. Registre divergencia."
+    fi
+  else
+    r "  ============================================================"
+    r "  AVISO: INSTALL_SCRIPT_HASH vazio em lib/config.sh"
+    r "  O haveno-install.sh baixado NAO foi verificado por hash."
+    y "  sha256 atual: ${actual}"
+    y "  Preencha INSTALL_SCRIPT_HASH='${actual}' em lib/config.sh para runs futuros."
+    r "  ============================================================"
+    printf "  Confirmar execucao SEM verificacao de hash? (sim/N): "
+    read -r _ack
+    case "${_ack:-N}" in
+      sim|SIM) y "  Prosseguindo sem verificacao de hash (risco confirmado)." ;;
+      *) die "Abortado. Preencha INSTALL_SCRIPT_HASH='${actual}' em lib/config.sh e rode de novo." ;;
+    esac
+  fi
+}
+
 haveno_run_upstream_install_deb() {
   local deb_url="$1" pgp_fpr="$2" expected="${3:-0}"
   local deb_basename install_rc=0
@@ -452,6 +483,7 @@ haveno_run_upstream_install_deb() {
   HAVENO_INSTALL_PID=
   HAVENO_MON_PID=
   trap 'haveno_download_interrupted' INT TERM
+  haveno_check_install_script_hash "./haveno-install.sh"
   LC_ALL=C bash ./haveno-install.sh "$deb_url" "$pgp_fpr" &
   HAVENO_INSTALL_PID=$!
   haveno_monitor_deb_download "$HAVENO_INSTALL_PID" "$expected" &
@@ -680,7 +712,7 @@ haveno_ensure_deb_deps() {
   for item in $deps_raw; do
     item="$(echo "$item" | sed 's/([^)]*)//g')"
     status=""
-    local IFS='|'
+    IFS='|'
     for alt in $item; do
       nome="$(echo "$alt" | tr -d '[:space:]')"
       [ -n "$nome" ] || continue
@@ -701,7 +733,7 @@ haveno_ensure_deb_deps() {
       nome="$(echo "$item" | tr -d '[:space:]' | cut -d'|' -f1)"
       [ -n "$nome" ] && faltando+=("$nome")
     fi
-    local IFS=','
+    IFS=','
   done
   unset IFS
   if [ "${#instalaveis[@]}" -gt 0 ]; then

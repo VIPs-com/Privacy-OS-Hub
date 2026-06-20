@@ -62,6 +62,7 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 | `04-haveno-backup-*` | `Backup concluido:` + `RESULTADO: PASS` | `ERRO:` ou `RESULTADO: FAIL` |
 | `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` | qualquer `=NAO` |
 | `05-feather-*` | `Fingerprint OK: 8185E158` + `VALIDSIG 8185E158` | `Assinatura GPG FALHOU` |
+| `06-haveno-update-*` | `Novo .deb verificado e preparado` + `RESULTADO: PASS` | `Atualizacao falhou` ou `RESULTADO: FAIL` |
 | `07-post-session-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal |
 | `09-seed-confirmacao-*` | 3 confirmações `=SIM` | qualquer `=NAO` |
 | `12-cold-signing-*` | `tails_offline_airgap=SIM` + confirmações `=SIM` | campo crítico `=NAO` |
@@ -80,7 +81,7 @@ exit_code: 0
 RESULTADO: PASS
 ```
 
-Depois rode `qa-confirm-seed-papel.sh` e confira `04-seed-papel-*.txt`.
+Depois rode `~/Persistent/hub-scripts/qa/confirm-seed.sh` e confira `04-seed-papel-*.txt`.
 
 ---
 
@@ -92,7 +93,7 @@ Depois rode `qa-confirm-seed-papel.sh` e confira `04-seed-papel-*.txt`.
 | **Offline (suporte)** | Seed em papel — pode ser com Tor ativo. |
 | **Offline (rede)** | Tails sem Wi‑Fi/cabo — passo **12** only. |
 
-Ver também: [README — trilha linear](../../README.md#trilha-linear).
+Ver também: [README — o que você vai aprender (12 passos)](../../README.md#o-que-você-vai-aprender-12-passos).
 
 ---
 

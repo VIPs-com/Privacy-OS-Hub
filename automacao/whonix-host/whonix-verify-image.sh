@@ -74,14 +74,15 @@ fi
 g "  Fingerprint OK: ${WHONIX_FPR}"
 
 b "[3/3] Verificando imagem..."
+_WHONIX_LOG="${WORKDIR}/whonix-verify.log"
 gpg --status-fd 1 --verify-options show-notations --verify "$SIG" "$IMAGE" \
-  > /tmp/whonix-verify.log 2>&1 || true
-if grep -q "^\[GNUPG:\] GOODSIG" /tmp/whonix-verify.log; then
+  > "$_WHONIX_LOG" 2>&1 || true
+if grep -q "^\[GNUPG:\] VALIDSIG .*${WHONIX_FPR}" "$_WHONIX_LOG"; then
   :
-elif grep -qi "EXPKEYSIG" /tmp/whonix-verify.log; then
+elif grep -qi "EXPKEYSIG" "$_WHONIX_LOG"; then
   die "EXPKEYSIG — reimporte derivative.asc e rode de novo (Instalar §5.4)."
 else
-  cat /tmp/whonix-verify.log >&2
+  cat "$_WHONIX_LOG" >&2
   die "Assinatura GPG FALHOU. NAO importe a VM."
 fi
 

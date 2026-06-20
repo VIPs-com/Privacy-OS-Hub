@@ -109,6 +109,13 @@ if [ -n "$RESTORE_FILE" ]; then
 
   b "  Testando integridade do arquivo..."
   tar -tzf "$TARFILE" >/dev/null 2>&1 || { rm -rf "$TMP"; die "Arquivo corrompido."; }
+  if [ -f "${RESTORE_FILE}.sha256" ]; then
+    b "  Verificando sha256 do backup original..."
+    ( cd "$(dirname "$RESTORE_FILE")" && sha256sum -c "$(basename "${RESTORE_FILE}.sha256")" >/dev/null ) \
+      && g "  sha256 OK." || { rm -rf "$TMP"; die "sha256 nao confere — backup corrompido ou substituido."; }
+  else
+    y "  Aviso: .sha256 ausente — integridade verificada apenas via tar."
+  fi
   g "  Arquivo OK."
 
   # Copia de seguranca do estado atual antes de sobrescrever
@@ -147,8 +154,11 @@ if [ "$USE_USB" = "1" ] && [ -z "$DEST" ]; then
     y "  Varios volumes encontrados:"
     i=1; for v in "${VOLS[@]}"; do echo "    [$i] $v"; i=$((i+1)); done
     printf "  Escolha o numero: "; read -r n
-    DEST="${VOLS[$((n-1))]:-}"
-    [ -n "$DEST" ] || die "Escolha invalida."
+    case "${n:-}" in
+      ''|*[!0-9]*|0) die "Escolha invalida (use 1-${#VOLS[@]})." ;;
+    esac
+    [ "$n" -le "${#VOLS[@]}" ] || die "Escolha invalida (use 1-${#VOLS[@]})."
+    DEST="${VOLS[$((n-1))]}"
   fi
 fi
 [ -n "$DEST" ] || DEST="$DEFAULT_DEST"
@@ -161,6 +171,12 @@ STAMP="$(date +%Y%m%d-%H%M%S)"
 BASE="haveno-data-${STAMP}"
 TMP="$(mktemp -d)"
 TARFILE="${TMP}/${BASE}.tar.gz"
+
+# Verifica RAM disponivel antes de compactar em /tmp (tmpfs em RAM no Tails)
+DATA_MiB="$(du -sm "$DATA_DIR" 2>/dev/null | cut -f1)"
+TMP_MiB="$(df -m /tmp 2>/dev/null | awk 'NR==2{print $4}')"
+[ "${TMP_MiB:-0}" -gt "$((${DATA_MiB:-0} * 2))" ] \
+  || die "RAM insuficiente para backup em /tmp (${DATA_MiB:-?}MB de dados, ${TMP_MiB:-?}MB livres). Use: hub.sh backup --dest /media/amnesia/SEU_USB"
 
 # Compactar (Data/ relativo, para restaurar limpo)
 b "[1/4] Compactando ${DATA_DIR}..."

@@ -1,9 +1,9 @@
 #!/bin/bash
 ###############################################################################
-# qa-confirm-passo9.sh — passo 9: ritual das 2 copias fisicas da seed
+# qa/confirm-step9.sh — passo 9: ritual das 2 copias fisicas da seed
 #
 # Tails pode estar ONLINE (Tor). Nao exige segundo boot offline no Minimo M2.
-# USO: ~/Persistent/qa-confirm-passo9.sh
+# USO: ~/Persistent/hub-scripts/qa/confirm-step9.sh
 ###############################################################################
 
 set -uo pipefail
