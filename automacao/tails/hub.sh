@@ -19,6 +19,15 @@
 #   hub.sh feather      Instala Feather Wallet (passo 5)
 #                               → baixa AppImage, verifica PGP, abre
 #
+#   hub.sh qa <cmd>     Confirmações humanas e relatórios QA:
+#
+#     validate          Valida scripts (sintaxe, PGP, YAML) — tela + log
+#     confirm-seed      Seed anotada em papel (passo 4) — só booleanos no log
+#     confirm-step9     Ritual 2 cópias físicas separadas (passo 9)
+#     confirm-step12    Pós cold-signing (passo 12 — Trilha A ou B)
+#     export-logs       Exporta qa-logs/ para pendrive USB
+#     finalize          validate + confirm-seed (1ª instalação, 1 vez)
+#
 # ── FLAGS ────────────────────────────────────────────────────────────────────
 #
 #   --qa-log            (todos os subcomandos)
@@ -51,6 +60,10 @@
 #   hub.sh backup                             # backup rápido antes do trade
 #   hub.sh update --qa-log                    # novo release + log
 #   hub.sh feather                            # instalar Feather (passo 5)
+#   hub.sh qa finalize                        # pós 1ª instalação (validate + seed)
+#   hub.sh qa confirm-step9                   # passo 9 — ritual 2 cópias físicas
+#   hub.sh qa confirm-step12                  # passo 12 — pós cold-signing
+#   hub.sh qa export-logs --usb               # exportar logs para pendrive
 #
 # ── SE ALGO DER ERRADO ───────────────────────────────────────────────────────
 #
@@ -83,9 +96,13 @@ usage() {
   b "    export-logs   exporta qa-logs/ para pendrive USB"
   b "    finalize      validate + confirm-seed (1ª instalação, 1 vez)"
   b ""
-  b "Flags (qualquer subcomando):"
+  b "Flags globais (qualquer subcomando):"
   b "  --qa-log        grava log em ~/Persistent/qa-logs/"
   b "  --one-password  senha admin só uma vez"
+  b ""
+  b "Flags específicas de install:"
+  b "  --install-only  pula download — usa .deb já em Install/"
+  b "  --skip-backup   pula backup automático ao final"
   b ""
   b "Quando algo falhar: steps/run-all.sh (fallback atômico)"
   exit 1
