@@ -1465,7 +1465,7 @@ Antes de considerar a trilha principal concluída:
 ├── system/                  (Tails — ambiente)
 │   ├── preflight.sh         (valida Tails/Tor/persistência/admin)
 │   ├── post-session.sh      (Tor + onion-grater pós-upgrade Tails)
-│   └── health-check.sh      (validação estática — equipe)
+│   └── qa-validate.sh       (validação de qualidade — tela + log · hub.sh qa validate)
 │
 ├── qa/                      (Validação / QA)
 │   ├── confirm-seed.sh      (confirma seed no papel — sem gravar palavras)

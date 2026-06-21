@@ -75,6 +75,13 @@ usage() {
   b "  backup        backup cifrado da carteira (antes do 1º depósito)"
   b "  update        atualiza para novo release (faz backup antes)"
   b "  feather       instala e verifica Feather Wallet"
+  b "  qa <cmd>      relatórios QA e confirmações humanas:"
+  b "    validate      valida scripts (sintaxe, PGP, YAML) — tela + log"
+  b "    confirm-seed  confirma seed anotada em papel (passo 4)"
+  b "    confirm-step9 ritual 2 cópias físicas separadas (passo 9)"
+  b "    confirm-step12 pós cold-signing (passo 12)"
+  b "    export-logs   exporta qa-logs/ para pendrive USB"
+  b "    finalize      validate + confirm-seed (1ª instalação, 1 vez)"
   b ""
   b "Flags (qualquer subcomando):"
   b "  --qa-log        grava log em ~/Persistent/qa-logs/"
@@ -82,6 +89,24 @@ usage() {
   b ""
   b "Quando algo falhar: steps/run-all.sh (fallback atômico)"
   exit 1
+}
+
+# ---- QA Finalize (1ª instalação: validate + confirm-seed) -------------------
+_hub_qa_finalize() {
+  local qa_logs="${PERSIST}/qa-logs"
+  if [ -z "$(ls "${qa_logs}/04-seed-papel-"*.txt 2>/dev/null)" ]; then
+    b "=== QA Finalize — primeira instalação ==="
+    b "[1/2] Validando integridade dos scripts..."
+    bash "${HUB_DIR}/system/qa-validate.sh" --qa-log
+    echo
+    b "[2/2] Confirmando seed anotada em papel..."
+    bash "${HUB_DIR}/qa/confirm-seed.sh"
+    echo
+    g "QA Finalize concluído. Logs em ~/Persistent/qa-logs/"
+  else
+    y "QA já finalizado nesta persistência (04-seed-papel-*.txt existe)."
+    y "Para revalidar scripts: hub.sh qa validate"
+  fi
 }
 
 CMD="${1:-}"
@@ -144,6 +169,17 @@ case "$CMD" in
       *) y "Pulando backup. Rode depois: hub.sh backup" ;;
       esac
     fi
+    # ---- QA Finalize: apenas na 1ª instalação --------------------------------
+    if [ -z "$(ls "${PERSIST}/qa-logs/04-seed-papel-"*.txt 2>/dev/null)" ]; then
+      echo
+      y "Seed ainda não confirmada em papel — relatório QA incompleto."
+      printf "Finalizar QA agora (valida scripts + confirma seed)? (s/N): "
+      read -r _qa_ans
+      case "${_qa_ans:-N}" in
+        s|S|sim|SIM) _hub_qa_finalize ;;
+        *) y "Rode depois: hub.sh qa finalize" ;;
+      esac
+    fi
     echo
     g "install concluído. Próxima sessão: hub.sh boot"
     ;;
@@ -169,6 +205,26 @@ case "$CMD" in
 
   feather)
     bash "$FEATHER_INSTALL" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]:-}"
+    ;;
+
+  qa)
+    QA_SUBCMD="${EXTRA_ARGS[0]:-}"
+    case "$QA_SUBCMD" in
+      validate)
+        export HAVENO_QA_LOG=1
+        bash "${HUB_DIR}/system/qa-validate.sh" --qa-log
+        ;;
+      confirm-seed)   bash "${HUB_DIR}/qa/confirm-seed.sh" ;;
+      confirm-step9)  bash "${HUB_DIR}/qa/confirm-step9.sh" ;;
+      confirm-step12) bash "${HUB_DIR}/qa/confirm-step12.sh" ;;
+      export-logs)    bash "${HUB_DIR}/qa/export-logs.sh" "${EXTRA_ARGS[@]:1}" ;;
+      finalize)       _hub_qa_finalize ;;
+      *)
+        r "hub.sh qa: subcomando desconhecido."
+        b "Use: validate | confirm-seed | confirm-step9 | confirm-step12 | export-logs | finalize"
+        exit 1
+        ;;
+    esac
     ;;
 
   help|--help|-h)

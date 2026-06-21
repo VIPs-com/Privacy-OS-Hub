@@ -78,7 +78,7 @@ Pré-req passo 8: passos 1–7 (Feather no 5). Passo 9: Tor OK. Passo 12: **air-
 
 ### Scripts — superfície expert
 
-Ponto de entrada: `hub.sh`. Matriz técnica: [automacao/tails/README.md](../automacao/tails/README.md). Validação estática: `system/health-check.sh` (host Linux; não substitui Tails real).
+Ponto de entrada: `hub.sh`. Matriz técnica: [automacao/tails/README.md](../automacao/tails/README.md). Validação estática: `system/qa-validate.sh` (host Linux; não substitui Tails real).
 
 ### O que este hub não cobre
 
@@ -500,7 +500,7 @@ hub-scripts/
 ├── system/                  Ambiente Tails
 │   ├── preflight.sh         ✗ interno (hub.sh chama automaticamente)
 │   ├── post-session.sh      aluno roda após atualizar o SO Tails
-│   └── health-check.sh      equipe / validação estática (host Linux)
+│   └── qa-validate.sh      aluno/equipe · validate + confirm-seed + logs
 │
 ├── qa/                      Validação / QA — confirmações sem segredos
 │   ├── confirm-seed.sh      aluno roda (passo 4)

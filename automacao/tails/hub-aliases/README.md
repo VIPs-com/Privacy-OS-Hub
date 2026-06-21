@@ -18,7 +18,7 @@ Resultado:
 ├── hub.sh               ← único ponto de entrada
 ├── haveno/              ← install · boot · backup · update · verify-deb · switch-network
 ├── feather/             ← install · backup
-├── system/              ← preflight · post-session · health-check
+├── system/              ← preflight · post-session · qa-validate
 ├── qa/                  ← confirm-seed · confirm-step9 · confirm-step12 · export-logs
 ├── lib/                 ← config.sh · common.sh · onion-grater.yml
 ├── steps/               ← fallback atômico 01–08 + run-all.sh
@@ -62,7 +62,7 @@ Pass-through: flags extras vão para o script alvo (`"$@"`), exceto onde o alias
 | `16-qa-check.sh` | `qa/export-logs.sh` | *(passe `--usb`)* | evidências |
 | `17-haveno-install-only.sh` | `hub.sh install` | `--install-only --qa-log` | recuperação |
 | `18-haveno-update.sh` | `haveno/update.sh` | `--one-password` | release novo |
-| `19-health-check.sh` | `system/health-check.sh` | — | mantenedor |
+| `19-qa-validate.sh` | `system/qa-validate.sh` | — | mantenedor |
 | `20-sync-hub-scripts.sh` | `sync-hub-scripts.sh` | — | sync |
 
 ## Fallback atômico (Haveno-only)

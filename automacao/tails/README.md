@@ -121,7 +121,7 @@ Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os scripts organizados p
 (inclui o filtro Tor `onion-grater.yml`) + o atalho `.desktop`.
 Oferece limpar scripts do layout antigo soltos na raiz (sem tocar nos seus dados).
 
-**Validação estática (equipe/host Linux):** `system/health-check.sh` — sintaxe `bash -n` + checks estáticos (não substitui teste no Tails real).
+**Validação de qualidade (aluno/equipe):** `system/qa-validate.sh` — sintaxe `bash -n` + checks estáticos (não substitui teste no Tails real).
 
 ### Método B — manual
 

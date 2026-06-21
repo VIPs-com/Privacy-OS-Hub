@@ -1,9 +1,12 @@
 #!/bin/bash
 ###############################################################################
-# health-check.sh — validação estática dos scripts (host Linux ou Tails)
+# qa-validate.sh — validação estática dos scripts (host Linux ou Tails)
 #
-# USO (em qualquer pasta — o script encontra a raiz automaticamente):
-#   ./system/health-check.sh
+# USO (via hub): hub.sh qa validate
+# USO (direto):  ./system/qa-validate.sh [--qa-log]
+#
+# Valida: sintaxe bash · PGP fail-closed · backup cifrado · YAML onion-grater
+# Saída: tela (tempo real) + ~/Persistent/qa-logs/ (com --qa-log ou HAVENO_QA_LOG=1)
 #
 # NAO substitui piloto CT-01..05 em Tails real.
 ###############################################################################
@@ -13,13 +16,17 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # shellcheck source=../lib/common.sh
 source "${SCRIPT_DIR}/../lib/common.sh"
 
-TAILS_DIR="${SCRIPT_DIR}/.."   # raiz de automacao/tails/
+# ---- QA log (tela + arquivo simultâneos) ------------------------------------
+for _arg in "$@"; do [ "$_arg" = "--qa-log" ] && export HAVENO_QA_LOG=1; done
+[ "${HAVENO_QA_LOG:-0}" = "1" ] && qa_log_tee_begin "qa-validate"
 
+TAILS_DIR="${SCRIPT_DIR}/.."
 FAILED=0
 WARN=0
 
-b "=== Health Check — Privacy-OS-Hub (automacao/tails) ==="
+b "=== QA Validate — Privacy-OS-Hub (automacao/tails) ==="
 
+# ---- [1/5] Sintaxe bash (-n) -------------------------------------------------
 b "[1/5] Sintaxe bash (-n)..."
 while IFS= read -r -d '' script; do
   rel="${script#${TAILS_DIR}/}"
@@ -32,6 +39,7 @@ while IFS= read -r -d '' script; do
   fi
 done < <(find "$TAILS_DIR" -name '*.sh' -type f -not -path '*/hub-aliases/*' -print0)
 
+# ---- [2/5] PGP fail-closed (VALIDSIG + [GNUPG:] + fingerprint) --------------
 b "[2/5] PGP fail-closed (VALIDSIG + [GNUPG:] + fingerprint)..."
 for script in \
   "${TAILS_DIR}/lib/common.sh" \
@@ -49,6 +57,7 @@ for script in \
   fi
 done
 
+# ---- [3/5] Backup cifrado com confirmação de senha --------------------------
 b "[3/5] Backup cifrado com confirmação de senha..."
 for script in \
   "${TAILS_DIR}/haveno/backup.sh" \
@@ -65,6 +74,7 @@ for script in \
   fi
 done
 
+# ---- [4/5] lib/onion-grater.yml (YAML) --------------------------------------
 b "[4/5] lib/onion-grater.yml (YAML)..."
 ONION_YML="${TAILS_DIR}/lib/onion-grater.yml"
 if [ ! -f "$ONION_YML" ]; then
@@ -83,6 +93,7 @@ else
   WARN=$((WARN + 1))
 fi
 
+# ---- [5/5] steps/08 usa filtro corrigido do hub (PoW Haveno 1.6.0) ----------
 b "[5/5] steps/08 usa filtro corrigido do hub (onion-grater com PoW)..."
 script_08="${TAILS_DIR}/steps/08-open-haveno.sh"
 if [ -f "$script_08" ]; then
@@ -98,10 +109,13 @@ else
   y "  steps/08-open-haveno.sh ausente — pulando."
 fi
 
+# ---- Resultado ---------------------------------------------------------------
 echo
 if [ "$FAILED" -eq 0 ]; then
-  g "Health check: PASS (${WARN} aviso(s) informativos)."
+  g "QA Validate: PASS (${WARN} aviso(s) informativos)."
+  [ "${HAVENO_QA_LOG:-0}" = "1" ] && qa_log_finish 0
   exit 0
 fi
 r "FAIL — ${FAILED} erro(s). Corrija antes de rodar com alunos."
+[ "${HAVENO_QA_LOG:-0}" = "1" ] && qa_log_finish 1
 exit 1

@@ -122,7 +122,7 @@ Scripts movidos de raiz plana para pastas por produto (`haveno/` · `feather/` �
 | **Promoção verificada** | `haveno_finalize_verified_deb_in_cwd`, `haveno_try_promote_deb_from_cwd` | `.deb` completo em `.download/` → PGP `VALIDSIG` → **mv** para `Install/` + symlink `haveno.deb` |
 | **Trap SIGINT** | `haveno-auto.sh`, `haveno-update.sh` | Mata filhos do download em Ctrl+C; `.download/` fica para retomar |
 | **Recovery** | `haveno_deb_download_failed_msg` | Mensagens distintas: `.download/` vs `Install/` vs `--install-only` |
-| **Auditoria** | `haveno_fix_dpkg_state` | Estado `half-installed`; `health-check.sh` valida YAML do onion-grater |
+| **Auditoria** | `haveno_fix_dpkg_state` | Estado `half-installed`; `qa-validate.sh` valida YAML do onion-grater |
 
 ---
 
@@ -136,7 +136,7 @@ Scripts movidos de raiz plana para pastas por produto (`haveno/` · `feather/` �
 | **Feather fallback** | `feather-install-verify.sh` | `FEATHER_VERSION_FALLBACK` (env) se scrape falhar |
 | **LC_ALL=C deps** | `haveno-common.sh`, `06-deps-apt.sh` | locale neutro em apt |
 | **TX ID hex** | `qa-confirm-passo12.sh` | valida 8 caracteres hex |
-| **Health-check** | `health-check.sh` | validacao estatica (sintaxe + checks + YAML onion-grater) |
+| **QA Validate** | `qa-validate.sh` | validacao estatica (sintaxe + checks + YAML onion-grater) |
 
 ---
 
