@@ -47,12 +47,15 @@ Consulte também: `docs/TROUBLESHOOTING.md` — diagnóstico por mensagem de err
 
 ## Para a equipe: atualizar para novo release
 
-Edite **apenas** estas 2 linhas em `lib/config.sh`:
+Edite estas **3 linhas** em `lib/config.sh`:
 
 ```bash
 HAVENO_VERSION="X.Y.Z-reto"
 HAVENO_PGP_FPR="NOVA_FINGERPRINT"
+INSTALL_SCRIPT_HASH="SHA256_DO_HAVENO_INSTALL_SH"  # curl -sL <URL_install.sh> | sha256sum | cut -d' ' -f1
 ```
+
+> ⚠️ **O aluno nunca edita `config.sh`** — ele roda `sync-hub-scripts.sh` para receber o config atualizado e depois `hub.sh update`.
 
 Todos os scripts — `hub.sh`, `steps/` — leem automaticamente de `lib/config.sh`.
 

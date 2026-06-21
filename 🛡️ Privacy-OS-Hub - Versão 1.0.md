@@ -500,7 +500,8 @@ O script faz automaticamente:
 5. Instala o Haveno
 6. Configura onion-grater
 7. Abre o Haveno
-8. Pergunta se quer fazer backup
+8. Pergunta se quer fazer backup — padrão **`S`** (Enter = sim, recomendado)
+9. Na 1ª vez: pergunta se quer **Finalizar QA** — padrão **`S`** (Enter = valida scripts + confirma seed em papel)
 
 🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` do script upstream fica parada — normal. O hub imprime **barra de progresso** (`[########----] NN%` a cada 10s na 1ª vez, ou barra **curl** se `App/utils/` já existir). **Não interrompa** com Ctrl+C no meio do download.
 
@@ -882,12 +883,14 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 | `hub.sh update` | Release novo da rede | Sim (backup automático antes) |
 | `hub.sh feather` | Passo 5 (instala + verifica PGP) | Sim (re-verifica) |
 | `hub.sh feather --qa-log` | Passo 5 com log | Sim |
+| `hub.sh qa validate` | Valida scripts — tela + log simultâneos | Sim |
+| `hub.sh qa finalize` | validate + confirm-seed (1ª instalação, 1 vez) | Sim |
+| `hub.sh qa confirm-seed` | Confirma seed em papel (passo 4) | Sim |
+| `hub.sh qa confirm-step9` | Ritual 2× cópias físicas (passo 9) | Sim |
+| `hub.sh qa confirm-step12` | Pós cold-signing (passo 12) | Sim |
+| `hub.sh qa export-logs --usb` | Exporta qa-logs/ para pendrive | Sim |
 | `system/preflight.sh` | Antes de qualquer script | Sim (só leitura) |
 | `system/post-session.sh` | Após atualizar o Tails (SO) | Sim |
-| `qa/confirm-seed.sh` | Após passo 4 | Sim |
-| `qa/confirm-step9.sh` | Passo 9 | Sim |
-| `qa/confirm-step12.sh` | Após cold-signing | Sim |
-| `qa/export-logs.sh --usb` | Entregar logs para equipe | Sim |
 
 **Resumo de bolso:**
 - **Primeira vez na vida** → `hub.sh install`
@@ -1503,6 +1506,12 @@ Antes de considerar a trilha principal concluída:
 | `hub.sh update` | 7 | Atualizar .deb com PGP (backup automático antes) | Release novo da rede | Seguro |
 | `hub.sh feather` | 5 | Feather: PGP fail-closed + abre UI | Passo 5 | Seguro (não mexe em wallets/) |
 | `hub.sh feather --qa-log` | 5 | Idem com log | Passo 5 (recomendado) | Seguro |
+| `hub.sh qa validate` | — | Valida scripts (sintaxe + PGP + YAML) — tela + log | A qualquer momento | Seguro |
+| `hub.sh qa finalize` | 2 | validate + confirm-seed (1ª instalação) | Ao final do install, 1 vez | Seguro |
+| `hub.sh qa confirm-seed` | 4 | Confirma seed no papel (sem gravar palavras) | Após anotar seed | Seguro |
+| `hub.sh qa confirm-step9` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
+| `hub.sh qa confirm-step12` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
+| `hub.sh qa export-logs` | — | Copia qa-logs/ para pendrive | Entregar evidências | Seguro |
 | `haveno/verify-deb.sh` | — | Verificar assinatura GPG do .deb | Dúvida sobre autenticidade | Seguro (só leitura) |
 | `haveno/switch-network.sh` | — | Trocar rede Haveno (backup + update) | Mudar para outra rede | Cuidado — feche trades antes |
 | `system/preflight.sh` | 1–4 | Valida Tails/Tor/persistência/admin | Antes de qualquer script | Seguro (só leitura) |

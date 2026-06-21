@@ -4,6 +4,56 @@
 
 ---
 
+## 2026-06-21 — `hub.sh qa` + `qa-validate.sh` + prompts S/n + B+ APROVADO
+
+> **Commits:** `7273437` (hub.sh qa + qa-validate.sh) · `7d39491` (prompts S/n) · `dcffaa1` (boot dedup + v1.0.2) · `ed9672f` (INSTALL_SCRIPT_HASH + B+)
+
+### `hub.sh qa` — novo subcomando completo
+
+| Subcomando | O que faz |
+|------------|-----------|
+| `hub.sh qa validate` | `system/qa-validate.sh --qa-log` — tela + log simultâneos |
+| `hub.sh qa confirm-seed` | `qa/confirm-seed.sh` |
+| `hub.sh qa confirm-step9` | `qa/confirm-step9.sh` |
+| `hub.sh qa confirm-step12` | `qa/confirm-step12.sh` |
+| `hub.sh qa export-logs` | `qa/export-logs.sh` |
+| `hub.sh qa finalize` | `validate` + `confirm-seed` — 1ª instalação, 1 vez |
+
+### `system/qa-validate.sh` — renomeado de `health-check.sh`
+
+- Saída simultânea: tela (tempo real) **e** `~/Persistent/qa-logs/qa-validate-*.txt`
+- Implementado via `qa_log_tee_begin` (mesma lib de todos os scripts)
+- `hub-aliases/19-qa-validate.sh` atualizado para o novo nome
+
+### QA Finalize automático pós-install
+
+Ao final de `hub.sh install`, se `04-seed-papel-*.txt` não existir:
+```
+→ "Rodar backup agora? (S/n):"     — Enter = backup (padrão S)
+→ "Finalizar QA agora? (S/n):"     — Enter = qa validate + confirm-seed
+```
+
+O aluno sai com `qa-logs/` completo em uma única sessão sem passos extras.
+
+### Prompts com padrão S (Enter = sim)
+
+- `hub.sh install` → backup: `(s/N)` → **`(S/n)`** — backup é sempre recomendado
+- `hub.sh install` → QA finalize: `(s/N)` → **`(S/n)`** — completar QA na 1ª vez
+
+### Cosméticos e fixes de campo
+
+| Fix | Detalhe |
+|-----|---------|
+| `boot.sh` monitor dedup | Loop imprimia mesma linha journalctl 32× — adicionado `last=""` + `[ "$line" != "$last" ]` (espelha `install.sh`) |
+| `lib/config.sh` PU-07 | `INSTALL_SCRIPT_HASH="658780708f1556a8135f2800c9182067909c5c77682bda68a98d70086779eeba"` confirmado em campo 21/06/2026 |
+| Tag `v1.0.2` | Publicada no GitHub apontando para `dcffaa1` |
+
+### B+ APROVADO — 21/06/2026
+
+**Evidências:** 5 logs QA PASS (`01-preflight`, `02-haveno-auto`, `04-haveno-backup`, `07-haveno-boot`, `09-seed-confirmacao`) · Tails **7.8.1** · RetoSwap **1.6.0-reto** · 12 peers P2P · bloco 3.700.884 · walletInitialized=true · porta 9062 confirmada (`haveno-exec.log:78`).
+
+---
+
 ## 2026-06-19 — Auditoria multi-agent: hardening + 16 fixes cirúrgicos
 
 > **Método:** 4 agentes especializados em paralelo (técnico · segurança · pedagógico · consistência).  

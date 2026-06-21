@@ -70,6 +70,12 @@ script terminar, e o **remove ao fim** (e ele some no reboot — o Tails é amn�
 | `hub.sh backup` | 4, 7 | §9 | Backup cifrado `Data/` |
 | `hub.sh update` | 7 | §10 | Novo release (backup automático antes) |
 | `hub.sh feather` | 5 | Vol II §2 | Feather PGP + AppImage |
+| `hub.sh qa validate` | — | — | `qa-validate.sh` — tela + log simultâneos |
+| `hub.sh qa confirm-seed` | 4 | — | seed confirmada em papel (sem gravar palavras) |
+| `hub.sh qa confirm-step9` | 9 | — | ritual 2× cópias físicas |
+| `hub.sh qa confirm-step12` | 12 | — | pós cold-signing (Tails offline) |
+| `hub.sh qa export-logs` | — | — | copia `qa-logs/` → pendrive USB |
+| `hub.sh qa finalize` | 2 | — | validate + confirm-seed na 1ª instalação |
 | `haveno/verify-deb.sh` | 5 | Vol II §3 | Auditar `.deb` em `Install/` (AVANÇADO) |
 | `haveno/switch-network.sh` | 5 | Vol II §8 | Trocar rede (backup + update) (AVANÇADO) |
 | `system/preflight.sh` | 1–4 | §1–4 | Valida ambiente antes de automatizar |

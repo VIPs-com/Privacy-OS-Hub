@@ -189,7 +189,8 @@ Use este **ponto de entrada** se você é novato. Ele chama os scripts internos 
 
 1. `system/preflight.sh` — valida passos 1–4
 2. `haveno/install.sh` — baixa (se preciso), instala, abre Haveno, corrige onion-grater (auto-resume `--install-only` se `.deb` já está em `Install/`)
-3. Pergunta se quer rodar **backup** agora (responda `s` ou `N`)
+3. Pergunta se quer rodar **backup** agora — padrão **`S`** (Enter = sim, recomendado)
+4. Na 1ª vez: pergunta se quer **finalizar QA** — padrão **`S`** (Enter = `qa validate` + `confirm-seed`)
 
 Com `--qa-log`, grava `01-preflight-*` **e** `02-haveno-auto-*` em `~/Persistent/qa-logs/`.
 
@@ -272,6 +273,25 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 |------|-----|
 | `--url` / `--pgp` | Obrigatórios para versão nova (**mesma rede**) |
 | `--no-backup` | **Evite** — pula backup antes de atualizar |
+
+---
+
+### `hub.sh qa` — validação e confirmações humanas
+
+Agrupa todos os scripts de QA em um ponto de entrada:
+
+```bash
+hub.sh qa validate        # valida scripts (sintaxe + PGP + YAML) — tela + log simultâneos
+hub.sh qa confirm-seed    # confirma seed em papel (passo 4, sem gravar palavras)
+hub.sh qa confirm-step9   # ritual 2× cópias físicas (passo 9, Tor OK)
+hub.sh qa confirm-step12  # pós cold-signing (passo 12, Tails sem rede)
+hub.sh qa export-logs     # exporta qa-logs/ para pendrive USB
+hub.sh qa finalize        # validate + confirm-seed (1ª instalação, 1 vez)
+```
+
+`hub.sh qa validate` usa `qa_log_tee_begin` — imprime em tempo real **e** grava em `~/Persistent/qa-logs/qa-validate-*.txt` simultaneamente. Não é necessário redirecionar a saída manualmente.
+
+**`finalize`** é chamado automaticamente ao final de `hub.sh install` na 1ª vez (prompt `S/n`). Para revalidar depois: `hub.sh qa validate`.
 
 ---
 
@@ -542,7 +562,7 @@ automacao/homelab/           ✗ Outro PC (Debian/Ubuntu) — não use no Tails
 | **Novato roda sozinho?** | **Sim** — é o único script que o aluno digita |
 | **O que faz** | Chama scripts internos na ordem: preflight → haveno/install **ou** haveno/boot → (opcional) backup → (opcional) feather |
 | **O que NÃO faz** | Não grava USB; não anota seed; não tradear |
-| **Subcomandos** | `install` · `boot` · `backup` · `update` · `feather` |
+| **Subcomandos** | `install` · `boot` · `backup` · `update` · `feather` · `qa` |
 | **Flags** | `--install-only` · `--one-password` · `--skip-backup` · `--qa-log` · `--url` · `--pgp` |
 | **Rodar 2×** | **Seguro** — ver seções [install](#install-1ª-vez--haveno-ainda-não-instalado) e [boot](#boot-cada-nova-sessão-no-tails) |
 | **Disco** | Não apaga `~/Persistent/haveno/Data/` nem `feather/wallets/` |
@@ -815,12 +835,14 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 | `hub.sh boot` | **Sim** (cada sessão após instalar) |
 | `hub.sh backup` | **Sim** (antes do 1º depósito) |
 | `hub.sh feather` | **Sim** (passo 5) |
+| `hub.sh qa finalize` | **Sim** (ao final do install — 1ª vez) |
+| `hub.sh qa validate` | Opcional (revalidar scripts) |
+| `hub.sh qa confirm-seed` | **Sim** (após passo 4) |
+| `hub.sh qa confirm-step9` | **Sim** (passo 9) |
+| `hub.sh qa confirm-step12` | **Sim** (após passo 12) |
+| `hub.sh qa export-logs` | Opcional (entregar logs) |
 | `feather/backup.sh` | **Sim** (após carteira Feather) |
 | `whonix-verify-image.sh` | **Sim** (passo 10, no PC host) |
-| `qa/confirm-seed.sh` | **Sim** (após passo 4) |
-| `qa/confirm-step9.sh` | **Sim** (passo 9) |
-| `qa/confirm-step12.sh` | **Sim** (após passo 12) |
-| `qa/export-logs.sh` | Opcional (entregar logs) |
 | `system/post-session.sh` | Só após atualizar o SO Tails |
 | `haveno/verify-deb.sh` | Só se desconfiar do `.deb` (avançado) |
 | `haveno/switch-network.sh` | Só ao trocar de rede Haveno (avançado) |
@@ -840,18 +862,22 @@ Depois de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scrip
 ```bash
 # 1ª instalação com evidência:
 ~/Persistent/hub-scripts/hub.sh install --qa-log
+# → ao final, Enter nos dois prompts (S/n) para fazer backup + qa finalize
 
-# Após anotar seed no papel (passo 4):
-~/Persistent/hub-scripts/qa/confirm-seed.sh
+# Ou, se pulou o qa finalize na instalação:
+~/Persistent/hub-scripts/hub.sh qa finalize    # validate + confirm-seed, 1 vez
+
+# Revalidar scripts a qualquer momento (tela + log):
+~/Persistent/hub-scripts/hub.sh qa validate
 
 # Passo 9 — duas cópias físicas (Tails pode estar com Tor):
-~/Persistent/hub-scripts/qa/confirm-step9.sh
+~/Persistent/hub-scripts/hub.sh qa confirm-step9
 
 # Passo 12 — depois do cold-signing offline:
-~/Persistent/hub-scripts/qa/confirm-step12.sh
+~/Persistent/hub-scripts/hub.sh qa confirm-step12
 
 # Entregar à equipe (2º pendrive):
-~/Persistent/hub-scripts/qa/export-logs.sh --usb
+~/Persistent/hub-scripts/hub.sh qa export-logs --usb
 ```
 
 | O log **contém** | O log **nunca contém** |

@@ -19,18 +19,22 @@ Ative gravação com **`--qa-log`** nos scripts (ou `hub.sh install --qa-log`).
 
 ```bash
 # Exemplos (Tails com Tor):
-~/Persistent/hub-scripts/hub.sh install --qa-log          # 1ª vez
+~/Persistent/hub-scripts/hub.sh install --qa-log          # 1ª vez (Enter nos prompts = bkp + qa finalize)
 ~/Persistent/hub-scripts/hub.sh boot --qa-log             # cada sessão
 ~/Persistent/hub-scripts/hub.sh backup --qa-log           # backup carteira
 ~/Persistent/hub-scripts/hub.sh feather --qa-log          # Feather (passo 5)
 ~/Persistent/hub-scripts/system/preflight.sh --qa-log     # só validar ambiente
 ~/Persistent/hub-scripts/system/post-session.sh --qa-log  # pós-upgrade Tails
-~/Persistent/hub-scripts/qa/confirm-seed.sh               # após anotar seed no papel
-~/Persistent/hub-scripts/qa/confirm-step9.sh              # passo 9 — 2 cópias físicas
-~/Persistent/hub-scripts/qa/confirm-step12.sh             # passo 12 — Tails SEM rede
+
+# QA via hub.sh qa (recomendado — tela + log simultâneos):
+~/Persistent/hub-scripts/hub.sh qa finalize               # validate + confirm-seed (1ª vez, 1 vez)
+~/Persistent/hub-scripts/hub.sh qa validate               # revalidar scripts a qualquer momento
+~/Persistent/hub-scripts/hub.sh qa confirm-seed           # após anotar seed no papel (passo 4)
+~/Persistent/hub-scripts/hub.sh qa confirm-step9          # passo 9 — 2 cópias físicas
+~/Persistent/hub-scripts/hub.sh qa confirm-step12         # passo 12 — Tails SEM rede
 
 # Exportar para equipe / outro PC:
-~/Persistent/hub-scripts/qa/export-logs.sh --usb
+~/Persistent/hub-scripts/hub.sh qa export-logs --usb
 ```
 
 **Host Debian (passo 10):**
