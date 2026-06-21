@@ -90,7 +90,7 @@ script terminar, e o **remove ao fim** (e ele some no reboot — o Tails é amn�
 
 **Home Lab** ([`HomeLab/`](../homelab/README.md)) — Debian/Ubuntu, **não** Tails.
 
-**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — atalhos numerados em `hub-scripts/aliases/` (ex. `02-haveno-install.sh` → `hub.sh install`).
+**Aliases opcionais** ([`hub-aliases/`](hub-aliases/README.md)) — wrappers por passo em `hub-scripts/aliases/` (subpastas `parte-1/` · `parte-2/` · `manutencao/`; ex. `parte-1/passo-02-instalar.sh` → `hub.sh install`).
 
 ## Ciclo de uso
 

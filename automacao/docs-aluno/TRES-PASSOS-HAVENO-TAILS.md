@@ -25,17 +25,17 @@ chmod +x sync-hub-scripts.sh
 ./sync-hub-scripts.sh
 ```
 
-**Resultado:** scripts em `~/Persistent/hub-scripts/` (subpastas: `haveno/`, `feather/`, `system/`, `qa/`, `lib/`, `steps/`) + atalhos em `hub-scripts/aliases/` (carteira e dados ficam em `~/Persistent/haveno/`, separado).
+**Resultado:** scripts em `~/Persistent/hub-scripts/` (subpastas: `haveno/`, `feather/`, `system/`, `qa/`, `lib/`, `steps/`) + aliases em `hub-scripts/aliases/` (parte-1/ · parte-2/ · manutencao/) + atalhos GNOME instalados (carteira e dados em `~/Persistent/haveno/`, separado).
 
-**Atalhos numerados (opcional):**
+**Aliases opcionais (por passo):**
 
 ```bash
-~/Persistent/hub-scripts/aliases/01-check-tails-environment.sh
-~/Persistent/hub-scripts/aliases/02-haveno-install.sh      # = hub.sh install --qa-log
-~/Persistent/hub-scripts/aliases/03-haveno-start.sh        # = hub.sh boot --qa-log (cada sessão)
+~/Persistent/hub-scripts/aliases/parte-1/passo-02-instalar.sh   # = hub.sh install --qa-log
+~/Persistent/hub-scripts/aliases/parte-1/passo-07-boot-sessao.sh # = hub.sh boot --qa-log
+~/Persistent/hub-scripts/aliases/parte-1/passo-04-backup.sh     # = hub.sh backup --qa-log
 ```
 
-Tabela completa: `~/Persistent/hub-scripts/hub-aliases/README.md` (no Tails) ou [hub-aliases/README.md](../tails/hub-aliases/README.md) (GitHub).
+Tabela completa: `~/Persistent/hub-scripts/aliases/README.md` (no Tails) ou [hub-aliases/README.md](../tails/hub-aliases/README.md) (GitHub).
 
 | Flag em `sync-hub-scripts.sh` | Quando |
 |-------------------------------|--------|

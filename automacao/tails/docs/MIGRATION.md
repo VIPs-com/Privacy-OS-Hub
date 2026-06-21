@@ -50,7 +50,7 @@ Todas as flags dos scripts antigos funcionam no `hub.sh`:
 - [x] Remover `haveno-boot.sh` — movido para `haveno/boot.sh` (interno)
 - [x] Remover `haveno-common.sh` — deletado; `lib/common.sh` é o canônico
 - [x] Remover `etapas/instalar-haveno/` — substituída por `steps/`
-- [ ] Colapsar `hub-aliases/00–20` em subcomandos de `hub.sh` — roadmap futuro
+- [x] Reorganizar `hub-aliases/` em subpastas `parte-1/` · `parte-2/` · `manutencao/` (v2.0 — 21/06/2026)
 - [x] Atualizar `sync-hub-scripts.sh` para não copiar arquivos removidos
 - [x] Atualizar documentação do curso para `hub.sh install` / `hub.sh boot`
 - [ ] Comunicado para alunos — aguardando piloto B+ concluir
