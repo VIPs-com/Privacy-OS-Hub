@@ -60,12 +60,12 @@ if [ -d "${SCRIPT_DIR}/steps" ]; then
   g "steps/ → ${DEST}/steps/  (use SÓ se hub.sh falhar)"
 fi
 
-# ---- hub-aliases/ → aliases/ ------------------------------------------------
+# ---- hub-aliases/ → aliases/ (com subpastas parte-1/ parte-2/ manutencao/) --
 if [ -d "${SCRIPT_DIR}/hub-aliases" ]; then
   mkdir -p "${DEST}/aliases"
-  cp -v "${SCRIPT_DIR}/hub-aliases"/*.sh "${DEST}/aliases/"
-  chmod +x "${DEST}/aliases"/*.sh
-  g "aliases/ → ${DEST}/aliases/"
+  cp -r "${SCRIPT_DIR}/hub-aliases/." "${DEST}/aliases/"
+  find "${DEST}/aliases" -name "*.sh" -exec chmod +x {} \;
+  g "aliases/ (parte-1/ parte-2/ manutencao/) → ${DEST}/aliases/"
 fi
 
 # ---- Limpeza opcional: scripts soltos do layout antigo em ~/Persistent/ -----

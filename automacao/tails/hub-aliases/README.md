@@ -1,77 +1,92 @@
-# hub-aliases — atalhos numerados para `~/Persistent/hub-scripts/aliases/`
+# hub-aliases — atalhos por passo e serviço
 
-> **Opcional.** O comando oficial é `hub.sh <subcomando>`. Estes aliases são
-> **wrappers finos** com nome e número — úteis para lembrar ou documentar a ordem
-> dos passos sem precisar digitar as flags. Chamam o script real com as flags certas.
+> **Opcional.** O comando oficial é `hub.sh <subcomando>`.
+> Estes aliases são **wrappers finos** organizados pela trilha do curso — úteis para
+> seguir a ordem dos passos sem memorizar flags.
 
-## Sync (copia scripts + aliases)
+## Sync (instalar scripts + aliases no Tails)
 
 ```bash
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 ./sync-hub-scripts.sh
 ```
 
-Resultado:
+Resultado em `~/Persistent/hub-scripts/`:
 
 ```text
-~/Persistent/hub-scripts/
-├── hub.sh               ← único ponto de entrada
-├── haveno/              ← install · boot · backup · update · verify-deb · switch-network
-├── feather/             ← install · backup
-├── system/              ← preflight · post-session · qa-validate
-├── qa/                  ← confirm-seed · confirm-step9 · confirm-step12 · export-logs
-├── lib/                 ← config.sh · common.sh · onion-grater.yml
-├── steps/               ← fallback atômico 01–08 + run-all.sh
+hub-scripts/
+├── hub.sh                   ← único ponto de entrada
+├── haveno/ feather/ system/ qa/ lib/ steps/
 └── aliases/
-    ├── 01-check-tails-environment.sh
-    ├── 02-haveno-install.sh
-    └── …
+    ├── parte-1/             ← Passos 1–7
+    ├── parte-2/             ← Passos 9 e 12
+    └── manutencao/          ← não é trilha do aluno
 ```
 
-## Uso no Tails
+## PARTE 1 — Passos 1–7 (Bootstrap + Haveno verde + Pré-M2)
+
+| Alias | Delega para | Flags fixas | Passo |
+|-------|-------------|:-----------:|:-----:|
+| `parte-1/passo-01-tails-usb.sh` | *(manual)* | — | 1–4 |
+| `parte-1/passo-02-instalar.sh` | `hub.sh install` | `--qa-log` | 2 |
+| `parte-1/passo-04-backup.sh` | `hub.sh backup` | `--qa-log` | 4 |
+| `parte-1/passo-04-confirmar-seed.sh` | `hub.sh qa confirm-seed` | — | 4 |
+| `parte-1/passo-05-feather.sh` | `hub.sh feather` | `--qa-log` | 5 |
+| `parte-1/passo-07-boot-sessao.sh` | `hub.sh boot` | `--qa-log` | 7 |
+| `parte-1/passo-07-qa-finalize.sh` | `hub.sh qa finalize` | — | 7 (1ª vez) |
+
+> `passo-04-confirmar-seed.sh` e `passo-07-qa-finalize.sh` não precisam de `--qa-log` externo —
+> os scripts de QA ativam o log internamente.
+
+## PARTE 2 — Passos 9 e 12 (Custódia fria)
+
+| Alias | Delega para | Flags fixas | Passo |
+|-------|-------------|:-----------:|:-----:|
+| `parte-2/passo-09-ritual-seed.sh` | `hub.sh qa confirm-step9` | — | 9 |
+| `parte-2/passo-12-cold-sign.sh` | `hub.sh qa confirm-step12` | — | 12 (A e B) |
+
+## MANUTENÇÃO — não é trilha do aluno
+
+| Alias | Delega para | Flags fixas | Quando usar |
+|-------|-------------|:-----------:|-------------|
+| `manutencao/haveno-update.sh` | `haveno/update.sh` | `--qa-log` | Novo release |
+| `manutencao/haveno-install-only.sh` | `hub.sh install` | `--install-only --qa-log` | Recuperação (.deb já em Install/) |
+| `manutencao/haveno-verify-deb.sh` | `haveno/verify-deb.sh` | — | AVANÇADO — auditoria do .deb |
+| `manutencao/feather-verify-only.sh` | `hub.sh feather` | `--no-launch --qa-log` | Re-verificar PGP sem abrir |
+| `manutencao/post-session-check.sh` | `system/post-session.sh` | `--qa-log` | Pós-upgrade Tails |
+| `manutencao/qa-validate.sh` | `hub.sh qa validate` | — | Validação estática dos scripts |
+| `manutencao/qa-export-logs.sh` | `hub.sh qa export-logs` | `--usb` | Exportar logs para pendrive |
+| `manutencao/sync-scripts.sh` | `sync-hub-scripts.sh` | — | Atualizar scripts do repo/ZIP |
+
+## Fluxo completo — do zero ao verde (Parte 1)
 
 ```bash
-~/Persistent/hub-scripts/aliases/01-check-tails-environment.sh
-~/Persistent/hub-scripts/aliases/02-haveno-install.sh      # = hub.sh install --qa-log
-~/Persistent/hub-scripts/aliases/03-haveno-start.sh        # = hub.sh boot --qa-log (cada sessão)
+# 1. Instalar scripts (uma vez, e a cada update do ZIP)
+~/Persistent/Privacy-OS-Hub-main/automacao/tails/sync-hub-scripts.sh
+
+cd ~/Persistent/hub-scripts/aliases
+
+# 2. Passo 2: instalar Haveno (prompts automáticos de backup + qa finalize ao final)
+./parte-1/passo-02-instalar.sh
+
+# 3. Se precisar fazer backup ou qa finalize manualmente:
+./parte-1/passo-04-backup.sh
+./parte-1/passo-04-confirmar-seed.sh
+./parte-1/passo-07-qa-finalize.sh
+
+# 4. Passo 5: Feather Wallet
+./parte-1/passo-05-feather.sh
+
+# 5. Cada sessão (passo 7):
+./parte-1/passo-07-boot-sessao.sh
 ```
-
-Pass-through: flags extras vão para o script alvo (`"$@"`), exceto onde o alias já fixa flags padrão.
-
-## Tabela completa
-
-| Alias | Delega para | Flags fixas | Passo hub |
-|-------|-------------|-------------|:---------:|
-| `00-tails-install.sh` | *(manual)* | — | 1 |
-| `00-bootstrap-tails.sh` | *(manual)* | — | 2–4 |
-| `01-check-tails-environment.sh` | `system/preflight.sh` | `--qa-log` | 1–4 |
-| `02-haveno-install.sh` | `hub.sh install` | `--qa-log` | 2 |
-| `03-haveno-start.sh` | `hub.sh boot` | `--qa-log` | 7 |
-| `04-daily-routine.sh` | `hub.sh boot` | `--qa-log` | 7 |
-| `05-haveno-network-check.sh` | `system/post-session.sh` | `--qa-log` | pós-upgrade |
-| `06-security-check.sh` | `haveno/verify-deb.sh` | — | 5 |
-| `07-backup-carteira.sh` | `haveno/backup.sh` | `--qa-log` | 4, 7 |
-| `08-backup-cifrado.sh` | `haveno/backup.sh` | `--qa-log` | 4 *(GPG padrão)* |
-| `09-feather-install.sh` | `feather/install.sh` | `--qa-log` | 5 |
-| `10-feather-pgp-verify.sh` | `feather/install.sh` | `--qa-log --no-launch` | 5 |
-| `11-seed-verify.sh` | `qa/confirm-seed.sh` | — | 4 |
-| `12-seed-ritual.sh` | `qa/confirm-step9.sh` | — | 9 |
-| `13-cold-sign.sh` | `qa/confirm-step12.sh` | — | 12A |
-| `14-whonix-cold-sign.sh` | `qa/confirm-step12.sh` | — | 12B |
-| `15-full-automation.sh` | `hub.sh install` | `--qa-log --one-password` | 2 |
-| `16-qa-check.sh` | `qa/export-logs.sh` | *(passe `--usb`)* | evidências |
-| `17-haveno-install-only.sh` | `hub.sh install` | `--install-only --qa-log` | recuperação |
-| `18-haveno-update.sh` | `haveno/update.sh` | `--one-password` | release novo |
-| `19-qa-validate.sh` | `system/qa-validate.sh` | — | mantenedor |
-| `20-sync-hub-scripts.sh` | `sync-hub-scripts.sh` | — | sync |
 
 ## Fallback atômico (Haveno-only)
 
 Para diagnóstico passo a passo, use `steps/` — não há alias, acesse direto:
 
 ```bash
-cd ~/Persistent/hub-scripts/steps
-./run-all.sh
+cd ~/Persistent/hub-scripts/steps && ./run-all.sh
 ```
 
-Detalhe: [`steps/README.md`](../steps/README.md) · Matriz: [`tails/README.md`](../README.md)
+Detalhe: [`steps/README.md`](../steps/README.md)
