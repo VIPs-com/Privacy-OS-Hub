@@ -152,7 +152,7 @@ Nenhum script grava o pendrive nem cria a persistência por você. **Termine ist
 ## Instalar os scripts (uma vez por persistência)
 
 0. **Obter o repo no Tails:** Tor Browser → `https://github.com/VIPs-com/Privacy-OS-Hub` → **Code ▸ Download ZIP** → salve em `~/Persistent/` e extraia (ou copie a pasta de outro PC via pendrive). *(No Tails não há `git` pré-instalado para `git clone` sem configuração extra.)*
-1. No repo baixado, rode o sincronizador — ele cria **`~/Persistent/hub-scripts/`** com todos os `.sh` organizados em subpastas + `lib/onion-grater.yml` + atalho desktop, e oferece limpar versões antigas soltas na raiz (sem tocar nos seus dados):
+1. No repo baixado, rode o sincronizador — ele cria **`~/Persistent/hub-scripts/`** com todos os `.sh` organizados em subpastas + `lib/onion-grater.yml`, instala os atalhos **"Haveno — Iniciar"** e **"Haveno — Backup"** no menu GNOME (e em `~/Persistent/dotfiles/` se Dotfiles ativo), e oferece limpar versões antigas soltas na raiz (sem tocar nos seus dados):
 
 ```bash
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
@@ -248,12 +248,18 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 ~/Persistent/hub-scripts/hub.sh backup --usb              # escolhe USB montado
 ~/Persistent/hub-scripts/hub.sh backup --dest /caminho    # pasta fixa
 ~/Persistent/hub-scripts/hub.sh backup --restore ARQUIVO  # SOBRESCREVE Data/ — pede confirmacao
+~/Persistent/hub-scripts/hub.sh backup --full --usb       # snapshot completo (3-2-1-1-0)
 ```
+
+**`--full`** arquiva em um único `.gpg` cifrado: `haveno/Data/` + `feather/wallets/` + `dotfiles/`
+→ nome: `tails-persist-full-TIMESTAMP.tar.gz.gpg` · `chmod 444` aplicado após gravar (imutável).
+`--restore` auto-detecta pelo nome do arquivo: full → extrai para `~/Persistent/`; parcial → só `haveno/Data/`.
 
 | Ação | Perigoso? |
 |------|-----------|
-| Backup normal | **Não** — cria `haveno-data-AAAAMMDD-HHMMSS.tar.gz.gpg` |
-| `--restore` | **Sim, se confirmar** — salva `Data.bak-*` antes, mas pede `s/N` |
+| `hub.sh backup` | **Não** — cria `haveno-data-TIMESTAMP.tar.gz.gpg` (novo arquivo) |
+| `hub.sh backup --full` | **Não** — cria `tails-persist-full-TIMESTAMP.tar.gz.gpg` (novo arquivo) |
+| `--restore` | **Sim, se confirmar** — salva `.bak-*` antes, mas pede `s/N` |
 | Rodar backup 10× seguidas | **Não** — 10 arquivos diferentes (ocupa espaço) |
 
 **Sempre feche o Haveno** antes do backup (o script avisa se o app estiver aberto).
@@ -317,7 +323,8 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 |------------------|-----------------|---------|----------------------------|
 | **`hub.sh install`** | 1ª instalação (do zero) | Preflight → verde | **Sim** — pula reinstall se já instalado |
 | **`hub.sh boot`** | Cada sessão após instalar | Playbook §7 | **Sim** — pode abrir 2 janelas |
-| **`hub.sh backup`** | Antes do 1º depósito; periodicamente | Proteger `Data/` | **Sim** — cada run gera arquivo **novo** com data/hora |
+| **`hub.sh backup`** | Antes do 1º depósito; antes de cada trade | Proteger `Data/` | **Sim** — cada run gera arquivo **novo** com data/hora |
+| **`hub.sh backup --full`** | Semanal ou após mudanças — para pendrive USB | Snapshot 3-2-1-1-0 (Data/ + wallets/ + Dotfiles) | **Sim** — arquivo novo com timestamp · `chmod 444` |
 | **`hub.sh update`** | Release novo da rede | `.deb` novo com PGP | **Sim** — faz backup **antes**; aborta se backup falhar |
 | **`hub.sh feather`** | Após download no Tor Browser | PGP do Feather | **Sim** — não mexe em `wallets/` |
 | **`feather/backup.sh`** | Após criar carteira Feather | Backup `wallets/` | **Sim** — arquivo novo com timestamp |

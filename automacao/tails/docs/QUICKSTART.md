@@ -3,13 +3,17 @@
 ## Os 4 comandos que você precisa saber
 
 ```bash
+# 0. Sincronizar scripts + instalar atalhos GNOME (uma vez, e a cada update)
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
+# → instala "Haveno — Iniciar" e "Haveno — Backup" no menu GNOME
+
 # 1ª vez — instalar o Haveno (só precisa fazer uma vez)
 ~/Persistent/hub-scripts/hub.sh install
 
-# Cada sessão — abrir o Haveno (pendrive ligado, Tor conectado)
+# Cada sessão — abrir o Haveno (ou clique "Haveno — Iniciar" no menu GNOME)
 ~/Persistent/hub-scripts/hub.sh boot
 
-# Antes do 1º depósito — backup da carteira
+# Antes do 1º depósito e após cada trade — backup da carteira
 ~/Persistent/hub-scripts/hub.sh backup
 
 # Novo release disponível — atualizar
@@ -28,8 +32,11 @@ hub.sh install --one-password
 # Retomar instalação quando o .deb já está em Install/ (não apenas em .download/)
 hub.sh install --install-only
 
-# Instalar o Feather Wallet (passo 5 do curso)
+# Instalar o Feather Wallet — instala atalho GNOME automaticamente (passo 5)
 hub.sh feather
+
+# Snapshot completo para pendrive (Haveno + Feather + Dotfiles) — estratégia 3-2-1-1-0
+hub.sh backup --full --usb
 ```
 
 ## Se o `hub.sh` falhar
