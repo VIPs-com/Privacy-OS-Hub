@@ -14,8 +14,8 @@
 |------------|-----------|
 | `hub.sh qa validate` | `system/qa-validate.sh --qa-log` — tela + log simultâneos |
 | `hub.sh qa confirm-seed` | `qa/confirm-seed.sh` |
-| `hub.sh qa confirm-step9` | `qa/confirm-step9.sh` |
-| `hub.sh qa confirm-step12` | `qa/confirm-step12.sh` |
+| `hub.sh qa ritual-seed` | `qa/confirm-step9.sh` |
+| `hub.sh qa cold-sign` | `qa/confirm-step12.sh` |
 | `hub.sh qa export-logs` | `qa/export-logs.sh` |
 | `hub.sh qa finalize` | `validate` + `confirm-seed` — 1ª instalação, 1 vez |
 

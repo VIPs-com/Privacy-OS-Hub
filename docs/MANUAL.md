@@ -283,8 +283,8 @@ Agrupa todos os scripts de QA em um ponto de entrada:
 ```bash
 hub.sh qa validate        # valida scripts (sintaxe + PGP + YAML) — tela + log simultâneos
 hub.sh qa confirm-seed    # confirma seed em papel (passo 4, sem gravar palavras)
-hub.sh qa confirm-step9   # ritual 2× cópias físicas (passo 9, Tor OK)
-hub.sh qa confirm-step12  # pós cold-signing (passo 12, Tails sem rede)
+hub.sh qa ritual-seed   # ritual 2× cópias físicas (passo 9, Tor OK)
+hub.sh qa cold-sign  # pós cold-signing (passo 12, Tails sem rede)
 hub.sh qa export-logs     # exporta qa-logs/ para pendrive USB
 hub.sh qa finalize        # validate + confirm-seed (1ª instalação, 1 vez)
 ```
@@ -838,8 +838,8 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 | `hub.sh qa finalize` | **Sim** (ao final do install — 1ª vez) |
 | `hub.sh qa validate` | Opcional (revalidar scripts) |
 | `hub.sh qa confirm-seed` | **Sim** (após passo 4) |
-| `hub.sh qa confirm-step9` | **Sim** (passo 9) |
-| `hub.sh qa confirm-step12` | **Sim** (após passo 12) |
+| `hub.sh qa ritual-seed` | **Sim** (passo 9) |
+| `hub.sh qa cold-sign` | **Sim** (após passo 12) |
 | `hub.sh qa export-logs` | Opcional (entregar logs) |
 | `feather/backup.sh` | **Sim** (após carteira Feather) |
 | `whonix-verify-image.sh` | **Sim** (passo 10, no PC host) |
@@ -871,10 +871,10 @@ Depois de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scrip
 ~/Persistent/hub-scripts/hub.sh qa validate
 
 # Passo 9 — duas cópias físicas (Tails pode estar com Tor):
-~/Persistent/hub-scripts/hub.sh qa confirm-step9
+~/Persistent/hub-scripts/hub.sh qa ritual-seed
 
 # Passo 12 — depois do cold-signing offline:
-~/Persistent/hub-scripts/hub.sh qa confirm-step12
+~/Persistent/hub-scripts/hub.sh qa cold-sign
 
 # Entregar à equipe (2º pendrive):
 ~/Persistent/hub-scripts/hub.sh qa export-logs --usb

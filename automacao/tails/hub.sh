@@ -23,8 +23,8 @@
 #
 #     validate          Valida scripts (sintaxe, PGP, YAML) — tela + log
 #     confirm-seed      Seed anotada em papel (passo 4) — só booleanos no log
-#     confirm-step9     Ritual 2 cópias físicas separadas (passo 9)
-#     confirm-step12    Pós cold-signing (passo 12 — Trilha A ou B)
+#     ritual-seed       Ritual 2 cópias físicas separadas (passo 9)
+#     cold-sign         Pós cold-signing (passo 12 — Trilha A ou B)
 #     export-logs       Exporta qa-logs/ para pendrive USB
 #     finalize          validate + confirm-seed (1ª instalação, 1 vez)
 #
@@ -60,9 +60,9 @@
 #   hub.sh backup                             # backup rápido antes do trade
 #   hub.sh update --qa-log                    # novo release + log
 #   hub.sh feather                            # instalar Feather (passo 5)
-#   hub.sh qa finalize                        # pós 1ª instalação (validate + seed)
-#   hub.sh qa confirm-step9                   # passo 9 — ritual 2 cópias físicas
-#   hub.sh qa confirm-step12                  # passo 12 — pós cold-signing
+#   hub.sh qa finalize --qa-log               # pós 1ª instalação (validate + seed)
+#   hub.sh qa ritual-seed                     # passo 9 — ritual 2 cópias físicas
+#   hub.sh qa cold-sign                       # passo 12 — pós cold-signing
 #   hub.sh qa export-logs --usb               # exportar logs para pendrive
 #
 # ── SE ALGO DER ERRADO ───────────────────────────────────────────────────────
@@ -91,8 +91,8 @@ usage() {
   b "  qa <cmd>      relatórios QA e confirmações humanas:"
   b "    validate      valida scripts (sintaxe, PGP, YAML) — tela + log"
   b "    confirm-seed  confirma seed anotada em papel (passo 4)"
-  b "    confirm-step9 ritual 2 cópias físicas separadas (passo 9)"
-  b "    confirm-step12 pós cold-signing (passo 12)"
+  b "    ritual-seed   ritual 2 cópias físicas separadas (passo 9)"
+  b "    cold-sign     pós cold-signing (passo 12)"
   b "    export-logs   exporta qa-logs/ para pendrive USB"
   b "    finalize      validate + confirm-seed (1ª instalação, 1 vez)"
   b ""
@@ -242,13 +242,13 @@ case "$CMD" in
         bash "${HUB_DIR}/system/qa-validate.sh" --qa-log
         ;;
       confirm-seed)   bash "${HUB_DIR}/qa/confirm-seed.sh" ;;
-      confirm-step9)  bash "${HUB_DIR}/qa/confirm-step9.sh" ;;
-      confirm-step12) bash "${HUB_DIR}/qa/confirm-step12.sh" ;;
+      ritual-seed)    bash "${HUB_DIR}/qa/confirm-step9.sh" ;;
+      cold-sign)      bash "${HUB_DIR}/qa/confirm-step12.sh" ;;
       export-logs)    bash "${HUB_DIR}/qa/export-logs.sh" "${EXTRA_ARGS[@]:1}" ;;
       finalize)       _hub_qa_finalize ;;
       *)
         r "hub.sh qa: subcomando desconhecido."
-        b "Use: validate | confirm-seed | confirm-step9 | confirm-step12 | export-logs | finalize"
+        b "Use: validate | confirm-seed | ritual-seed | cold-sign | export-logs | finalize"
         exit 1
         ;;
     esac

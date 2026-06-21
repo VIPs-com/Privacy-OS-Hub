@@ -30,8 +30,8 @@ Ative gravação com **`--qa-log`** nos scripts (ou `hub.sh install --qa-log`).
 ~/Persistent/hub-scripts/hub.sh qa finalize               # validate + confirm-seed (1ª vez, 1 vez)
 ~/Persistent/hub-scripts/hub.sh qa validate               # revalidar scripts a qualquer momento
 ~/Persistent/hub-scripts/hub.sh qa confirm-seed           # após anotar seed no papel (passo 4)
-~/Persistent/hub-scripts/hub.sh qa confirm-step9          # passo 9 — 2 cópias físicas
-~/Persistent/hub-scripts/hub.sh qa confirm-step12         # passo 12 — Tails SEM rede
+~/Persistent/hub-scripts/hub.sh qa ritual-seed          # passo 9 — 2 cópias físicas
+~/Persistent/hub-scripts/hub.sh qa cold-sign         # passo 12 — Tails SEM rede
 
 # Exportar para equipe / outro PC:
 ~/Persistent/hub-scripts/hub.sh qa export-logs --usb

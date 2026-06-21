@@ -55,7 +55,7 @@ PARTE 1 (1–7)                         PARTE 2 (8–12)
 | 7 | Rotina de scripts | `hub.sh boot` | Boot automatizado em < 5 min |
 | | **Passos 8–12 — Custódia fria** | | |
 | 8 | Porteiro: Trilha A ou B | — | Trilha escolhida conscientemente |
-| 9 | Ritual Seed | `hub.sh qa confirm-step9` | 2 cópias físicas em locais separados |
+| 9 | Ritual Seed | `hub.sh qa ritual-seed` | 2 cópias físicas em locais separados |
 | 10 | Whonix + PGP | VirtualBox/KVM | "Tor Connected" no Workstation |
 | 11 | Modelo frio↔quente | — | Air-gap internalizado |
 | 12A | Feather Offline *(Trilha A)* | Feather (air-gap) | Cold-signing completo |
@@ -106,8 +106,8 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
 # Validação e confirmações QA
 ~/Persistent/hub-scripts/hub.sh qa finalize        # validate + seed (1ª instalação, automático)
-~/Persistent/hub-scripts/hub.sh qa confirm-step9   # passo 9 — 2 cópias físicas
-~/Persistent/hub-scripts/hub.sh qa confirm-step12  # passo 12 — pós cold-signing
+~/Persistent/hub-scripts/hub.sh qa ritual-seed   # passo 9 — 2 cópias físicas
+~/Persistent/hub-scripts/hub.sh qa cold-sign  # passo 12 — pós cold-signing
 
 # Exportar logs para suporte
 ~/Persistent/hub-scripts/hub.sh qa export-logs --usb

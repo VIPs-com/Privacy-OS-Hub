@@ -42,8 +42,8 @@ hub-scripts/
 
 | Alias | Delega para | Flags fixas | Passo |
 |-------|-------------|:-----------:|:-----:|
-| `parte-2/passo-09-ritual-seed.sh` | `hub.sh qa confirm-step9` | — | 9 |
-| `parte-2/passo-12-cold-sign.sh` | `hub.sh qa confirm-step12` | — | 12 (A e B) |
+| `parte-2/passo-09-ritual-seed.sh` | `hub.sh qa ritual-seed` | — | 9 |
+| `parte-2/passo-12-cold-sign.sh` | `hub.sh qa cold-sign` | — | 12 (A e B) |
 
 ## MANUTENÇÃO — não é trilha do aluno
 

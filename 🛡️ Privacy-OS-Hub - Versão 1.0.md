@@ -891,8 +891,8 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 | `hub.sh qa validate` | Valida scripts — tela + log simultâneos | Sim |
 | `hub.sh qa finalize` | validate + confirm-seed (1ª instalação, 1 vez) | Sim |
 | `hub.sh qa confirm-seed` | Confirma seed em papel (passo 4) | Sim |
-| `hub.sh qa confirm-step9` | Ritual 2× cópias físicas (passo 9) | Sim |
-| `hub.sh qa confirm-step12` | Pós cold-signing (passo 12) | Sim |
+| `hub.sh qa ritual-seed` | Ritual 2× cópias físicas (passo 9) | Sim |
+| `hub.sh qa cold-sign` | Pós cold-signing (passo 12) | Sim |
 | `hub.sh qa export-logs --usb` | Exporta qa-logs/ para pendrive | Sim |
 | `system/preflight.sh` | Antes de qualquer script | Sim (só leitura) |
 | `system/post-session.sh` | Após atualizar o Tails (SO) | Sim |
@@ -1514,8 +1514,8 @@ Antes de considerar a trilha principal concluída:
 | `hub.sh qa validate` | — | Valida scripts (sintaxe + PGP + YAML) — tela + log | A qualquer momento | Seguro |
 | `hub.sh qa finalize` | 2 | validate + confirm-seed (1ª instalação) | Ao final do install, 1 vez | Seguro |
 | `hub.sh qa confirm-seed` | 4 | Confirma seed no papel (sem gravar palavras) | Após anotar seed | Seguro |
-| `hub.sh qa confirm-step9` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
-| `hub.sh qa confirm-step12` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
+| `hub.sh qa ritual-seed` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
+| `hub.sh qa cold-sign` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
 | `hub.sh qa export-logs` | — | Copia qa-logs/ para pendrive | Entregar evidências | Seguro |
 | `haveno/verify-deb.sh` | — | Verificar assinatura GPG do .deb | Dúvida sobre autenticidade | Seguro (só leitura) |
 | `haveno/switch-network.sh` | — | Trocar rede Haveno (backup + update) | Mudar para outra rede | Cuidado — feche trades antes |
