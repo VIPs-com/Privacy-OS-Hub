@@ -10,8 +10,9 @@
 #   hub.sh boot         Cada sessão: instala deps → aplica filtro Tor
 #                               → abre Haveno  (SEM re-download)
 #
-#   hub.sh backup       Backup cifrado da carteira (Data/)
+#   hub.sh backup       Backup cifrado da carteira Haveno (Data/)
 #                               → rode ANTES do 1º depósito e após cada trade
+#                               → hub.sh backup --full  snapshot completo (3-2-1)
 #
 #   hub.sh update       Novo release: backup automático → baixa novo .deb
 #                               → verifica PGP → reinstala → abre
@@ -58,6 +59,7 @@
 #   hub.sh install --install-only --qa-log    # retoma após download OK
 #   hub.sh boot --qa-log                      # sessão + log para diagnóstico
 #   hub.sh backup                             # backup rápido antes do trade
+#   hub.sh backup --full --usb               # snapshot completo → pendrive (3-2-1)
 #   hub.sh update --qa-log                    # novo release + log
 #   hub.sh feather                            # instalar Feather (passo 5)
 #   hub.sh qa finalize --qa-log               # pós 1ª instalação (validate + seed)

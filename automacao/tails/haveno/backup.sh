@@ -56,12 +56,14 @@ die(){ r "ERRO: $*"; exit 1; }
 DEST=""
 USE_USB=0
 ENCRYPT=1
+FULL_BACKUP=0
 RESTORE_FILE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --usb) USE_USB=1 ;;
     --dest) shift; DEST="${1:-}" ;;
     --no-encrypt) ENCRYPT=0 ;;
+    --full) FULL_BACKUP=1 ;;
     --restore) shift; RESTORE_FILE="${1:-}" ;;
     --qa-log) export HAVENO_QA_LOG=1 ;;
     *) y "Opcao desconhecida: $1 (ignorada)" ;;
@@ -94,6 +96,10 @@ if [ -n "$RESTORE_FILE" ]; then
   b "[restore] Restaurando de: $RESTORE_FILE"
   [ -f "$RESTORE_FILE" ] || die "Arquivo de backup nao encontrado."
 
+  # Detecta tipo pelo nome do arquivo
+  _IS_FULL=0
+  [[ "$(basename "$RESTORE_FILE")" == tails-persist-full-* ]] && _IS_FULL=1
+
   TMP="$(mktemp -d)"
   TARFILE="${TMP}/restore.tar.gz"
 
@@ -118,21 +124,34 @@ if [ -n "$RESTORE_FILE" ]; then
   fi
   g "  Arquivo OK."
 
-  # Copia de seguranca do estado atual antes de sobrescrever
-  if [ -d "$DATA_DIR" ]; then
-    SAFETY="${PERSIST}/haveno/Data.bak-$(date +%Y%m%d-%H%M%S)"
-    y "  Estado atual sera salvo em: $SAFETY"
-    printf "Confirmar restauracao (sobrescreve Data/)? (s/N): "; read -r ans
+  STAMP_SAFE="$(date +%Y%m%d-%H%M%S)"
+  if [ "$_IS_FULL" = "1" ]; then
+    y "  Backup COMPLETO: restaura haveno/Data/ + feather/wallets/ + dotfiles/"
+    printf "Confirmar restauracao completa (estado atual salvo como .bak)? (s/N): "; read -r ans
     case "${ans:-N}" in s|S|sim|SIM) ;; *) rm -rf "$TMP"; die "Cancelado."; esac
-    mv "$DATA_DIR" "$SAFETY" || { rm -rf "$TMP"; die "Nao consegui salvar o estado atual."; }
+    for _d in haveno/Data feather/wallets dotfiles; do
+      [ -d "${PERSIST}/${_d}" ] && mv "${PERSIST}/${_d}" "${PERSIST}/${_d}.bak-${STAMP_SAFE}"
+    done
+    tar -xzf "$TARFILE" -C "$PERSIST" || { rm -rf "$TMP"; die "Falha ao extrair."; }
+    rm -rf "$TMP"
+    g "Restauracao completa concluida em: ${PERSIST}/"
+    y "Rode: hub.sh boot  (Haveno) · abra o Feather para confirmar carteiras."
+    qa_log_line "Restauracao completa concluida: ${PERSIST}/"
+  else
+    if [ -d "$DATA_DIR" ]; then
+      SAFETY="${PERSIST}/haveno/Data.bak-${STAMP_SAFE}"
+      y "  Estado atual sera salvo em: $SAFETY"
+      printf "Confirmar restauracao (sobrescreve Data/)? (s/N): "; read -r ans
+      case "${ans:-N}" in s|S|sim|SIM) ;; *) rm -rf "$TMP"; die "Cancelado."; esac
+      mv "$DATA_DIR" "$SAFETY" || { rm -rf "$TMP"; die "Nao consegui salvar o estado atual."; }
+    fi
+    mkdir -p "$DATA_DIR"
+    tar -xzf "$TARFILE" -C "$(dirname "$DATA_DIR")" || { rm -rf "$TMP"; die "Falha ao extrair."; }
+    rm -rf "$TMP"
+    g "Restauracao concluida em: $DATA_DIR"
+    y "Abra o Haveno pelo menu e confirme a carteira/historico."
+    qa_log_line "Restauracao concluida: $DATA_DIR"
   fi
-
-  mkdir -p "$DATA_DIR"
-  tar -xzf "$TARFILE" -C "$(dirname "$DATA_DIR")" || { rm -rf "$TMP"; die "Falha ao extrair."; }
-  rm -rf "$TMP"
-  g "Restauracao concluida em: $DATA_DIR"
-  y "Abra o Haveno pelo menu e confirme a carteira/historico."
-  qa_log_line "Restauracao concluida: $DATA_DIR"
   qa_log_finish 0
   exit 0
 fi
@@ -140,7 +159,9 @@ fi
 ###############################################################################
 # MODO BACKUP
 ###############################################################################
-[ -d "$DATA_DIR" ] || die "Pasta de dados nao encontrada ($DATA_DIR). Instale/abra o Haveno antes."
+if [ "$FULL_BACKUP" = "0" ]; then
+  [ -d "$DATA_DIR" ] || die "Pasta de dados nao encontrada ($DATA_DIR). Instale/abra o Haveno antes."
+fi
 
 # Definir destino
 if [ "$USE_USB" = "1" ] && [ -z "$DEST" ]; then
@@ -168,20 +189,39 @@ mkdir -p "$DEST" || die "Nao consegui criar/usar o destino: $DEST"
 g "  Destino: $DEST"
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
-BASE="haveno-data-${STAMP}"
+if [ "$FULL_BACKUP" = "1" ]; then
+  BASE="tails-persist-full-${STAMP}"
+  _FULL_DIRS=()
+  [ -d "${PERSIST}/haveno/Data" ]     && _FULL_DIRS+=(haveno/Data)
+  [ -d "${PERSIST}/feather/wallets" ] && _FULL_DIRS+=(feather/wallets)
+  [ -d "${PERSIST}/dotfiles" ]        && _FULL_DIRS+=(dotfiles)
+  [ "${#_FULL_DIRS[@]}" -gt 0 ] || die "Nenhuma pasta encontrada para backup completo (Data/, wallets/, dotfiles/)."
+else
+  BASE="haveno-data-${STAMP}"
+fi
 TMP="$(mktemp -d)"
 TARFILE="${TMP}/${BASE}.tar.gz"
 
 # Verifica RAM disponivel antes de compactar em /tmp (tmpfs em RAM no Tails)
-DATA_MiB="$(du -sm "$DATA_DIR" 2>/dev/null | cut -f1)"
+if [ "$FULL_BACKUP" = "1" ]; then
+  DATA_MiB="$(du -sm "${PERSIST}/haveno/Data" "${PERSIST}/feather/wallets" "${PERSIST}/dotfiles" 2>/dev/null \
+    | awk '{s+=$1} END{print s+0}')"
+else
+  DATA_MiB="$(du -sm "$DATA_DIR" 2>/dev/null | cut -f1)"
+fi
 TMP_MiB="$(df -m /tmp 2>/dev/null | awk 'NR==2{print $4}')"
 [ "${TMP_MiB:-0}" -gt "$((${DATA_MiB:-0} * 2))" ] \
-  || die "RAM insuficiente para backup em /tmp (${DATA_MiB:-?}MB de dados, ${TMP_MiB:-?}MB livres). Use: hub.sh backup --dest /media/amnesia/SEU_USB"
+  || die "RAM insuficiente para backup em /tmp (${DATA_MiB:-?}MB de dados, ${TMP_MiB:-?}MB livres). Use: hub.sh backup --full --dest /media/amnesia/SEU_USB"
 
-# Compactar (Data/ relativo, para restaurar limpo)
-b "[1/4] Compactando ${DATA_DIR}..."
-tar -czf "$TARFILE" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" \
-  || { rm -rf "$TMP"; die "Falha ao compactar."; }
+if [ "$FULL_BACKUP" = "1" ]; then
+  b "[1/4] Backup completo: ${_FULL_DIRS[*]}..."
+  tar -czf "$TARFILE" -C "$PERSIST" "${_FULL_DIRS[@]}" \
+    || { rm -rf "$TMP"; die "Falha ao compactar."; }
+else
+  b "[1/4] Compactando ${DATA_DIR}..."
+  tar -czf "$TARFILE" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" \
+    || { rm -rf "$TMP"; die "Falha ao compactar."; }
+fi
 
 # Verificar o tar
 b "[2/4] Verificando integridade do arquivo..."
@@ -216,8 +256,16 @@ g "  $OUT"
 g "  Verificar depois:  sha256sum -c \"${OUT}.sha256\""
 g "  Restaurar:         hub.sh backup --restore \"$OUT\""
 g "==============================================================="
-y "Lembrete: anote tambem a SEED (Account > Wallet seed) em papel/metal,"
-y "guardada separada deste arquivo. Seed != backup completo."
+if [ "$FULL_BACKUP" = "1" ]; then
+  y "Snapshot completo (Data/ + wallets/ + Dotfiles). Regra 3-2-1:"
+  y "  Copia 2: leve este arquivo para um pendrive USB separado."
+  y "  Copia 3: guarde esse pendrive em local fisico diferente de casa."
+  y "  Seed em papel e independente — sem ela, nenhum backup recupera os fundos."
+else
+  y "Lembrete: anote tambem a SEED (Account > Wallet seed) em papel/metal,"
+  y "guardada separada deste arquivo. Seed != backup completo."
+  y "Para snapshot completo (Haveno + Feather + Dotfiles): hub.sh backup --full --usb"
+fi
 qa_log_line "Backup concluido: $OUT"
 qa_log_line "REDE: tails_online_tor_esperado=SIM"
 y "Apos anotar a seed no papel, rode: ~/Persistent/hub-scripts/qa/confirm-seed.sh"

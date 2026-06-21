@@ -645,9 +645,51 @@ ls ~/Persistent/haveno/Install/
 
 ```bash
 # Variações úteis:
-~/Persistent/hub-scripts/hub.sh backup --usb     # salvar em pendrive separado
-~/Persistent/hub-scripts/hub.sh backup --dest /caminho/pasta  # pasta específica
+~/Persistent/hub-scripts/hub.sh backup --usb              # salvar em pendrive separado
+~/Persistent/hub-scripts/hub.sh backup --dest /caminho/   # pasta específica
+~/Persistent/hub-scripts/hub.sh backup --full --usb       # snapshot completo → 3-2-1
 ```
+
+#### 4.A — O que cada backup cobre
+
+| Backup | O que salva | Quando rodar |
+|--------|-------------|--------------|
+| `hub.sh backup` | Haveno `Data/` (trades, contas, contratos) | Antes de cada trade |
+| `feather/backup.sh` | Feather `wallets/` | Após criar ou alterar carteira Feather |
+| `hub.sh backup --full` | Data/ + wallets/ + Dotfiles — **snapshot completo** | Semanal ou após mudanças |
+| **Seed em papel** | Fundos XMR (a mais importante) | SEMPRE — 2 vias físicas |
+
+> **Seed ≠ backup.** A seed recupera os **fundos**. O `Data/` recupera **histórico, trades e contas de pagamento**. Você precisa dos dois, em locais diferentes.
+
+#### 4.B — Regra 3-2-1 adaptada ao Tails
+
+| Cópia | Mídia | Onde fica |
+|-------|-------|-----------|
+| **1ª** (automática) | Persistent do USB Tails | Em uso, no seu bolso/mochila |
+| **2ª** | Pendrive USB separado (cifrado) | Gaveta / cofre pessoal |
+| **3ª** | Segundo pendrive USB (cifrado) | Fora de casa — cofre, familiar confiável |
+
+```bash
+# Criar a 2ª e 3ª cópias (rodar no pendrive conectado):
+~/Persistent/hub-scripts/hub.sh backup --full --usb
+# → gera tails-persist-full-TIMESTAMP.tar.gz.gpg no pendrive
+# → repita com o 2º pendrive para ter a 3ª cópia
+```
+
+🔴 **A seed em papel é a Cópia 0** — sem ela, nenhum arquivo `.gpg` recupera os fundos.
+Guarde-a em local físico **diferente** dos pendrives e do USB Tails.
+
+#### 4.C — Restaurar (depois de um problema)
+
+```bash
+# Restaurar snapshot completo (Data/ + wallets/ + Dotfiles):
+~/Persistent/hub-scripts/hub.sh backup --restore /caminho/tails-persist-full-TIMESTAMP.tar.gz.gpg
+
+# Restaurar só o Haveno (backup --usb anterior):
+~/Persistent/hub-scripts/hub.sh backup --restore /caminho/haveno-data-TIMESTAMP.tar.gz.gpg
+```
+
+Após restaurar: rode `hub.sh boot` → confirme o verde → abra o Feather → confirme saldo.
 
 ```bash
 # Após anotar a seed no papel (Account → Wallet seed no Haveno):
