@@ -245,6 +245,10 @@ b "[4/4] Gerando soma de verificacao (.sha256)..."
 ( cd "$DEST" && sha256sum "$(basename "$OUT")" > "$(basename "$OUT").sha256" ) \
   && g "  $(basename "$OUT").sha256 criado." || y "  (nao consegui gerar sha256)"
 
+# Imutabilidade (principio 3-2-1-1-0): arquivo somente leitura apos gravar
+# Em FAT32 o chmod e silenciosamente ignorado — sem impacto em ext4/btrfs
+chmod 444 "$OUT" "${OUT}.sha256" 2>/dev/null || true
+
 # Limpeza do temporario (tar em claro)
 rm -rf "$TMP"
 
@@ -257,14 +261,18 @@ g "  Verificar depois:  sha256sum -c \"${OUT}.sha256\""
 g "  Restaurar:         hub.sh backup --restore \"$OUT\""
 g "==============================================================="
 if [ "$FULL_BACKUP" = "1" ]; then
-  y "Snapshot completo (Data/ + wallets/ + Dotfiles). Regra 3-2-1:"
-  y "  Copia 2: leve este arquivo para um pendrive USB separado."
-  y "  Copia 3: guarde esse pendrive em local fisico diferente de casa."
-  y "  Seed em papel e independente — sem ela, nenhum backup recupera os fundos."
+  y "Estrategia 3-2-1-1-0:"
+  y "  [3] 3 copias: Persistent + Pendrive A + Pendrive B"
+  y "  [2] 2 midias: USB Tails + pendrives de backup"
+  y "  [1] Offsite: Pendrive B guardado fora de casa"
+  y "  [1] Imutavel: arquivo .gpg com timestamp + chmod 444 (nao sobrescrito)"
+  y "  [0] 0 erros: verifique a cada 3 meses:"
+  y "      sha256sum -c \"${OUT}.sha256\""
+  y "  Seed em papel e independente — sem ela nenhum .gpg recupera os fundos."
 else
-  y "Lembrete: anote tambem a SEED (Account > Wallet seed) em papel/metal,"
-  y "guardada separada deste arquivo. Seed != backup completo."
-  y "Para snapshot completo (Haveno + Feather + Dotfiles): hub.sh backup --full --usb"
+  y "Lembrete: anote a SEED (Account > Wallet seed) em papel/metal — guardada"
+  y "separada deste arquivo. Seed != backup de dados."
+  y "Snapshot completo (3-2-1-1-0): hub.sh backup --full --usb"
 fi
 qa_log_line "Backup concluido: $OUT"
 qa_log_line "REDE: tails_online_tor_esperado=SIM"

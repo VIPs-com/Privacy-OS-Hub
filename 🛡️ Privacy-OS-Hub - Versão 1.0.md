@@ -661,23 +661,32 @@ ls ~/Persistent/haveno/Install/
 
 > **Seed ≠ backup.** A seed recupera os **fundos**. O `Data/` recupera **histórico, trades e contas de pagamento**. Você precisa dos dois, em locais diferentes.
 
-#### 4.B — Regra 3-2-1 adaptada ao Tails
+#### 4.B — Estratégia 3-2-1-1-0 adaptada ao Tails
 
-| Cópia | Mídia | Onde fica |
-|-------|-------|-----------|
-| **1ª** (automática) | Persistent do USB Tails | Em uso, no seu bolso/mochila |
-| **2ª** | Pendrive USB separado (cifrado) | Gaveta / cofre pessoal |
-| **3ª** | Segundo pendrive USB (cifrado) | Fora de casa — cofre, familiar confiável |
+Evolução do 3-2-1 clássico — adiciona **imutabilidade** e **verificação obrigatória**:
+
+| # | Regra | No Tails | Como |
+|---|-------|----------|------|
+| **3** | 3 cópias totais | Persistent + Pendrive A + Pendrive B | — |
+| **2** | 2 mídias diferentes | USB Tails (em uso) + pendrives de backup | 2 pendrives separados do Tails USB |
+| **1** | 1 cópia offsite | Pendrive B fora de casa | Cofre, familiar confiável, local separado |
+| **1** | 1 cópia imutável | Arquivo `.gpg` com timestamp — nunca sobrescrito | `backup.sh` aplica `chmod 444` após gravar |
+| **0** | 0 erros verificados | Integridade + restauração testada | `sha256sum -c` a cada 3 meses · restauração anual |
+
+🔴 **A seed em papel é a Cópia 0** — imutável por natureza, independente de qualquer arquivo digital. Sem ela, nenhum `.gpg` recupera os fundos. Guarde em local físico **diferente** de todos os pendrives.
 
 ```bash
-# Criar a 2ª e 3ª cópias (rodar no pendrive conectado):
+# Criar as cópias 2 e 3 (pendrive conectado — repita para cada um):
 ~/Persistent/hub-scripts/hub.sh backup --full --usb
-# → gera tails-persist-full-TIMESTAMP.tar.gz.gpg no pendrive
-# → repita com o 2º pendrive para ter a 3ª cópia
-```
+# → tails-persist-full-TIMESTAMP.tar.gz.gpg  (novo arquivo a cada vez, não sobrescreve)
+# → arquivo marcado como somente leitura (chmod 444) automaticamente
 
-🔴 **A seed em papel é a Cópia 0** — sem ela, nenhum arquivo `.gpg` recupera os fundos.
-Guarde-a em local físico **diferente** dos pendrives e do USB Tails.
+# Verificar integridade a cada 3 meses:
+sha256sum -c /media/amnesia/MEU_USB/tails-persist-full-TIMESTAMP.tar.gz.gpg.sha256
+
+# Testar restauração anualmente (em Tails de teste — "0 erros verificados"):
+~/Persistent/hub-scripts/hub.sh backup --restore /media/amnesia/MEU_USB/tails-persist-full-TIMESTAMP.tar.gz.gpg
+```
 
 #### 4.C — Restaurar (depois de um problema)
 
