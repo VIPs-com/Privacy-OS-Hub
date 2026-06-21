@@ -162,22 +162,23 @@ case "$CMD" in
     if [ "$SKIP_BACKUP" = "0" ] && haveno_pkg_installed_ok; then
       echo
       y "Recomendado: backup cifrado antes do 1º depósito."
-      printf "Rodar backup agora? (s/N): "
+      printf "Rodar backup agora? (S/n): "
       read -r ans
-      case "${ans:-N}" in s|S|sim|SIM)
+      case "${ans:-S}" in n|N)
+        y "Pulando backup. Rode depois: hub.sh backup" ;;
+      *)
         bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" ;;
-      *) y "Pulando backup. Rode depois: hub.sh backup" ;;
       esac
     fi
     # ---- QA Finalize: apenas na 1ª instalação --------------------------------
     if [ -z "$(ls "${PERSIST}/qa-logs/04-seed-papel-"*.txt 2>/dev/null)" ]; then
       echo
       y "Seed ainda não confirmada em papel — relatório QA incompleto."
-      printf "Finalizar QA agora (valida scripts + confirma seed)? (s/N): "
+      printf "Finalizar QA agora (valida scripts + confirma seed)? (S/n): "
       read -r _qa_ans
-      case "${_qa_ans:-N}" in
-        s|S|sim|SIM) _hub_qa_finalize ;;
-        *) y "Rode depois: hub.sh qa finalize" ;;
+      case "${_qa_ans:-S}" in
+        n|N) y "Rode depois: hub.sh qa finalize" ;;
+        *) _hub_qa_finalize ;;
       esac
     fi
     echo
