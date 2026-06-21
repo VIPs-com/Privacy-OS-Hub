@@ -88,7 +88,9 @@ hub_sync_scripts_to_persistent() {
     mkdir -p "${HUB_SCRIPTS_DIR}" || return 1
     # Scripts raiz (hub.sh, sync-hub-scripts.sh, haveno-backup.desktop)
     cp -f "${src}"/*.sh "${HUB_SCRIPTS_DIR}/" 2>/dev/null || true
-    [ -f "${src}/haveno-backup.desktop" ] && cp -f "${src}/haveno-backup.desktop" "${HUB_SCRIPTS_DIR}/"
+    for _dsk in haveno-boot.desktop haveno-backup.desktop; do
+      [ -f "${src}/${_dsk}" ] && cp -f "${src}/${_dsk}" "${HUB_SCRIPTS_DIR}/"
+    done
     chmod +x "${HUB_SCRIPTS_DIR}"/*.sh 2>/dev/null || true
     # lib/ (config.sh + common.sh + onion-grater.yml)
     if [ -d "${src}/lib" ]; then
@@ -112,11 +114,11 @@ hub_sync_scripts_to_persistent() {
       cp -f "${src}/steps/README.md" "${HUB_SCRIPTS_DIR}/steps/" 2>/dev/null || true
       chmod +x "${HUB_SCRIPTS_DIR}/steps"/*.sh 2>/dev/null || true
     fi
-    # hub-aliases/ → aliases/
+    # hub-aliases/ → aliases/ (com subpastas parte-1/ parte-2/ manutencao/)
     if [ -d "${src}/hub-aliases" ]; then
       mkdir -p "${HUB_SCRIPTS_DIR}/aliases"
-      cp -f "${src}/hub-aliases"/*.sh "${HUB_SCRIPTS_DIR}/aliases/" 2>/dev/null || true
-      chmod +x "${HUB_SCRIPTS_DIR}/aliases"/*.sh 2>/dev/null || true
+      cp -rf "${src}/hub-aliases/." "${HUB_SCRIPTS_DIR}/aliases/" 2>/dev/null || true
+      find "${HUB_SCRIPTS_DIR}/aliases" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
     fi
     g "  Sync OK (${src} -> ${HUB_SCRIPTS_DIR})."
   fi

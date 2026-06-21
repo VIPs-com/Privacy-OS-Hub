@@ -202,6 +202,27 @@ else
   y "  Sem 'Bootstrapped 100%' no log ainda — IsTor ja respondeu true, seguindo."
 fi
 
+# Confirmar torsocks DNS antes de [6/9]: o upstream usa torsocks para baixar
+# haveno.yml; se o circuito Tor ainda esta frio, torsocks falha com
+# "Status reply: 4" mesmo que IsTor:true ja responda — isso forçava o aluno
+# a rodar o install duas vezes. Aguarda ate 90s (6 × 15s).
+y "  Confirmando resolucao DNS via torsocks (ate 90s)..."
+_ts_ok=0
+if command -v torsocks &>/dev/null; then
+  for _tw in 1 2 3 4 5 6; do
+    if torsocks curl -fsSL --max-time 15 \
+        https://check.torproject.org/api/ip 2>/dev/null | grep -q '"IsTor":true'; then
+      _ts_ok=1; break
+    fi
+    [ "$_tw" -lt 6 ] && { printf "  torsocks: circuito frio (%s/6, aguardando 15s)...\r" "$_tw"; sleep 15; }
+  done
+  echo
+  [ "$_ts_ok" = "1" ] && g "  torsocks DNS OK." \
+    || y "  torsocks nao confirmou em 90s — seguindo (circuito pode ja estar pronto)."
+else
+  y "  torsocks nao encontrado — pulando pre-aquecimento."
+fi
+
 # ----------------------------- 5. Relogio via Tor ----------------------------
 if [ "$DO_CLOCK" = "1" ]; then
   b "[5/9] Ajustando relogio pela hora obtida ATRAVES do Tor (sem vazar local)..."
@@ -308,6 +329,25 @@ fi
 b "[7/9] Dependencias apt + install.sh + onion-grater + exec.sh (pode pedir senha admin)..."
 chmod +x "${UTILS_DIR}/exec.sh" 2>/dev/null || true
 haveno_run_install || die "install.sh falhou."
+
+# Garantir atalhos GNOME em Dotfiles: cobre o caso em que o aluno ativou
+# Dotfiles DEPOIS de rodar sync-hub-scripts.sh (sem Dotfiles ativo, o sync
+# colocava os .desktop so na sessao e eles sumiam no proximo boot).
+if [ -d "$DOTFILES_DIR" ]; then
+  _dotfiles_apps="${DOTFILES_DIR}/.local/share/applications"
+  _local_apps="/home/amnesia/.local/share/applications"
+  mkdir -p "$_dotfiles_apps" "$_local_apps"
+  for _dsk in "${HUB_SCRIPTS_DIR}/haveno-boot.desktop" \
+              "${HUB_SCRIPTS_DIR}/haveno-backup.desktop"; do
+    [ -f "$_dsk" ] || continue
+    cp "$_dsk" "$_dotfiles_apps/"
+    cp "$_dsk" "$_local_apps/"
+  done
+  command -v update-desktop-database &>/dev/null && \
+    update-desktop-database "$_local_apps" 2>/dev/null || true
+  g "  Atalhos GNOME em Dotfiles: 'Haveno — Iniciar' + 'Haveno — Backup da carteira' (persistem entre boots)."
+fi
+
 # onion-grater + cookie do Tor ANTES de abrir o Haveno. O app le o cookie na
 # partida; se o 'chmod o+r' vier so DEPOIS (como estava no [8/9]), ele abre e
 # ENCERRA com 'torControlCookieFile ... is not readable' (DIV-20260611-01) — foi
