@@ -842,6 +842,11 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 
 **OK se:** Haveno abre e fica verde. Indicador amarelo por 5–20 min no primeiro boot da sessão é normal.
 
+> **Atalho rápido no menu GNOME (após `sync-hub-scripts.sh`):**
+> Clique em **"Haveno — Iniciar"** nas aplicações — equivalente ao comando acima.
+> Para backup: clique em **"Haveno — Backup da carteira"** → salva sem abrir terminal.
+> Os atalhos ficam salvos no Dotfiles e sobrevivem ao reboot.
+
 ---
 
 #### 7.2 — Com Feather também (passo 5 + boot)

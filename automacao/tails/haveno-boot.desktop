@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Haveno — Iniciar
+Comment=Abre o Haveno nesta sessão com preflight completo (hub.sh boot) — rode toda vez que ligar o Tails
+Exec=bash -c "/home/amnesia/Persistent/hub-scripts/hub.sh boot; echo; read -n1 -r -p 'Pressione qualquer tecla para fechar...'"
+Icon=/home/amnesia/Persistent/haveno/App/utils/icon.png
+Terminal=true
+Type=Application
+Categories=Network;Finance;

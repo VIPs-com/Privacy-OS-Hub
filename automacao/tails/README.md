@@ -84,7 +84,8 @@ script terminar, e o **remove ao fim** (e ele some no reboot — o Tails é amn�
 | `qa/confirm-step9.sh` | 9 | Playbook backup | Ritual 2× cópias físicas |
 | `qa/confirm-step12.sh` | 12 | Trilha A | Cold-signing offline (confirmações) |
 | `qa/export-logs.sh` | — | — | Copia `qa-logs/` → pendrive USB |
-| `haveno-backup.desktop` | 4, 7 | §9 | Atalho de menu (chama `hub.sh backup`) |
+| `haveno-boot.desktop` | 7 | §7 | Atalho GNOME "Iniciar" — chama `hub.sh boot` cada sessão |
+| `haveno-backup.desktop` | 4, 7 | §9 | Atalho GNOME "Backup" — chama `hub.sh backup` |
 | `steps/run-all.sh` | 2 | §5–6 | **Fallback Haveno-only** (1 processo = 1 script) — ver abaixo |
 
 **Home Lab** ([`HomeLab/`](../homelab/README.md)) — Debian/Ubuntu, **não** Tails.
@@ -124,7 +125,12 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 Cria/atualiza **`~/Persistent/hub-scripts/`** com todos os scripts organizados por produto
 (`haveno/`, `feather/`, `system/`, `qa/`, `steps/`, `aliases/`) + biblioteca `lib/`
-(inclui o filtro Tor `onion-grater.yml`) + o atalho `.desktop`.
+(inclui o filtro Tor `onion-grater.yml`) + dois atalhos `.desktop`.
+
+Instala os atalhos automaticamente no menu GNOME:
+- **`~/.local/share/applications/`** — funciona nessa sessão imediatamente
+- **`~/Persistent/dotfiles/.local/share/applications/`** — persiste nos reboots (se Dotfiles ativo)
+
 Oferece limpar scripts do layout antigo soltos na raiz (sem tocar nos seus dados).
 
 **Validação de qualidade (aluno/equipe):** `system/qa-validate.sh` — sintaxe `bash -n` + checks estáticos (não substitui teste no Tails real).

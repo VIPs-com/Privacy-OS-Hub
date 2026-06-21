@@ -8,7 +8,7 @@
 #
 # Copia para DEST (padrão: ~/Persistent/hub-scripts/):
 #   *.sh raiz  +  lib/  +  haveno/  +  feather/  +  system/  +  qa/
-#   +  steps/  +  hub-aliases/ → aliases/
+#   +  steps/  +  hub-aliases/ → aliases/  +  *.desktop → menu GNOME
 ###############################################################################
 
 set -euo pipefail
@@ -25,11 +25,13 @@ die(){ echo -e "\033[0;31mERRO: $*\033[0m"; exit 1; }
 [ -d "$PERSIST" ] || die "Persistência inexistente: $PERSIST (crie-a primeiro)."
 mkdir -p "$DEST" || die "Não criei ${DEST}."
 
-# ---- Scripts raiz (hub.sh, sync-hub-scripts.sh, haveno-backup.desktop) ---
+# ---- Scripts raiz (hub.sh, sync-hub-scripts.sh) + atalhos .desktop ---------
 b "Copiando scripts raiz de ${SCRIPT_DIR}/ -> ${DEST}/"
 cp -v "${SCRIPT_DIR}"/*.sh "$DEST/"
-[ -f "${SCRIPT_DIR}/haveno-backup.desktop" ] && cp -v "${SCRIPT_DIR}/haveno-backup.desktop" "$DEST/"
 chmod +x "${DEST}"/*.sh
+for _df in "${SCRIPT_DIR}"/*.desktop; do
+  [ -f "$_df" ] && cp -v "$_df" "$DEST/"
+done
 
 # ---- lib/ (config.sh + common.sh + onion-grater.yml) -----------------------
 if [ -d "${SCRIPT_DIR}/lib" ]; then
@@ -68,6 +70,36 @@ if [ -d "${SCRIPT_DIR}/hub-aliases" ]; then
   g "aliases/ (parte-1/ parte-2/ manutencao/) → ${DEST}/aliases/"
 fi
 
+# ---- Atalhos de menu GNOME (.desktop) ----------------------------------------
+_install_desktop_file() {
+  local src="$1" fname
+  fname="$(basename "$src")"
+  local apps_cur="/home/amnesia/.local/share/applications"
+  mkdir -p "$apps_cur"
+  cp "$src" "${apps_cur}/${fname}"
+  local dotfiles_apps="${PERSIST}/dotfiles/.local/share/applications"
+  if [ -d "${PERSIST}/dotfiles" ]; then
+    mkdir -p "$dotfiles_apps"
+    cp "$src" "${dotfiles_apps}/${fname}"
+    g "  ✓ ${fname} → menu GNOME + Dotfiles (persiste nos reboots)"
+  else
+    y "  ✓ ${fname} → menu GNOME (somente esta sessão)"
+    y "    Para persistir: ative 'Dotfiles' na Persistent Storage e rode sync novamente."
+  fi
+}
+
+b "Instalando atalhos no menu GNOME..."
+_any_desktop=0
+for _df in "${DEST}"/*.desktop; do
+  [ -f "$_df" ] || continue
+  _install_desktop_file "$_df"
+  _any_desktop=1
+done
+if [ "$_any_desktop" = "1" ]; then
+  command -v update-desktop-database &>/dev/null && \
+    update-desktop-database "/home/amnesia/.local/share/applications" 2>/dev/null || true
+fi
+
 # ---- Limpeza opcional: scripts soltos do layout antigo em ~/Persistent/ -----
 ANTIGOS=$(ls "${PERSIST}"/haveno-*.sh "${PERSIST}"/feather-*.sh "${PERSIST}"/qa-*.sh \
   "${PERSIST}"/tails-preflight.sh "${PERSIST}"/post-session-check.sh \
@@ -88,6 +120,7 @@ fi
 
 echo
 g "Pronto. Scripts em: ${DEST}/"
+g "ATALHOS no menu GNOME: 'Haveno — Iniciar'  ·  'Haveno — Backup da carteira'"
 g "Rode: ${DEST}/hub.sh install   (1ª vez)"
-g "      ${DEST}/hub.sh boot      (cada sessão)"
+g "      ${DEST}/hub.sh boot      (cada sessão — ou clique 'Haveno — Iniciar' no menu)"
 g "Se hub.sh falhar: ${DEST}/steps/run-all.sh"
