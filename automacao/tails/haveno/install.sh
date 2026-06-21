@@ -279,19 +279,7 @@ if [ "$dl_ok" = "0" ]; then
   curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
 fi
 [ "$dl_ok" = "1" ] || die "Nao baixei haveno-install.sh (rede/Tor). Verifique o Tor Connection assistant."
-INSTALL_SHA="$(sha256sum haveno-install.sh 2>/dev/null | awk '{print $1}')"
-if [ -n "${INSTALL_SCRIPT_HASH:-}" ]; then
-  EXPECTED_SCRIPT_HASH="${INSTALL_SCRIPT_HASH#sha256:}"
-  if [ "$INSTALL_SHA" != "$EXPECTED_SCRIPT_HASH" ]; then
-    r "ERRO: hash do haveno-install.sh diferente do esperado."
-    r "  Esperado: ${EXPECTED_SCRIPT_HASH}"
-    r "  Obtido:   ${INSTALL_SHA}"
-    die "Script upstream modificado. Nao execute. Reporte a equipe."
-  fi
-  g "  haveno-install.sh sha256: OK (${INSTALL_SHA:0:16}...)"
-else
-  g "  haveno-install.sh sha256: ${INSTALL_SHA:-desconhecido} (auditoria de procedencia; INSTALL_SCRIPT_HASH vazio)"
-fi
+haveno_check_install_script_hash "./haveno-install.sh"
 
 if [ "$DO_UPDATE" = "1" ] || [ ! -d "$UTILS_DIR" ] || ! haveno_has_install_deb; then
   [ "$DO_UPDATE" = "1" ] && y "  Modo --update: reinstalando/atualizando o .deb (dados preservados)."

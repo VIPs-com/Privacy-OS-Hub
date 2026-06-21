@@ -479,12 +479,13 @@ haveno_check_install_script_hash() {
   local actual
   actual="$(sha256sum "$script_path" | awk '{print $1}')"
   qa_log_line "haveno-install.sh sha256: ${actual}"
-  if [ -n "${INSTALL_SCRIPT_HASH:-}" ]; then
-    if [ "$actual" = "$INSTALL_SCRIPT_HASH" ]; then
+  local _expected="${INSTALL_SCRIPT_HASH#sha256:}"
+  if [ -n "${_expected:-}" ]; then
+    if [ "$actual" = "$_expected" ]; then
       g "  [OK] haveno-install.sh verificado (sha256 confere)."
     else
       r "  ERRO: sha256 do haveno-install.sh NAO CONFERE."
-      r "  Esperado: ${INSTALL_SCRIPT_HASH}"
+      r "  Esperado: ${_expected}"
       r "  Obtido:   ${actual}"
       die "haveno-install.sh comprometido ou alterado — abortando. Registre divergencia."
     fi
