@@ -5,7 +5,7 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `pgp`
 
-> **v1.0 canônica** — material consolidado em arquivo único. [docs/CHANGELOG.md](docs/CHANGELOG.md)
+> **v1.0 canônica** · Nível B+ ✅ APROVADO (Tails 7.8.1 · RetoSwap 1.6.0-reto) · Auditoria Rodada 4 concluída · [CHANGELOG](docs/CHANGELOG.md)
 
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e fontes oficiais.
 
@@ -46,16 +46,16 @@ PARTE 1 (1–7)                         PARTE 2 (8–12)
 |:-:|-------|-----------|-----------|
 | | **Passos 1–3 — Núcleo Haveno** | | |
 | 1 | Bootstrap Tails | Tails Installer | USB pronto · Tor ativo · Persistência |
-| 2 | Haveno Verde | Haveno 1.6.0-reto | Indicador ● VERDE |
+| 2 | Haveno Verde | `hub.sh install` | Indicador ● VERDE |
 | 3 | Cautela pré-trade | — | Regras e golpes internalizados |
 | | **Passos 4–7 — Pré-M2** | | |
-| 4 | Backup Seed | hub.sh backup | Seed em papel + backup cifrado |
-| 5 | Feather Wallet | Feather AppImage | Carteira verificada por PGP |
+| 4 | Backup Seed | `hub.sh backup` → `hub.sh qa confirm-seed` | Seed em papel + backup cifrado |
+| 5 | Feather Wallet | `hub.sh feather` | Carteira verificada por PGP |
 | 6 | Folheto | — | Regras de ouro impressas |
-| 7 | Rotina de scripts | hub.sh boot | Boot automatizado em < 5 min |
+| 7 | Rotina de scripts | `hub.sh boot` | Boot automatizado em < 5 min |
 | | **Passos 8–12 — Custódia fria** | | |
 | 8 | Porteiro: Trilha A ou B | — | Trilha escolhida conscientemente |
-| 9 | Ritual Seed | qa/confirm-step9.sh | 2 cópias físicas em locais separados |
+| 9 | Ritual Seed | `hub.sh qa confirm-step9` | 2 cópias físicas em locais separados |
 | 10 | Whonix + PGP | VirtualBox/KVM | "Tor Connected" no Workstation |
 | 11 | Modelo frio↔quente | — | Air-gap internalizado |
 | 12A | Feather Offline *(Trilha A)* | Feather (air-gap) | Cold-signing completo |
@@ -73,16 +73,47 @@ Privacy-OS-Hub/
 ├── README.md                            ← você está aqui
 │
 ├── automacao/                           ← scripts .sh para Tails e Whonix
-│   ├── tails/                           ·  hub.sh · haveno/ feather/ system/ qa/ lib/ steps/
+│   ├── tails/                           ·  hub.sh · haveno/ · feather/ · system/ · qa/ · lib/ · steps/
+│   │                                    ·  hub.sh qa: validate · confirm-seed/step9/step12 · export-logs · finalize
 │   ├── whonix-host/                     ·  whonix-verify-image.sh
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
-│   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md
+│   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md · TRES-PASSOS-HAVENO-TAILS.md
 │
 └── docs/                                ← licenças e documentação de projeto
     ├── LICENSE · LICENSE-DOCS.md
     ├── MANIFESTO.md · CHANGELOG.md
     └── MANUAL.md
 ```
+
+---
+
+## Scripts — o essencial
+
+Você só precisa de **um comando** para cada situação:
+
+```bash
+# Sincronizar scripts do ZIP para ~/Persistent/hub-scripts/ (uma vez, e a cada update)
+cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
+
+# 1ª vez — instalar até o verde (passo 2)
+~/Persistent/hub-scripts/hub.sh install --qa-log
+
+# Cada sessão — abrir o Haveno (passo 7)
+~/Persistent/hub-scripts/hub.sh boot
+
+# Backup da carteira (passo 4 e após cada trade)
+~/Persistent/hub-scripts/hub.sh backup
+
+# Validação e confirmações QA
+~/Persistent/hub-scripts/hub.sh qa finalize        # validate + seed (1ª instalação, automático)
+~/Persistent/hub-scripts/hub.sh qa confirm-step9   # passo 9 — 2 cópias físicas
+~/Persistent/hub-scripts/hub.sh qa confirm-step12  # passo 12 — pós cold-signing
+
+# Exportar logs para suporte
+~/Persistent/hub-scripts/hub.sh qa export-logs --usb
+```
+
+> **Guia completo de scripts:** [`docs/MANUAL.md`](docs/MANUAL.md)
 
 ---
 
@@ -94,11 +125,10 @@ Privacy-OS-Hub/
 | Ir direto a um passo | Mesmo arquivo — busque `PASSO N` |
 | Scripts (o que cada .sh faz) | [`docs/MANUAL.md`](docs/MANUAL.md#parte-ii--scripts-para-novato) ou Apêndice A no canônico |
 | Mapa compacto para experts | [`docs/MANUAL.md`](docs/MANUAL.md#parte-i--mapa-rápido) |
+| Entender os logs de validação | [`automacao/docs-aluno/COMO-LER-SEUS-LOGS.md`](automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) |
 | Home Lab (nó + mineração) | [`🏠 Home-Lab - Versão 1.0.md`](🏠%20Home-Lab%20-%20Versão%201.0.md) |
-| Trilha script-first | Seção "Trilha script-first" no canônico |
-| Instalar Whonix por SO | Apêndice E no canônico |
 | Fingerprints PGP | Apêndice C no canônico (ou tabela acima) |
-| Erros comuns | Apêndice B no canônico |
+| Erros comuns | Apêndice B no canônico · [`automacao/tails/docs/TROUBLESHOOTING.md`](automacao/tails/docs/TROUBLESHOOTING.md) |
 
 ---
 
@@ -113,7 +143,7 @@ Privacy-OS-Hub/
 
 ---
 
-## Opcional: Home Lab e Zero-Trust-Core
+## Opcional: Home Lab e ecossistema
 
 **Só depois dos passos 1–12.**
 
