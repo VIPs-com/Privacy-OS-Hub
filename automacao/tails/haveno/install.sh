@@ -246,13 +246,18 @@ mkdir -p "$WORK" || die "Nao criei a pasta de download persistente (${WORK})."
 cd "$WORK" || die "Nao entrei em ${WORK}."
 
 dl_ok=0
-y "  Baixando haveno-install.sh via Tor..."
-if curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then dl_ok=1; fi
+y "  Baixando haveno-install.sh via Tor (ate 3 tentativas)..."
+for _try in 1 2 3; do
+  if curl -x socks5h://127.0.0.1:9050 -fsSL --max-time 60 -O "$INSTALL_SCRIPT_URL" 2>/dev/null; then
+    dl_ok=1; break
+  fi
+  [ "$_try" -lt 3 ] && { y "  Tentativa ${_try}/3 falhou — aguardando 8s (circuito Tor)..."; sleep 8; }
+done
 if [ "$dl_ok" = "0" ]; then
-  y "  Tor falhou — tentando via TransPort do Tails..."
+  y "  Tor falhou (3 tentativas) — tentando via TransPort do Tails..."
   curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
 fi
-[ "$dl_ok" = "1" ] || die "Nao baixei haveno-install.sh (rede/Tor)."
+[ "$dl_ok" = "1" ] || die "Nao baixei haveno-install.sh (rede/Tor). Verifique o Tor Connection assistant."
 INSTALL_SHA="$(sha256sum haveno-install.sh 2>/dev/null | awk '{print $1}')"
 if [ -n "${INSTALL_SCRIPT_HASH:-}" ]; then
   EXPECTED_SCRIPT_HASH="${INSTALL_SCRIPT_HASH#sha256:}"

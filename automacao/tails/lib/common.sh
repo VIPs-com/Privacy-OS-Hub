@@ -243,6 +243,12 @@ HAVENO_DEB_POISON_MAX_BYTES="${HAVENO_DEB_POISON_MAX_BYTES:-1048576}"
 # 119 bytes — OpenPGP old-format sig packet (0x88) + corpo Ed25519.
 HAVENO_SIG_MIN_BYTES="${HAVENO_SIG_MIN_BYTES:-60}"
 HAVENO_SIG_DOWNLOAD_RETRIES="${HAVENO_SIG_DOWNLOAD_RETRIES:-3}"
+# Retentativas de download do .deb (hub/curl) — wait curto porque curl -C- retoma sem re-baixar
+HAVENO_DEB_DOWNLOAD_RETRIES="${HAVENO_DEB_DOWNLOAD_RETRIES:-5}"
+HAVENO_DEB_RETRY_WAIT_SEC="${HAVENO_DEB_RETRY_WAIT_SEC:-8}"
+# Retentativas do upstream (haveno-install.sh via wget) — wait maior para o circuito Tor aquecer
+HAVENO_UPSTREAM_RETRIES="${HAVENO_UPSTREAM_RETRIES:-3}"
+HAVENO_UPSTREAM_RETRY_WAIT_SEC="${HAVENO_UPSTREAM_RETRY_WAIT_SEC:-10}"
 
 haveno_deb_size_ok() {
   local f="$1" sz
@@ -398,27 +404,49 @@ haveno_download_interrupted() {
 
 haveno_hub_download_deb_to_cwd() {
   local deb_url="$1" expected="${2:-0}"
-  local deb_basename deb_path now=0
+  local deb_basename deb_path now=0 try rc=1
   deb_basename="$(basename "$deb_url")"
   deb_path="./${deb_basename}"
   [ -f "$deb_path" ] && now=$(stat -c%s "$deb_path" 2>/dev/null || echo 0)
+
+  # Ja completo — pula download
   if haveno_deb_size_ok "$deb_path"; then
     if [ "${expected:-0}" -le 0 ] 2>/dev/null || [ "$now" -ge "$expected" ]; then
       g "  .deb ja completo em .download/ ($(haveno_fmt_bytes "$now"))."
       return 0
     fi
   fi
+
   if [ "$now" -gt 1048576 ] 2>/dev/null; then
-    y "  Retomando .deb parcial ($(haveno_fmt_bytes "$now"))..."
+    y "  Retomando .deb parcial ($(haveno_fmt_bytes "$now")) — ate ${HAVENO_DEB_DOWNLOAD_RETRIES} tentativas..."
   else
-    b "  Baixando .deb pelo Tor (barra abaixo; 30-90 min, retomavel)..."
-    if [ "${expected:-0}" -gt 0 ] 2>/dev/null; then
-      y "  Tamanho esperado: $(haveno_fmt_bytes "$expected")"
-    fi
+    b "  Baixando .deb pelo Tor (ate ${HAVENO_DEB_DOWNLOAD_RETRIES} tentativas; 30-90 min; retomavel)..."
+    [ "${expected:-0}" -gt 0 ] 2>/dev/null && y "  Tamanho esperado: $(haveno_fmt_bytes "$expected")"
   fi
-  curl -fL -C - --socks5-hostname 127.0.0.1:9050 --progress-bar --max-time 0 \
-    -o "$deb_path" "$deb_url" \
-    || die "Download do .deb interrompido em .download/. Rode de novo — retoma automaticamente."
+
+  for (( try=1; try<=HAVENO_DEB_DOWNLOAD_RETRIES; try++ )); do
+    if [ "$try" -gt 1 ]; then
+      now=$(stat -c%s "$deb_path" 2>/dev/null || echo 0)
+      y "  [retry ${try}/${HAVENO_DEB_DOWNLOAD_RETRIES}] $(haveno_fmt_bytes "$now") ja baixados — aguardando ${HAVENO_DEB_RETRY_WAIT_SEC}s (circuito Tor)..."
+      sleep "$HAVENO_DEB_RETRY_WAIT_SEC"
+    fi
+    curl -fL -C - --socks5-hostname 127.0.0.1:9050 --progress-bar --max-time 0 \
+      -o "$deb_path" "$deb_url"
+    rc=$?
+    case "$rc" in
+      0)   break ;;             # sucesso
+      130|143) return "$rc" ;; # Ctrl+C / SIGTERM — nao retenta
+      *)
+        now=$(stat -c%s "$deb_path" 2>/dev/null || echo 0)
+        [ "$try" -lt "$HAVENO_DEB_DOWNLOAD_RETRIES" ] && \
+          y "  curl codigo ${rc} ($(haveno_fmt_bytes "$now") ate agora) — Tor instavel; retentando..."
+        ;;
+    esac
+  done
+
+  if [ "${rc:-1}" -ne 0 ] 2>/dev/null; then
+    die "Download do .deb falhou apos ${HAVENO_DEB_DOWNLOAD_RETRIES} tentativas. Rode de novo — retoma de onde parou (curl -C-)."
+  fi
   haveno_deb_size_ok "$deb_path" \
     || die ".deb incompleto apos download ($(stat -c%s "$deb_path" 2>/dev/null || echo 0) bytes)."
   g "  .deb completo em .download/ ($(haveno_fmt_bytes "$(stat -c%s "$deb_path")"))."
@@ -476,68 +504,109 @@ haveno_check_install_script_hash() {
 
 haveno_run_upstream_install_deb() {
   local deb_url="$1" pgp_fpr="$2" expected="${3:-0}"
-  local deb_basename install_rc=0
+  local deb_basename install_rc=0 _upstream_try _deb_now
   deb_basename="$(basename "$deb_url")"
-  haveno_predownload_sig "$deb_url"
-  b "  Rodando haveno-install.sh (1a vez: cria App/utils/ + verifica PGP)..."
-  HAVENO_INSTALL_PID=
-  HAVENO_MON_PID=
-  trap 'haveno_download_interrupted' INT TERM
+
+  # Hash check uma vez (script ja baixado)
   haveno_check_install_script_hash "./haveno-install.sh"
-  LC_ALL=C bash ./haveno-install.sh "$deb_url" "$pgp_fpr" &
-  HAVENO_INSTALL_PID=$!
-  haveno_monitor_deb_download "$HAVENO_INSTALL_PID" "$expected" &
-  HAVENO_MON_PID=$!
-  wait "$HAVENO_INSTALL_PID"
-  install_rc=$?
-  trap - INT TERM
-  haveno_kill_download_children
-  wait "$HAVENO_MON_PID" 2>/dev/null || true
-  HAVENO_INSTALL_PID=
-  HAVENO_MON_PID=
-  if [ "$install_rc" -eq 130 ] || [ "$install_rc" -eq 143 ]; then
-    qa_log_finish "$install_rc"
-    exit "$install_rc"
-  fi
-  if [ "$install_rc" -ne 0 ]; then
-    if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
-      local _deb_now
-      _deb_now="$(stat -c%s "./${deb_basename}" 2>/dev/null || echo 0)"
-      if [ "${expected:-0}" -gt 0 ] 2>/dev/null && [ "$_deb_now" -lt "$expected" ] \
-          && [ -d "$UTILS_DIR" ]; then
-        y "  .deb parcial ($(haveno_fmt_bytes "$_deb_now") de $(haveno_fmt_bytes "$expected")) — retomando via hub (curl resume)..."
-        if haveno_hub_download_and_promote_deb "$deb_url" "$pgp_fpr" "$expected"; then
-          return 0
-        fi
-      fi
-      if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
-        y "  haveno-install.sh falhou apos o .deb completo — tentando verificar PGP localmente..."
-        haveno_purge_poisoned_partial_debs "${expected:-0}" "."
-        haveno_predownload_sig "$deb_url"
-        if haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"; then
-          install_rc=0
-        fi
-      fi
-    elif [ -d "$UTILS_DIR" ]; then
-      # Upstream falhou sem baixar o .deb (0 bytes / URL / rede) mas App/utils/ ja existe.
-      # curl do hub (curl -L -C -) e mais robusto que o wget do upstream para grandes arquivos via Tor.
-      local _tiny="./${deb_basename}"
-      [ -f "$_tiny" ] && rm -f "$_tiny" 2>/dev/null || true
-      y "  Upstream sem .deb em .download/ — retentando download direto via hub (curl)..."
+
+  for (( _upstream_try=1; _upstream_try<=HAVENO_UPSTREAM_RETRIES; _upstream_try++ )); do
+    _deb_now="$(stat -c%s "./${deb_basename}" 2>/dev/null || echo 0)"
+
+    if [ "$_upstream_try" -gt 1 ]; then
+      y "  [retry upstream ${_upstream_try}/${HAVENO_UPSTREAM_RETRIES}] $(haveno_fmt_bytes "$_deb_now") ate agora — aguardando ${HAVENO_UPSTREAM_RETRY_WAIT_SEC}s (circuito Tor)..."
+      sleep "$HAVENO_UPSTREAM_RETRY_WAIT_SEC"
+    fi
+
+    # Re-baixa .sig a cada tentativa (pequena; garante integridade apos wait)
+    haveno_predownload_sig "$deb_url"
+    b "  Rodando haveno-install.sh (tentativa ${_upstream_try}/${HAVENO_UPSTREAM_RETRIES}: cria App/utils/ + wget resume)..."
+    HAVENO_INSTALL_PID=
+    HAVENO_MON_PID=
+    trap 'haveno_download_interrupted' INT TERM
+    LC_ALL=C bash ./haveno-install.sh "$deb_url" "$pgp_fpr" &
+    HAVENO_INSTALL_PID=$!
+    haveno_monitor_deb_download "$HAVENO_INSTALL_PID" "$expected" &
+    HAVENO_MON_PID=$!
+    wait "$HAVENO_INSTALL_PID"
+    install_rc=$?
+    trap - INT TERM
+    haveno_kill_download_children
+    wait "$HAVENO_MON_PID" 2>/dev/null || true
+    HAVENO_INSTALL_PID=
+    HAVENO_MON_PID=
+
+    # Sucesso
+    [ "$install_rc" -eq 0 ] && return 0
+
+    # Interrompido pelo usuario — nao retenta
+    if [ "$install_rc" -eq 130 ] || [ "$install_rc" -eq 143 ]; then
+      qa_log_finish "$install_rc"; exit "$install_rc"
+    fi
+
+    _deb_now="$(stat -c%s "./${deb_basename}" 2>/dev/null || echo 0)"
+
+    # .deb substancialmente baixado E App/utils/ ja existe → hub (curl resume) e mais robusto
+    if [ "${_deb_now:-0}" -gt "${HAVENO_DEB_MIN_BYTES:-104857600}" ] 2>/dev/null && [ -d "$UTILS_DIR" ]; then
+      y "  .deb parcial ($(haveno_fmt_bytes "$_deb_now")) e App/utils/ OK — alternando para hub (curl -C-)..."
       if haveno_hub_download_and_promote_deb "$deb_url" "$pgp_fpr" "$expected"; then
         return 0
       fi
     fi
+
+    # Sem bytes significativos (falha de conexao) — proximo retry do loop vai aguardar
+    if [ "${_deb_now:-0}" -lt "${HAVENO_DEB_POISON_MAX_BYTES:-1048576}" ] 2>/dev/null; then
+      [ "$_upstream_try" -lt "$HAVENO_UPSTREAM_RETRIES" ] && \
+        y "  Sem download significativo (${_deb_now} bytes) — Tor instavel; proxima tentativa aguardara ${HAVENO_UPSTREAM_RETRY_WAIT_SEC}s."
+    fi
+  done
+
+  # --- Recuperacao final apos todas as tentativas upstream ---
+  _deb_now="$(stat -c%s "./${deb_basename}" 2>/dev/null || echo 0)"
+
+  if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
+    # .deb substancial: parcial → hub resume; completo → verifica PGP localmente
+    if [ "${expected:-0}" -gt 0 ] 2>/dev/null && [ "${_deb_now:-0}" -lt "$expected" ] \
+        && [ -d "$UTILS_DIR" ]; then
+      y "  .deb parcial ($(haveno_fmt_bytes "$_deb_now") de $(haveno_fmt_bytes "$expected")) — retomando via hub (curl resume)..."
+      haveno_hub_download_and_promote_deb "$deb_url" "$pgp_fpr" "$expected" && return 0
+    fi
+    if [ -f "./${deb_basename}" ] && haveno_deb_size_ok "./${deb_basename}"; then
+      y "  .deb presente — tentando verificar PGP localmente..."
+      haveno_purge_poisoned_partial_debs "${expected:-0}" "."
+      haveno_predownload_sig "$deb_url"
+      haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr" && return 0
+    fi
+  elif [ -d "$UTILS_DIR" ]; then
+    # Sem .deb mas App/utils/ existe → hub direto (curl mais robusto que wget via Tor)
+    local _tiny="./${deb_basename}"
+    [ -f "$_tiny" ] && rm -f "$_tiny" 2>/dev/null || true
+    y "  Sem .deb apos ${HAVENO_UPSTREAM_RETRIES} tentativas — alternando para hub (curl)..."
+    haveno_hub_download_and_promote_deb "$deb_url" "$pgp_fpr" "$expected" && return 0
   fi
+
   return "$install_rc"
 }
 
 haveno_deb_download_failed_msg() {
-  r "ERRO: haveno-install.sh falhou (PGP/URL/rede)."
-  y "  · .deb COMPLETO so em .download/: sync-hub-scripts.sh + hub.sh install --qa-log"
-  y "  · .deb+.sig ja em Install/ (App/utils/ OK): hub.sh install --install-only"
-  y "  · Fallback atomico: steps/run-all.sh (passo a passo)"
-  y "  · Apendice B (erros comuns) no arquivo canonico do curso"
+  r "ERRO: download falhou apos todas as tentativas (Tor/rede/upstream)."
+  y "  O .deb parcial fica em .download/ — o proximo run RETOMA de onde parou."
+  y ""
+  y "  Rotas de recuperacao (em ordem):"
+  y "  1. Rode de novo:        hub.sh install --qa-log   (retoma .deb automaticamente)"
+  y "  2. .deb em Install/:    hub.sh install --install-only"
+  y "  3. Fallback atomico:    steps/02-download-deb.sh  (passo isolado, retomavel)"
+  y "                          steps/run-all.sh          (sequencia completa)"
+  y "  4. Apendice B (erros comuns) no arquivo canonico do curso"
+  echo
+  # Auto-fallback para steps/ apenas se App/utils/ ja existir
+  # (sem App/utils/ o [7/9] nao tem install.sh para executar)
+  local _steps_dl="${HUB_SCRIPTS_DIR}/steps/02-download-deb.sh"
+  if [ -x "$_steps_dl" ] && [ -d "${UTILS_DIR:-}" ]; then
+    y "  App/utils/ presente — chamando steps/02-download-deb.sh como fallback automatico..."
+    bash "$_steps_dl" && return 0 || true
+    r "  steps/02-download-deb.sh tambem falhou. Tente: hub.sh install --qa-log"
+  fi
   exit 1
 }
 
