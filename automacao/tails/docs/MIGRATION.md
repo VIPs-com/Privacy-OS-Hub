@@ -36,7 +36,7 @@
 ## Flags mantidas (backward-compat)
 
 Todas as flags dos scripts antigos funcionam no `hub.sh`:
-- `--one-password` — digitar senha admin uma vez só
+- `--one-password` — senha admin uma vez só (agora **padrão** — não precisa digitar)
 - `--qa-log` — gravar log completo
 - `--no-clock` — pular ajuste de relógio
 - `--force-depends` — instalar ignorando dependências ausentes

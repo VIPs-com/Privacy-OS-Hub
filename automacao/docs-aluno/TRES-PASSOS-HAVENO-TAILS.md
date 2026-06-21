@@ -55,13 +55,14 @@ Tabela completa: `~/Persistent/hub-scripts/aliases/README.md` (no Tails) ou [hub
 |------|:------------:|--------|
 | *(nenhuma)* | — | Modo **1ª instalação** (padrão) |
 | `--qa-log` | Recomendada | Evidências em `~/Persistent/qa-logs/` |
-| `--one-password` | Opcional | Senha de admin **uma vez** no fluxo |
 | `--skip-backup` | Opcional | Não pergunta backup no fim |
 
-**Exemplo (menos prompts de senha):**
+> A senha de admin é pedida **apenas uma vez** — comportamento padrão do hub.
+
+**Exemplo:**
 
 ```bash
-~/Persistent/hub-scripts/hub.sh install --qa-log --one-password
+~/Persistent/hub-scripts/hub.sh install --qa-log
 ```
 
 **OK se:** indicador **verde** na janela do Haveno.
@@ -147,12 +148,13 @@ Sempre que ligar o Tails de novo (**Haveno já instalado** uma vez):
 |------|:------------:|--------|
 | *(nenhuma)* | — | Modo "voltei ao Tails" |
 | `--qa-log` | Opcional | Grava log em `qa-logs/` |
-| `--one-password` | Opcional | Uma senha admin só |
+
+> A senha de admin é pedida **apenas uma vez** — comportamento padrão do hub.
 
 **Exemplo:**
 
 ```bash
-~/Persistent/hub-scripts/hub.sh boot --one-password
+~/Persistent/hub-scripts/hub.sh boot
 ```
 
 **OK se:** Haveno abre e fica **verde** (amarelo alguns minutos na 1ª abertura da sessão pode ser normal).

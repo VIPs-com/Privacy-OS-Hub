@@ -102,7 +102,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 ~/Persistent/hub-scripts/hub.sh install --qa-log
 
 # Cada sessão — abrir o Haveno (passo 7)
-~/Persistent/hub-scripts/hub.sh boot            # ou clique "Haveno — Iniciar" no menu GNOME
+~/Persistent/hub-scripts/hub.sh boot --qa-log     # ou clique "Haveno — Iniciar" no menu GNOME
 
 # Backup (passo 4 e após cada trade)
 ~/Persistent/hub-scripts/hub.sh backup                  # rápido — só Haveno Data/

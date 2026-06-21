@@ -36,10 +36,10 @@
 #                       → USE SEMPRE que algo der errado — envie o .txt ao suporte
 #                       Exemplo: hub.sh install --qa-log
 #
-#   --one-password      (todos os subcomandos)
-#                       Digita a senha de administrador apenas 1 vez
-#                       → USE se cansou de redigitar a senha em cada etapa
-#                       Exemplo: hub.sh install --one-password --qa-log
+#   --one-password      (todos os subcomandos — ativado por PADRÃO)
+#                       Senha de administrador pedida apenas 1 vez por sessão
+#                       → já é o padrão; não precisa digitar a flag
+#                       → Para desativar: HAVENO_ONE_PASSWORD=0 hub.sh install
 #
 #   --install-only      (somente: install)
 #                       Pula o download — usa o .deb já em Install/
@@ -55,7 +55,6 @@
 # ── EXEMPLOS COMUNS ──────────────────────────────────────────────────────────
 #
 #   hub.sh install --qa-log                   # 1ª vez + log (recomendado)
-#   hub.sh install --one-password --qa-log    # 1ª vez com 1 senha + log
 #   hub.sh install --install-only --qa-log    # retoma após download OK
 #   hub.sh boot --qa-log                      # sessão + log para diagnóstico
 #   hub.sh backup                             # backup rápido antes do trade
@@ -100,7 +99,7 @@ usage() {
   b ""
   b "Flags globais (qualquer subcomando):"
   b "  --qa-log        grava log em ~/Persistent/qa-logs/"
-  b "  --one-password  senha admin só uma vez"
+  b "  --one-password  senha admin 1x por sessão (padrão ativo)"
   b ""
   b "Flags específicas de install:"
   b "  --install-only  pula download — usa .deb já em Install/"
@@ -143,6 +142,7 @@ for arg in "$@"; do
   esac
 done
 export HAVENO_QA_LOG="${HAVENO_QA_LOG:-0}"
+export HAVENO_ONE_PASSWORD="${HAVENO_ONE_PASSWORD:-1}"  # padrão: senha admin 1x por sessão
 
 QA_ARGS=()
 [ "${HAVENO_QA_LOG}" = "1" ] && QA_ARGS=(--qa-log)

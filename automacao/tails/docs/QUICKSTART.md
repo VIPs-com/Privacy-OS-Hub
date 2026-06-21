@@ -24,11 +24,8 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 ## Opções úteis
 
 ```bash
-# Gravar log completo para enviar ao suporte
+# Gravar log completo para enviar ao suporte (a senha é pedida apenas 1× — padrão)
 hub.sh install --qa-log
-
-# Digitar a senha de admin só uma vez no fluxo
-hub.sh install --one-password
 
 # Retomar instalação quando o .deb já está em Install/ (não apenas em .download/)
 hub.sh install --install-only

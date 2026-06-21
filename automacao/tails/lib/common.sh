@@ -36,25 +36,25 @@ haveno_gpg_symmetric_encrypt() {
   unset pass1 pass2
 }
 
-# --- Modo "uma senha so" (opt-in: --one-password) -----------------------------
+# --- Modo "uma senha so" (padrão via hub.sh; desativar: HAVENO_ONE_PASSWORD=0) -
 HAVENO_SUDOERS_DROPIN="${HAVENO_SUDOERS_DROPIN:-/etc/sudoers.d/zz-haveno-1session}"
 
 sudo_one_password_start() {
   [ "${HAVENO_ONE_PASSWORD:-0}" = "1" ] || return 0
   [ "${HAVENO_SUDO_SESSION:-0}" = "1" ] && return 0
-  y "  [--one-password] Voce vai digitar a senha de admin UMA vez agora."
+  y "  Voce vai digitar a senha de admin UMA vez agora (padrao do hub)."
   y "  Ajuste TEMPORARIO de sessao (removido ao fim do script; some no reboot)."
   sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
   if ! sudo bash -c "umask 0337; \
         printf 'Defaults timestamp_timeout=300\n' > '$HAVENO_SUDOERS_DROPIN'; \
         visudo -cf '$HAVENO_SUDOERS_DROPIN' >/dev/null"; then
     sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
-    die "Nao ativei o modo uma-senha (sudoers invalido). Rode sem --one-password."
+    die "Nao ativei o modo uma-senha (sudoers invalido). Tente: HAVENO_ONE_PASSWORD=0 hub.sh install"
   fi
   export HAVENO_SUDO_SESSION=1
   HAVENO_SUDO_OWNER=1
   trap 'sudo_one_password_stop' EXIT INT TERM
-  g "  [--one-password] Ativo: os proximos comandos nao pedem senha ate o fim."
+  g "  Modo uma-senha ativo: os proximos comandos nao pedem senha ate o fim."
 }
 
 sudo_one_password_stop() {

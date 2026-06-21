@@ -40,26 +40,20 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 
 > **Passos 1–4** (USB, persistência, Dotfiles, admin) **sempre manuais** — `system/preflight.sh` só valida.
 
-### Senha de admin: digitar uma vez (`--one-password`, opcional)
+### Senha de admin: pedida apenas uma vez por sessão (padrão)
 
 O Tails, **de propósito**, faz o `sudo` pedir a senha de admin a **cada** comando
-(`/etc/sudoers.d/always-ask-password` → `timestamp_timeout=0`). Por isso o fluxo
-normal pede a senha várias vezes. Se você preferir digitar **uma vez só**:
+(`/etc/sudoers.d/always-ask-password` → `timestamp_timeout=0`). O `hub.sh` ativa
+**automaticamente** um ajuste **temporário de sessão** que guarda a senha em cache
+até o script terminar, e o **remove ao fim** (some também no reboot — o Tails é amnésico).
 
-```bash
-~/Persistent/hub-scripts/hub.sh install --one-password          # 1ª vez
-~/Persistent/hub-scripts/hub.sh boot --one-password             # cada sessão
-~/Persistent/hub-scripts/hub.sh update --one-password           # novo release
-```
+Resultado: você digita a senha de admin **uma única vez** no início do `hub.sh install`, `boot` ou `update` — e não é mais pedida até o fim.
 
-A flag instala um ajuste **temporário de sessão** que mantém a senha em cache até o
-script terminar, e o **remove ao fim** (e ele some no reboot — o Tails é amnésico).
-
-> ⚠️ **Trade-off:** enquanto o script roda, isso **afrouxa** a proteção do Tails de
-> pedir a senha sempre. Por isso é **opt-in** — sem a flag, nada muda (padrão seguro).
-> Não há atalho para "rodar como root": os scripts exigem o usuário `amnesia` de
-> propósito (rodar como root quebraria permissões da Persistent e abriria a carteira
-> como root). Detalhe: **Apêndice B erro 14** no arquivo canônico do curso.
+> Os scripts exigem o usuário `amnesia` de propósito (rodar como root quebraria
+> permissões da Persistent e abriria a carteira como root).
+> Detalhe: **Apêndice B erro 14** no arquivo canônico do curso.
+>
+> Para desativar (avançado): `HAVENO_ONE_PASSWORD=0 hub.sh install`
 
 ## Matriz script ↔ trilha ↔ Playbook
 
@@ -155,7 +149,6 @@ chmod +x ~/Persistent/hub-scripts/**/*.sh ~/Persistent/hub-scripts/*.sh
 ```bash
 hub.sh install                        # padrão
 hub.sh install --install-only         # .deb já em Install/ — pula download
-hub.sh install --one-password         # senha admin só 1 vez
 hub.sh install --skip-backup          # pula backup pós-instalação
 hub.sh install --qa-log               # + log em qa-logs/
 ```
@@ -181,7 +174,6 @@ No **[7/9]**, o hub instala dependências `apt` do `.deb` (FFmpeg, ICU, …) **a
 
 ```bash
 hub.sh boot                 # padrão
-hub.sh boot --one-password  # senha admin só 1 vez
 hub.sh boot --qa-log        # + log para diagnóstico
 ```
 

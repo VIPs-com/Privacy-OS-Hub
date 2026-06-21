@@ -1595,7 +1595,6 @@ Antes de considerar a trilha principal concluída:
 | `hub.sh install` | 2 | Orquestrador: preflight → download + PGP + install + verde | 1ª vez | Seguro |
 | `hub.sh install --qa-log` | 2 | Idem com log de evidência | 1ª vez (recomendado) | Seguro |
 | `hub.sh install --install-only` | 2 | .deb já em Install/ — deps + install.sh (sem download) | Retomar após download OK | Seguro |
-| `hub.sh install --one-password` | 2 | Senha admin uma vez só no fluxo | Conforto (opt-in) | Seguro |
 | `hub.sh boot` | 7 | Preflight → boot Haveno na sessão | Cada sessão após instalar | Seguro |
 | `hub.sh boot --qa-log` | 7 | Idem com log | Cada sessão (recomendado) | Seguro |
 | `hub.sh backup` | 4, 7 | Backup cifrado Data/ com GPG | Antes do 1º depósito; periodicamente | Seguro (timestamp) |
@@ -1625,7 +1624,6 @@ Antes de considerar a trilha principal concluída:
 ```bash
 ~/Persistent/hub-scripts/hub.sh install              # padrão: download + PGP + install + abrir
 ~/Persistent/hub-scripts/hub.sh install --qa-log     # grava log em ~/Persistent/qa-logs/
-~/Persistent/hub-scripts/hub.sh install --one-password # senha admin uma vez só no fluxo
 ~/Persistent/hub-scripts/hub.sh install --install-only # .deb já em Install/ — deps + install.sh (sem download)
 ```
 
@@ -1829,16 +1827,14 @@ Confirme `loaded filter: haveno` no journalctl e reabra o Haveno. O `sync-hub-sc
 
 🔴 **Não rode tudo como root:** criaria arquivos de root na persistência e abriria a carteira Haveno como root — perigoso.
 
-**Se quiser digitar a senha uma vez só**, todos os scripts aceitam a flag opcional **`--one-password`**:
+**O `hub.sh` pede a senha de admin apenas uma vez por sessão — automaticamente.** Ele instala um ajuste **temporário de sessão** (o `sudo` guarda a senha até o script terminar) e o **remove automaticamente no fim**. O Tails é amnésico — o ajuste some ao reiniciar.
 
 ```bash
-~/Persistent/hub-scripts/hub.sh install --one-password   # 1ª vez
-~/Persistent/hub-scripts/hub.sh boot --one-password      # cada sessão
+~/Persistent/hub-scripts/hub.sh install --qa-log   # digita senha 1× no início e pronto
+~/Persistent/hub-scripts/hub.sh boot               # mesma coisa — 1× só
 ```
 
-Ela instala um ajuste **temporário de sessão** (o `sudo` guarda a senha até o script terminar) e o **remove automaticamente no fim**. O Tails é amnésico — o ajuste some ao reiniciar.
-
-> ⚠️ **Trade-off:** enquanto o script roda, a proteção de pedir senha sempre fica afrouxada. É **opt-in** — sem a flag, o comportamento seguro padrão continua.
+> Para desativar (avançado): `HAVENO_ONE_PASSWORD=0 hub.sh install`
 
 ---
 

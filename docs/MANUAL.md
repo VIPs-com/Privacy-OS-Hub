@@ -180,7 +180,6 @@ Use este **ponto de entrada** se você é novato. Ele chama os scripts internos 
 ```bash
 ~/Persistent/hub-scripts/hub.sh install
 ~/Persistent/hub-scripts/hub.sh install --install-only   # retoma: .deb já em Install/
-~/Persistent/hub-scripts/hub.sh install --one-password   # senha admin só 1 vez
 ~/Persistent/hub-scripts/hub.sh install --skip-backup    # pula backup pós-instalação
 ~/Persistent/hub-scripts/hub.sh install --qa-log         # + log em qa-logs/
 ```
@@ -204,7 +203,6 @@ Com `--qa-log`, grava `01-preflight-*` **e** `02-haveno-auto-*` em `~/Persistent
 ```bash
 ~/Persistent/hub-scripts/hub.sh boot
 ~/Persistent/hub-scripts/hub.sh boot --qa-log
-~/Persistent/hub-scripts/hub.sh boot --one-password
 ```
 
 **O que acontece:** preflight → `haveno/boot.sh` (Playbook §7: `install.sh` + `exec.sh` + onion-grater). *(Nota: `install.sh` e `exec.sh` são scripts internos do pacote Haveno `.deb`, não fazem parte deste repositório.)*
@@ -309,9 +307,11 @@ Pula a pergunta "rodar backup agora?" no fluxo `install`. Use se você **já** f
 
 ---
 
-### `--one-password` (digitar a senha uma vez)
+### Senha de admin: uma vez por sessão (padrão)
 
-O Tails, de propósito, faz o `sudo` pedir a senha a **cada** comando (`timestamp_timeout=0`). Esta flag — aceita por `hub.sh install`, `hub.sh boot` e `hub.sh update` — instala um ajuste **temporário de sessão** que guarda a senha até o script terminar e o **remove ao fim** (some também no reboot, pois o Tails é amnésico). Enquanto roda, afrouxa a proteção do Tails de pedir a senha sempre — por isso é **opt-in** (sem a flag, nada muda). Detalhe e por que `root` é bloqueado: **Apêndice B erro 14** no canônico.
+O Tails, de propósito, faz o `sudo` pedir a senha a **cada** comando (`timestamp_timeout=0`). O `hub.sh` ativa **automaticamente** um ajuste temporário de sessão que guarda a senha em cache até o script terminar e o **remove ao fim** (some também no reboot). Resultado: você digita a senha de admin **uma única vez** no início — e o resto roda sem interrupções.
+
+Para desativar (avançado): `HAVENO_ONE_PASSWORD=0 hub.sh install`. Detalhe e por que `root` é bloqueado: **Apêndice B erro 14** no canônico.
 
 ---
 
@@ -339,7 +339,6 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 | Flag | Quando | Seguro 2×? |
 |------|--------|------------|
 | `--install-only` | Já tem `.deb` verificado em `Install/` (+ `App/utils/`) — só deps apt + `install.sh` | Sim |
-| `--one-password` | Digitar a senha de admin **uma vez** no fluxo todo | Sim |
 | `--skip-backup` | Pular pergunta de backup pós-install | Sim |
 | `--qa-log` | Grava toda a saída em `~/Persistent/qa-logs/02-haveno-auto-*.txt` | Sim |
 
