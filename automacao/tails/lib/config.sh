@@ -20,6 +20,8 @@ HAVENO_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/${H
 HAVENO_SIG_URL="${HAVENO_DEB_URL}.sig"
 DEB_NAME="$(basename "$HAVENO_DEB_URL")"
 INSTALL_SCRIPT_URL="https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh"
+# MANUTENCAO: URL aponta para branch master (mutavel). A cada release upstream verificar se
+# o hash mudou: curl -sL "$INSTALL_SCRIPT_URL" | sha256sum — e atualizar INSTALL_SCRIPT_HASH.
 INSTALL_SCRIPT_HASH="658780708f1556a8135f2800c9182067909c5c77682bda68a98d70086779eeba"  # sha256 haveno-install.sh confirmado em campo 21/06/2026 — atualizar a cada release upstream
 
 # ----- Caminhos no Tails (não editar) ----------------------------------------

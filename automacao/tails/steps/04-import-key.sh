@@ -20,7 +20,7 @@ else
   y "Baixando a chave pública da Reto pelo Tor..."
   TMPKEY="$(mktemp)"
   curl -fsSL --socks5-hostname "$TOR_SOCKS" --max-time 120 -o "$TMPKEY" "$RETO_KEY_URL" \
-    || fail "Não baixei a chave ($RETO_KEY_URL). Tor ok? URL mudou?"
+    || { rm -f "$TMPKEY"; fail "Não baixei a chave ($RETO_KEY_URL). Tor ok? URL mudou?"; }
   gpg --import "$TMPKEY" || { rm -f "$TMPKEY"; fail "gpg --import falhou."; }
   rm -f "$TMPKEY"
 fi

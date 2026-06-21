@@ -46,7 +46,7 @@ sudo_one_password_start() {
   y "  Ajuste TEMPORARIO de sessao (removido ao fim do script; some no reboot)."
   sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
   if ! sudo bash -c "umask 0337; \
-        printf 'Defaults timestamp_timeout=30\n' > '$HAVENO_SUDOERS_DROPIN'; \
+        printf 'Defaults timestamp_timeout=300\n' > '$HAVENO_SUDOERS_DROPIN'; \
         visudo -cf '$HAVENO_SUDOERS_DROPIN' >/dev/null"; then
     sudo rm -f "$HAVENO_SUDOERS_DROPIN" 2>/dev/null || true
     die "Nao ativei o modo uma-senha (sudoers invalido). Rode sem --one-password."

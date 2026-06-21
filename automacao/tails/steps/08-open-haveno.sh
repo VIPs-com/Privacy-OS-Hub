@@ -25,6 +25,9 @@ if [ -f "${UTILS_DIR}/haveno.yml" ]; then
   if [ -f "$HUB_ONION_YML" ]; then
     YML_SRC="$HUB_ONION_YML"
     y "  Usando filtro corrigido do hub (com PoW do Haveno 1.6.0)."
+  else
+    y "  AVISO: lib/onion-grater.yml ausente — usando haveno.yml do upstream (SEM fix PoW)."
+    y "  Se o Haveno nao conectar: rode sync-hub-scripts.sh e tente de novo."
   fi
   sudo cp "$YML_SRC" "$ONION_GRATER_DST" || fail "Não copiei o filtro onion-grater (senha admin ativa?)."
   sudo systemctl restart onion-grater || y "Não reiniciei o onion-grater — pode já estar ativo."
