@@ -55,9 +55,10 @@ haveno_session_boot
 if [ "$WATCH_MIN" -gt 0 ]; then
   b "Monitorando log por ${WATCH_MIN} min..."
   deadline=$(( $(date +%s) + WATCH_MIN * 60 ))
+  last=""
   while [ "$(date +%s)" -lt "$deadline" ]; do
     line="$(haveno_check_filter | grep -E 'loaded filter|AUTHCHALLENGE' | tail -1)"
-    [ -n "$line" ] && echo "  log> $line"
+    if [ -n "$line" ] && [ "$line" != "$last" ]; then echo "  log> $line"; last="$line"; fi
     sleep 15
   done
 fi
