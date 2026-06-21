@@ -276,7 +276,7 @@ for _try in 1 2 3; do
 done
 if [ "$dl_ok" = "0" ]; then
   y "  Tor falhou (3 tentativas) — tentando via TransPort do Tails..."
-  curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
+  curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null && dl_ok=1
 fi
 [ "$dl_ok" = "1" ] || die "Nao baixei haveno-install.sh (rede/Tor). Verifique o Tor Connection assistant."
 INSTALL_SHA="$(sha256sum haveno-install.sh 2>/dev/null | awk '{print $1}')"
@@ -414,6 +414,7 @@ if [ -t 0 ] && [ -t 1 ]; then
       _hub_sh="${HUB_SCRIPTS_DIR}/hub.sh"
       if [ -x "$_hub_sh" ]; then
         g "Iniciando instalacao do Feather (hub.sh feather)..."
+        # Com --one-password ativo: a janela sudo permanece ate o Feather concluir (por design).
         if [ "${HAVENO_QA_LOG:-0}" = "1" ]; then
           exec "$_hub_sh" feather --qa-log
         else

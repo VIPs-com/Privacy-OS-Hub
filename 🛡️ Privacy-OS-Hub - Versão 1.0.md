@@ -173,6 +173,9 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 | **Trilha B** | Cold-signing com monero-wallet-cli (avançado) |
 | **M1** | Módulo 1: Haveno (passos 1–7) — núcleo 1–3 · pré-M2 4–7 |
 | **M2** | Módulo 2: Whonix + Custódia fria (passos 8–12) |
+| **onion-grater** | Filtro Tor do Tails — controla quais conexões o Haveno pode abrir |
+| **KYC** | Know Your Customer — verificação de identidade exigida por exchanges centralizadas (Haveno não exige) |
+| **TOFU** | Trust On First Use — confiar na chave PGP na 1ª vez e verificar se não muda depois |
 
 ### 🚨 12 Regras de Ouro da Custódia Monero
 
@@ -350,6 +353,30 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+## 🧭 Navegação rápida
+
+| Seção | Atalho |
+|-------|--------|
+| **§0 Onboarding** — Glossário · Regras de Ouro | [→ ir](#-0-onboarding) |
+| **§1 Mapa do curso** | [→ ir](#️⃣-1-mapa-do-curso-visão-geral) |
+| **Parte 1** — Passos 1–7 (Haveno verde) | [→ ir](#-parte-1--tails--haveno-passos-17) |
+| Passo 1 — Bootstrap Tails | [→ ir](#-passo-1--bootstrap-tails-usb--tor--persistência--admin) |
+| Passo 2 — Haveno verde | [→ ir](#-passo-2--haveno-até-o-verde) |
+| Passo 4 — Backup + Seed | [→ ir](#-passo-4--backup-e-seed-em-papel) |
+| Passo 5 — Feather Wallet | [→ ir](#-passo-5--feather-wallet-obrigatório-para-m2) |
+| 🏁 Checkpoint 1 | [→ ir](#-checkpoint-1--haveno-verde--seed-salva) |
+| **Parte 2** — Passos 8–12 (Custódia fria) | [→ ir](#-parte-2--custódia-fria-passos-812) |
+| Passo 8 — Porteiro (Trilha A/B) | [→ ir](#-passo-8--porteiro-trilha-a-ou-b) |
+| Passo 9 — Ritual Seed | [→ ir](#-passo-9--ritual-seed-2-cópias-físicas) |
+| Passo 10 — Whonix | [→ ir](#-passo-10--whonix-pgp--import-vms) |
+| Passo 12A — Feather Offline (Trilha A) | [→ ir](#-passo-12a--feather-offline-trilha-a--padrão) |
+| Passo 12B — CLI Offline (Trilha B) | [→ ir](#-passo-12b--cli-offline-trilha-b--avançado) |
+| 🏁 Checkpoint 2 | [→ ir](#-checkpoint-2--cold-signing-ao-vivo) |
+| **Apêndices A–F** | [→ ir](#-apêndices) |
+| **Roadmap 2025–2030** | [→ ir](#-roadmap-20252030) |
+
+---
+
 ## 🔴🟡🟢🔵 LEGENDA DE CORES
 
 | Cor | Significado |
@@ -503,15 +530,21 @@ O script faz automaticamente (passos 1–7 sem interação):
 
 Depois do Haveno abrir, três prompts interativos (pressione Enter ou responda):
 
-8. **Backup:** "Rodar backup agora? (S/n)" — padrão **Enter = sim** (recomendado antes do 1º depósito)
-9. **Finalizar QA (1ª vez):** "Finalizar QA agora? (S/n)" — padrão **Enter = sim**
+**Prompt A — Backup:** "Rodar backup agora? (S/n)" — padrão **Enter = sim** (recomendado antes do 1º depósito)
+
+**Prompt B — Finalizar QA (1ª vez):** "Finalizar QA agora? (S/n)" — padrão **Enter = sim**
    - Antes de pressionar Enter aqui: **sua seed deve estar anotada em papel**.
    - O script vai pedir que você confirme cada uma das 3 perguntas sobre a seed (sem digitar as palavras).
-10. **Feather (opcional):** "Instalar o Feather agora tambem? [s/N]" — padrão **N** (pule se quiser fazer depois; rode `hub.sh feather` no Passo 5)
+
+**Prompt C — Feather (opcional):** "Instalar o Feather agora tambem? [s/N]" — padrão **N** (pule se quiser fazer depois; rode `hub.sh feather` no Passo 5)
 
 🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` do script upstream fica parada — normal. O hub imprime **barra de progresso** (`[########----] NN%` a cada 10s na 1ª vez, ou barra **curl** se `App/utils/` já existir). **Não interrompa** com Ctrl+C no meio do download. Os prompts **8 e 9** aparecem em seguida — fique por perto.
 
 📎 **Onde ficam os arquivos:** o `.deb` baixa em `~/Persistent/haveno/.download/` (retomável). Depois da verificação PGP, vai para `~/Persistent/haveno/Install/` — com symlink `haveno.deb` se preciso. A pasta `.download/` só é apagada no **sucesso**; em falha, fica para retomar.
+
+---
+
+##### Se algo der errado durante o download
 
 📎 **Recuperação:** `.deb` completo só em `.download/` → `sync-hub-scripts.sh` + `hub.sh install --qa-log`. Já em `Install/` → `hub.sh install --install-only --qa-log`.
 
@@ -519,7 +552,7 @@ Depois do Haveno abrir, três prompts interativos (pressione Enter ou responda):
 
 ---
 
-#### 2.2-A — Instalação manual (se preferir sem script)
+#### 2.2-A — Instalação manual (para usuários avançados que preferem não usar o hub.sh)
 
 ```bash
 # Rede Reto (turma — pronto para usar):
@@ -673,6 +706,8 @@ Evolução do 3-2-1 clássico — adiciona **imutabilidade** e **verificação o
 | **1** | 1 cópia offsite | Pendrive B fora de casa | Cofre, familiar confiável, local separado |
 | **1** | 1 cópia imutável | Arquivo `.gpg` com timestamp — nunca sobrescrito | `backup.sh` aplica `chmod 444` após gravar |
 | **0** | 0 erros verificados | Integridade + restauração testada | `sha256sum -c` a cada 3 meses · restauração anual |
+
+> 💡 **O pendrive Tails com Persistência ativa já conta como a 1ª cópia.** Para atingir o "3" você precisa de mais 2 pendrives separados (Pendrive A e Pendrive B).
 
 🔴 **A seed em papel é a Cópia 0** — imutável por natureza, independente de qualquer arquivo digital. Sem ela, nenhum `.gpg` recupera os fundos. Guarde em local físico **diferente** de todos os pendrives.
 
@@ -881,7 +916,7 @@ UI do Feather:
 ~/Persistent/hub-scripts/hub.sh boot --qa-log
 ```
 
-Manual (equivalente):
+Manual (equivalente, para usuários avançados):
 ```bash
 sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 /home/amnesia/Persistent/haveno/App/utils/exec.sh
@@ -1011,6 +1046,8 @@ Antes de continuar para a Parte 2, confirme cada item:
 | Processo | Passo 12A | Passo 12B |
 
 > 🔴 **NÃO misture as trilhas.** A carteira nasce e morre na mesma ferramenta. **Na dúvida: Trilha A.**
+
+> 🧪 **Antes de continuar — confirme:** Trilha A = interface gráfica Feather (cliques e botões). Trilha B = terminal (comandos). Se ainda não decidiu, escolha **Trilha A**.
 
 ---
 
@@ -2189,9 +2226,9 @@ submit_multisig multisig_monero_tx
 
 | Horizonte | Item | Status | Impacto |
 |-----------|------|:------:|:-------:|
-| **2026 Q3** | Screenshots reais PI-8 (Haveno UI no Tails) | 🟡 Pendente | Didático |
-| **2026 Q3** | Screenshots reais PI-1 (Whonix no repo público) | 🟡 Pendente | Didático |
-| **2026 Q3** | Piloto campo Nível B+ (trilha 1–12 + HW wallet) | 🟡 Em andamento | Validação |
+| **2026 Q2** | Screenshot Haveno verde (IMG-1) | ✅ Capturada 21/06/2026 | Didático |
+| **2026 Q3** | Screenshots Whonix + UI adicionais (PI-1, PI-8) | 🟡 Pendente | Didático |
+| **2026 Q2** | Piloto campo Nível B+ (trilha 1–12) | ✅ APROVADO 21/06/2026 | Validação |
 | **2026 Q4** | v2.0.0 estável (tag após B+ PASS) | 🔵 Planejado | Release |
 | **2027** | Serenó Funds (custódia institucional Monero) | 🔵 Acompanhar | Expansão |
 | **2027** | Hardware wallet — YubiKey / Ledger docs | 🔵 Planejado | Opcional |

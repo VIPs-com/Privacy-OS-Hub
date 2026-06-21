@@ -6,7 +6,7 @@
 >
 > **Para o aluno:** só instalação e execução. Um script: `hub.sh`.  
 > **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).  
-> **Logs:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) · **Detalhe de flags:** [MANUAL.md](../../docs/MANUAL.md#parte-ii--scripts-para-novato)
+> **Logs:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) (no Tails: mesma pasta deste arquivo) · **Detalhe de flags:** [MANUAL.md](../../docs/MANUAL.md#parte-ii--scripts-para-novato) (no Tails: `~/Persistent/Privacy-OS-Hub-main/docs/MANUAL.md`)
 
 ---
 
@@ -88,7 +88,11 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails
 
 O hub verifica PGP (`VALIDSIG`), **move** o `.deb` para `Install/` e cria `haveno.deb` (symlink se o nome for longo). **Não** use `--install-only` se o pacote ainda está só em `.download/`.
 
-### Fallback atômico (se `hub.sh install` ainda falhar)
+---
+
+> **Apenas se `hub.sh install` ainda falhar após as recuperações acima:**
+
+### Fallback atômico
 
 Passos atômicos já em `hub-scripts/steps/` — **Haveno-only**, não para Feather:
 

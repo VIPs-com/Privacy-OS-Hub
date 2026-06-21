@@ -17,7 +17,7 @@ qa_log_init "12-cold-signing"
 
 echo
 b "Passo 12 — cold-signing trilha A (confirmacoes pos air-gap)"
-echo "Preencha apos assinar offline. TX ID: so primeiros 8 chars + [BORRADO]"
+echo "Preencha apos assinar offline."
 echo
 
 _confirm() {
@@ -45,19 +45,7 @@ _confirm "tx_assinada_offline" "Transacao assinada offline" && ok=$((ok+1)) || t
 _confirm "tx_exportada_pendrive" "TX assinada exportada para pendrive transitorio" && ok=$((ok+1)) || true
 _confirm "tx_transmitida_depois" "TX transmitida depois em ambiente online (Whonix/Tails)" && ok=$((ok+1)) || true
 
-printf "Primeiros 8 caracteres do TX ID (resto omitido): "
-read -r tx_prefix
-if [[ "${tx_prefix:-}" =~ ^[0-9a-fA-F]{8}$ ]]; then
-  qa_log_line "TX_ID_PREFIX: ${tx_prefix}[BORRADO]"
-  ok=$((ok+1))
-elif [ -n "${tx_prefix:-}" ]; then
-  y "  AVISO: '${tx_prefix}' nao parece TX ID valido (8 caracteres hex)."
-  qa_log_line "TX_ID_PREFIX: INVALIDO"
-  r "  TX ID prefixo invalido"
-else
-  qa_log_line "TX_ID_PREFIX: AUSENTE"
-  r "  TX ID prefixo ausente"
-fi
+_confirm "tx_id_conferido" "TX ID conferido visualmente na tela (nao registre aqui)" && ok=$((ok+1)) || true
 
 if [ "$ok" -ge 6 ]; then
   qa_log_finish 0

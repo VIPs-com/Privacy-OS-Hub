@@ -127,7 +127,7 @@ WORK="${HAVENO_DIR}/.download"
 mkdir -p "$WORK" || die "Nao criei a pasta de download persistente (${WORK})."
 cd "$WORK" || die "Nao entrei em ${WORK}."
 if ! curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
-  curl -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
+  curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
 fi
 EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
 haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."

@@ -21,7 +21,7 @@ b(){ echo -e "\033[1;34m$*\033[0m"; }
 g(){ echo -e "\033[1;32m$*\033[0m"; }
 y(){ echo -e "\033[1;33m$*\033[0m"; }
 r(){ echo -e "\033[0;31m$*\033[0m"; }
-die(){ r "ERRO: $*"; exit 1; }
+die(){ r "ERRO: $*"; [ -n "${QA_LOG_FILE:-}" ] && qa_log_finish 1 2>/dev/null || true; exit 1; }
 
 DEST=""
 USE_USB=0

@@ -26,15 +26,15 @@ Ative gravação com **`--qa-log`** nos scripts (ou `hub.sh install --qa-log`).
 ~/Persistent/hub-scripts/system/preflight.sh --qa-log     # só validar ambiente
 ~/Persistent/hub-scripts/system/post-session.sh --qa-log  # pós-upgrade Tails
 
-# QA via hub.sh qa (recomendado — tela + log simultâneos):
+# QA — Trilha do aluno:
 ~/Persistent/hub-scripts/hub.sh qa finalize               # validate + confirm-seed (1ª vez, 1 vez)
-~/Persistent/hub-scripts/hub.sh qa validate               # revalidar scripts a qualquer momento
 ~/Persistent/hub-scripts/hub.sh qa confirm-seed           # após anotar seed no papel (passo 4)
-~/Persistent/hub-scripts/hub.sh qa ritual-seed          # passo 9 — 2 cópias físicas
-~/Persistent/hub-scripts/hub.sh qa cold-sign         # passo 12 — Tails SEM rede
+~/Persistent/hub-scripts/hub.sh qa ritual-seed            # passo 9 — 2 cópias físicas
+~/Persistent/hub-scripts/hub.sh qa cold-sign              # passo 12 — Tails SEM rede
 
-# Exportar para equipe / outro PC:
-~/Persistent/hub-scripts/hub.sh qa export-logs --usb
+# QA — Opcional / equipe:
+~/Persistent/hub-scripts/hub.sh qa validate               # revalidar scripts a qualquer momento
+~/Persistent/hub-scripts/hub.sh qa export-logs --usb      # exportar logs para equipe / outro PC
 ```
 
 **Host Debian (passo 10):**
@@ -50,7 +50,7 @@ Ative gravação com **`--qa-log`** nos scripts (ou `hub.sh install --qa-log`).
 - As 25 palavras da seed  
 - Senhas (conta Haveno, GPG do backup)  
 - View key / spend key completas  
-- TX ID completo (no passo 12: só prefixo + `[BORRADO]`)
+- TX ID (passo 12: confirmação visual na tela — nunca registrado no log)
 
 Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 
