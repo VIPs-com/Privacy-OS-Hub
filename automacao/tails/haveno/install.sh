@@ -401,3 +401,30 @@ qa_log_finish 0
 # Chegou ate aqui = sucesso: o .deb ja foi movido para Install/. So agora limpamos
 # a pasta de download persistente (em falha, o script sai antes e ela fica para retomar).
 cd / ; rm -rf "$WORK" 2>/dev/null || true
+
+# Oferecer instalacao do Feather (Passo 5 — carteira Monero online/offline).
+# Totalmente opcional: Enter ou N pula; S instala agora sem precisar rodar
+# hub.sh feather separadamente depois.
+if [ -t 0 ] && [ -t 1 ]; then
+  echo
+  printf "Instalar o Feather agora tambem? (Passo 5 — carteira XMR) [s/N] "
+  read -r _feather_ans </dev/tty
+  case "${_feather_ans:-N}" in
+    s|S)
+      _hub_sh="${HUB_SCRIPTS_DIR}/hub.sh"
+      if [ -x "$_hub_sh" ]; then
+        g "Iniciando instalacao do Feather (hub.sh feather)..."
+        if [ "${HAVENO_QA_LOG:-0}" = "1" ]; then
+          exec "$_hub_sh" feather --qa-log
+        else
+          exec "$_hub_sh" feather
+        fi
+      else
+        y "hub.sh nao encontrado em ${HUB_SCRIPTS_DIR}/. Rode: hub.sh feather"
+      fi
+      ;;
+    *)
+      g "Feather pulado. Rode quando quiser: hub.sh feather (Passo 5 do curso)."
+      ;;
+  esac
+fi
