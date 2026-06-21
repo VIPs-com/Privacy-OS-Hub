@@ -5,7 +5,7 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `pgp`
 
-> **v1.0 canônica** · Nível B+ ✅ APROVADO (Tails 7.8.1 · RetoSwap 1.6.0-reto) · Auditoria Rodada 4 concluída · [CHANGELOG](docs/CHANGELOG.md)
+> **v1.0 canônica** · Nível B+ ✅ APROVADO (Tails 7.8.1 · RetoSwap 1.6.0-reto) · Atalhos GNOME · Backup 3-2-1-1-0 · [CHANGELOG](docs/CHANGELOG.md)
 
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e fontes oficiais.
 
@@ -74,7 +74,8 @@ Privacy-OS-Hub/
 │
 ├── automacao/                           ← scripts .sh para Tails e Whonix
 │   ├── tails/                           ·  hub.sh · haveno/ · feather/ · system/ · qa/ · lib/ · steps/
-│   │                                    ·  hub.sh qa: validate · confirm-seed/step9/step12 · export-logs · finalize
+│   │                                    ·  hub.sh qa: validate · confirm-seed · ritual-seed · cold-sign · export-logs · finalize
+│   │                                    ·  atalhos GNOME: haveno-boot.desktop · haveno-backup.desktop (instalados pelo sync)
 │   ├── whonix-host/                     ·  whonix-verify-image.sh
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
 │   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md · TRES-PASSOS-HAVENO-TAILS.md
@@ -92,22 +93,25 @@ Privacy-OS-Hub/
 Você só precisa de **um comando** para cada situação:
 
 ```bash
-# Sincronizar scripts do ZIP para ~/Persistent/hub-scripts/ (uma vez, e a cada update)
+# 1. Sincronizar scripts + instalar atalhos GNOME (uma vez, e a cada update do ZIP)
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
+# → instala "Haveno — Iniciar" e "Haveno — Backup" no menu GNOME
+# → salva em ~/Persistent/dotfiles/ (sobrevivem ao reboot se Dotfiles ativo)
 
 # 1ª vez — instalar até o verde (passo 2)
 ~/Persistent/hub-scripts/hub.sh install --qa-log
 
 # Cada sessão — abrir o Haveno (passo 7)
-~/Persistent/hub-scripts/hub.sh boot
+~/Persistent/hub-scripts/hub.sh boot            # ou clique "Haveno — Iniciar" no menu GNOME
 
-# Backup da carteira (passo 4 e após cada trade)
-~/Persistent/hub-scripts/hub.sh backup
+# Backup (passo 4 e após cada trade)
+~/Persistent/hub-scripts/hub.sh backup                  # rápido — só Haveno Data/
+~/Persistent/hub-scripts/hub.sh backup --full --usb     # snapshot completo → pendrive (3-2-1-1-0)
 
 # Validação e confirmações QA
-~/Persistent/hub-scripts/hub.sh qa finalize        # validate + seed (1ª instalação, automático)
-~/Persistent/hub-scripts/hub.sh qa ritual-seed   # passo 9 — 2 cópias físicas
-~/Persistent/hub-scripts/hub.sh qa cold-sign  # passo 12 — pós cold-signing
+~/Persistent/hub-scripts/hub.sh qa finalize       # validate + seed (1ª instalação, automático)
+~/Persistent/hub-scripts/hub.sh qa ritual-seed    # passo 9 — 2 cópias físicas da seed
+~/Persistent/hub-scripts/hub.sh qa cold-sign      # passo 12 — pós cold-signing
 
 # Exportar logs para suporte
 ~/Persistent/hub-scripts/hub.sh qa export-logs --usb
