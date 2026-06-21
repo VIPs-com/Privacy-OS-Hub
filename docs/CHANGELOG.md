@@ -4,6 +4,33 @@
 
 ---
 
+## 2026-06-21 — senha de admin pedida 1× por padrão (sem `--one-password` nas docs)
+
+> **Commit:** `39d8adb`
+
+### UX: `--one-password` agora é o padrão do `hub.sh`
+
+O Tails pede senha de admin a cada `sudo` por design. Antes, o aluno precisava digitar
+`--one-password` explicitamente para evitar múltiplos prompts. Agora o hub ativa
+esse comportamento **automaticamente** em todos os subcomandos (`install`, `boot`, `update`).
+
+| Antes | Depois |
+|-------|--------|
+| `hub.sh install --one-password --qa-log` | `hub.sh install --qa-log` |
+| `hub.sh boot --one-password` | `hub.sh boot` |
+
+**O que muda no código (`hub.sh`):**
+```bash
+export HAVENO_ONE_PASSWORD="${HAVENO_ONE_PASSWORD:-1}"  # padrão: ativo
+```
+
+O ajuste de sudoers é **temporário de sessão** — removido ao fim do script e no reboot (Tails amnésico). Para desativar: `HAVENO_ONE_PASSWORD=0 hub.sh install`.
+
+**Docs atualizadas** (9 arquivos): `README.md`, canônico, `TRES-PASSOS`, `MANUAL.md`,
+`QUICKSTART.md`, `MIGRATION.md`, `automacao/tails/README.md`, `lib/common.sh`, `hub.sh`.
+
+---
+
 ## 2026-06-21 — torsocks warm-up · Dotfiles fix · Feather prompt pós-install
 
 > **Commits:** `3163faf` (torsocks warm-up + Dotfiles + auto-sync subpastas) · `3c33e74` (Feather prompt)
