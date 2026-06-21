@@ -60,5 +60,9 @@ printf "Continuar? (s/N): "
 read -r ans
 case "${ans:-N}" in s|S|sim|SIM) ;; *) die "Cancelado."; esac
 
-[ -x "$BACKUP" ] && "$BACKUP" || die "haveno/backup.sh nao encontrado — rode hub.sh backup manualmente."
+if [ -d "${DATA_DIR:-}" ] && [ -n "$(ls -A "$DATA_DIR" 2>/dev/null)" ]; then
+  [ -x "$BACKUP" ] && "$BACKUP" || die "haveno/backup.sh nao encontrado — rode hub.sh backup manualmente."
+else
+  y "  Data/ vazia ou ausente (Haveno ainda nao instalado?) — pulando backup antes da troca de rede."
+fi
 exec "$UPDATE" --url "$URL" --pgp "$PGP"

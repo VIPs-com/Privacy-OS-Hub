@@ -310,9 +310,8 @@ haveno_purge_poisoned_partial_debs() {
       if [ "${s:-0}" -lt "${HAVENO_DEB_POISON_MAX_BYTES}" ]; then
         y "  Lixo de download removido (${s} bytes): ${f}"
         rm -f "$f" 2>/dev/null || true
-      elif [ "${expected:-0}" -gt 0 ] 2>/dev/null && [ "${s:-0}" -ge "${expected}" ]; then
-        : # completo
       fi
+      # arquivos entre POISON_MAX e expected: parciais grandes — deixar para retomada
     done < <(find "$dir" -maxdepth 1 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) ! -name '*.sig' -type f -print0 2>/dev/null)
     while IFS= read -r -d '' f; do
       s="$(stat -c%s "$f" 2>/dev/null || echo 0)"
@@ -499,7 +498,15 @@ haveno_check_install_script_hash() {
     printf "  Confirmar execucao SEM verificacao de hash? (sim/N): "
     read -r _ack
     case "${_ack:-N}" in
-      sim|SIM) y "  Prosseguindo sem verificacao de hash (risco confirmado)." ;;
+      sim|SIM)
+        y "  Prosseguindo sem verificacao de hash (risco confirmado)."
+        # Registrar desvio critico permanentemente — independente de --qa-log
+        _bypass_log="${PERSIST}/qa-logs/CRITICO-hash-bypass-$(date +%Y%m%d-%H%M%S).txt"
+        mkdir -p "${PERSIST}/qa-logs" 2>/dev/null || true
+        printf "CRITICO: INSTALL_SCRIPT_HASH vazio — usuario confirmou execucao sem verificacao de integridade\nData: %s\nSHA256 atual: %s\nAcao: preencha INSTALL_SCRIPT_HASH='%s' em lib/config.sh\n" \
+          "$(date -u)" "$actual" "$actual" > "$_bypass_log" 2>/dev/null || true
+        r "  Evento critico registrado: ${_bypass_log}"
+        ;;
       *) die "Abortado. Preencha INSTALL_SCRIPT_HASH='${actual}' em lib/config.sh e rode de novo." ;;
     esac
   fi
