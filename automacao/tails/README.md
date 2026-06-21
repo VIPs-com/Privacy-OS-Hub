@@ -194,7 +194,8 @@ hub.sh feather              # baixa (Tor) + verifica PGP + abre
 hub.sh feather --qa-log     # + log
 ```
 
-Atalho gerado em `~/Persistent/feather/feather.desktop`.
+Atalho gerado em `~/Persistent/feather/feather.desktop` e instalado no menu GNOME
+(+ Dotfiles se ativo).
 
 ### `hub.sh backup` / Feather backup
 

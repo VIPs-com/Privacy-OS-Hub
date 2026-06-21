@@ -179,9 +179,8 @@ chmod +x "$APPIMAGE"
 g "  chmod +x OK."
 
 FEATHER_DESKTOP="${FEATHER_DIR}/feather.desktop"
-if [ "$DO_LAUNCH" = "1" ]; then
-  b "[6/6] Abrindo Feather (como Haveno apos install)..."
-  cat > "$FEATHER_DESKTOP" <<EOF
+b "[6/6] Instalando atalho no menu GNOME..."
+cat > "$FEATHER_DESKTOP" <<EOF
 [Desktop Entry]
 Name=Feather Wallet
 Comment=Carteira Monero verificada (PGP fail-closed)
@@ -190,11 +189,22 @@ Terminal=false
 Type=Application
 Categories=Finance;
 EOF
-  g "  Atalho: ${FEATHER_DESKTOP}"
-  if [ -d "${HOME}/Desktop" ]; then
-    cp "$FEATHER_DESKTOP" "${HOME}/Desktop/Feather-Wallet.desktop"
-    g "  Atalho: ~/Desktop/Feather-Wallet.desktop"
-  fi
+_apps_cur="/home/amnesia/.local/share/applications"
+mkdir -p "$_apps_cur"
+cp "$FEATHER_DESKTOP" "${_apps_cur}/feather.desktop"
+_dotfiles_apps="${PERSIST}/dotfiles/.local/share/applications"
+if [ -d "${PERSIST}/dotfiles" ]; then
+  mkdir -p "$_dotfiles_apps"
+  cp "$FEATHER_DESKTOP" "${_dotfiles_apps}/feather.desktop"
+  g "  Feather Wallet → menu GNOME + Dotfiles (persiste nos reboots)"
+else
+  g "  Feather Wallet → menu GNOME (somente esta sessao)"
+  y "  Para persistir: ative 'Dotfiles' na Persistent Storage e rode hub.sh feather novamente."
+fi
+command -v update-desktop-database &>/dev/null && \
+  update-desktop-database "$_apps_cur" 2>/dev/null || true
+
+if [ "$DO_LAUNCH" = "1" ]; then
   if pgrep -f "feather-.*AppImage" >/dev/null 2>&1; then
     y "  Feather ja parece aberto — nao abro outra janela."
   else
@@ -206,7 +216,7 @@ EOF
   y "  Na janela do Feather: Create wallet -> seed em PAPEL -> Settings -> Always over Tor"
   y "  Volte a este terminal quando terminar a 1a configuracao."
 else
-  y "[6/6] Pulado (--no-launch). Abra manualmente: ${APPIMAGE}"
+  y "  --no-launch: atalho instalado. Abra manualmente: ${APPIMAGE}"
 fi
 
 echo
