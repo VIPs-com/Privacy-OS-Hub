@@ -347,7 +347,7 @@ haveno_deb_bytes_now() {
     while IFS= read -r -d '' f; do
       s=$(stat -c%s "$f" 2>/dev/null || echo 0)
       [ "$s" -gt "$size" ] && size=$s
-    done < <(find "$d" -maxdepth 2 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) -print0 2>/dev/null)
+    done < <(find "$d" -maxdepth 2 \( -name '*.deb' -o -name '*.deb.*' -o -name '*.part' \) ! -name '*.sig' -print0 2>/dev/null)
   done
   echo "$size"
 }
@@ -517,6 +517,15 @@ haveno_run_upstream_install_deb() {
         if haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"; then
           install_rc=0
         fi
+      fi
+    elif [ -d "$UTILS_DIR" ]; then
+      # Upstream falhou sem baixar o .deb (0 bytes / URL / rede) mas App/utils/ ja existe.
+      # curl do hub (curl -L -C -) e mais robusto que o wget do upstream para grandes arquivos via Tor.
+      local _tiny="./${deb_basename}"
+      [ -f "$_tiny" ] && rm -f "$_tiny" 2>/dev/null || true
+      y "  Upstream sem .deb em .download/ — retentando download direto via hub (curl)..."
+      if haveno_hub_download_and_promote_deb "$deb_url" "$pgp_fpr" "$expected"; then
+        return 0
       fi
     fi
   fi
