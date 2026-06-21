@@ -184,6 +184,8 @@ sudo systemctl restart monerod
 
 ### Alternativa — nó em Docker (opcional)
 
+> ⚠️ **Segurança:** a imagem `sethsimmons/simple-monerod` é comunitária e **não é verificada por PGP**. Para ambientes de produção ou onde a integridade do binário é crítica, prefira o script `01-setup-monero-node.sh` (baixa o monerod oficial e verifica GPG com fingerprint `81AC591F…2A0BDF92` antes de instalar). O Docker é adequado para laboratório e testes.
+
 Se você prefere containers em vez de systemd, é possível rodar o nó com **docker compose**. Crie `docker-compose.yml`:
 
 ```yaml
