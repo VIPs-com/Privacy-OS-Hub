@@ -19,7 +19,7 @@ Ative gravação com **`--qa-log`** nos scripts (ou `hub.sh install --qa-log`).
 
 ```bash
 # Exemplos (Tails com Tor):
-~/Persistent/hub-scripts/hub.sh install --qa-log          # 1ª vez (Enter nos prompts = bkp + qa finalize)
+~/Persistent/hub-scripts/hub.sh install --qa-log          # 1ª vez (Enter nos prompts = backup + qa finalize)
 ~/Persistent/hub-scripts/hub.sh boot --qa-log             # cada sessão
 ~/Persistent/hub-scripts/hub.sh backup --qa-log           # backup carteira
 ~/Persistent/hub-scripts/hub.sh feather --qa-log          # Feather (passo 5)
@@ -64,7 +64,8 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 | `02-haveno-auto-*` | `Dependencias do .deb OK` + `RESULTADO: PASS` | `install.sh falhou`, `Failed to download Haveno signature`, ou `RESULTADO: FAIL` |
 | `03-haveno-boot-*` / `07-haveno-boot-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal ou `RESULTADO: FAIL` |
 | `04-haveno-backup-*` | `Backup concluido:` + `RESULTADO: PASS` | `ERRO:` ou `RESULTADO: FAIL` |
-| `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` | qualquer `=NAO` |
+| `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` + `RESULTADO: PASS` | qualquer `=NAO` ou ausência de `RESULTADO: PASS` |
+| `qa-validate-*` | `QA Validate: PASS` + `RESULTADO: PASS` | `FAIL —` ou `RESULTADO: FAIL` |
 | `05-feather-*` | `Fingerprint OK: 8185E158` + `VALIDSIG 8185E158` | `Assinatura GPG FALHOU` |
 | `06-haveno-update-*` | `Novo .deb verificado e preparado` + `RESULTADO: PASS` | `Atualizacao falhou` ou `RESULTADO: FAIL` |
 | `07-post-session-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal |
@@ -85,7 +86,7 @@ exit_code: 0
 RESULTADO: PASS
 ```
 
-Depois rode `~/Persistent/hub-scripts/qa/confirm-seed.sh` e confira `04-seed-papel-*.txt`.
+Depois rode `~/Persistent/hub-scripts/hub.sh qa confirm-seed` e confira `04-seed-papel-*.txt`.
 
 ---
 

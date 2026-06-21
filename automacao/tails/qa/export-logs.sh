@@ -1,10 +1,10 @@
 #!/bin/bash
 ###############################################################################
-# qa-export-logs.sh — copia ~/Persistent/qa-logs/ para pendrive transitório
+# qa/export-logs.sh — copia ~/Persistent/qa-logs/ para pendrive transitório
 #
 # USO:
-#   ~/Persistent/qa-export-logs.sh --usb
-#   ~/Persistent/qa-export-logs.sh --dest /media/amnesia/MEU-PENDRIVE
+#   hub.sh qa export-logs --usb
+#   hub.sh qa export-logs --dest /media/amnesia/MEU-PENDRIVE
 ###############################################################################
 
 set -uo pipefail
@@ -38,7 +38,11 @@ if [ "$USE_USB" = "1" ] && [ -z "$DEST" ]; then
     y "Volumes:"
     i=1; for v in "${VOLS[@]}"; do echo "  [$i] $v"; i=$((i+1)); done
     printf "Numero: "; read -r n
-    DEST="${VOLS[$((n-1))]:-}/logs-tails"
+    case "$n" in
+      ''|*[!0-9]*) die "Número inválido: $n" ;;
+    esac
+    [ "$n" -ge 1 ] && [ "$n" -le "${#VOLS[@]}" ] || die "Número fora do range: $n"
+    DEST="${VOLS[$((n-1))]}/logs-tails"
   fi
 fi
 
@@ -50,4 +54,4 @@ cp -v "$SRC"/*.txt "$DEST/" 2>/dev/null || die "Nenhum .txt em $SRC"
 sync
 g "Exportado para: $DEST"
 g "Ejetar com seguranca antes de remover o pendrive."
-y "No Debian: copie os logs do Tails para Privacy-OS-Hub-equipe-dev/testes/evidencias/qa-logs/"
+y "Para enviar ao suporte: compacte a pasta logs-tails/ e envie pelo canal indicado."

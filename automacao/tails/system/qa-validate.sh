@@ -5,10 +5,10 @@
 # USO (via hub): hub.sh qa validate
 # USO (direto):  ./system/qa-validate.sh [--qa-log]
 #
-# Valida: sintaxe bash · PGP fail-closed · backup cifrado · YAML onion-grater
+# Valida (estática): sintaxe bash · grep PGP fail-closed · backup cifrado · YAML onion-grater
 # Saída: tela (tempo real) + ~/Persistent/qa-logs/ (com --qa-log ou HAVENO_QA_LOG=1)
 #
-# NAO substitui piloto CT-01..05 em Tails real.
+# IMPORTANTE: verificação estática por grep — não substitui piloto CT-01..05 em Tails real.
 ###############################################################################
 set -uo pipefail
 
@@ -39,8 +39,8 @@ while IFS= read -r -d '' script; do
   fi
 done < <(find "$TAILS_DIR" -name '*.sh' -type f -not -path '*/hub-aliases/*' -print0)
 
-# ---- [2/5] PGP fail-closed (VALIDSIG + [GNUPG:] + fingerprint) --------------
-b "[2/5] PGP fail-closed (VALIDSIG + [GNUPG:] + fingerprint)..."
+# ---- [2/5] PGP fail-closed (grep estático: VALIDSIG + [GNUPG:] + fingerprint) ------
+b "[2/5] PGP fail-closed (grep: VALIDSIG + fingerprint dinamico)..."
 for script in \
   "${TAILS_DIR}/lib/common.sh" \
   "${TAILS_DIR}/haveno/verify-deb.sh" \
@@ -52,8 +52,8 @@ for script in \
   if grep -qE 'GNUPG.*VALIDSIG \.\*\$\{' "$script"; then
     g "OK"
   else
-    y "WARN"
-    WARN=$((WARN + 1))
+    r "FAIL"
+    FAILED=$((FAILED + 1))
   fi
 done
 

@@ -45,7 +45,7 @@ Consulte também: `docs/TROUBLESHOOTING.md` — diagnóstico por mensagem de err
 
 ---
 
-## Para a equipe: atualizar para novo release
+## Para a equipe (mantenedores): atualizar para novo release
 
 Edite estas **3 linhas** em `lib/config.sh`:
 

@@ -492,7 +492,7 @@ chmod +x sync-hub-scripts.sh
 ~/Persistent/hub-scripts/hub.sh install --qa-log
 ```
 
-O script faz automaticamente:
+O script faz automaticamente (passos 1–7 sem interação):
 1. Valida ambiente (preflight)
 2. Aguarda Tor
 3. Baixa o `.deb` com PGP verificado
@@ -500,10 +500,15 @@ O script faz automaticamente:
 5. Instala o Haveno
 6. Configura onion-grater
 7. Abre o Haveno
-8. Pergunta se quer fazer backup — padrão **`S`** (Enter = sim, recomendado)
-9. Na 1ª vez: pergunta se quer **Finalizar QA** — padrão **`S`** (Enter = valida scripts + confirma seed em papel)
 
-🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` do script upstream fica parada — normal. O hub imprime **barra de progresso** (`[########----] NN%` a cada 10s na 1ª vez, ou barra **curl** se `App/utils/` já existir). **Não interrompa** com Ctrl+C no meio do download.
+Depois do Haveno abrir, dois prompts interativos (pressione Enter ou responda):
+
+8. **Backup:** "Rodar backup agora? (S/n)" — padrão **Enter = sim** (recomendado antes do 1º depósito)
+9. **Finalizar QA (1ª vez):** "Finalizar QA agora? (S/n)" — padrão **Enter = sim**
+   - Antes de pressionar Enter aqui: **sua seed deve estar anotada em papel**.
+   - O script vai pedir que você confirme cada uma das 3 perguntas sobre a seed (sem digitar as palavras).
+
+🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` do script upstream fica parada — normal. O hub imprime **barra de progresso** (`[########----] NN%` a cada 10s na 1ª vez, ou barra **curl** se `App/utils/` já existir). **Não interrompa** com Ctrl+C no meio do download. Os prompts **8 e 9** aparecem em seguida — fique por perto.
 
 📎 **Onde ficam os arquivos:** o `.deb` baixa em `~/Persistent/haveno/.download/` (retomável). Depois da verificação PGP, vai para `~/Persistent/haveno/Install/` — com symlink `haveno.deb` se preciso. A pasta `.download/` só é apagada no **sucesso**; em falha, fica para retomar.
 

@@ -93,8 +93,9 @@ usage() {
 
 # ---- QA Finalize (1ª instalação: validate + confirm-seed) -------------------
 _hub_qa_finalize() {
+  [ -t 0 ] || { y "Modo não interativo — qa finalize requer terminal. Rode: hub.sh qa finalize"; return 0; }
   local qa_logs="${PERSIST}/qa-logs"
-  if [ -z "$(ls "${qa_logs}/04-seed-papel-"*.txt 2>/dev/null)" ]; then
+  if ! grep -ql 'RESULTADO: PASS' "${qa_logs}/04-seed-papel-"*.txt 2>/dev/null; then
     b "=== QA Finalize — primeira instalação ==="
     b "[1/2] Validando integridade dos scripts..."
     bash "${HUB_DIR}/system/qa-validate.sh" --qa-log
@@ -150,7 +151,6 @@ case "$CMD" in
     AUTO_ARGS=("${QA_ARGS[@]}")
     for a in "${EXTRA_ARGS[@]:-}"; do
       [ "$a" = "--install-only" ] && AUTO_ARGS+=(--install-only)
-      [ "$a" = "--skip-backup" ]  && true
     done
     if haveno_needs_install_only && [[ ! " ${EXTRA_ARGS[*]:-} " =~ " --install-only " ]]; then
       y "  Detectado: .deb em Install/ mas Haveno não instalado — usando --install-only."
@@ -162,24 +162,32 @@ case "$CMD" in
     if [ "$SKIP_BACKUP" = "0" ] && haveno_pkg_installed_ok; then
       echo
       y "Recomendado: backup cifrado antes do 1º depósito."
-      printf "Rodar backup agora? (S/n): "
-      read -r ans
-      case "${ans:-S}" in n|N)
-        y "Pulando backup. Rode depois: hub.sh backup" ;;
-      *)
-        bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" ;;
-      esac
+      if [ -t 0 ]; then
+        printf "Rodar backup agora? (S/n): "
+        read -r ans
+        case "${ans:-S}" in n|N)
+          y "Pulando backup. Rode depois: hub.sh backup" ;;
+        *)
+          bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" ;;
+        esac
+      else
+        y "Modo não interativo — rode: hub.sh backup"
+      fi
     fi
-    # ---- QA Finalize: apenas na 1ª instalação --------------------------------
-    if [ -z "$(ls "${PERSIST}/qa-logs/04-seed-papel-"*.txt 2>/dev/null)" ]; then
+    # ---- QA Finalize: apenas quando seed não tem PASS confirmado ----------------
+    if ! grep -ql 'RESULTADO: PASS' "${PERSIST}/qa-logs/04-seed-papel-"*.txt 2>/dev/null; then
       echo
       y "Seed ainda não confirmada em papel — relatório QA incompleto."
-      printf "Finalizar QA agora (valida scripts + confirma seed)? (S/n): "
-      read -r _qa_ans
-      case "${_qa_ans:-S}" in
-        n|N) y "Rode depois: hub.sh qa finalize" ;;
-        *) _hub_qa_finalize ;;
-      esac
+      if [ -t 0 ]; then
+        printf "Finalizar QA agora (valida scripts + confirma seed)? (S/n): "
+        read -r _qa_ans
+        case "${_qa_ans:-S}" in
+          n|N) y "Rode depois: hub.sh qa finalize" ;;
+          *) _hub_qa_finalize ;;
+        esac
+      else
+        y "Modo não interativo — rode: hub.sh qa finalize"
+      fi
     fi
     echo
     g "install concluído. Próxima sessão: hub.sh boot"
@@ -212,6 +220,7 @@ case "$CMD" in
     QA_SUBCMD="${EXTRA_ARGS[0]:-}"
     case "$QA_SUBCMD" in
       validate)
+        # qa validate sempre grava log — é o artefato de evidência que justifica o subcomando
         export HAVENO_QA_LOG=1
         bash "${HUB_DIR}/system/qa-validate.sh" --qa-log
         ;;
