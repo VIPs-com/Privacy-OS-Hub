@@ -108,7 +108,7 @@ if [ "$INSTALL_ONLY" = "1" ]; then
   haveno_fix_onion_grater || true
   nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
   HAVENO_BG=$!
-  sleep 8
+  sleep 8  # atraso de UX antes do polling; o timeout real é em haveno_wait_onion_grater_filter()
   g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
   b "[8/9] Confirmando onion-grater..."
   sleep 4
@@ -344,7 +344,7 @@ b "  Preparando onion-grater + cookie do Tor (antes de abrir)..."
 haveno_fix_onion_grater || true
 nohup "${UTILS_DIR}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
 HAVENO_BG=$!
-sleep 8
+sleep 8  # atraso de UX antes do polling; o timeout real é em haveno_wait_onion_grater_filter()
 g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
 
 # ----------------------------- 8. Re-verificar o filtro ----------------------

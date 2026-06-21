@@ -923,7 +923,7 @@ haveno_session_boot() {
   b "Abrindo Haveno (exec.sh)..."
   chmod +x "${utils}/exec.sh" 2>/dev/null || true
   nohup "${utils}/exec.sh" >/tmp/haveno-exec.log 2>&1 &
-  sleep 8
+  sleep 8  # atraso de UX antes do polling; o timeout real é em haveno_wait_onion_grater_filter()
   g "  exec.sh iniciado (log: /tmp/haveno-exec.log)."
 }
 
