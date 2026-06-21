@@ -2,7 +2,7 @@
 Name=Haveno — Backup da carteira
 Comment=Backup cifrado da carteira Haveno (persistencia ou USB)
 Exec=bash -c "/home/amnesia/Persistent/hub-scripts/hub.sh backup; echo; read -n1 -r -p 'Pressione uma tecla para fechar...'"
-Icon=/home/amnesia/Persistent/haveno/App/utils/icon.png
+Icon=utilities-file-archiver
 Terminal=true
 Type=Application
 Categories=Utility;Other;

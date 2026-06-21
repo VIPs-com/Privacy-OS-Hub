@@ -185,6 +185,7 @@ cat > "$FEATHER_DESKTOP" <<EOF
 Name=Feather Wallet
 Comment=Carteira Monero verificada (PGP fail-closed)
 Exec=${APPIMAGE}
+Icon=dialog-password
 Terminal=false
 Type=Application
 Categories=Finance;
