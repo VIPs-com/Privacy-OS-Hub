@@ -10,7 +10,7 @@
 | hub.sh parou em... | Mensagem típica | Step a rodar | O que o FAIL indica |
 |---|---|---|---|
 | Baixando a assinatura | `Failed to download Haveno signature` | `steps/02-download-deb.sh` | URL do .sig desatualizada ou circuito Tor instável (ver erro 7) |
-| Baixando o .deb | `[download] NNB` ou `Failed to download resource` | `steps/02-download-deb.sh` | Rede Tor instável ou URL do release desatualizada |
+| Baixando o .deb | `[download] NNB` ou `Failed to download Haveno binary` | `steps/02-download-deb.sh` | Rede Tor instável ou URL do release (hub tenta curl automaticamente — ver erro 2) |
 | Verificando assinatura | `Assinatura invalida` ou `NO_PUBKEY` | `steps/05-verify-sig.sh` | .sig corrompida, chave não importada ou fingerprint errado |
 | Instalando dependências | `NAO EXISTE` em vermelho | `steps/06-check-deps.sh` | Libs Ubuntu-only ausentes no Tails/Debian (ver erro 1 abaixo) |
 | Instalando o .deb | `dpkg -i falhou` | `steps/07-install-deb.sh --force-depends` | Dependências ausentes no Tails |
@@ -62,42 +62,43 @@ Em seguida, reporte à equipe com o log de `/tmp/haveno-exec.log`.
 
 ---
 
-### Erro 2 — "Failed to download resource (exec.sh)"
+### Erro 2 — Upstream falha no download do .deb (`Failed to download Haveno binary`)
 
 **Sintoma:**
 ```
 [download] 119B — baixando (retomavel na persistencia)...
-Failed to download resource (exec.sh).
+[download] 119B — baixando (retomavel na persistencia)...
+Failed to download Haveno binary.
 ERRO: haveno-install.sh falhou (PGP/URL/rede).
 ```
 
-> **O que é "119B"?** É o tamanho do arquivo auxiliar `exec.sh` do instalador upstream — arquivo pequeno, tamanho normal. O problema **não** é o `.deb` (que tem ~266 MB), mas a tentativa de baixar esse script auxiliar via Tor.
+> **Por que "119B" no monitor?** O monitoramento via versões antigas incluía a assinatura `.sig` (119 B) na contagem do `.deb` — aparecia "119B" estático enquanto o `.deb` real não havia iniciado. Corrigido: versões recentes do hub mostram "conectando ao Tor" em vez de "119B" quando nenhum `.deb` foi baixado ainda.
 
-**Causa:** O `haveno-install.sh` do upstream tentou baixar um recurso auxiliar via Tor e falhou. Problema de rede ou URL do upstream — não é erro do hub.
+**Causa:** O `haveno-install.sh` do upstream usa `wget` para baixar o `.deb` (~266 MB) via Tor. Se o circuito Tor foi substituído ou o `wget` expirou, o upstream aborta com `Failed to download Haveno binary`. A fase de recursos (`exec.sh`, `haveno.desktop`) pode ter concluído com sucesso antes da falha.
 
-**Solução (se o .deb já está completo em `Install/`):**
+**Hub tenta automaticamente (versões recentes):**  
+Quando o upstream falha e `App/utils/` já existe, o hub faz retry com `curl -L -C -` (mais robusto para grandes downloads via Tor). Se o retry funcionar, o fluxo continua normalmente — **nenhuma ação manual necessária**.
+
+**Se o retry também falhar — solução manual:**
 ```bash
-hub.sh install --install-only
-```
-
-**Solução (se o .deb ainda não foi baixado):**
-```bash
+# Baixar o .deb diretamente (curl com retomada)
 cd ~/Persistent/hub-scripts/steps
-./02-download-deb.sh   # baixa direto na persistência, com retomada
+./02-download-deb.sh
 ```
-Depois que der PASS:
+Quando der PASS, se `App/utils/` já existe:
 ```bash
-./04-import-key.sh
-./05-verify-sig.sh
-./06-check-deps.sh
-./07-install-deb.sh    # ou --force-depends se o 06 indicar libs faltando
-./08-open-haveno.sh
+hub.sh install --install-only --qa-log
+```
+Se `App/utils/` não existe (falha na fase de recursos):
+```bash
+./05-verify-sig.sh && ./06-check-deps.sh && ./07-install-deb.sh && ./08-open-haveno.sh
 ```
 
-**Verificar se o .deb está completo:**
+**Verificar o que já foi baixado:**
 ```bash
-ls -lh ~/Persistent/haveno/Install/
-# Deve mostrar ~266 MB para o 1.6.0-reto
+ls -lh ~/Persistent/haveno/Install/    # .deb completo → ~266 MB
+ls -lh ~/Persistent/haveno/.download/  # parcial (retomável)
+ls -lh ~/Persistent/haveno/App/utils/  # existe = fase de recursos ok
 ```
 
 ---
@@ -193,6 +194,46 @@ hub.sh install --install-only
 
 ---
 
+### Erro 7 — "Failed to download Haveno signature" (`.sig` não baixou)
+
+**Sintoma:**
+```
+Tentativa 1/3 da .sig (aguarde Tor/GitHub)...
+Tentativa 2/3 da .sig (aguarde Tor/GitHub)...
+Tentativa 3/3 da .sig (aguarde Tor/GitHub)...
+ERRO: Assinatura .sig invalida (0 bytes) — provavel erro de rede/GitHub, nao PGP.
+```
+
+**Causa:** O hub tenta baixar a `.sig` (119 B) 3 vezes via Tor antes de abortar. Se as 3 tentativas falharem, o problema é de rede/Tor ou a URL do release está desatualizada em `lib/config.sh`.
+
+**Diagnóstico:**
+```bash
+# Verificar se a URL do .sig resolve (fora do Tails, na máquina de dev):
+source automacao/tails/lib/config.sh
+curl -sI "$HAVENO_SIG_URL" | grep -i content-length
+# Esperado: Content-Length: 119
+```
+
+**Solução — problema de rede (transiente):**
+```bash
+# Aguardar 2-3 min e tentar novamente:
+hub.sh install --qa-log
+```
+
+**Solução — URL desatualizada (release novo não atualizado em config.sh):**
+```bash
+# Verificar o nome exato do .deb no GitHub e atualizar config.sh (equipe)
+# Ver docs/RELEASE-UPDATE.md
+```
+
+**Fallback manual (se a URL está correta mas o Tor não coopera):**
+```bash
+cd ~/Persistent/hub-scripts/steps
+./02-download-deb.sh   # inclui download da .sig com retomada
+```
+
+---
+
 ## 3. Logs úteis para enviar ao suporte
 
 | Log | Localização | Como coletar |
@@ -225,4 +266,4 @@ hub.sh install --install-only
 
 ---
 
-*docs/TROUBLESHOOTING.md · Privacy-OS-Hub · atualizado 2026-06-19*
+*docs/TROUBLESHOOTING.md · Privacy-OS-Hub · atualizado 2026-06-20*
