@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-06-21 — torsocks warm-up · Dotfiles fix · Feather prompt pós-install
+
+> **Commits:** `3163faf` (torsocks warm-up + Dotfiles + auto-sync subpastas) · `3c33e74` (Feather prompt)
+
+### Fixes de campo — segunda sessão 21/06/2026
+
+| Fix | Detalhe |
+|-----|---------|
+| **torsocks DNS warm-up** (`install.sh` [4/9]) | `IsTor:true` passava mas `torsocks` falhava com `Status reply: 4` ao baixar `haveno.yml` upstream — forçava rodar install duas vezes. Fix: loop 6×15s aguarda `torsocks curl` responder antes do [6/9]. |
+| **Atalhos GNOME em Dotfiles** (`install.sh` [7/9]) | Se Dotfiles foi ativado *após* `sync-hub-scripts.sh`, `.desktop` ficava só na sessão e sumia no reboot. Fix: pós-`haveno_run_install` copia automaticamente `haveno-boot.desktop` + `haveno-backup.desktop` para `$DOTFILES_DIR/.local/share/applications/`. |
+| **Auto-sync subpastas** (`lib/common.sh`) | `hub_sync_scripts_to_persistent()` usava `cp *.sh` (sem subdiretórios) — aliases v2.0 `parte-1/` `parte-2/` `manutencao/` se perdiam; só copiava `haveno-backup.desktop`. Fix: `cp -rf hub-aliases/.` + loop `boot+backup.desktop`. |
+
+### Feather prompt ao final do install
+
+Ao final de `hub.sh install` (após Haveno verde + QA), novo prompt:
+
+```
+Instalar o Feather agora tambem? (Passo 5 — carteira XMR) [s/N]
+```
+
+- **Enter / N:** pula — rode `hub.sh feather` quando quiser (Passo 5 do curso)
+- **S:** chama `exec hub.sh feather` diretamente, herdando `--qa-log` se ativo
+
+---
+
 ## 2026-06-21 — `hub.sh qa` + `qa-validate.sh` + prompts S/n + B+ APROVADO
 
 > **Commits:** `7273437` (hub.sh qa + qa-validate.sh) · `7d39491` (prompts S/n) · `dcffaa1` (boot dedup + v1.0.2) · `ed9672f` (INSTALL_SCRIPT_HASH + B+)

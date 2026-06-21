@@ -494,19 +494,20 @@ chmod +x sync-hub-scripts.sh
 
 O script faz automaticamente (passos 1–7 sem interação):
 1. Valida ambiente (preflight)
-2. Aguarda Tor
+2. Aguarda Tor + confirma torsocks DNS (até 90s — garante download em uma única rodada)
 3. Baixa o `.deb` com PGP verificado
 4. Instala dependências apt
-5. Instala o Haveno
+5. Instala o Haveno + copia atalhos GNOME para Dotfiles (persistem entre boots)
 6. Configura onion-grater
 7. Abre o Haveno
 
-Depois do Haveno abrir, dois prompts interativos (pressione Enter ou responda):
+Depois do Haveno abrir, três prompts interativos (pressione Enter ou responda):
 
 8. **Backup:** "Rodar backup agora? (S/n)" — padrão **Enter = sim** (recomendado antes do 1º depósito)
 9. **Finalizar QA (1ª vez):** "Finalizar QA agora? (S/n)" — padrão **Enter = sim**
    - Antes de pressionar Enter aqui: **sua seed deve estar anotada em papel**.
    - O script vai pedir que você confirme cada uma das 3 perguntas sobre a seed (sem digitar as palavras).
+10. **Feather (opcional):** "Instalar o Feather agora tambem? [s/N]" — padrão **N** (pule se quiser fazer depois; rode `hub.sh feather` no Passo 5)
 
 🟡 **Durante o passo [6/9] (download):** pode levar 30–90 min pelo Tor. A linha `Downloading...` do script upstream fica parada — normal. O hub imprime **barra de progresso** (`[########----] NN%` a cada 10s na 1ª vez, ou barra **curl** se `App/utils/` já existir). **Não interrompa** com Ctrl+C no meio do download. Os prompts **8 e 9** aparecem em seguida — fique por perto.
 

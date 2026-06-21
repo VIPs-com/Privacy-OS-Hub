@@ -8,6 +8,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 # → instala "Haveno — Iniciar" e "Haveno — Backup" no menu GNOME
 
 # 1ª vez — instalar o Haveno (só precisa fazer uma vez)
+# Ao final: pergunta se quer instalar o Feather também (s/N) — pode pular e fazer depois
 ~/Persistent/hub-scripts/hub.sh install
 
 # Cada sessão — abrir o Haveno (ou clique "Haveno — Iniciar" no menu GNOME)
