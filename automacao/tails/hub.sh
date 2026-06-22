@@ -6,19 +6,24 @@
 #
 #   hub.sh install      1ª vez: preflight → download .deb → verifica PGP
 #                               → instala → abre Haveno
+#                               → ao final (interativo): backup (S/n), QA finalize (S/n),
+#                                 Feather [s/N] — Enter em cada um segue o padrão indicado
 #
 #   hub.sh boot         Cada sessão: instala deps → aplica filtro Tor
 #                               → abre Haveno  (SEM re-download)
 #
 #   hub.sh backup       Backup cifrado da carteira Haveno (Data/)
 #                               → rode ANTES do 1º depósito e após cada trade
-#                               → hub.sh backup --full  snapshot completo (3-2-1)
+#                               → --full --usb  snapshot completo (3-2-1-1-0)
+#                               → --restore ARQUIVO  restaura backup .tar.gz.gpg
+#                               → --usb · --dest /caminho  destino alternativo
 #
 #   hub.sh update       Novo release: backup automático → baixa novo .deb
 #                               → verifica PGP → reinstala → abre
 #
 #   hub.sh feather      Instala Feather Wallet (passo 5)
 #                               → baixa AppImage, verifica PGP, abre
+#                               → --no-launch  só re-verifica PGP (sem abrir janela)
 #
 #   hub.sh qa <cmd>     Confirmações humanas e relatórios QA:
 #
@@ -48,9 +53,16 @@
 #                       Exemplo: hub.sh install --install-only --qa-log
 #
 #   --skip-backup       (somente: install)
-#                       Pula o backup automático ao final da 1ª instalação
+#                       Pula o prompt de backup ao final da 1ª instalação
 #                       → USE raramente; por padrão o backup é recomendado
 #                       Exemplo: hub.sh install --skip-backup
+#
+#   --full · --usb · --restore · --dest  (somente: backup)
+#                       --full --usb  snapshot 3-2-1-1-0 em pendrive
+#                       --restore ARQUIVO  restaura Data/ ou snapshot completo
+#
+#   --no-launch         (somente: feather)
+#                       Re-verifica PGP sem abrir o Feather
 #
 # ── EXEMPLOS COMUNS ──────────────────────────────────────────────────────────
 #
@@ -58,9 +70,11 @@
 #   hub.sh install --install-only --qa-log    # retoma após download OK
 #   hub.sh boot --qa-log                      # sessão + log para diagnóstico
 #   hub.sh backup                             # backup rápido antes do trade
-#   hub.sh backup --full --usb               # snapshot completo → pendrive (3-2-1)
+#   hub.sh backup --full --usb               # snapshot completo → pendrive (3-2-1-1-0)
+#   hub.sh backup --restore ARQUIVO.gpg       # restaurar backup cifrado
 #   hub.sh update --qa-log                    # novo release + log
 #   hub.sh feather                            # instalar Feather (passo 5)
+#   hub.sh feather --no-launch                # re-verificar PGP sem abrir
 #   hub.sh qa finalize --qa-log               # pós 1ª instalação (validate + seed)
 #   hub.sh qa ritual-seed                     # passo 9 — ritual 2 cópias físicas
 #   hub.sh qa cold-sign                       # passo 12 — pós cold-signing
@@ -103,7 +117,15 @@ usage() {
   b ""
   b "Flags específicas de install:"
   b "  --install-only  pula download — usa .deb já em Install/"
-  b "  --skip-backup   pula backup automático ao final"
+  b "  --skip-backup   pula prompt de backup ao final"
+  b ""
+  b "Flags específicas de backup:"
+  b "  --full --usb    snapshot 3-2-1-1-0 em pendrive"
+  b "  --restore FILE  restaura backup .tar.gz.gpg"
+  b "  --usb --dest    destino alternativo"
+  b ""
+  b "Flags específicas de feather:"
+  b "  --no-launch     re-verifica PGP sem abrir janela"
   b ""
   b "Quando algo falhar: steps/run-all.sh (fallback atômico)"
   exit 1
