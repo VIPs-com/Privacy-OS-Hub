@@ -5,7 +5,7 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `pgp`
 
-> **v1.0 canônica** · Nível B+ ✅ APROVADO (Tails 7.8.1 · RetoSwap 1.6.0-reto) · Atalhos GNOME · Backup 3-2-1-1-0 · [CHANGELOG](docs/CHANGELOG.md)
+> **v1.0 canônica** · release [`v1.0.4`](https://github.com/VIPs-com/Privacy-OS-Hub/releases/tag/v1.0.4) · Nível B+ ✅ APROVADO (Tails 7.8.1 · RetoSwap 1.6.0-reto) · [CHANGELOG](docs/CHANGELOG.md)
 
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e fontes oficiais.
 
@@ -29,6 +29,8 @@ segurança operacional.
 
 Tudo em um único arquivo: passos 1–12 completos, comandos, checkpoints, apêndices e glossário.
 **Sem precisar navegar entre pastas.**
+
+**Atalho operacional (ZIP → 1ª vez → reiniciar):** [`automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md`](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md)
 
 ---
 
@@ -73,9 +75,10 @@ Privacy-OS-Hub/
 ├── README.md                            ← você está aqui
 │
 ├── automacao/                           ← scripts .sh para Tails e Whonix
-│   ├── tails/                           ·  hub.sh · haveno/ · feather/ · system/ · qa/ · lib/ · steps/
-│   │                                    ·  hub.sh qa: validate · confirm-seed · ritual-seed · cold-sign · export-logs · finalize
-│   │                                    ·  atalhos GNOME: haveno-boot.desktop · haveno-backup.desktop (instalados pelo sync)
+│   ├── tails/                           ·  hub.sh (único ponto de entrada)
+│   │                                    ·  haveno/ · feather/ · system/ · qa/ · lib/ · steps/
+│   │                                    ·  hub-aliases/ → aliases/ (parte-1/ · parte-2/ · manutencao/)
+│   │                                    ·  atalhos GNOME: haveno-boot.desktop · haveno-backup.desktop
 │   ├── whonix-host/                     ·  whonix-verify-image.sh
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
 │   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md · TRES-PASSOS-HAVENO-TAILS.md
@@ -90,26 +93,39 @@ Privacy-OS-Hub/
 
 ## Scripts — o essencial
 
-Você só precisa de **um comando** para cada situação:
+Você só precisa de **um comando** para cada situação. O `hub.sh` pede a **senha de admin apenas uma vez por sessão** (padrão ativo — não precisa de `--one-password`).
 
 ```bash
-# 1. Sincronizar scripts + instalar atalhos GNOME (uma vez, e a cada update do ZIP)
+# 0. Sincronizar scripts + atalhos GNOME (uma vez, e a cada update do ZIP)
 cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
+# → copia para ~/Persistent/hub-scripts/ (inclui aliases parte-1/ · parte-2/ · manutencao/)
 # → instala "Haveno — Iniciar" e "Haveno — Backup" no menu GNOME
-# → salva em ~/Persistent/dotfiles/ (sobrevivem ao reboot se Dotfiles ativo)
+# → se Dotfiles estiver ativo, os atalhos sobrevivem ao reboot
 
 # 1ª vez — instalar até o verde (passo 2)
 ~/Persistent/hub-scripts/hub.sh install --qa-log
+# → ao final: prompts opcionais de backup (S/n), QA finalize (S/n) e Feather (s/N)
+
+# Retomar após download OK ( .deb já em Install/ )
+~/Persistent/hub-scripts/hub.sh install --install-only --qa-log
 
 # Cada sessão — abrir o Haveno (passo 7)
 ~/Persistent/hub-scripts/hub.sh boot --qa-log     # ou clique "Haveno — Iniciar" no menu GNOME
+
+# Feather Wallet (passo 5 — ou aceite o prompt ao final do install)
+~/Persistent/hub-scripts/hub.sh feather --qa-log
+
+# Atualizar release (backup automático antes)
+~/Persistent/hub-scripts/hub.sh update --qa-log
 
 # Backup (passo 4 e após cada trade)
 ~/Persistent/hub-scripts/hub.sh backup                  # rápido — só Haveno Data/
 ~/Persistent/hub-scripts/hub.sh backup --full --usb     # snapshot completo → pendrive (3-2-1-1-0)
 
 # Validação e confirmações QA
-~/Persistent/hub-scripts/hub.sh qa finalize       # validate + seed (1ª instalação, automático)
+~/Persistent/hub-scripts/hub.sh qa validate       # checagem estática dos scripts
+~/Persistent/hub-scripts/hub.sh qa finalize       # validate + seed (1ª instalação)
+~/Persistent/hub-scripts/hub.sh qa confirm-seed   # passo 4 — seed anotada em papel
 ~/Persistent/hub-scripts/hub.sh qa ritual-seed    # passo 9 — 2 cópias físicas da seed
 ~/Persistent/hub-scripts/hub.sh qa cold-sign      # passo 12 — pós cold-signing
 
@@ -117,7 +133,18 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 ~/Persistent/hub-scripts/hub.sh qa export-logs --usb
 ```
 
-> **Guia completo de scripts:** [`docs/MANUAL.md`](docs/MANUAL.md)
+### Flags úteis
+
+| Flag | Quando usar |
+|------|-------------|
+| `--qa-log` | Sempre que algo der errado — gera `~/Persistent/qa-logs/*.txt` |
+| `--install-only` | `.deb` já verificado em `Install/` — pula download |
+| `--skip-backup` | Pula o prompt de backup ao final do `install` (raro) |
+| `HAVENO_ONE_PASSWORD=0` | Desativa senha admin 1× (avançado) |
+
+> **Algo falhou no install?** Fallback atômico: `~/Persistent/hub-scripts/steps/run-all.sh` (Haveno-only).
+>
+> **Guia completo de scripts:** [`docs/MANUAL.md`](docs/MANUAL.md) · [`automacao/tails/README.md`](automacao/tails/README.md)
 
 ---
 
@@ -126,6 +153,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 | Você quer… | Abra |
 |------------|------|
 | Começar do zero | [`🛡️ Privacy-OS-Hub - Versão 1.0.md`](🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) — Seção 0. ONBOARDING |
+| Três passos (ZIP → install → boot) | [`TRES-PASSOS-HAVENO-TAILS.md`](automacao/docs-aluno/TRES-PASSOS-HAVENO-TAILS.md) |
 | Ir direto a um passo | Mesmo arquivo — busque `PASSO N` |
 | Scripts (o que cada .sh faz) | [`docs/MANUAL.md`](docs/MANUAL.md#parte-ii--scripts-para-novato) ou Apêndice A no canônico |
 | Mapa compacto para experts | [`docs/MANUAL.md`](docs/MANUAL.md#parte-i--mapa-rápido) |
@@ -133,6 +161,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 | Home Lab (nó + mineração) | [`🏠 Home-Lab - Versão 1.0.md`](🏠%20Home-Lab%20-%20Versão%201.0.md) |
 | Fingerprints PGP | Apêndice C no canônico (ou tabela acima) |
 | Erros comuns | Apêndice B no canônico · [`automacao/tails/docs/TROUBLESHOOTING.md`](automacao/tails/docs/TROUBLESHOOTING.md) |
+| Histórico de releases | [`docs/CHANGELOG.md`](docs/CHANGELOG.md) |
 
 ---
 
