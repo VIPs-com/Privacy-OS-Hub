@@ -53,13 +53,60 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 
 **Você não precisa conhecer** Tails, Haveno, Feather, Whonix ou Monero antes de começar. Este curso assume zero experiência e ensina processo + ferramentas na ordem certa.
 
-**Você precisa de:**
-- Um PC para gravar o Tails (Windows, macOS ou Linux)
-- Um pendrive de **8 GB ou mais** (será completamente apagado)
-- Paciência com o Tor na primeira vez (download pode levar 30–90 min)
-- **Papel e caneta** para anotar a seed (nunca só no computador)
+**O Tails não funciona em celular, tablet ou Mac Apple Silicon (ARM).** Requer PC x86_64 (Intel/AMD 64-bit).
 
-**O Tails não funciona em celular ou tablet.**
+---
+
+### 💻 Requisitos de hardware
+
+> **Por que RAM importa tanto no Tails?** O Tails roda **100% na RAM** e não tem swap (arquivo de troca em disco seria rastro forense). Quando a RAM enche, o sistema trava. Planeie antes de comprar.
+
+#### RAM do computador
+
+| RAM | Situação | Recomendado para |
+|-----|----------|-----------------|
+| **4 GB** | ⚠️ Mínimo absoluto | Só Haveno, sem Tor Browser aberto simultaneamente |
+| **8 GB** | ✅ Recomendado | Haveno + Tor Browser + Feather ao mesmo tempo |
+| **16 GB+** | ⭐ Confortável | Tudo simultâneo + folga para apps extras (KeePassXC, etc.) |
+
+> Com 4 GB e Haveno rodando (~1,5 GB JVM), sobram ~2 GB para o sistema e o Tor Browser. É possível, mas apertado — evite abrir muitas abas.
+
+#### Pendrive Tails (principal)
+
+| Tamanho | Situação | O que cabe |
+|---------|----------|-----------|
+| **8 GB** | ⚠️ Mínimo | Tails + persistência básica (sem folga para backups locais) |
+| **16 GB** | ✅ Funcional | Tails + Haveno Data + my-locker + Backups/ locais |
+| **32–64 GB** | ⭐ Ideal | Tudo acima + espaço sobrando para crescer |
+
+> **Velocidade USB importa:** USB 3.0+ (azul por dentro) é o mínimo para velocidade razoável. USB 3.1/3.2 é ainda melhor. USB 2.0 funciona mas o Tails demora para iniciar e os backups ficam lentos. Dual Type-A + Type-C = máxima compatibilidade com qualquer máquina.
+
+#### Pendrives de backup A e B (offsite — 3-2-1)
+
+| Tamanho | Situação |
+|---------|----------|
+| **8 GB** | Mínimo — backup `--full` padrão cabe (Data + Feather + my-locker) |
+| **16 GB+** | Recomendado — folga para múltiplos snapshots sem apagar o anterior |
+
+> O script grava `tar | gpg` **direto no pendrive** sem passar pela RAM — backup de 300 MB não estresa a memória.
+
+#### Computador para gravar o Tails (PC host)
+
+- Qualquer SO: Windows, macOS, Linux
+- Não precisa ser poderoso — só serve para baixar e gravar o pendrive Tails (Passo 1)
+- Pode ser o mesmo PC que vai rodar o Tails depois
+
+#### CPU / arquitetura
+
+| Arquitetura | Suporte |
+|-------------|---------|
+| **x86_64** (Intel/AMD 64-bit) | ✅ Suportado |
+| ARM (Apple Silicon M1/M2/M3, tablets, Android) | ❌ Não suportado |
+| 32-bit (i386) | ❌ Não suportado desde Tails 3.x |
+
+> **Secure Boot:** Tails 6.x+ funciona na maioria dos casos. Se travar na tela de boot, desabilite Secure Boot no BIOS/UEFI.
+
+---
 
 ### 🛠️ Checklist de ferramentas necessárias
 
@@ -69,8 +116,10 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 | Haveno / RetoSwap | 1.6.0-reto | GitHub retoaccess1/haveno-reto | Sim |
 | Feather Wallet | atual | https://featherwallet.org/download | Sim (M2) |
 | Whonix LXQt | 18.1.4.2+ | https://www.whonix.org/wiki/Download | Sim (M2) |
-| Pendrive | 8 GB+ | — | Sim |
-| Papel e caneta | — | — | Sim |
+| **Pendrive Tails** | **16–64 GB USB 3.0+** | — | Sim |
+| **Pendrives backup A/B** | **8–16 GB cada** | — | Sim (3-2-1) |
+| **RAM do PC** | **8 GB recomendado** | — | Mínimo 4 GB |
+| Papel e caneta | — | — | Sim (seed) |
 | PC host (outro PC) | qualquer SO | — | Sim (para gravar Tails) |
 
 ### 🎯 Escolha seu caminho
