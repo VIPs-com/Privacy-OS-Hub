@@ -85,8 +85,8 @@ _install_desktop_file() {
   local apps_cur="/home/amnesia/.local/share/applications"
   mkdir -p "$apps_cur"
   cp "$src" "${apps_cur}/${fname}"
-  local dotfiles_apps="${PERSIST}/dotfiles/.local/share/applications"
-  if [ -d "${PERSIST}/dotfiles" ]; then
+  local dotfiles_apps="${DOTFILES_DIR}/.local/share/applications"
+  if [ -d "${DOTFILES_DIR}" ]; then
     mkdir -p "$dotfiles_apps"
     cp "$src" "${dotfiles_apps}/${fname}"
     g "  ✓ ${fname} → menu GNOME + Dotfiles (persiste nos reboots)"

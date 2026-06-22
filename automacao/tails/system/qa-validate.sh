@@ -66,7 +66,9 @@ for script in \
   [ -f "$script" ] || continue
   rel="${script#${TAILS_DIR}/}"
   printf "  %s... " "$rel"
-  if grep -q 'haveno_gpg_symmetric_encrypt' "$script"; then
+  # haveno/backup.sh usa gpg --cipher-algo AES256 inline (pipe tar|gpg direto).
+  # feather/backup.sh e lib/common.sh usam haveno_gpg_symmetric_encrypt.
+  if grep -qE 'haveno_gpg_symmetric_encrypt|--cipher-algo AES256' "$script"; then
     g "OK"
   else
     y "WARN"

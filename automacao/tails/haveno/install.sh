@@ -340,6 +340,9 @@ if [ -d "$DOTFILES_DIR" ]; then
   done
   command -v update-desktop-database &>/dev/null && \
     update-desktop-database "$_local_apps" 2>/dev/null || true
+  # O .deb ja instala haveno.desktop em /usr/share/applications/; telo tambem em
+  # Dotfiles gera icone duplicado no menu GNOME. Remover se presente de run anterior.
+  rm -f "${_dotfiles_apps}/haveno.desktop" 2>/dev/null || true
   g "  Atalhos GNOME em Dotfiles: 'Haveno — Iniciar' + 'Haveno — Backup da carteira' (persistem entre boots)."
 fi
 

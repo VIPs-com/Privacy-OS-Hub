@@ -193,8 +193,8 @@ EOF
 _apps_cur="/home/amnesia/.local/share/applications"
 mkdir -p "$_apps_cur"
 cp "$FEATHER_DESKTOP" "${_apps_cur}/feather.desktop"
-_dotfiles_apps="${PERSIST}/dotfiles/.local/share/applications"
-if [ -d "${PERSIST}/dotfiles" ]; then
+_dotfiles_apps="${DOTFILES_DIR}/.local/share/applications"
+if [ -d "${DOTFILES_DIR}" ]; then
   mkdir -p "$_dotfiles_apps"
   cp "$FEATHER_DESKTOP" "${_dotfiles_apps}/feather.desktop"
   g "  Feather Wallet → menu GNOME + Dotfiles (persiste nos reboots)"
