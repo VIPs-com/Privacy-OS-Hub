@@ -40,6 +40,8 @@ O --full NAO e clone da persistencia inteira. De proposito NAO entram:
 
 REGRAS:
   - NUNCA guarde a seed (25 palavras) em arquivo — somente papel/metal.
+    Guardar a wallet (.kdbx/.wallet) aqui NAO substitui anotar a seed em papel.
+    O arquivo e conveniencia; a seed em papel e a Copia 0 imutavel — deve existir SEMPRE.
   - Arquivos pessoais (KeePass, Electrum, comprovantes): SOMENTE em my-locker/.
     Outros lugares em ~/Persistent/ NAO entram no --full.
   - NAO copie arquivos de Backups/ para my-locker/ (duplicata inutil).

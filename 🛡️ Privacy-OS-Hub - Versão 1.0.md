@@ -59,7 +59,7 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 
 ### 💻 Requisitos de hardware
 
-> **Por que RAM importa tanto no Tails?** O Tails roda **100% na RAM** e não tem swap (arquivo de troca em disco seria rastro forense). Quando a RAM enche, o sistema trava. Planeie antes de comprar.
+> **Por que RAM importa tanto no Tails?** O Tails roda **100% na RAM** e não tem swap (arquivo de troca em disco seria rastro forense). Quando a RAM enche, o sistema trava. Planeje antes de comprar.
 
 #### RAM do computador
 
@@ -602,6 +602,7 @@ Depois do Haveno abrir, três prompts interativos (pressione Enter ou responda):
 **Prompt A — Backup:** "Rodar backup agora? (S/n)" — padrão **Enter = sim** (recomendado antes do 1º depósito)
 
 **Prompt B — Finalizar QA (1ª vez):** "Finalizar QA agora? (S/n)" — padrão **Enter = sim**
+   - Para anotar a seed: no Haveno aberto, vá em **Account → Wallet seed**, anote as 25 palavras em papel, feche a tela.
    - Antes de pressionar Enter aqui: **sua seed deve estar anotada em papel**.
    - O script vai pedir que você confirme cada uma das 3 perguntas sobre a seed (sem digitar as palavras).
 

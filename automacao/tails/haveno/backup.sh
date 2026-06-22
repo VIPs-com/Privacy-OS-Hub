@@ -139,7 +139,11 @@ if [ -n "$RESTORE_FILE" ]; then
     for _d in "${FULL_BACKUP_REL_DIRS[@]}"; do
       [ -d "${PERSIST}/${_d}" ] && mv "${PERSIST}/${_d}" "${PERSIST}/${_d}.bak-${STAMP_SAFE}"
     done
-    tar -xzf "$TARFILE" -C "$PERSIST" || { rm -rf "$TMP"; die "Falha ao extrair."; }
+    tar -xzf "$TARFILE" -C "$PERSIST" \
+      || { rm -rf "$TMP"
+           r "Seus dados estao intactos em *.bak-${STAMP_SAFE} — nenhum dado perdido."
+           r "Para reverter: mv <pasta>.bak-${STAMP_SAFE} <pasta>  (ex: mv haveno/Data.bak-... haveno/Data)"
+           die "Falha ao extrair."; }
     rm -rf "$TMP"
     g "Restauracao completa concluida em: ${PERSIST}/"
     y "Rode: hub.sh boot  (Haveno) · abra o Feather para confirmar carteiras."
@@ -235,15 +239,15 @@ if [ "$ENCRYPT" = "1" ]; then
   if [ "$FULL_BACKUP" = "1" ]; then
     tar -czf - -C "$PERSIST" "${_FULL_DIRS[@]}" | \
       gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 3 -o "$OUT" - 3<<<"$_bk_pass" \
-      || { unset _bk_pass; die "Falha ao compactar/cifrar."; }
+      || { unset _bk_pass; rm -f "$OUT"; die "Falha ao compactar/cifrar."; }
   else
     tar -czf - -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" | \
       gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 3 -o "$OUT" - 3<<<"$_bk_pass" \
-      || { unset _bk_pass; die "Falha ao compactar/cifrar."; }
+      || { unset _bk_pass; rm -f "$OUT"; die "Falha ao compactar/cifrar."; }
   fi
   b "[2/3] Verificando integridade do .gpg..."
   gpg --batch --passphrase-fd 3 -d "$OUT" 3<<<"$_bk_pass" | tar -tzf - >/dev/null 2>&1 \
-    || die "Arquivo gerado esta corrompido."
+    || { unset _bk_pass; die "Arquivo gerado esta corrompido."; }
   unset _bk_pass
 else
   r "AVISO: --no-encrypt grava a carteira SEM cifrar (NAO recomendado)."
