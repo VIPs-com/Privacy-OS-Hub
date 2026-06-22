@@ -52,6 +52,10 @@ if [ -n "$NEW_PGP" ]; then
   HAVENO_PGP_FPR="$NEW_PGP"
 fi
 
+if [ -n "$NEW_URL" ] || [ -n "$NEW_PGP" ]; then
+  haveno_guard_deb_url_pgp "$HAVENO_DEB_URL" "$HAVENO_PGP_FPR"
+fi
+
 BACKUP_SCRIPT="${HUB_SCRIPTS_DIR}/haveno/backup.sh"
 [ -x "$BACKUP_SCRIPT" ] || BACKUP_SCRIPT="${SCRIPT_DIR}/backup.sh"
 
@@ -129,6 +133,7 @@ cd "$WORK" || die "Nao entrei em ${WORK}."
 if ! curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null; then
   curl -x socks5h://127.0.0.1:9050 -fsSLO "$INSTALL_SCRIPT_URL" 2>/dev/null || { cd /; die "Nao baixei haveno-install.sh."; }
 fi
+haveno_check_install_script_hash "./haveno-install.sh"
 EXPECTED_DEB_BYTES="$(haveno_fetch_deb_expected_bytes "$HAVENO_DEB_URL")"
 haveno_purge_poisoned_partial_debs "${EXPECTED_DEB_BYTES:-0}" "${HAVENO_DIR}/.download" "${HAVENO_DIR}/Install" "."
 DEB_READY=0

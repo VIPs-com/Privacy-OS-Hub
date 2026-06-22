@@ -121,6 +121,9 @@ if [ -n "$RESTORE_FILE" ]; then
       && g "  sha256 OK." || { rm -rf "$TMP"; die "sha256 nao confere — backup corrompido ou substituido."; }
   else
     y "  Aviso: .sha256 ausente — integridade verificada apenas via tar."
+    printf "  Continuar restauracao sem verificacao sha256? (s/N): "
+    read -r _sha_ans
+    case "${_sha_ans:-N}" in s|S|sim|SIM) ;; *) rm -rf "$TMP"; die "Cancelado."; esac
   fi
   g "  Arquivo OK."
 
@@ -235,6 +238,12 @@ if [ "$ENCRYPT" = "1" ]; then
   OUT="${DEST}/${BASE}.tar.gz.gpg"
   haveno_gpg_symmetric_encrypt "$OUT" "$TARFILE" || { rm -rf "$TMP"; die "Falha ao cifrar."; }
 else
+  r "AVISO: --no-encrypt grava a carteira SEM cifrar (NAO recomendado)."
+  printf "Gravar sem cifrar? Digite sim para confirmar (N): "
+  read -r _noenc_ans
+  case "${_noenc_ans:-N}" in sim|SIM) ;;
+    *) rm -rf "$TMP"; die "Cancelado. Rode hub.sh backup sem --no-encrypt (recomendado)." ;;
+  esac
   y "[3/4] --no-encrypt: salvando SEM cifrar (NAO recomendado)."
   OUT="${DEST}/${BASE}.tar.gz"
   cp "$TARFILE" "$OUT" || { rm -rf "$TMP"; die "Falha ao copiar."; }

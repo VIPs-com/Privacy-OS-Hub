@@ -453,8 +453,8 @@ Detalhe: [automacao/whonix-host/README.md](../automacao/whonix-host/README.md)
 |--------|----------------|
 | Seed no papel / metal | Segurança física — humano anota |
 | Trades, disputas, fiat | Julgamento e risco financeiro |
-| Passo 9 (ritual 2× seed, Tor OK) | `qa/confirm-step9.sh` — cópias físicas em locais separados |
-| Passo 12 (cold-signing, **sem rede**) | Air-gap, USB entre máquinas, conferir destino antes de assinar · `qa/confirm-step12.sh` |
+| Passo 9 (ritual 2× seed, Tor OK) | `hub.sh qa ritual-seed` — cópias físicas em locais separados |
+| Passo 12 (cold-signing, **sem rede**) | Air-gap, USB entre máquinas, conferir destino antes de assinar · `hub.sh qa cold-sign` |
 | Upgrade do **Tails** (SO) | Oficial só via Tails Upgrader |
 | BIOS, Kleopatra (Windows), USB passthrough | GUI / hardware |
 
@@ -801,7 +801,7 @@ cd ~/Persistent/hub-scripts/steps
 | **Passo hub** | **4** (após anotar seed no papel) |
 | **O que faz** | Perguntas s/N → grava `04-seed-papel-*.txt` |
 | **O que NÃO faz** | Nunca pede nem grava as 25 palavras |
-| **Comando** | `~/Persistent/hub-scripts/qa/confirm-seed.sh` |
+| **Comando** | `~/Persistent/hub-scripts/hub.sh qa confirm-seed` |
 
 #### `qa/confirm-step9.sh`
 
@@ -810,7 +810,7 @@ cd ~/Persistent/hub-scripts/steps
 | **Passo hub** | **9** |
 | **Rede** | Tails **com Tor** OK |
 | **O que faz** | Confirma 2× cópias físicas em locais separados |
-| **Comando** | `~/Persistent/hub-scripts/qa/confirm-step9.sh` |
+| **Comando** | `~/Persistent/hub-scripts/hub.sh qa ritual-seed` |
 
 #### `qa/confirm-step12.sh`
 
@@ -819,7 +819,7 @@ cd ~/Persistent/hub-scripts/steps
 | **Passo hub** | **12** (trilha **A ou B**) |
 | **Rede** | Tails **sem** Wi‑Fi/cabo |
 | **O que faz** | Confirma cold-signing; TX ID só prefixo + `[BORRADO]` |
-| **Comando** | `~/Persistent/hub-scripts/qa/confirm-step12.sh` |
+| **Comando** | `~/Persistent/hub-scripts/hub.sh qa cold-sign` |
 
 #### `qa/export-logs.sh`
 
@@ -912,8 +912,8 @@ Depois de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scrip
 - [ ] Indicador **verde** (ou amarelo temporário entendido)
 - [ ] `hub.sh backup` executado pelo menos uma vez
 - [ ] **Seed** anotada no papel (Account → Wallet seed) — **fora** do backup automático
-- [ ] `qa/confirm-seed.sh` → log com 3 confirmações `=SIM`
-- [ ] (M2) `qa/confirm-step9.sh` antes de mover valor relevante
+- [ ] `hub.sh qa confirm-seed` → log com 3 confirmações `=SIM`
+- [ ] (M2) `hub.sh qa ritual-seed` antes de mover valor relevante
 - [ ] Se for tradear: leu **Passo 3** e canais oficiais da rede no [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md)
 
 ---

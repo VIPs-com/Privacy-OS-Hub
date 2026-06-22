@@ -1,6 +1,6 @@
 # Três passos — Haveno no Tails (ZIP do GitHub)
 
-> **Atualizado:** 2026-06-19 · `.sig` via Tor (3 tentativas) · fluxo `.download/` → `Install/` · rode `sync-hub-scripts.sh` após baixar ZIP novo.
+> **Atualizado:** 2026-06-21 · prompts pós-install · `.sig` via Tor (3 tentativas) · fluxo `.download/` → `Install/`
 >
 > **Scripts do pendrive/Windows:** copiar os `.sh` para o Tails está **correto** (`sync-hub-scripts.sh` faz o mesmo). O **`.deb` e a `.sig` do Haveno** são baixados **no Tails via Tor** quando você roda o setup — não vêm do pendrive.
 >
@@ -49,7 +49,15 @@ Tabela completa: `~/Persistent/hub-scripts/aliases/README.md` (no Tails) ou [hub
 ~/Persistent/hub-scripts/hub.sh install --qa-log
 ```
 
-**O que faz:** valida ambiente → instala Haveno (download + PGP se preciso) → abre a janela → corrige rede → pergunta backup.
+**O que faz:** valida ambiente → instala Haveno (download + PGP se preciso) → abre a janela → corrige rede → **prompts interativos ao final**.
+
+| Prompt ao final do `install` | Padrão (Enter) | O que faz |
+|------------------------------|----------------|-----------|
+| `Rodar backup agora? (S/n)` | **S** — sim | `hub.sh backup` |
+| `Finalizar QA agora? (S/n)` | **S** — sim | `hub.sh qa finalize` (validate + seed) |
+| `Instalar o Feather agora? [s/N]` | **N** — não | `hub.sh feather` (Passo 5 depois) |
+
+> Não cancele por surpresa — os três prompts são opcionais; Enter segue o padrão indicado.
 
 | Flag | Obrigatória? | Função |
 |------|:------------:|--------|

@@ -33,4 +33,7 @@ y "CONFIRA COM SEUS OLHOS (deve ser idêntico ao README do curso):"
 gpg --fingerprint "$HAVENO_PGP_FPR" | sed 's/^/  /'
 echo
 y "Esperado: DAA2 4D87 8B8D 36C9 0120  A897 CA02 DAC1 2DAE 2D0F"
+printf "O fingerprint acima confere com o README do curso? (s/N): "
+read -r _fpr_ok
+case "${_fpr_ok:-N}" in s|S|sim|SIM) ;; *) fail "Abortado — confira o fingerprint na fonte oficial antes de continuar."; esac
 pass "Chave da Reto no chaveiro com o fingerprint do curso. Próximo: ./05-verify-sig.sh"

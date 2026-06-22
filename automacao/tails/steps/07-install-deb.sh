@@ -24,7 +24,7 @@ FORCE=0
 DEB="${INSTALL_DIR}/${DEB_NAME}"
 [ -f "$DEB" ] || fail "Sem .deb em ${INSTALL_DIR}/ — rode 02 (ou 03) antes."
 SIG="${DEB}.sig"
-[ -f "$SIG" ] || y "AVISO: sem .sig do lado do .deb — você rodou ./05-verify-sig.sh?"
+[ -f "$SIG" ] || fail "Sem .sig em ${INSTALL_DIR}/ — rode ./05-verify-sig.sh ANTES de instalar."
 
 ST="$(dpkg-query -W -f='${Status}' haveno 2>/dev/null || true)"
 case "$ST" in
