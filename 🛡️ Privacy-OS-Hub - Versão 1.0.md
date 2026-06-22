@@ -520,10 +520,13 @@ O `sync-hub-scripts.sh` e o `hub.sh install` criam:
 ~/Persistent/my-locker/
 ├── keepass/        ← banco KeePass (.kdbx)
 ├── comprovantes/   ← PDFs de trade / disputa
+├── electrum/       ← wallets Electrum (se usar)
 └── LEIA-ME.txt     ← regras (leia uma vez)
 ```
 
-🔴 **Arquivos pessoais fora de `my-locker/`** (na raiz de `~/Persistent/`) **não entram** no `hub.sh backup --full`. Se o USB Tails falhar, **perda total** do que ficou fora. Use **só** `my-locker/` para KeePass e comprovantes.
+🔴 **Arquivos pessoais fora de `my-locker/`** (na raiz de `~/Persistent/`) **não entram** no `hub.sh backup --full`. Se o USB Tails falhar, **perda total** do que ficou fora. Use **só** `my-locker/` para KeePass, Electrum e comprovantes.
+
+🟡 **Já tem arquivos em `~/Persistent/`?** Mova-os para cá antes do próximo `--full`: `mv ~/Persistent/minha-carteira.kdbx ~/Persistent/my-locker/keepass/`
 
 ✅ **`hub.sh backup --restore`** de um snapshot `--full` traz de volta `my-locker/` (e Haveno Data, Feather, dotfiles) como estavam na hora do backup.
 
@@ -722,16 +725,20 @@ Criada pelo **`sync-hub-scripts.sh`** e pelo **`hub.sh install`** — **não** p
 ~/Persistent/my-locker/
 ├── keepass/        ← KeePass (.kdbx)
 ├── comprovantes/   ← PDFs de trade / disputa
+├── electrum/       ← wallets Electrum (se usar — copie o .wallet para cá)
 └── LEIA-ME.txt     ← regras (leia uma vez)
 ```
 
 🔴 **Só guarde arquivos pessoais aqui.** Coisas na raiz de `~/Persistent/` **fora** de `my-locker/` **não entram** no `--full` → perda total se o USB falhar.
 
+🟡 **Já tem arquivos em `~/Persistent/` antes de instalar o hub?** Mova-os para cá: `mv ~/Persistent/minha-carteira.kdbx ~/Persistent/my-locker/keepass/`
+
 | Pode colocar | Não colocar |
 |--------------|-------------|
 | Banco KeePass (`.kdbx`) | Seed (só papel/metal) |
-| PDFs de comprovante de pagamento | Vídeos, ISOs, arquivos enormes |
-| Notas de texto pequenas | Cópia duplicada de `Backups/` |
+| Wallets Electrum (`.wallet`) | Vídeos, ISOs, arquivos enormes |
+| PDFs de comprovante de pagamento | Cópia duplicada de `Backups/` |
+| Notas de texto pequenas | `~/.electrum/` na raiz — não persiste no Tails |
 
 🟡 **Tamanho:** mantenha `my-locker/` **enxuto (&lt; ~500 MB no total)**. Pendrive **64 GB** aumenta espaço em disco, mas **não** a RAM da sessão. O script grava **direto no pendrive/USB** (`tar | gpg`), sem passar por `/tmp` — ainda assim, evite gigabytes desnecessários.
 

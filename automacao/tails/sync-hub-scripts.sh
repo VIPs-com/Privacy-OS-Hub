@@ -28,8 +28,10 @@ mkdir -p "$DEST" || die "Não criei ${DEST}."
 # shellcheck source=lib/common.sh
 source "${SCRIPT_DIR}/lib/common.sh"
 b "Preparando cofre pessoal my-locker/..."
-haveno_ensure_my_locker && g "  my-locker/ OK (keepass + comprovantes + LEIA-ME.txt)" \
+haveno_ensure_my_locker && g "  my-locker/ OK (keepass + comprovantes + electrum + LEIA-ME.txt)" \
   || y "  Aviso: nao criei my-locker/ — verifique permissoes em ${PERSIST}/"
+y "  Lembre: arquivos pessoais fora de my-locker/ NAO entram no backup --full."
+y "  Se ja tem arquivos em ${PERSIST}/, mova-os: mv <arquivo> ${PERSIST}/my-locker/<subpasta>/"
 
 # ---- Scripts raiz (hub.sh, sync-hub-scripts.sh) + atalhos .desktop ---------
 b "Copiando scripts raiz de ${SCRIPT_DIR}/ -> ${DEST}/"

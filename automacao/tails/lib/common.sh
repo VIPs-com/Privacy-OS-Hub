@@ -26,6 +26,7 @@ my-locker/ — cofre pessoal na persistencia do Tails
 O que vai AQUI (e so aqui, para arquivos seus):
   keepass/       banco KeePass (.kdbx)
   comprovantes/  PDFs de pagamento, notas de trade (disputas)
+  electrum/      wallets Electrum (se usar — copie o .wallet para ca)
 
 O hub.sh backup --full inclui esta pasta no snapshot (junto com Haveno Data,
 Feather wallets e dotfiles). Restaurar: hub.sh backup --restore ARQUIVO.gpg
@@ -39,11 +40,16 @@ O --full NAO e clone da persistencia inteira. De proposito NAO entram:
 
 REGRAS:
   - NUNCA guarde a seed (25 palavras) em arquivo — somente papel/metal.
-  - Arquivos pessoais (KeePass, comprovantes): SOMENTE em my-locker/.
+  - Arquivos pessoais (KeePass, Electrum, comprovantes): SOMENTE em my-locker/.
     Outros lugares em ~/Persistent/ NAO entram no --full.
   - NAO copie arquivos de Backups/ para my-locker/ (duplicata inutil).
   - Mantenha enxuto: alvo < ~500 MB (KeePass + comprovantes, sem videos/ISOs).
   - Backup rapido (hub.sh backup, sem --full): so Haveno Data/ — antes de cada trade.
+
+SE JA TEM ARQUIVOS EM ~/Persistent/ FORA DESTA PASTA:
+  Mova-os para ca antes do proximo hub.sh backup --full.
+  Exemplo: mv ~/Persistent/minha-carteira.kdbx ~/Persistent/my-locker/keepass/
+  Arquivos na raiz de ~/Persistent/ NAO entram no snapshot — perda total se o USB falhar.
 
 Criada automaticamente por sync-hub-scripts.sh e hub.sh install.
 EOF
@@ -52,7 +58,9 @@ EOF
 # Atualiza LEIA-ME sempre (conteudo gerado pelo hub — nao e dado do aluno).
 haveno_ensure_my_locker() {
   [ -d "$PERSIST" ] || return 1
-  mkdir -p "${PERSIST}/my-locker/keepass" "${PERSIST}/my-locker/comprovantes" \
+  mkdir -p "${PERSIST}/my-locker/keepass" \
+           "${PERSIST}/my-locker/comprovantes" \
+           "${PERSIST}/my-locker/electrum" \
     || return 1
   haveno_write_my_locker_readme || return 1
   return 0
