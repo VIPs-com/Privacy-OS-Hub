@@ -209,6 +209,14 @@ Atalho gerado em `~/Persistent/feather/feather.desktop` e instalado no menu GNOM
 
 🔴 Arquivos **fora** de `my-locker/` na persistência **não entram** no `--full`. Restaurar `--full` traz `my-locker/` de volta.
 
+**Excluído do `--full` de propósito:**
+
+| Pasta | Por quê | O que fazer |
+|-------|---------|-------------|
+| `Backups/` | Evita `.gpg` dentro de `.gpg` e conflito na restore | Copiar para pendrive B **manual** ou usar `--usb` |
+| `qa-logs/` | Só diagnóstico | `hub.sh qa export-logs --usb` |
+| `hub-scripts/` | Recriável | `sync-hub-scripts.sh` após restore |
+
 | Pode | Não pode |
 |------|----------|
 | KeePass (`.kdbx`) | Seed (só papel/metal) |

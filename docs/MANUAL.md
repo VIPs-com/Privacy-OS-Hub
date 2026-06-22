@@ -263,6 +263,14 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 
 **`my-locker/`:** criada automaticamente (`sync` + `install`) — `keepass/`, `comprovantes/`, `LEIA-ME.txt`. Arquivos pessoais **só aqui**; fora = fora do `--full`. Alvo **&lt; ~500 MB**.
 
+**Excluído do `--full` de propósito** (não duplicar / não conflitar na restore):
+
+| Pasta | Motivo | Alternativa |
+|-------|--------|-------------|
+| `Backups/` | `.gpg` já gerados — backup-dentro-de-backup | Copiar `.gpg` para pendrive B **manual** ou `--usb` ao gerar |
+| `qa-logs/` | Logs de suporte | `hub.sh qa export-logs --usb` |
+| `hub-scripts/` | Recriável do repo | `sync-hub-scripts.sh` após restore |
+
 | Ação | Perigoso? |
 |------|-----------|
 | `hub.sh backup` | **Não** — cria `haveno-data-TIMESTAMP.tar.gz.gpg` (novo arquivo) |
@@ -655,6 +663,7 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **`--full`** | `Data/` + `feather/wallets/` + `dotfiles/` + **`my-locker/`** (se existir) |
 | **`my-locker/`** | `~/Persistent/my-locker/` — **auto** no sync/install | KeePass, comprovantes; **nunca seed**; só entra no `--full` se estiver aqui |
 | **Gravação** | Cifrado: `tar -czf - \| gpg` **direto no destino** (`--usb`/`--dest`) — sem `/tmp`/RAM |
+| **Excluído `--full`** | `Backups/`, `qa-logs/`, `hub-scripts/` — de propósito; `Backups/` → cópia manual pendrive B |
 | **O que faz** | Compacta → cifra GPG → salva em `Backups/` ou USB · gera `.sha256` · `chmod 444` |
 | **O que NÃO faz** | **Seed não entra** — anote no app (Account → Wallet seed) |
 | **Rodar 2×** | **Sim** — cada execução cria arquivo **novo** com data/hora |

@@ -4,6 +4,16 @@
 
 ---
 
+## 2026-06-22 — doc: pastas excluídas do backup --full
+
+| Item | Detalhe |
+|------|---------|
+| **Excluídas** | `Backups/`, `qa-logs/`, `hub-scripts/` — de propósito (sem backup-dentro-de-backup) |
+| **LEIA-ME.txt** | Atualizado em todo `sync`/`install` |
+| **Docs** | Canônico 4.A.2, MANUAL, tails/README, hub.sh, mensagem pós `--full` |
+
+---
+
 ## 2026-06-22 — my-locker automático (sync + install)
 
 | Mudança | Arquivo | Detalhe |

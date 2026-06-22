@@ -26,9 +26,11 @@
 #   | Feather só    | feather/backup.sh          | Opcional — ou deixe o --full incluir |
 #
 #   my-locker/  →  criada automaticamente (sync + install) — LEIA-ME.txt na pasta
-#                  KeePass .kdbx, PDFs de trade. NUNCA seed. Alvo < ~500 MB.
-#                  USB 64 GB guarda disco; sessão Tails tem RAM limitada.
-#                  Gravação: tar|gpg direto no destino — não usa /tmp/RAM.
+#
+#   --full NAO inclui (de proposito — evita duplicata e conflito na restore):
+#     Backups/     .gpg ja gerados — copie para pendrive B MANUAL ou use --usb
+#     qa-logs/     hub.sh qa export-logs --usb
+#     hub-scripts/ sync-hub-scripts.sh apos restore
 #
 #   hub.sh update       Novo release: backup automático → baixa novo .deb
 #                               → verifica PGP → reinstala → abre
@@ -137,6 +139,7 @@ usage() {
   b "  --restore FILE  restaura backup .tar.gz.gpg"
   b "  --usb --dest    destino no disco (tar|gpg direto, sem /tmp/RAM)"
   b "  my-locker/      ~/Persistent/my-locker/ — KeePass, comprovantes (< ~500 MB)"
+  b "  (excluidos)     Backups/ qa-logs/ hub-scripts/ — ver LEIA-ME.txt"
   b ""
   b "Flags específicas de feather:"
   b "  --no-launch     re-verifica PGP sem abrir janela"

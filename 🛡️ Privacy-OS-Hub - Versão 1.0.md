@@ -742,6 +742,20 @@ Criada pelo **`sync-hub-scripts.sh`** e pelo **`hub.sh install`** — **não** p
 | `my-locker/` | **&lt; ~500 MB** (KeePass + comprovantes) |
 | `hub.sh backup` rápido (só Data/) | tipicamente dezenas–200 MB |
 
+#### 4.A.2 — O que o `--full` **não** inclui (de propósito)
+
+O `--full` **não** clona `~/Persistent/` inteira. Estas pastas ficam **fora** para não duplicar lixo nem atrapalhar a restauração:
+
+| Pasta | Por quê não entra | O que fazer |
+|-------|-------------------|-------------|
+| **`Backups/`** | Seria backup **dentro** de backup (`.gpg` dentro de `.gpg`) — inchaca o arquivo e na **restore** mistura versões antigas | Copie os `.gpg` para o **pendrive B manualmente**, ou gere já no USB com `--usb` / `--full --usb` |
+| **`qa-logs/`** | Logs de suporte — não é carteira nem cofre | `hub.sh qa export-logs --usb` |
+| **`hub-scripts/`** | Scripts **recriáveis** do ZIP do GitHub | Após restore: `sync-hub-scripts.sh` |
+
+🟡 **`~/Persistent/Backups/`** guarda cópias locais no USB Tails (útil), mas o **offsite** (pendrive B fora de casa) é **manual** ou via `--usb` na hora de gerar — o `--full` **não** embute a pasta `Backups/`.
+
+🔴 **Não coloque** arquivos de `Backups/` dentro de `my-locker/` — é duplicata inútil.
+
 #### 4.B — Estratégia 3-2-1-1-0 adaptada ao Tails
 
 Evolução do 3-2-1 clássico — adiciona **imutabilidade** e **verificação obrigatória**:

@@ -30,25 +30,31 @@ O que vai AQUI (e so aqui, para arquivos seus):
 O hub.sh backup --full inclui esta pasta no snapshot (junto com Haveno Data,
 Feather wallets e dotfiles). Restaurar: hub.sh backup --restore ARQUIVO.gpg
 
+O --full NAO e clone da persistencia inteira. De proposito NAO entram:
+  Backups/      arquivos .gpg ja gerados — evita backup-dentro-de-backup
+                e conflito na restauracao. Copie para pendrive B MANUALMENTE
+                ou gere com hub.sh backup --usb / --full --usb direto no USB.
+  qa-logs/      logs de suporte — exporte com: hub.sh qa export-logs --usb
+  hub-scripts/  scripts recriaveis — apos restore rode sync-hub-scripts.sh
+
 REGRAS:
   - NUNCA guarde a seed (25 palavras) em arquivo — somente papel/metal.
-  - Arquivos FORA de my-locker/ na raiz de ~/Persistent/ NAO entram no --full.
-    Se o USB Tails falhar, voce perde o que ficou fora desta pasta.
+  - Arquivos pessoais (KeePass, comprovantes): SOMENTE em my-locker/.
+    Outros lugares em ~/Persistent/ NAO entram no --full.
+  - NAO copie arquivos de Backups/ para my-locker/ (duplicata inutil).
   - Mantenha enxuto: alvo < ~500 MB (KeePass + comprovantes, sem videos/ISOs).
-  - Backup rapido (hub.sh backup, sem --full): so Haveno Data/ — use antes de cada trade.
+  - Backup rapido (hub.sh backup, sem --full): so Haveno Data/ — antes de cada trade.
 
 Criada automaticamente por sync-hub-scripts.sh e hub.sh install.
 EOF
 }
 
-# Cria ~/Persistent/my-locker/{keepass,comprovantes} + LEIA-ME.txt (idempotente).
+# Atualiza LEIA-ME sempre (conteudo gerado pelo hub — nao e dado do aluno).
 haveno_ensure_my_locker() {
   [ -d "$PERSIST" ] || return 1
   mkdir -p "${PERSIST}/my-locker/keepass" "${PERSIST}/my-locker/comprovantes" \
     || return 1
-  if [ ! -f "${PERSIST}/my-locker/LEIA-ME.txt" ]; then
-    haveno_write_my_locker_readme || return 1
-  fi
+  haveno_write_my_locker_readme || return 1
   return 0
 }
 
