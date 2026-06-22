@@ -735,10 +735,18 @@ Criada pelo **`sync-hub-scripts.sh`** e pelo **`hub.sh install`** — **não** p
 
 | Pode colocar | Não colocar |
 |--------------|-------------|
-| Banco KeePass (`.kdbx`) | Seed (só papel/metal) |
+| Banco KeePass (`.kdbx`) | **Seed** — só papel/metal, nunca arquivo |
 | Wallets Electrum (`.wallet`) | Vídeos, ISOs, arquivos enormes |
 | PDFs de comprovante de pagamento | Cópia duplicada de `Backups/` |
 | Notas de texto pequenas | `~/.electrum/` na raiz — não persiste no Tails |
+| Dados de outros apps (Bisq, Thunderbird…) | Seeds de qualquer carteira em arquivo |
+
+> **Outras ferramentas no Tails (Bisq, Thunderbird, etc.):** crie subpastas aqui dentro conforme precisar — tudo será incluído no `--full` automaticamente:
+> ```bash
+> mkdir ~/Persistent/my-locker/bisq
+> mkdir ~/Persistent/my-locker/thunderbird
+> ```
+> Copie os dados do app para a subpasta e aponte o app para lá. **Nunca crie pastas fora de `my-locker/`** esperando que entrem no backup.
 
 🟡 **Tamanho:** mantenha `my-locker/` **enxuto (&lt; ~500 MB no total)**. Pendrive **64 GB** aumenta espaço em disco, mas **não** a RAM da sessão. O script grava **direto no pendrive/USB** (`tar | gpg`), sem passar por `/tmp` — ainda assim, evite gigabytes desnecessários.
 

@@ -51,6 +51,18 @@ SE JA TEM ARQUIVOS EM ~/Persistent/ FORA DESTA PASTA:
   Exemplo: mv ~/Persistent/minha-carteira.kdbx ~/Persistent/my-locker/keepass/
   Arquivos na raiz de ~/Persistent/ NAO entram no snapshot — perda total se o USB falhar.
 
+OUTRAS FERRAMENTAS (Bisq, Thunderbird, etc.):
+  Crie subpastas aqui dentro conforme precisar — tudo sera incluido no --full:
+    mkdir ~/Persistent/my-locker/bisq
+    mkdir ~/Persistent/my-locker/thunderbird
+  Copie os dados do app para a subpasta e aponte o app para la.
+  NUNCA crie pastas fora de my-locker/ esperando que entrem no backup.
+
+AVISO SOBRE SEEDS:
+  Seeds de qualquer carteira (Monero, Bitcoin, Electrum, Bisq) NAO devem
+  ficar em arquivo — somente papel ou metal gravado. Um arquivo de seed
+  em ~/Persistent/ e um ponto unico de falha se o pendrive for apreendido.
+
 Criada automaticamente por sync-hub-scripts.sh e hub.sh install.
 EOF
 }
