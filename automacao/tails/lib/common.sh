@@ -557,6 +557,14 @@ haveno_guard_deb_url_pgp() {
     printf "  Digite CONFIRMO para prosseguir mesmo assim: "
     read -r _chk
     [ "${_chk:-}" = "CONFIRMO" ] || die "Abortado. Verifique URL e PGP — mesma rede, mesmo release."
+  elif [ "$_pgp_reto" = "1" ] && [ "$_url_reto" = "0" ]; then
+    r "CRITICO: o PGP e RetoSwap mas a URL NAO e do repositorio retoaccess1/haveno-reto."
+    r "  RetoSwap (config.sh): ${HAVENO_PGP_FPR:-N/A}"
+    r "  URL informada:        ${url}"
+    y "  URL e PGP devem ser da MESMA rede/fonte oficial."
+    printf "  Digite CONFIRMO para prosseguir mesmo assim: "
+    read -r _chk_pgp
+    [ "${_chk_pgp:-}" = "CONFIRMO" ] || die "Abortado. Use URL e PGP da mesma rede verificada."
   elif [ "$_url_reto" = "0" ]; then
     r "AVISO: a URL NAO e do repositorio oficial RetoSwap (retoaccess1/haveno-reto)."
     r "  URL: ${url}"

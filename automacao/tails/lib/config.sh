@@ -19,10 +19,11 @@ _HAVENO_VER_NUM="${_HAVENO_VER_NUM#v}"  # remove prefixo "v" se existir: "v1.8.0
 HAVENO_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/${HAVENO_VERSION}/haveno-v${_HAVENO_VER_NUM}-linux-x86_64-installer.deb"
 HAVENO_SIG_URL="${HAVENO_DEB_URL}.sig"
 DEB_NAME="$(basename "$HAVENO_DEB_URL")"
-INSTALL_SCRIPT_URL="https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh"
-# MANUTENCAO: URL aponta para branch master (mutavel). A cada release upstream verificar se
-# o hash mudou: curl -fsSL --socks5-hostname 127.0.0.1:9050 "$INSTALL_SCRIPT_URL" | sha256sum | cut -d' ' -f1
-INSTALL_SCRIPT_HASH="658780708f1556a8135f2800c9182067909c5c77682bda68a98d70086779eeba"  # sha256 haveno-install.sh confirmado em campo 21/06/2026 — atualizar a cada release upstream
+# Pin imutavel (commit 9a14d55 — hash confirmado em campo 21/06/2026). A cada release upstream:
+# gh api repos/haveno-dex/haveno/commits?path=scripts/install_tails/haveno-install.sh&per_page=1 --jq '.[0].sha'
+# curl -fsSL --socks5-hostname 127.0.0.1:9050 "$INSTALL_SCRIPT_URL" | sha256sum | cut -d' ' -f1
+INSTALL_SCRIPT_URL="https://github.com/haveno-dex/haveno/raw/9a14d5552efca8d326648968f2a6596575a35f66/scripts/install_tails/haveno-install.sh"
+INSTALL_SCRIPT_HASH="658780708f1556a8135f2800c9182067909c5c77682bda68a98d70086779eeba"
 
 # ----- Caminhos no Tails (não editar) ----------------------------------------
 PERSIST="/home/amnesia/Persistent"

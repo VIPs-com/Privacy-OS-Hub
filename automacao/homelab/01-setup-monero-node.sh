@@ -32,6 +32,7 @@ BIN_DST="/usr/local/bin"
 
 # Verificacao do binario (getmonero). Se MONEROD_SHA256 vier preenchido, compara direto;
 # senao, verifica hashes.txt assinado por binaryfate e ABORTA se nao conferir (fail-closed).
+# DL_URL segue o redirect oficial (linux64) — nao fixa versao; upstream 0.18.5.0+ em jun/2026.
 MONERO_SIGNER_FPR="${MONERO_SIGNER_FPR:-81AC591FE9C4B65C5806AFC3F0AF4D462A0BDF92}"   # binaryfate
 HASHES_URL="${HASHES_URL:-https://www.getmonero.org/downloads/hashes.txt}"
 MONEROD_SHA256="${MONEROD_SHA256:-}"

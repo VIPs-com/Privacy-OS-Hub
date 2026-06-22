@@ -1,12 +1,13 @@
 # Três passos — Haveno no Tails (ZIP do GitHub)
 
-> **Atualizado:** 2026-06-21 · prompts pós-install · `.sig` via Tor (3 tentativas) · fluxo `.download/` → `Install/`
+> **Atualizado:** 2026-06-22 · my-locker auto no sync/install · `--full` não inclui Backups/qa-logs/hub-scripts · RAM 8 GB recomendado · pendrive 16 GB+ USB 3.0+
 >
 > **Scripts do pendrive/Windows:** copiar os `.sh` para o Tails está **correto** (`sync-hub-scripts.sh` faz o mesmo). O **`.deb` e a `.sig` do Haveno** são baixados **no Tails via Tor** quando você roda o setup — não vêm do pendrive.
 >
+> **No Tails:** scripts em `~/Persistent/hub-scripts/` · logs em `~/Persistent/qa-logs/` · MANUAL em `~/Persistent/Privacy-OS-Hub-main/docs/MANUAL.md`
+>
 > **Para o aluno:** só instalação e execução. Um script: `hub.sh`.  
-> **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).  
-> **Logs:** [COMO-LER-SEUS-LOGS.md](COMO-LER-SEUS-LOGS.md) (no Tails: mesma pasta deste arquivo) · **Detalhe de flags:** [MANUAL.md](../../docs/MANUAL.md#parte-ii--scripts-para-novato) (no Tails: `~/Persistent/Privacy-OS-Hub-main/docs/MANUAL.md`)
+> **Pré-requisito:** passos 1–4 manuais (USB Tails, **Persistência**, **Dotfiles**, senha **admin** no boot, **Tor** conectado).
 
 ---
 
@@ -100,6 +101,8 @@ O hub verifica PGP (`VALIDSIG`), **move** o `.deb` para `Install/` e cria `haven
 ---
 
 > **Apenas se `hub.sh install` ainda falhar após as recuperações acima:**
+>
+> **Avançado / suporte** — não é a trilha normal. Use os passos atômicos em `~/Persistent/hub-scripts/steps/` (veja `steps/README.md`).
 
 ### Fallback atômico
 
@@ -121,24 +124,12 @@ cd ~/Persistent/hub-scripts/steps
 ./05-verify-sig.sh
 ./06-check-deps.sh
 ./07-install-deb.sh
-./08-open-haveno.sh          # verde na janela
+./08-open-haveno.sh
 ```
 
-Se o `.deb` **já** está em `.download/` ou `Install/`:
-
-```bash
-# copiar .deb completo para Install/ se preciso
-cp ~/Persistent/haveno/.download/haveno-v1.6.0-linux-x86_64-installer.deb \
-   ~/Persistent/haveno/Install/
-# só a assinatura (Tor)
-curl -fsSL --socks5-hostname 127.0.0.1:9050 \
-  -o ~/Persistent/haveno/Install/haveno-v1.6.0-linux-x86_64-installer.deb.sig \
-  "https://github.com/retoaccess1/haveno-reto/releases/download/1.6.0-reto/haveno-v1.6.0-linux-x86_64-installer.deb.sig"
-./05-verify-sig.sh && ./06-check-deps.sh && ./07-install-deb.sh && ./08-open-haveno.sh
-```
-
-Depois de instalar pelo atômico, nos próximos boots use o **Passo 3** (`hub.sh boot`) normalmente.
 Detalhe completo: `~/Persistent/hub-scripts/steps/README.md` (no Tails) ou [steps/README.md](../tails/steps/README.md) (GitHub).
+
+Depois de instalar pelo atômico, nos próximos boots use o **item 3 deste guia** (`hub.sh boot`) — **não confundir** com o Passo 3 do curso completo (Cautela pré-trade).
 
 ---
 
@@ -173,16 +164,8 @@ Sempre que ligar o Tails de novo (**Haveno já instalado** uma vez):
 
 | # | Situação | Comando |
 |---|----------|---------|
-| **1** | Preparar scripts do ZIP | `cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh` |
-| **2** | **1ª vez** instalar | `~/Persistent/hub-scripts/hub.sh install --qa-log` |
-| **3** | **Depois de reiniciar** | `~/Persistent/hub-scripts/hub.sh boot` |
+| 1 | Copiar scripts do ZIP | `sync-hub-scripts.sh` |
+| 2 | 1ª instalação (verde) | `hub.sh install --qa-log` |
+| 3 | Cada boot novo | `hub.sh boot` |
 
----
-
-## Não faça
-
-- Não rode `install.sh` nem `apt-get install -f` sozinhos.
-- Não use `hub.sh update` na 1ª instalação.
-- Não use `hub.sh boot` na 1ª vez; depois de instalado, use sempre `hub.sh boot`.
-
-**Não precisa** rodar `haveno/install.sh` nem `haveno/boot.sh` direto — o `hub.sh` chama eles por você.
+**Curso completo (passos 1–12):** arquivo canônico `🛡️ Privacy-OS-Hub - Versão 1.0.md` no repositório.

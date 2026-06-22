@@ -110,19 +110,24 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 
 ### 🛠️ Checklist de ferramentas necessárias
 
+> Especificações de RAM, pendrive USB e CPU: seção [Requisitos de hardware](#-requisitos-de-hardware) acima.
+> O cofre `~/Persistent/my-locker/` é criado automaticamente no `sync-hub-scripts.sh` ou `hub.sh install`.
+
 | Ferramenta | Versão | Onde obter | Obrigatório |
 |-----------|:------:|------------|:-----------:|
 | Tails | 7.8.1+ | https://tails.net (só aqui) | Sim |
 | Haveno / RetoSwap | 1.6.0-reto | GitHub retoaccess1/haveno-reto | Sim |
 | Feather Wallet | atual | https://featherwallet.org/download | Sim (M2) |
 | Whonix LXQt | 18.1.4.2+ | https://www.whonix.org/wiki/Download | Sim (M2) |
-| **Pendrive Tails** | **16–64 GB USB 3.0+** | — | Sim |
+| **Pendrive Tails** | **8 GB mín. · 16–64 GB ideal USB 3.0+** | — | Sim |
 | **Pendrives backup A/B** | **8–16 GB cada** | — | Sim (3-2-1) |
 | **RAM do PC** | **8 GB recomendado** | — | Mínimo 4 GB |
 | Papel e caneta | — | — | Sim (seed) |
 | PC host (outro PC) | qualquer SO | — | Sim (para gravar Tails) |
 
 ### 🎯 Escolha seu caminho
+
+> No **Passo 8** você escolhe Trilha A (Feather, recomendada) ou Trilha B (CLI). **Por agora, siga os Passos 1–7** — iguais para todos.
 
 ```text
                     TRILHA COMPLETA (passos 1–12)
@@ -178,6 +183,8 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 📎 **Passos 2–3** são o bloco “somente Haveno” (instalar + regras). O **passo 1** é pré-requisito Tails; **4–7** preparam o M2 sem ser só instalação.
 
 ### ⚖️ Manifesto (7 princípios)
+
+> Resumo dos princípios do hub — pode ler depois do Passo 1 se preferir ir direto à prática.
 
 **1. Verificação antes de confiança**
 Todo binário que entra no fluxo deve ser verificável (PGP, checksums assinados, fingerprints com fonte). Scripts seguem postura fail-closed. Exceções e TOFU são documentados honestamente — nunca escondidos.
@@ -411,13 +418,17 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 | **Parte 1** — Passos 1–7 (Haveno verde) | [→ ir](#-parte-1--tails--haveno-passos-17) |
 | Passo 1 — Bootstrap Tails | [→ ir](#-passo-1--bootstrap-tails-usb--tor--persistência--admin) |
 | Passo 2 — Haveno verde | [→ ir](#-passo-2--haveno-até-o-verde) |
+| Passo 3 — Cautela pré-trade | [→ ir](#-passo-3--cautela-pré-trade) |
 | Passo 4 — Backup + Seed | [→ ir](#-passo-4--backup-e-seed-em-papel) |
 | Passo 5 — Feather Wallet | [→ ir](#-passo-5--feather-wallet-obrigatório-para-m2) |
+| Passo 6 — Folheto golpes | [→ ir](#-passo-6--folheto-regras-de-ouro-e-golpes) |
+| Passo 7 — Rotina boot | [→ ir](#-passo-7--rotina-de-scripts-cada-sessão) |
 | 🏁 Checkpoint 1 | [→ ir](#-checkpoint-1--haveno-verde--seed-salva) |
 | **Parte 2** — Passos 8–12 (Custódia fria) | [→ ir](#-parte-2--custódia-fria-passos-812) |
 | Passo 8 — Porteiro (Trilha A/B) | [→ ir](#-passo-8--porteiro-trilha-a-ou-b) |
 | Passo 9 — Ritual Seed | [→ ir](#-passo-9--ritual-seed-2-cópias-físicas) |
 | Passo 10 — Whonix | [→ ir](#-passo-10--whonix-pgp--import-vms) |
+| Passo 11 — Modelo frio-quente | [→ ir](#-passo-11--modelo-frio-quente-teoria) |
 | Passo 12A — Feather Offline (Trilha A) | [→ ir](#-passo-12a--feather-offline-trilha-a--padrão) |
 | Passo 12B — CLI Offline (Trilha B) | [→ ir](#-passo-12b--cli-offline-trilha-b--avançado) |
 | 🏁 Checkpoint 2 | [→ ir](#-checkpoint-2--cold-signing-ao-vivo) |
@@ -684,6 +695,8 @@ sudo systemctl restart onion-grater
 
 #### 2.5 — Fallback atômico (se o script travar no [6/9])
 
+> **Avançado / suporte** — só após esgotar recuperação com `hub.sh install` (seção 2.3). Não é a trilha normal.
+
 ```bash
 # Caminho validado em Tails real (piloto jun/2026):
 cd ~/Persistent/hub-scripts/steps
@@ -823,6 +836,9 @@ O `--full` **não** clona `~/Persistent/` inteira. Estas pastas ficam **fora** p
 
 #### 4.B — Estratégia 3-2-1-1-0 adaptada ao Tails
 
+> **Faça agora (Passo 4):** backup `hub.sh backup` + seed em papel + 1º `--full --usb` quando tiver pendrive B.
+> **Rotina futura (calendário):** `sha256sum -c` a cada 3 meses · teste de restore anual (regra **0** da tabela).
+
 Evolução do 3-2-1 clássico — adiciona **imutabilidade** e **verificação obrigatória**:
 
 | # | Regra | No Tails | Como |
@@ -897,6 +913,8 @@ Após restaurar: rode `hub.sh boot` → confirme o verde → abra o Feather → 
 **Contexto:** O Feather é a carteira Monero recomendada para guardar XMR fora do Haveno. É também o pré-requisito obrigatório para o Módulo 2 (Trilha A de cold-signing). Instalação alinhada à documentação oficial Feather/Tails.
 
 **Pré-requisito:** Haveno verde + backup cifrado feito (Passo 4).
+
+> Backup Feather (arquivo `.wallet` / pasta `wallets/`) **≠ seed** — a seed das 25 palavras continua **só em papel** (regra 9 das 12 Regras de Ouro).
 
 ---
 
@@ -1410,7 +1428,9 @@ Fonte oficial: https://www.whonix.org/wiki/VirtualBox
 3. **O que viaja no pendrive USB entre quente e frio?** → o unsigned tx (quente → frio) e o signed tx (frio → quente). Nunca a seed nem a spend key.
 4. **Por que isso protege?** → mesmo que a máquina online (quente) seja comprometida, sem a spend key ela não gasta seus fundos.
 
-**OK se:** respondeu as 4 perguntas sem consultar.
+**Auto-verificação (papel):** escreva as 4 respostas em uma linha cada; confira com o diagrama acima antes de marcar OK.
+
+**OK se:** respondeu as 4 perguntas e conferiu com o diagrama.
 
 ---
 
@@ -1788,6 +1808,8 @@ sudo chmod o+r /var/run/tor/control.authcookie
 sudo systemctl restart onion-grater
 ```
 
+**Você deve ver:** após reabrir o Haveno pelo menu → indicador **verde** · log `loaded filter: haveno` · sem pop-up "No default Tor Instance configured".
+
 ---
 
 #### 2. Log mostra `loaded filter: None` ou `command filtered: AUTHCHALLENGE`
@@ -1798,6 +1820,8 @@ sudo systemctl restart onion-grater
 python3 -c "import yaml; yaml.safe_load(open('/etc/onion-grater.d/haveno.yml')); print('YAML OK')"
 sudo systemctl restart onion-grater
 ```
+
+**Você deve ver:** imprime `YAML OK` · log `loaded filter: haveno` (não `None` nem rajada infinita de `command filtered`).
 
 ---
 
@@ -1823,6 +1847,8 @@ O `sync-hub-scripts.sh` distribui a versão corrigida (`haveno_sig_valid_format`
 dos2unix ~/Persistent/hub-scripts/*.sh
 ```
 
+**Você deve ver:** scripts rodam sem `$'\r': comando não encontrado`.
+
 ---
 
 #### 5. `sudo echo ok` falha — admin não configurado
@@ -1830,6 +1856,8 @@ dos2unix ~/Persistent/hub-scripts/*.sh
 **Causa:** a senha de administrador não foi definida no boot.
 
 **Solução:** reinicie o Tails e na tela de boas-vindas, clique "+ Mais opções" e defina a senha admin.
+
+**Você deve ver:** `sudo echo ok` imprime `ok` após digitar a senha.
 
 ---
 
@@ -1843,6 +1871,8 @@ sudo journalctl -u onion-grater --no-pager | tail -20
 
 Se `loaded filter: haveno` → aguarde mais (pode demorar 20–30 min na 1ª vez).
 Se `loaded filter: None` → erro 1 acima.
+
+**Você deve ver:** `loaded filter: haveno` no journalctl · indicador verde na UI (pode levar 20–30 min na 1ª vez).
 
 ---
 
@@ -1865,6 +1895,8 @@ O fingerprint `916B8D99…2EEACCDA` não mudou — só reimporte.
 
 **Solução:** execute o ciclo B2 (export_outputs → import_outputs → export_key_images → import_key_images) completo.
 
+**Você deve ver:** saldo view-only no Whonix confere com o esperado após o ciclo.
+
 ---
 
 #### 9. Feather: `Good signature` mas fingerprint diferente
@@ -1880,6 +1912,8 @@ O fingerprint `916B8D99…2EEACCDA` não mudou — só reimporte.
 **Causa:** Hyper-V, WSL2 ou Virtual Machine Platform ocupando VT.
 
 **Solução:** Painel de Controle → Programas → Recursos do Windows → desmarque: Hyper-V, Virtual Machine Platform, Windows Hypervisor Platform. Reinicie.
+
+**Você deve ver:** VirtualBox inicia a VM Whonix sem erro VT-x.
 
 ---
 

@@ -4,6 +4,32 @@
 
 ---
 
+## 2026-06-22 — polish pedagógico R7 (Ped#03–24) + release v1.0.7
+
+| ID | Arquivo | Fix |
+|----|---------|-----|
+| **Ped#06** | canônico checklist | Ponte para requisitos hardware + my-locker auto; pendrive alinhado 8/16–64 GB |
+| **Ped#20** | TRES-PASSOS | Cabeçalho 22/06, caminhos Tails absolutos, fallback simplificado |
+| **Ped#03** | canônico 4.B | Separador “faça agora” vs rotina calendário 3-2-1-1-0 |
+| **Ped#05** | canônico 2.5 + TRES-PASSOS | Aviso “avançado/suporte”; removido curl hardcoded no fallback |
+| **Ped#08** | canônico §0 | Nota Passo 8 adiado; Manifesto opcional pós-Passo 1 |
+| **Ped#11** | TRES-PASSOS | “item 3 deste guia” ≠ Passo 3 canônico |
+| **Ped#17** | canônico 5 + 11 | wallet≠seed; auto-verificação papel no Passo 11 |
+| **Ped#24** | canônico | Navegação rápida passos 3/6/7/11; Apêndice B “Você deve ver” |
+
+---
+
+## 2026-06-22 — backlog R6/R7 fechado (polish pré-v1.0.7)
+
+| ID | Arquivo | Fix |
+|----|---------|-----|
+| **P6-08** | `haveno/boot.sh` | Monitor onion-grater: `loaded filter: haveno\|command allowed` (sem rajada cosmética) |
+| **P6-02** | `lib/common.sh` | `haveno_guard_deb_url_pgp()` — ramo PGP-Reto + URL≠Reto |
+| **R7-FEATHER-TMP** | `feather/backup.sh` | `tar \| gpg` direto no disco; USB multi-volume; prompt `--no-encrypt` |
+| **AUD-URL-PIN** | `lib/config.sh` | `INSTALL_SCRIPT_URL` pinado em commit `9a14d55` (hash `658780…` inalterado) |
+
+---
+
 ## 2026-06-22 — doc: pastas excluídas do backup --full
 
 | Item | Detalhe |

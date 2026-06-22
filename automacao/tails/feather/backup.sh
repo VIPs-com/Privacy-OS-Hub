@@ -83,29 +83,56 @@ fi
 
 if [ "$USE_USB" = "1" ] && [ -z "$DEST" ]; then
   mapfile -t VOLS < <(find "$MEDIA_DIR" -mindepth 1 -maxdepth 1 -type d 2>/dev/null)
-  [ "${#VOLS[@]}" -gt 0 ] || die "Nenhum USB montado."
-  DEST="${VOLS[0]}"
+  if [ "${#VOLS[@]}" -eq 0 ]; then
+    die "Nenhum USB montado."
+  elif [ "${#VOLS[@]}" -eq 1 ]; then
+    DEST="${VOLS[0]}"
+  else
+    y "  Varios volumes encontrados:"
+    i=1; for v in "${VOLS[@]}"; do echo "    [$i] $v"; i=$((i+1)); done
+    printf "  Escolha o numero: "; read -r n
+    case "${n:-}" in
+      ''|*[!0-9]*|0) die "Escolha invalida (use 1-${#VOLS[@]})." ;;
+    esac
+    [ "$n" -le "${#VOLS[@]}" ] || die "Escolha invalida (use 1-${#VOLS[@]})."
+    DEST="${VOLS[$((n-1))]}"
+  fi
 fi
 [ -n "$DEST" ] || DEST="$DEFAULT_DEST"
 mkdir -p "$DEST" || die "Destino invalido: $DEST"
+[ -w "$DEST" ] || die "Sem permissao de escrita em: $DEST"
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
 BASE="feather-wallets-${STAMP}"
-TMP="$(mktemp -d)"
-TARFILE="${TMP}/${BASE}.tar.gz"
-
-tar -czf "$TARFILE" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" || die "Falha ao compactar."
-tar -tzf "$TARFILE" >/dev/null 2>&1 || die "Tar corrompido."
 
 if [ "$ENCRYPT" = "1" ]; then
   OUT="${DEST}/${BASE}.tar.gz.gpg"
-  haveno_gpg_symmetric_encrypt "$OUT" "$TARFILE" || die "Falha ao cifrar."
 else
   OUT="${DEST}/${BASE}.tar.gz"
-  cp "$TARFILE" "$OUT"
+fi
+
+if [ "$ENCRYPT" = "1" ]; then
+  b "Compactando e cifrando em disco (${OUT})..."
+  y "  (tar | gpg direto no destino — nao usa /tmp/RAM)"
+  haveno_read_backup_passphrase _bk_pass
+  tar -czf - -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" | \
+    gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 3 -o "$OUT" - 3<<<"$_bk_pass" \
+    || { unset _bk_pass; rm -f "$OUT"; die "Falha ao compactar/cifrar."; }
+  gpg --batch --passphrase-fd 3 -d "$OUT" 3<<<"$_bk_pass" | tar -tzf - >/dev/null 2>&1 \
+    || { unset _bk_pass; die "Arquivo gerado esta corrompido."; }
+  unset _bk_pass
+else
+  r "AVISO: --no-encrypt grava wallets SEM cifrar (NAO recomendado)."
+  printf "Gravar sem cifrar? Digite sim para confirmar (N): "
+  read -r _noenc_ans
+  case "${_noenc_ans:-N}" in sim|SIM) ;;
+    *) die "Cancelado. Rode sem --no-encrypt (recomendado)." ;;
+  esac
+  tar -czf "$OUT" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" || die "Falha ao compactar."
+  tar -tzf "$OUT" >/dev/null 2>&1 || die "Arquivo gerado esta corrompido."
 fi
 ( cd "$DEST" && sha256sum "$(basename "$OUT")" > "$(basename "$OUT").sha256" ) 2>/dev/null || true
-rm -rf "$TMP"
+chmod 444 "$OUT" "${OUT}.sha256" 2>/dev/null || true
 
 g "Backup: $OUT"
 y "Seed em papel/metal — separada deste arquivo."
