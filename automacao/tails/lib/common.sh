@@ -18,9 +18,9 @@ r(){ echo -e "\033[0;31m$*\033[0m"; }
 die(){ r "ERRO: $*"; [ -n "${QA_LOG_FILE:-}" ] && qa_log_finish 1 2>/dev/null || true; exit 1; }
 
 # --- Backup cifrado: confirmar senha antes do gpg (evita .gpg irrecuperavel) -
-haveno_gpg_symmetric_encrypt() {
-  local outfile="$1" infile="$2" pass1 pass2
-  [ -f "$infile" ] || die "haveno_gpg_symmetric_encrypt: arquivo inexistente: $infile"
+haveno_read_backup_passphrase() {
+  local _retvar="${1:?variavel destino da senha}"
+  local pass1 pass2
   while true; do
     read -s -p "Senha do backup (forte — guarde-a): " pass1; echo
     read -s -p "Confirmar senha: " pass2; echo
@@ -30,10 +30,18 @@ haveno_gpg_symmetric_encrypt() {
     fi
     r "Senhas nao conferem. Tente de novo."
   done
-  printf '%s' "$pass1" | gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 0 \
-    -o "$outfile" "$infile" \
-    || { unset pass1 pass2; die "Falha ao cifrar."; }
+  printf -v "$_retvar" '%s' "$pass1"
   unset pass1 pass2
+}
+
+haveno_gpg_symmetric_encrypt() {
+  local outfile="$1" infile="$2" pass
+  [ -f "$infile" ] || die "haveno_gpg_symmetric_encrypt: arquivo inexistente: $infile"
+  haveno_read_backup_passphrase pass
+  printf '%s' "$pass" | gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 0 \
+    -o "$outfile" "$infile" \
+    || { unset pass; die "Falha ao cifrar."; }
+  unset pass
 }
 
 # --- Modo "uma senha so" (padrão via hub.sh; desativar: HAVENO_ONE_PASSWORD=0) -

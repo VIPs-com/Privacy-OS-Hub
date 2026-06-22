@@ -191,13 +191,39 @@ Atalho gerado em `~/Persistent/feather/feather.desktop` e instalado no menu GNOM
 
 ### `hub.sh backup` / Feather backup
 
+**Três camadas** — não confunda rápido com completo:
+
+| Camada | Comando | O que salva | Quando |
+|--------|---------|-------------|--------|
+| **Operacional** | `hub.sh backup` | Só `haveno/Data/` (trades, chat, disputas) | Antes do 1º depósito; **antes de cada trade** |
+| **Periódico** | `hub.sh backup --full --usb` | Data + `feather/wallets/` + `dotfiles/` + **`my-locker/`** | Semanal (pendrive 3-2-1-1-0) |
+| **Feather só** | `feather/backup.sh` | Só `wallets/` | Opcional — ou deixe o `--full` incluir |
+
+**Pasta `my-locker/`** (cofre pessoal na persistência):
+
 ```bash
-hub.sh backup               # backup cifrado da carteira Haveno (Data/)
-hub.sh backup --usb         # salva direto no USB
-hub.sh backup --restore     # restaura
+mkdir -p ~/Persistent/my-locker/keepass
+mkdir -p ~/Persistent/my-locker/comprovantes
+# KeePass .kdbx, PDFs de comprovante — NUNCA seed em arquivo
 ```
 
-Para Feather: `feather/backup.sh` (mesma interface: `--usb`, `--dest`, `--restore`). **Seed não entra no arquivo.**
+| Pode | Não pode |
+|------|----------|
+| KeePass (`.kdbx`) | Seed (só papel/metal) |
+| Comprovantes de trade (PDF) | Vídeos, ISOs, arquivos enormes |
+
+🟡 Mantenha `my-locker/` **&lt; ~500 MB**. Pendrive **64 GB** aumenta espaço em **disco**; a **RAM** da sessão continua limitada. O script grava **`tar | gpg` direto no destino** (`--usb` / `--dest`) — não passa mais por `/tmp`.
+
+```bash
+hub.sh backup                    # rápido — Haveno Data/
+hub.sh backup --usb              # rápido → pendrive
+hub.sh backup --full --usb       # snapshot completo → pendrive
+hub.sh backup --restore ARQUIVO  # restaura (pede confirmação)
+```
+
+Para Feather isolado: `feather/backup.sh` (`--usb`, `--dest`, `--restore`). **Seed não entra** em nenhum backup — anote em papel.
+
+Erro de espaço? Ver **TROUBLESHOOTING.md** Erro 8.
 
 ### lib/onion-grater.yml — filtro Tor (interno, automático)
 

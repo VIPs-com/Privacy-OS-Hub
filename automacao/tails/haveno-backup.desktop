@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Haveno — Backup da carteira
-Comment=Backup cifrado da carteira Haveno (persistencia ou USB)
+Comment=Backup Haveno (rápido) ou hub.sh backup --full --usb (my-locker + 3-2-1-1-0)
 Exec=bash -c "/home/amnesia/Persistent/hub-scripts/hub.sh backup; echo; read -n1 -r -p 'Pressione uma tecla para fechar...'"
 Icon=utilities-file-archiver
 Terminal=true

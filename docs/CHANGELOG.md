@@ -4,6 +4,23 @@
 
 ---
 
+## 2026-06-22 — backup `--full`: my-locker + gravação direta em disco
+
+### Scripts
+
+| Mudança | Arquivo | Detalhe |
+|---------|---------|---------|
+| **`my-locker/`** | `haveno/backup.sh` | `--full` inclui `~/Persistent/my-locker/` (KeePass, comprovantes) além de Data/, wallets/, dotfiles/ |
+| **Sem /tmp/RAM** | `haveno/backup.sh` | Backup cifrado: `tar -czf - \| gpg` direto no destino (`--usb`/`--dest`); checagem de espaço no disco destino |
+| **Passphrase** | `lib/common.sh` | `haveno_read_backup_passphrase()` extraído para reutilização |
+
+### Documentação
+
+- Canônico Passo 4: seção **4.A.1 my-locker/** + limites de tamanho (USB vs RAM)
+- `README.md`, `MANUAL.md`, `TROUBLESHOOTING.md` (Erro 8), `hub.sh` usage
+
+---
+
 ## 2026-06-21 — Rodada 6: fixes auditoria (Tails 7.8.1 · RetoSwap 1.6.0-reto)
 
 > **Auditoria:** 7 agentes · relatório `Hub-equipe-dev/auditoria-repo/AUDITORIA-RODADA-6-21062026.md`

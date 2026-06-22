@@ -12,11 +12,23 @@
 #   hub.sh boot         Cada sessão: instala deps → aplica filtro Tor
 #                               → abre Haveno  (SEM re-download)
 #
-#   hub.sh backup       Backup cifrado da carteira Haveno (Data/)
-#                               → rode ANTES do 1º depósito e após cada trade
-#                               → --full --usb  snapshot completo (3-2-1-1-0)
-#                               → --restore ARQUIVO  restaura backup .tar.gz.gpg
-#                               → --usb · --dest /caminho  destino alternativo
+#   hub.sh backup       Três camadas de backup (ver abaixo)
+#                               → RÁPIDO: só Haveno Data/ — antes de cada trade / disputa
+#                               → --full --usb: hub + ~/Persistent/my-locker/ (3-2-1-1-0)
+#                               → --restore ARQUIVO  restaura .tar.gz.gpg
+#                               → --usb · --dest /caminho  destino no disco (tar|gpg direto)
+#
+#   ── ABA BACKUP — três camadas ─────────────────────────────────────────────
+#
+#   | Camada        | Comando                    | Quando |
+#   | Operacional   | hub.sh backup              | 1º depósito; antes de cada trade |
+#   | Periódico     | hub.sh backup --full --usb | Semanal — Data + Feather + dotfiles + my-locker |
+#   | Feather só    | feather/backup.sh          | Opcional — ou deixe o --full incluir |
+#
+#   my-locker/  →  mkdir -p ~/Persistent/my-locker/{keepass,comprovantes}
+#                  KeePass .kdbx, PDFs de trade. NUNCA seed. Alvo < ~500 MB.
+#                  USB 64 GB guarda disco; sessão Tails tem RAM limitada.
+#                  Gravação: tar|gpg direto no destino — não usa /tmp/RAM.
 #
 #   hub.sh update       Novo release: backup automático → baixa novo .deb
 #                               → verifica PGP → reinstala → abre
@@ -58,7 +70,7 @@
 #                       Exemplo: hub.sh install --skip-backup
 #
 #   --full · --usb · --restore · --dest  (somente: backup)
-#                       --full --usb  snapshot 3-2-1-1-0 em pendrive
+#                       --full --usb  hub stack + ~/Persistent/my-locker/ → pendrive
 #                       --restore ARQUIVO  restaura Data/ ou snapshot completo
 #
 #   --no-launch         (somente: feather)
@@ -100,7 +112,7 @@ usage() {
   b "Subcomandos:"
   b "  install       1ª vez — preflight, download, instala, abre Haveno"
   b "  boot          cada sessão — abre Haveno (sem re-download)"
-  b "  backup        backup cifrado da carteira (antes do 1º depósito)"
+  b "  backup        backup cifrado (rápido = Data/; --full = hub + my-locker)"
   b "  update        atualiza para novo release (faz backup antes)"
   b "  feather       instala e verifica Feather Wallet"
   b "  qa <cmd>      relatórios QA e confirmações humanas:"
@@ -120,9 +132,11 @@ usage() {
   b "  --skip-backup   pula prompt de backup ao final"
   b ""
   b "Flags específicas de backup:"
-  b "  --full --usb    snapshot 3-2-1-1-0 em pendrive"
+  b "  (rápido)        hub.sh backup — só Haveno Data/ (trades, disputas)"
+  b "  --full --usb    snapshot: Data + wallets + dotfiles + my-locker/ → pendrive"
   b "  --restore FILE  restaura backup .tar.gz.gpg"
-  b "  --usb --dest    destino alternativo"
+  b "  --usb --dest    destino no disco (tar|gpg direto, sem /tmp/RAM)"
+  b "  my-locker/      ~/Persistent/my-locker/ — KeePass, comprovantes (< ~500 MB)"
   b ""
   b "Flags específicas de feather:"
   b "  --no-launch     re-verifica PGP sem abrir janela"

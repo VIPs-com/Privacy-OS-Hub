@@ -4,7 +4,7 @@
 # Comando do aluno: hub.sh backup
 # =================================================================
 ###############################################################################
-# haveno-backup.sh  —  Backup/restauracao da carteira Haveno no Tails
+# haveno/backup.sh  —  Backup/restauracao da carteira Haveno no Tails
 #
 # O QUE FAZ:
 #   - Compacta ~/Persistent/haveno/Data/ (carteira, historico, contas)
@@ -12,25 +12,20 @@
 #   - Salva na persistencia (~/Persistent/Backups) ou num USB montado
 #   - Verifica a integridade do arquivo e gera um .sha256
 #   - Pode RESTAURAR um backup (com copia de seguranca do estado atual)
+#   - --full: hub stack + ~/Persistent/my-locker/ (docs pessoais do aluno)
+#   - Tar/grava em DISCO no destino (pipe gpg) — nao usa /tmp/RAM
 #
 # PRIVACIDADE/SEGURANCA:
 #   - Nao usa rede. Mantenha o arquivo .gpg offline.
 #   - A SEED nao entra aqui: anote-a pela interface (Account > Wallet seed).
 #   - FECHE o Haveno antes de rodar (evita copiar carteira em uso).
+#   - my-locker/: KeePass, comprovantes — NUNCA seed em arquivo.
 #
 # USO:
-#   chmod +x ~/Persistent/haveno-backup.sh
-#
-#   Backup (destino padrao = ~/Persistent/Backups):
-#     ~/Persistent/haveno-backup.sh
-#   Backup para um USB montado (escolhe/escolha o volume):
-#     ~/Persistent/haveno-backup.sh --usb
-#   Backup para pasta especifica:
-#     ~/Persistent/haveno-backup.sh --dest /media/amnesia/MEU_USB
-#   Sem cifrar (NAO recomendado):
-#     ~/Persistent/haveno-backup.sh --no-encrypt
-#   Restaurar:
-#     ~/Persistent/haveno-backup.sh --restore /caminho/haveno-data-AAAA....tar.gz.gpg
+#   hub.sh backup
+#   hub.sh backup --usb
+#   hub.sh backup --full --usb
+#   hub.sh backup --restore /caminho/haveno-data-AAAA....tar.gz.gpg
 ###############################################################################
 
 set -uo pipefail
@@ -42,8 +37,17 @@ source "${SCRIPT_DIR}/../lib/common.sh"
 # ----------------------------- Caminhos --------------------------------------
 PERSIST="/home/amnesia/Persistent"
 DATA_DIR="${PERSIST}/haveno/Data"
+MY_LOCKER_DIR="${PERSIST}/my-locker"
 DEFAULT_DEST="${PERSIST}/Backups"
 MEDIA_DIR="/media/amnesia"
+
+# Pastas incluidas em --full (hub + cofre pessoal do aluno)
+FULL_BACKUP_REL_DIRS=(
+  haveno/Data
+  feather/wallets
+  dotfiles
+  my-locker
+)
 
 # ----------------------------- Cores -----------------------------------------
 b(){ echo -e "\033[1;34m$*\033[0m"; }
@@ -129,10 +133,10 @@ if [ -n "$RESTORE_FILE" ]; then
 
   STAMP_SAFE="$(date +%Y%m%d-%H%M%S)"
   if [ "$_IS_FULL" = "1" ]; then
-    y "  Backup COMPLETO: restaura haveno/Data/ + feather/wallets/ + dotfiles/"
+    y "  Backup COMPLETO: haveno/Data + feather/wallets + dotfiles + my-locker (se no arquivo)"
     printf "Confirmar restauracao completa (estado atual salvo como .bak)? (s/N): "; read -r ans
     case "${ans:-N}" in s|S|sim|SIM) ;; *) rm -rf "$TMP"; die "Cancelado."; esac
-    for _d in haveno/Data feather/wallets dotfiles; do
+    for _d in "${FULL_BACKUP_REL_DIRS[@]}"; do
       [ -d "${PERSIST}/${_d}" ] && mv "${PERSIST}/${_d}" "${PERSIST}/${_d}.bak-${STAMP_SAFE}"
     done
     tar -xzf "$TARFILE" -C "$PERSIST" || { rm -rf "$TMP"; die "Falha ao extrair."; }
@@ -192,74 +196,85 @@ mkdir -p "$DEST" || die "Nao consegui criar/usar o destino: $DEST"
 g "  Destino: $DEST"
 
 STAMP="$(date +%Y%m%d-%H%M%S)"
+_FULL_DIRS=()
 if [ "$FULL_BACKUP" = "1" ]; then
   BASE="tails-persist-full-${STAMP}"
-  _FULL_DIRS=()
-  [ -d "${PERSIST}/haveno/Data" ]     && _FULL_DIRS+=(haveno/Data)
-  [ -d "${PERSIST}/feather/wallets" ] && _FULL_DIRS+=(feather/wallets)
-  [ -d "${PERSIST}/dotfiles" ]        && _FULL_DIRS+=(dotfiles)
-  [ "${#_FULL_DIRS[@]}" -gt 0 ] || die "Nenhuma pasta encontrada para backup completo (Data/, wallets/, dotfiles/)."
+  for _rel in "${FULL_BACKUP_REL_DIRS[@]}"; do
+    [ -d "${PERSIST}/${_rel}" ] && _FULL_DIRS+=("$_rel")
+  done
+  [ "${#_FULL_DIRS[@]}" -gt 0 ] || die "Nenhuma pasta encontrada para backup completo (Data/, my-locker/, etc.)."
+  if [ ! -d "$MY_LOCKER_DIR" ]; then
+    y "  Dica: mkdir -p ~/Persistent/my-locker  (KeePass, comprovantes — Passo 4 do curso)"
+  fi
 else
   BASE="haveno-data-${STAMP}"
 fi
-TMP="$(mktemp -d)"
-TARFILE="${TMP}/${BASE}.tar.gz"
 
-# Verifica RAM disponivel antes de compactar em /tmp (tmpfs em RAM no Tails)
+# Tamanho estimado + espaco livre no DESTINO (disco/USB — nao RAM)
+_DATA_PATHS=()
 if [ "$FULL_BACKUP" = "1" ]; then
-  DATA_MiB="$(du -sm "${PERSIST}/haveno/Data" "${PERSIST}/feather/wallets" "${PERSIST}/dotfiles" 2>/dev/null \
-    | awk '{s+=$1} END{print s+0}')"
+  for _rel in "${_FULL_DIRS[@]}"; do
+    _DATA_PATHS+=("${PERSIST}/${_rel}")
+  done
 else
-  DATA_MiB="$(du -sm "$DATA_DIR" 2>/dev/null | cut -f1)"
+  _DATA_PATHS+=("$DATA_DIR")
 fi
-TMP_MiB="$(df -m /tmp 2>/dev/null | awk 'NR==2{print $4}')"
-[ "${TMP_MiB:-0}" -gt "$((${DATA_MiB:-0} * 2))" ] \
-  || die "RAM insuficiente para backup em /tmp (${DATA_MiB:-?}MB de dados, ${TMP_MiB:-?}MB livres). Use: hub.sh backup --full --dest /media/amnesia/SEU_USB"
+DATA_MiB="$(du -sm "${_DATA_PATHS[@]}" 2>/dev/null | awk '{s+=$1} END{print s+0}')"
+DEST_MiB="$(df -m "$DEST" 2>/dev/null | awk 'NR==2{print $4}')"
+DEST_MARGIN_MiB=64
+[ "${DEST_MiB:-0}" -gt "$((${DATA_MiB:-0} + DEST_MARGIN_MiB))" ] \
+  || die "Espaco insuficiente em ${DEST} (dados ~${DATA_MiB:-?}MiB, livre ${DEST_MiB:-?}MiB). Use pendrive maior ou reduza ~/Persistent/my-locker/."
 
-if [ "$FULL_BACKUP" = "1" ]; then
-  b "[1/4] Backup completo: ${_FULL_DIRS[*]}..."
-  tar -czf "$TARFILE" -C "$PERSIST" "${_FULL_DIRS[@]}" \
-    || { rm -rf "$TMP"; die "Falha ao compactar."; }
-else
-  b "[1/4] Compactando ${DATA_DIR}..."
-  tar -czf "$TARFILE" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" \
-    || { rm -rf "$TMP"; die "Falha ao compactar."; }
-fi
-
-# Verificar o tar
-b "[2/4] Verificando integridade do arquivo..."
-tar -tzf "$TARFILE" >/dev/null 2>&1 || { rm -rf "$TMP"; die "Arquivo gerado esta corrompido."; }
-SIZE="$(du -h "$TARFILE" | cut -f1)"
-g "  OK (${SIZE})."
-
-# Cifrar
 if [ "$ENCRYPT" = "1" ]; then
-  b "[3/4] Cifrando com GPG (senha forte — confirme duas vezes)..."
   OUT="${DEST}/${BASE}.tar.gz.gpg"
-  haveno_gpg_symmetric_encrypt "$OUT" "$TARFILE" || { rm -rf "$TMP"; die "Falha ao cifrar."; }
+else
+  OUT="${DEST}/${BASE}.tar.gz"
+fi
+
+if [ "$ENCRYPT" = "1" ]; then
+  b "[1/3] Compactando e cifrando em disco (${OUT})..."
+  y "  (tar | gpg direto no destino — nao usa /tmp/RAM)"
+  haveno_read_backup_passphrase _bk_pass
+  if [ "$FULL_BACKUP" = "1" ]; then
+    tar -czf - -C "$PERSIST" "${_FULL_DIRS[@]}" | \
+      gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 3 -o "$OUT" - 3<<<"$_bk_pass" \
+      || { unset _bk_pass; die "Falha ao compactar/cifrar."; }
+  else
+    tar -czf - -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" | \
+      gpg --batch --yes -c --cipher-algo AES256 --passphrase-fd 3 -o "$OUT" - 3<<<"$_bk_pass" \
+      || { unset _bk_pass; die "Falha ao compactar/cifrar."; }
+  fi
+  b "[2/3] Verificando integridade do .gpg..."
+  gpg --batch --passphrase-fd 3 -d "$OUT" 3<<<"$_bk_pass" | tar -tzf - >/dev/null 2>&1 \
+    || die "Arquivo gerado esta corrompido."
+  unset _bk_pass
 else
   r "AVISO: --no-encrypt grava a carteira SEM cifrar (NAO recomendado)."
   printf "Gravar sem cifrar? Digite sim para confirmar (N): "
   read -r _noenc_ans
   case "${_noenc_ans:-N}" in sim|SIM) ;;
-    *) rm -rf "$TMP"; die "Cancelado. Rode hub.sh backup sem --no-encrypt (recomendado)." ;;
+    *) die "Cancelado. Rode hub.sh backup sem --no-encrypt (recomendado)." ;;
   esac
-  y "[3/4] --no-encrypt: salvando SEM cifrar (NAO recomendado)."
-  OUT="${DEST}/${BASE}.tar.gz"
-  cp "$TARFILE" "$OUT" || { rm -rf "$TMP"; die "Falha ao copiar."; }
+  b "[1/3] Compactando em ${OUT} (disco direto)..."
+  if [ "$FULL_BACKUP" = "1" ]; then
+    tar -czf "$OUT" -C "$PERSIST" "${_FULL_DIRS[@]}" || die "Falha ao compactar."
+  else
+    tar -czf "$OUT" -C "$(dirname "$DATA_DIR")" "$(basename "$DATA_DIR")" || die "Falha ao compactar."
+  fi
+  b "[2/3] Verificando integridade..."
+  tar -tzf "$OUT" >/dev/null 2>&1 || die "Arquivo gerado esta corrompido."
 fi
 
+SIZE="$(du -h "$OUT" | cut -f1)"
+g "  OK (${SIZE})."
+
 # Hash de integridade
-b "[4/4] Gerando soma de verificacao (.sha256)..."
+b "[3/3] Gerando soma de verificacao (.sha256)..."
 ( cd "$DEST" && sha256sum "$(basename "$OUT")" > "$(basename "$OUT").sha256" ) \
   && g "  $(basename "$OUT").sha256 criado." || y "  (nao consegui gerar sha256)"
 
 # Imutabilidade (principio 3-2-1-1-0): arquivo somente leitura apos gravar
-# Em FAT32 o chmod e silenciosamente ignorado — sem impacto em ext4/btrfs
 chmod 444 "$OUT" "${OUT}.sha256" 2>/dev/null || true
-
-# Limpeza do temporario (tar em claro)
-rm -rf "$TMP"
 
 echo
 g "==============================================================="
@@ -270,6 +285,7 @@ g "  Verificar depois:  sha256sum -c \"${OUT}.sha256\""
 g "  Restaurar:         hub.sh backup --restore \"$OUT\""
 g "==============================================================="
 if [ "$FULL_BACKUP" = "1" ]; then
+  y "Incluido no --full: ${_FULL_DIRS[*]}"
   y "Estrategia 3-2-1-1-0:"
   y "  [3] 3 copias: Persistent + Pendrive A + Pendrive B"
   y "  [2] 2 midias: USB Tails + pendrives de backup"
@@ -278,6 +294,7 @@ if [ "$FULL_BACKUP" = "1" ]; then
   y "  [0] 0 erros: verifique a cada 3 meses:"
   y "      sha256sum -c \"${OUT}.sha256\""
   y "  Seed em papel e independente — sem ela nenhum .gpg recupera os fundos."
+  y "  my-locker/: mantenha enxuto (<500MB) — USB grande != RAM ilimitada na sessao."
 else
   y "Lembrete: anote a SEED (Account > Wallet seed) em papel/metal — guardada"
   y "separada deste arquivo. Seed != backup de dados."

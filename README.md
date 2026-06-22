@@ -121,7 +121,19 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 # Backup (passo 4 e após cada trade)
 ~/Persistent/hub-scripts/hub.sh backup                  # rápido — só Haveno Data/
 ~/Persistent/hub-scripts/hub.sh backup --full --usb     # snapshot completo → pendrive (3-2-1-1-0)
+```
 
+**Três camadas de backup** (não são “só Haveno vs Feather”):
+
+| Camada | Comando | Quando |
+|--------|---------|--------|
+| **Operacional** | `hub.sh backup` | Antes do 1º depósito e **antes de cada trade** — histórico, chat e contas para disputas |
+| **Periódico** | `hub.sh backup --full --usb` | Semanal — Haveno + Feather + dotfiles + **`my-locker/`** (3-2-1-1-0) |
+| **Feather pontual** | `feather/backup.sh` | Opcional — ou deixe o `--full` incluir |
+
+> **Seed em papel** recupera fundos. **`~/Persistent/my-locker/`** — KeePass, comprovantes de trade (nunca seed). Mantenha **&lt; ~500 MB**; pendrive 64 GB guarda disco, mas a sessão Tails tem RAM limitada.
+
+```bash
 # Validação e confirmações QA
 ~/Persistent/hub-scripts/hub.sh qa validate       # checagem estática dos scripts
 ~/Persistent/hub-scripts/hub.sh qa finalize       # validate + seed (1ª instalação)

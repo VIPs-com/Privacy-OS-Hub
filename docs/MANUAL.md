@@ -249,9 +249,19 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 ~/Persistent/hub-scripts/hub.sh backup --full --usb       # snapshot completo (3-2-1-1-0)
 ```
 
-**`--full`** arquiva em um único `.gpg` cifrado: `haveno/Data/` + `feather/wallets/` + `dotfiles/`
-→ nome: `tails-persist-full-TIMESTAMP.tar.gz.gpg` · `chmod 444` aplicado após gravar (imutável).
+**`--full`** arquiva em um único `.gpg` cifrado: `haveno/Data/` + `feather/wallets/` + `dotfiles/` + **`my-locker/`** (se existir)
+→ nome: `tails-persist-full-TIMESTAMP.tar.gz.gpg` · gravação **direta no destino** (`tar | gpg`, sem `/tmp`/RAM) · `chmod 444` após gravar.
 `--restore` auto-detecta pelo nome do arquivo: full → extrai para `~/Persistent/`; parcial → só `haveno/Data/`.
+
+**Três camadas de backup:**
+
+| Camada | Comando | Quando |
+|--------|---------|--------|
+| Operacional | `hub.sh backup` | Antes de cada trade — histórico/chat para disputas |
+| Periódico | `hub.sh backup --full --usb` | Semanal — inclui **`~/Persistent/my-locker/`** |
+| Feather só | `feather/backup.sh` | Opcional após criar carteira |
+
+**`my-locker/`:** `mkdir -p ~/Persistent/my-locker/{keepass,comprovantes}` — KeePass, comprovantes. **Nunca seed.** Alvo **&lt; ~500 MB**. USB grande ≠ RAM ilimitada.
 
 | Ação | Perigoso? |
 |------|-----------|
@@ -324,7 +334,7 @@ Visão rápida. **Ficha completa por arquivo:** [Apêndice A](#apêndice-a--cat�
 | **`hub.sh install`** | 1ª instalação (do zero) | Preflight → verde | **Sim** — pula reinstall se já instalado |
 | **`hub.sh boot`** | Cada sessão após instalar | Playbook §7 | **Sim** — pode abrir 2 janelas |
 | **`hub.sh backup`** | Antes do 1º depósito; antes de cada trade | Proteger `Data/` | **Sim** — cada run gera arquivo **novo** com data/hora |
-| **`hub.sh backup --full`** | Semanal ou após mudanças — para pendrive USB | Snapshot 3-2-1-1-0 (Data/ + wallets/ + Dotfiles) | **Sim** — arquivo novo com timestamp · `chmod 444` |
+| **`hub.sh backup --full`** | Semanal ou após mudanças — para pendrive USB | Snapshot 3-2-1-1-0 (Data/ + wallets/ + dotfiles + my-locker/) | **Sim** — arquivo novo · disco direto |
 | **`hub.sh update`** | Release novo da rede | `.deb` novo com PGP | **Sim** — faz backup **antes**; aborta se backup falhar |
 | **`hub.sh feather`** | Após download no Tor Browser | PGP do Feather | **Sim** — não mexe em `wallets/` |
 | **`feather/backup.sh`** | Após criar carteira Feather | Backup `wallets/` | **Sim** — arquivo novo com timestamp |
@@ -641,10 +651,15 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Grupo** | Haveno |
 | **Passo hub** | **4**, **7** |
 | **Novato roda sozinho?** | **Não** — use `hub.sh backup` (mesmas flags) |
-| **O que faz** | Compacta `~/Persistent/haveno/Data/` → cifra com GPG → salva em `Backups/` ou USB |
-| **O que NÃO faz** | **Seed não entra** no arquivo — anote no app (Account → Wallet seed) |
+| **Rápido** | `hub.sh backup` — só `~/Persistent/haveno/Data/` (trades, chat, disputas) |
+| **`--full`** | `Data/` + `feather/wallets/` + `dotfiles/` + **`my-locker/`** (se existir) |
+| **`my-locker/`** | `~/Persistent/my-locker/` — KeePass, comprovantes; **nunca seed**; alvo &lt; ~500 MB |
+| **Gravação** | Cifrado: `tar -czf - \| gpg` **direto no destino** (`--usb`/`--dest`) — sem `/tmp`/RAM |
+| **O que faz** | Compacta → cifra GPG → salva em `Backups/` ou USB · gera `.sha256` · `chmod 444` |
+| **O que NÃO faz** | **Seed não entra** — anote no app (Account → Wallet seed) |
 | **Rodar 2×** | **Sim** — cada execução cria arquivo **novo** com data/hora |
-| **Disco** | Lê `Data/`; grava em `Backups/`; `--restore` **substitui** `Data/` (pede `s/N`) |
+| **Disco** | Checa espaço livre no **destino**; `--restore` substitui pastas (pede `s/N`, salva `.bak-*`) |
+| **Flags** | `--full` · `--usb` · `--dest` · `--restore` · `--no-encrypt` (exige `sim`) |
 
 #### `haveno/update.sh` (interno — use `hub.sh update`)
 

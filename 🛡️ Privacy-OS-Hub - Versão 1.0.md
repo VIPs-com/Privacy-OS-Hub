@@ -688,12 +688,38 @@ ls ~/Persistent/haveno/Install/
 
 | Backup | O que salva | Quando rodar |
 |--------|-------------|--------------|
-| `hub.sh backup` | Haveno `Data/` (trades, contas, contratos) | Antes de cada trade |
-| `feather/backup.sh` | Feather `wallets/` | Após criar ou alterar carteira Feather |
-| `hub.sh backup --full` | Data/ + wallets/ + Dotfiles — **snapshot completo** | Semanal ou após mudanças |
+| `hub.sh backup` | Haveno `Data/` (trades, chat, contas, contratos) | Antes do 1º depósito; **antes de cada trade**; durante negociação (prova para disputa) |
+| `hub.sh backup --full` | `Data/` + `feather/wallets/` + `dotfiles/` + **`my-locker/`** | Semanal ou após mudanças (pendrive 3-2-1-1-0) |
+| `feather/backup.sh` | Só Feather `wallets/` | **Opcional** — ou deixe o `--full` incluir |
 | **Seed em papel** | Fundos XMR (a mais importante) | SEMPRE — 2 vias físicas |
 
-> **Seed ≠ backup.** A seed recupera os **fundos**. O `Data/` recupera **histórico, trades e contas de pagamento**. Você precisa dos dois, em locais diferentes.
+> **Seed ≠ backup de dados.** A seed recupera os **fundos**. O `Data/` recupera **histórico, trades, chat e contas de pagamento** — essencial para disputas no Haveno.
+>
+> **Feather (custódia fria):** a seed em papel basta para recuperar XMR. Backup de `wallets/` é conveniência — **não** precisa antes de cada trade. O `--full` já inclui Feather no snapshot periódico.
+
+#### 4.A.1 — Pasta `my-locker/` (cofre pessoal na persistência)
+
+Crie **uma vez** e guarde só o que quer no snapshot `--full`:
+
+```bash
+mkdir -p ~/Persistent/my-locker/keepass
+mkdir -p ~/Persistent/my-locker/comprovantes
+```
+
+| Pode colocar | Não colocar |
+|--------------|-------------|
+| Banco KeePass (`.kdbx`) | Seed (só papel/metal) |
+| PDFs de comprovante de pagamento | Vídeos, ISOs, arquivos enormes |
+| Notas de texto pequenas | Cópia duplicada de `Backups/` |
+
+🟡 **Tamanho:** mantenha `my-locker/` **enxuto (&lt; ~500 MB no total)**. Pendrive **64 GB** aumenta espaço em disco, mas **não** a RAM da sessão. O script grava **direto no pendrive/USB** (`tar | gpg`), sem passar por `/tmp` — ainda assim, evite gigabytes desnecessários.
+
+| Mídia | Recomendação |
+|-------|--------------|
+| Pendrive Tails | **Mín. 8 GB** · ideal **16–32 GB** |
+| Pendrives backup A/B | **8 GB+** cada |
+| `my-locker/` | **&lt; ~500 MB** (KeePass + comprovantes) |
+| `hub.sh backup` rápido (só Data/) | tipicamente dezenas–200 MB |
 
 #### 4.B — Estratégia 3-2-1-1-0 adaptada ao Tails
 

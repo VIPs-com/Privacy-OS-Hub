@@ -250,6 +250,31 @@ cd ~/Persistent/hub-scripts/steps
 
 ---
 
+### Erro 8 — Backup: "Espaco insuficiente" ou falha no `--full`
+
+**Sintoma:**
+```
+ERRO: Espaco insuficiente em /media/amnesia/MEU_USB (dados ~450MiB, livre 120MiB)...
+```
+
+**Causa:** O destino (`--usb`, `--dest` ou `~/Persistent/Backups/`) não tem espaço livre para o `.gpg` final. O hub grava **direto no disco do destino** (`tar | gpg`) — não usa mais `/tmp`/RAM como gargalo principal.
+
+**Solução:**
+```bash
+# Ver tamanho das pastas que entram no --full:
+du -sh ~/Persistent/haveno/Data ~/Persistent/feather/wallets ~/Persistent/dotfiles ~/Persistent/my-locker 2>/dev/null
+
+# Reduzir my-locker/ (KeePass + comprovantes — alvo < ~500 MB):
+# Remover vídeos, ISOs, duplicatas em Backups/
+
+# Usar pendrive com mais espaço livre:
+hub.sh backup --full --usb
+```
+
+**Pasta `my-locker/`:** crie `~/Persistent/my-locker/` para KeePass e comprovantes de trade. **Nunca** guarde seed em arquivo.
+
+---
+
 ## 4. Referência rápida — steps/ e quando usar cada um
 
 | Step | Arquivo | Quando usar |
