@@ -199,13 +199,15 @@ Atalho gerado em `~/Persistent/feather/feather.desktop` e instalado no menu GNOM
 | **Periódico** | `hub.sh backup --full --usb` | Data + `feather/wallets/` + `dotfiles/` + **`my-locker/`** | Semanal (pendrive 3-2-1-1-0) |
 | **Feather só** | `feather/backup.sh` | Só `wallets/` | Opcional — ou deixe o `--full` incluir |
 
-**Pasta `my-locker/`** (cofre pessoal na persistência):
+**Pasta `my-locker/`** — criada automaticamente no `sync-hub-scripts.sh` e no `hub.sh install`:
 
-```bash
-mkdir -p ~/Persistent/my-locker/keepass
-mkdir -p ~/Persistent/my-locker/comprovantes
-# KeePass .kdbx, PDFs de comprovante — NUNCA seed em arquivo
+```text
+~/Persistent/my-locker/keepass/      ← KeePass (.kdbx)
+~/Persistent/my-locker/comprovantes/ ← PDFs de trade
+~/Persistent/my-locker/LEIA-ME.txt   ← regras
 ```
+
+🔴 Arquivos **fora** de `my-locker/` na persistência **não entram** no `--full`. Restaurar `--full` traz `my-locker/` de volta.
 
 | Pode | Não pode |
 |------|----------|

@@ -131,7 +131,7 @@ cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails && ./sync-hub-scripts.sh
 | **Periódico** | `hub.sh backup --full --usb` | Semanal — Haveno + Feather + dotfiles + **`my-locker/`** (3-2-1-1-0) |
 | **Feather pontual** | `feather/backup.sh` | Opcional — ou deixe o `--full` incluir |
 
-> **Seed em papel** recupera fundos. **`~/Persistent/my-locker/`** — KeePass, comprovantes de trade (nunca seed). Mantenha **&lt; ~500 MB**; pendrive 64 GB guarda disco, mas a sessão Tails tem RAM limitada.
+> **Seed em papel** recupera fundos. **`my-locker/`** é criada no sync/install — KeePass e comprovantes **só ali** (ver `LEIA-ME.txt`). Fora dela = sem `--full`. Alvo **&lt; ~500 MB**.
 
 ```bash
 # Validação e confirmações QA

@@ -93,6 +93,7 @@ if [ "$INSTALL_ONLY" = "1" ]; then
   b "[recuperacao] Conferindo minimo..."
   sudo -v 2>/dev/null || die "Senha de administrador nao ativa."
   [ -d "$PERSIST" ] || die "Persistencia nao encontrada ($PERSIST)."
+  haveno_ensure_my_locker || y "  Aviso: my-locker/ nao criado — verifique ${PERSIST}/"
   [ -f "${UTILS_DIR}/install.sh" ] || die "install.sh ausente em ${UTILS_DIR}/."
   [ -f "${UTILS_DIR}/exec.sh" ] || die "exec.sh ausente."
   INSTALL_SHA="$(sha256sum "${UTILS_DIR}/install.sh" 2>/dev/null | awk '{print $1}')"
@@ -172,6 +173,12 @@ if [ ! -d "$DOTFILES_DIR" ]; then
   die "Dotfiles nao ativado. Abra 'Armazenamento persistente' e marque Dotfiles, depois reinicie."
 fi
 g "  Persistencia + Dotfiles OK."
+b "  Preparando my-locker/ (cofre pessoal — incluido no backup --full)..."
+if haveno_ensure_my_locker; then
+  g "  my-locker/ OK — guarde KeePass e comprovantes aqui (leia LEIA-ME.txt)."
+else
+  y "  Aviso: nao criei my-locker/ — crie manualmente antes do backup --full."
+fi
 
 # ----------------------------- 3. Fuso UTC (privacidade) ---------------------
 b "[3/9] Garantindo fuso horario UTC (sem revelar localizacao)..."

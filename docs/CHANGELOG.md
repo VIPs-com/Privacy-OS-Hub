@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-06-22 — my-locker automático (sync + install)
+
+| Mudança | Arquivo | Detalhe |
+|---------|---------|---------|
+| **`haveno_ensure_my_locker()`** | `lib/common.sh` | Cria `my-locker/{keepass,comprovantes}` + `LEIA-ME.txt` (idempotente) |
+| **Sync** | `sync-hub-scripts.sh` | Chama ensure após validar persistência |
+| **Install** | `haveno/install.sh` | Após Dotfiles OK (+ `--install-only`) |
+| **Fallback** | `steps/01-setup-dirs.sh` | Mesma função no caminho atômico |
+| **Docs** | canônico · README · MANUAL | Sem `mkdir` manual; regra “arquivos pessoais só em my-locker/” |
+
+---
+
 ## 2026-06-22 — backup `--full`: my-locker + gravação direta em disco
 
 ### Scripts

@@ -25,6 +25,12 @@ die(){ echo -e "\033[0;31mERRO: $*\033[0m"; exit 1; }
 [ -d "$PERSIST" ] || die "Persistência inexistente: $PERSIST (crie-a primeiro)."
 mkdir -p "$DEST" || die "Não criei ${DEST}."
 
+# shellcheck source=lib/common.sh
+source "${SCRIPT_DIR}/lib/common.sh"
+b "Preparando cofre pessoal my-locker/..."
+haveno_ensure_my_locker && g "  my-locker/ OK (keepass + comprovantes + LEIA-ME.txt)" \
+  || y "  Aviso: nao criei my-locker/ — verifique permissoes em ${PERSIST}/"
+
 # ---- Scripts raiz (hub.sh, sync-hub-scripts.sh) + atalhos .desktop ---------
 b "Copiando scripts raiz de ${SCRIPT_DIR}/ -> ${DEST}/"
 cp -v "${SCRIPT_DIR}"/*.sh "$DEST/"
@@ -120,6 +126,7 @@ fi
 
 echo
 g "Pronto. Scripts em: ${DEST}/"
+g "Cofre pessoal: ${PERSIST}/my-locker/ (keepass + comprovantes — incluido no backup --full)"
 g "ATALHOS no menu GNOME: 'Haveno — Iniciar'  ·  'Haveno — Backup da carteira'"
 g "Rode: ${DEST}/hub.sh install   (1ª vez)"
 g "      ${DEST}/hub.sh boot      (cada sessão — ou clique 'Haveno — Iniciar' no menu)"

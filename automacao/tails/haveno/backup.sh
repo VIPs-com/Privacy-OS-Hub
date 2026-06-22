@@ -203,9 +203,6 @@ if [ "$FULL_BACKUP" = "1" ]; then
     [ -d "${PERSIST}/${_rel}" ] && _FULL_DIRS+=("$_rel")
   done
   [ "${#_FULL_DIRS[@]}" -gt 0 ] || die "Nenhuma pasta encontrada para backup completo (Data/, my-locker/, etc.)."
-  if [ ! -d "$MY_LOCKER_DIR" ]; then
-    y "  Dica: mkdir -p ~/Persistent/my-locker  (KeePass, comprovantes — Passo 4 do curso)"
-  fi
 else
   BASE="haveno-data-${STAMP}"
 fi

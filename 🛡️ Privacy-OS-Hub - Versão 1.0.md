@@ -508,7 +508,24 @@ chmod +x sync-hub-scripts.sh
 ./sync-hub-scripts.sh
 ```
 
-**Resultado:** scripts em `~/Persistent/hub-scripts/` (seus dados ficam em `~/Persistent/haveno/`, separado).
+**Resultado:** scripts em `~/Persistent/hub-scripts/` · cofre **`~/Persistent/my-locker/`** criado automaticamente (`keepass/`, `comprovantes/`, `LEIA-ME.txt`).
+
+---
+
+#### 2.1.A — Pasta `my-locker/` (criada pelo sync — não precisa mkdir manual)
+
+O `sync-hub-scripts.sh` e o `hub.sh install` criam:
+
+```text
+~/Persistent/my-locker/
+├── keepass/        ← banco KeePass (.kdbx)
+├── comprovantes/   ← PDFs de trade / disputa
+└── LEIA-ME.txt     ← regras (leia uma vez)
+```
+
+🔴 **Arquivos pessoais fora de `my-locker/`** (na raiz de `~/Persistent/`) **não entram** no `hub.sh backup --full`. Se o USB Tails falhar, **perda total** do que ficou fora. Use **só** `my-locker/` para KeePass e comprovantes.
+
+✅ **`hub.sh backup --restore`** de um snapshot `--full` traz de volta `my-locker/` (e Haveno Data, Feather, dotfiles) como estavam na hora do backup.
 
 ---
 
@@ -697,14 +714,18 @@ ls ~/Persistent/haveno/Install/
 >
 > **Feather (custódia fria):** a seed em papel basta para recuperar XMR. Backup de `wallets/` é conveniência — **não** precisa antes de cada trade. O `--full` já inclui Feather no snapshot periódico.
 
-#### 4.A.1 — Pasta `my-locker/` (cofre pessoal na persistência)
+#### 4.A.1 — Pasta `my-locker/` (cofre pessoal — criada automaticamente)
 
-Crie **uma vez** e guarde só o que quer no snapshot `--full`:
+Criada pelo **`sync-hub-scripts.sh`** e pelo **`hub.sh install`** — **não** precisa `mkdir` manual:
 
-```bash
-mkdir -p ~/Persistent/my-locker/keepass
-mkdir -p ~/Persistent/my-locker/comprovantes
+```text
+~/Persistent/my-locker/
+├── keepass/        ← KeePass (.kdbx)
+├── comprovantes/   ← PDFs de trade / disputa
+└── LEIA-ME.txt     ← regras (leia uma vez)
 ```
+
+🔴 **Só guarde arquivos pessoais aqui.** Coisas na raiz de `~/Persistent/` **fora** de `my-locker/` **não entram** no `--full` → perda total se o USB falhar.
 
 | Pode colocar | Não colocar |
 |--------------|-------------|

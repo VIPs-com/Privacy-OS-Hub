@@ -25,7 +25,7 @@
 #   | Periódico     | hub.sh backup --full --usb | Semanal — Data + Feather + dotfiles + my-locker |
 #   | Feather só    | feather/backup.sh          | Opcional — ou deixe o --full incluir |
 #
-#   my-locker/  →  mkdir -p ~/Persistent/my-locker/{keepass,comprovantes}
+#   my-locker/  →  criada automaticamente (sync + install) — LEIA-ME.txt na pasta
 #                  KeePass .kdbx, PDFs de trade. NUNCA seed. Alvo < ~500 MB.
 #                  USB 64 GB guarda disco; sessão Tails tem RAM limitada.
 #                  Gravação: tar|gpg direto no destino — não usa /tmp/RAM.

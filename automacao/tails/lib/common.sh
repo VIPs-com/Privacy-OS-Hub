@@ -17,6 +17,41 @@ y(){ echo -e "\033[1;33m$*\033[0m"; }
 r(){ echo -e "\033[0;31m$*\033[0m"; }
 die(){ r "ERRO: $*"; [ -n "${QA_LOG_FILE:-}" ] && qa_log_finish 1 2>/dev/null || true; exit 1; }
 
+# --- my-locker: cofre pessoal do aluno (incluido em hub.sh backup --full) -------
+haveno_write_my_locker_readme() {
+  cat > "${PERSIST}/my-locker/LEIA-ME.txt" <<'EOF'
+my-locker/ — cofre pessoal na persistencia do Tails
+==================================================
+
+O que vai AQUI (e so aqui, para arquivos seus):
+  keepass/       banco KeePass (.kdbx)
+  comprovantes/  PDFs de pagamento, notas de trade (disputas)
+
+O hub.sh backup --full inclui esta pasta no snapshot (junto com Haveno Data,
+Feather wallets e dotfiles). Restaurar: hub.sh backup --restore ARQUIVO.gpg
+
+REGRAS:
+  - NUNCA guarde a seed (25 palavras) em arquivo — somente papel/metal.
+  - Arquivos FORA de my-locker/ na raiz de ~/Persistent/ NAO entram no --full.
+    Se o USB Tails falhar, voce perde o que ficou fora desta pasta.
+  - Mantenha enxuto: alvo < ~500 MB (KeePass + comprovantes, sem videos/ISOs).
+  - Backup rapido (hub.sh backup, sem --full): so Haveno Data/ — use antes de cada trade.
+
+Criada automaticamente por sync-hub-scripts.sh e hub.sh install.
+EOF
+}
+
+# Cria ~/Persistent/my-locker/{keepass,comprovantes} + LEIA-ME.txt (idempotente).
+haveno_ensure_my_locker() {
+  [ -d "$PERSIST" ] || return 1
+  mkdir -p "${PERSIST}/my-locker/keepass" "${PERSIST}/my-locker/comprovantes" \
+    || return 1
+  if [ ! -f "${PERSIST}/my-locker/LEIA-ME.txt" ]; then
+    haveno_write_my_locker_readme || return 1
+  fi
+  return 0
+}
+
 # --- Backup cifrado: confirmar senha antes do gpg (evita .gpg irrecuperavel) -
 haveno_read_backup_passphrase() {
   local _retvar="${1:?variavel destino da senha}"

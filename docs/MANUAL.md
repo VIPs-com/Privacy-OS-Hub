@@ -261,7 +261,7 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 | Periódico | `hub.sh backup --full --usb` | Semanal — inclui **`~/Persistent/my-locker/`** |
 | Feather só | `feather/backup.sh` | Opcional após criar carteira |
 
-**`my-locker/`:** `mkdir -p ~/Persistent/my-locker/{keepass,comprovantes}` — KeePass, comprovantes. **Nunca seed.** Alvo **&lt; ~500 MB**. USB grande ≠ RAM ilimitada.
+**`my-locker/`:** criada automaticamente (`sync` + `install`) — `keepass/`, `comprovantes/`, `LEIA-ME.txt`. Arquivos pessoais **só aqui**; fora = fora do `--full`. Alvo **&lt; ~500 MB**.
 
 | Ação | Perigoso? |
 |------|-----------|
@@ -653,7 +653,7 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Novato roda sozinho?** | **Não** — use `hub.sh backup` (mesmas flags) |
 | **Rápido** | `hub.sh backup` — só `~/Persistent/haveno/Data/` (trades, chat, disputas) |
 | **`--full`** | `Data/` + `feather/wallets/` + `dotfiles/` + **`my-locker/`** (se existir) |
-| **`my-locker/`** | `~/Persistent/my-locker/` — KeePass, comprovantes; **nunca seed**; alvo &lt; ~500 MB |
+| **`my-locker/`** | `~/Persistent/my-locker/` — **auto** no sync/install | KeePass, comprovantes; **nunca seed**; só entra no `--full` se estiver aqui |
 | **Gravação** | Cifrado: `tar -czf - \| gpg` **direto no destino** (`--usb`/`--dest`) — sem `/tmp`/RAM |
 | **O que faz** | Compacta → cifra GPG → salva em `Backups/` ou USB · gera `.sha256` · `chmod 444` |
 | **O que NÃO faz** | **Seed não entra** — anote no app (Account → Wallet seed) |
