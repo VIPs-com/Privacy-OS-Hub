@@ -4,6 +4,15 @@
 
 ---
 
+## 2026-06-22 — release v1.0.7.2 (docs-aluno polish)
+
+| Arquivo | Fix |
+|---------|-----|
+| `TRES-PASSOS` | Cabeçalho: `electrum/` no my-locker |
+| `COMO-LER-SEUS-LOGS` | Caminho Tails para TROUBLESHOOTING; nota qa-validate PASS com avisos |
+
+---
+
 ## 2026-06-22 — release v1.0.7.1 (docs MANUAL sync)
 
 Patch de documentação pós-v1.0.7 — sem mudança de scripts. README banner → `v1.0.7.1`.

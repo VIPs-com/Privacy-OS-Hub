@@ -66,6 +66,8 @@ Se aparecer → **apague o arquivo**, refaça o passo, não compartilhe.
 | `04-haveno-backup-*` | `Backup concluido:` + `RESULTADO: PASS` | `ERRO:` ou `RESULTADO: FAIL` |
 | `04-seed-papel-*` | 3× `CONFIRMACAO_HUMANA: ...=SIM` + `RESULTADO: PASS` | qualquer `=NAO` ou ausência de `RESULTADO: PASS` |
 | `qa-validate-*` | `QA Validate: PASS` + `RESULTADO: PASS` | `FAIL —` ou `RESULTADO: FAIL` |
+
+> **`qa-validate`:** `PASS` com “N aviso(s) informativos” ainda conta como OK — avisos são grep estático, não falha de campo.
 | `05-feather-*` | `Fingerprint OK: 8185E158` + `VALIDSIG 8185E158` | `Assinatura GPG FALHOU` |
 | `06-haveno-update-*` | `Novo .deb verificado e preparado` + `RESULTADO: PASS` | `Atualizacao falhou` ou `RESULTADO: FAIL` |
 | `07-post-session-*` | `Haveno instalado` + `RESULTADO: PASS` | `ERRO:` fatal |
@@ -110,10 +112,10 @@ Ver também: [README — o que você vai aprender (12 passos)](../../README.md#o
    - **`.deb` ~266 MB só em `.download/`:** `sync-hub-scripts.sh` + `hub.sh install --qa-log` (promove para `Install/`).
    - **Já em `Install/`:** `hub.sh install --install-only`.
    - Alternativa: [TRES-PASSOS — fallback atômico](TRES-PASSOS-HAVENO-TAILS.md).  
-3. Consulte `automacao/tails/docs/TROUBLESHOOTING.md` — tabela de diagnóstico por mensagem de erro.  
+3. Consulte `~/Persistent/Privacy-OS-Hub-main/automacao/tails/docs/TROUBLESHOOTING.md` (no Tails) — tabela de diagnóstico por mensagem de erro.  
 4. Corrija e rode de novo com `--qa-log`.  
 5. **Não** edite o `.txt` à mão para fingir PASS.
 
 ---
 
-*Privacy-OS-Hub · Scripts · validação por evidência · jun/2026*
+*Privacy-OS-Hub · docs-aluno · validação por evidência · v1.0.7.2 · jun/2026*

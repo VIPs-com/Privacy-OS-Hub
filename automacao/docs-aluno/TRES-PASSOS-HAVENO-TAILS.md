@@ -1,6 +1,6 @@
 # Três passos — Haveno no Tails (ZIP do GitHub)
 
-> **Atualizado:** 2026-06-22 · my-locker auto no sync/install · `--full` não inclui Backups/qa-logs/hub-scripts · RAM 8 GB recomendado · pendrive 16 GB+ USB 3.0+
+> **Atualizado:** 2026-06-22 · my-locker auto (`keepass/`, `comprovantes/`, `electrum/`) · `--full` não inclui Backups/qa-logs/hub-scripts · RAM 8 GB recomendado · pendrive 16 GB+ USB 3.0+
 >
 > **Scripts do pendrive/Windows:** copiar os `.sh` para o Tails está **correto** (`sync-hub-scripts.sh` faz o mesmo). O **`.deb` e a `.sig` do Haveno** são baixados **no Tails via Tor** quando você roda o setup — não vêm do pendrive.
 >
