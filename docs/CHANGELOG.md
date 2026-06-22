@@ -4,6 +4,24 @@
 
 ---
 
+## 2026-06-22 — release v1.0.7.1 (docs MANUAL sync)
+
+Patch de documentação pós-v1.0.7 — sem mudança de scripts. README banner → `v1.0.7.1`.
+
+---
+
+## 2026-06-22 — docs: MANUAL sincronizado com v1.0.7
+
+| Seção | Detalhe |
+|-------|---------|
+| `feather/backup.sh` | `tar \| gpg` direto, USB index, `--no-encrypt`, wallet≠seed |
+| `lib/config.sh` | `INSTALL_SCRIPT_HASH` + URL pin commit; nota mantenedor |
+| `my-locker/` | `electrum/` + subpastas personalizadas |
+| `haveno/boot.sh` | Monitor onion-grater no journal |
+| `switch-network` | `haveno_guard_deb_url_pgp()` documentado |
+
+---
+
 ## 2026-06-22 — polish pedagógico R7 (Ped#03–24) + release v1.0.7
 
 | ID | Arquivo | Fix |

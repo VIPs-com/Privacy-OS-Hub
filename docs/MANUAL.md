@@ -261,7 +261,7 @@ O script **move** os arquivos de `~/Tor Browser/Browser/Downloads/` para `~/Pers
 | Periódico | `hub.sh backup --full --usb` | Semanal — inclui **`~/Persistent/my-locker/`** |
 | Feather só | `feather/backup.sh` | Opcional após criar carteira |
 
-**`my-locker/`:** criada automaticamente (`sync` + `install`) — `keepass/`, `comprovantes/`, `LEIA-ME.txt`. Arquivos pessoais **só aqui**; fora = fora do `--full`. Alvo **&lt; ~500 MB**.
+**`my-locker/`:** criada automaticamente (`sync` + `install`) — `keepass/`, `comprovantes/`, `electrum/`, `LEIA-ME.txt` (subpastas extras via `mkdir`, ex. `bisq/`). Arquivos pessoais **só aqui**; fora = fora do `--full`. Alvo **&lt; ~500 MB**.
 
 **Excluído do `--full` de propósito** (não duplicar / não conflitar na restore):
 
@@ -647,7 +647,7 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Grupo** | Haveno |
 | **Passo hub** | **7** (cada sessão) |
 | **Novato roda sozinho?** | **Não** — use `hub.sh boot` |
-| **O que faz** | Playbook §7: preflight → `sudo install.sh` → `exec.sh` → onion-grater |
+| **O que faz** | Playbook §7: preflight → `sudo install.sh` → `exec.sh` → onion-grater · monitor opcional do journal (`loaded filter: haveno` / `command allowed`) |
 | **O que NÃO faz** | Não baixa versão nova do `.deb` |
 | **Rodar 2×** | **Sim** — pode abrir 2 janelas Haveno; feche extras |
 | **Disco** | Reaplica config em `/etc/onion-grater.d/`; **não apaga** `Data/` |
@@ -661,7 +661,7 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Novato roda sozinho?** | **Não** — use `hub.sh backup` (mesmas flags) |
 | **Rápido** | `hub.sh backup` — só `~/Persistent/haveno/Data/` (trades, chat, disputas) |
 | **`--full`** | `Data/` + `feather/wallets/` + `dotfiles/` + **`my-locker/`** (se existir) |
-| **`my-locker/`** | `~/Persistent/my-locker/` — **auto** no sync/install | KeePass, comprovantes; **nunca seed**; só entra no `--full` se estiver aqui |
+| **`my-locker/`** | `~/Persistent/my-locker/` — **auto** no sync/install | KeePass, comprovantes, Electrum; **nunca seed**; subpastas personalizadas OK |
 | **Gravação** | Cifrado: `tar -czf - \| gpg` **direto no destino** (`--usb`/`--dest`) — sem `/tmp`/RAM |
 | **Excluído `--full`** | `Backups/`, `qa-logs/`, `hub-scripts/` — de propósito; `Backups/` → cópia manual pendrive B |
 | **O que faz** | Compacta → cifra GPG → salva em `Backups/` ou USB · gera `.sha256` · `chmod 444` |
@@ -701,8 +701,8 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Grupo** | Haveno (rede alternativa) |
 | **Passo hub** | **5** (Vol II §8) |
 | **Novato roda sozinho?** | **Não** — só se for mudar de rede Haveno de propósito |
-| **O que faz** | Avisa → backup → chama `haveno/update.sh` com URL+PGP da **nova** rede |
-| **O que NÃO faz** | Não mistura URL de uma rede com PGP de outra |
+| **O que faz** | Avisa → backup → chama `haveno/update.sh` com URL+PGP da **nova** rede · `haveno_guard_deb_url_pgp()` bloqueia mistura Reto↔não-Reto (exige `CONFIRMO` se incoerente) |
+| **O que NÃO faz** | Não instala sem par URL+PGP coerente (guard fail-closed + prompt humano) |
 | **Comando** | `~/Persistent/hub-scripts/haveno/switch-network.sh --url "…" --pgp "…"` |
 | **Rodar 2×** | Reinstala de novo — feche trades antes |
 | **Disco** | Igual ao update; backup antes |
@@ -720,6 +720,7 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Novato roda sozinho?** | Sim — via `hub.sh feather`, **depois** de baixar AppImage + `.asc` no Tor Browser |
 | **O que faz** | Move downloads → importa chave PGP → verifica AppImage → `chmod +x` |
 | **O que NÃO faz** | Não cria carteira; não grava seed — faça na UI do Feather |
+| **Nota** | Backup `.wallet` / `wallets/` **≠ seed** — a seed das 25 palavras fica **só em papel** |
 | **Comando** | `~/Persistent/hub-scripts/hub.sh feather` |
 | **Rodar 2×** | **Sim** — re-verifica; **não apaga** `~/Persistent/feather/wallets/` |
 | **Disco** | `~/Persistent/feather/` (AppImage, chaves) |
@@ -731,11 +732,12 @@ Os scripts em `haveno/` são chamados pelo `hub.sh`. O aluno **não** precisa ex
 | **Grupo** | Feather |
 | **Passo hub** | **5** |
 | **Novato roda sozinho?** | Sim, após criar carteira no Feather |
-| **O que faz** | Backup cifrado de `~/Persistent/feather/wallets/` |
-| **O que NÃO faz** | Seed fora do tarball (papel/metal) |
-| **Comando** | `~/Persistent/hub-scripts/feather/backup.sh` · `--usb` · `--restore` |
-| **Rodar 2×** | **Sim** — arquivos novos com timestamp |
-| **Disco** | `wallets/` → `Backups/`; restore pede confirmação |
+| **O que faz** | Backup cifrado de `~/Persistent/feather/wallets/` · `tar -czf - \| gpg` **direto no destino** (sem `/tmp`/RAM) |
+| **O que NÃO faz** | **Seed não entra** — anote no Feather (wallet ≠ seed) |
+| **Comando** | `~/Persistent/hub-scripts/feather/backup.sh` · `--usb` (seleção numerada se vários volumes) · `--restore` |
+| **Flags** | `--no-encrypt` exige digitar `sim` (não recomendado) |
+| **Rodar 2×** | **Sim** — arquivos novos com timestamp · `chmod 444` + `.sha256` |
+| **Disco** | `wallets/` → `Backups/` ou USB; restore pede confirmação |
 
 ---
 
@@ -783,7 +785,8 @@ cd ~/Persistent/hub-scripts/steps
 |-------|---------|
 | **Grupo** | Biblioteca interna |
 | **Novato roda sozinho?** | **Nunca** — não são programas; outros scripts carregam via `source` |
-| **O que fazem** | `config.sh`: constantes (`HAVENO_VERSION`, `HAVENO_PGP_FPR`). Deriva URLs via `_HAVENO_VER_NUM="${HAVENO_VERSION%-*}"` — TAG usa sufixo de rede (`1.6.0-reto`), nome do binário usa só o número (`1.6.0`). `common.sh`: funções compartilhadas (preflight, onion-grater, boot, `haveno_sig_valid_format()`) |
+| **O que fazem** | `config.sh`: constantes de release — `HAVENO_VERSION`, `HAVENO_PGP_FPR`, `INSTALL_SCRIPT_HASH` (sha256 do `haveno-install.sh`), `INSTALL_SCRIPT_URL` (pin em commit GitHub, não `master` mutável). Deriva URLs do `.deb` via `_HAVENO_VER_NUM` (TAG com sufixo `-reto` / prefixo `v` opcional). `common.sh`: funções compartilhadas (preflight, onion-grater, `haveno_guard_deb_url_pgp()`, `haveno_sig_valid_format()`) |
+| **Mantenedor** | A cada release RetoSwap: atualizar versão + FPR + hash + URL pin do install script (ver comentários em `config.sh`) · aluno usa `sync-hub-scripts.sh` + `hub.sh update` |
 | **Rodar 2×** | N/A — não rode diretamente |
 
 #### `automacao/homelab/` (pasta)
@@ -942,4 +945,4 @@ Depois de instalar os scripts (`sync-hub-scripts.sh` → `~/Persistent/hub-scrip
 
 ---
 
-*Manual · Privacy-OS-Hub · jun/2026 · [docs/MANUAL.md](MANUAL.md)*
+*Manual · Privacy-OS-Hub · v1.0.7 · jun/2026 · [docs/MANUAL.md](MANUAL.md)*
