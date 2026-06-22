@@ -190,16 +190,16 @@ case "$CMD" in
     sudo_one_password_start
     bash "$PREFLIGHT" "${QA_ARGS[@]}"
     AUTO_ARGS=("${QA_ARGS[@]}")
-    for a in "${EXTRA_ARGS[@]:-}"; do
+    for a in "${EXTRA_ARGS[@]}"; do
       [ "$a" = "--install-only" ] && AUTO_ARGS+=(--install-only)
     done
-    if haveno_needs_install_only && [[ ! " ${EXTRA_ARGS[*]:-} " =~ " --install-only " ]]; then
+    if haveno_needs_install_only && [[ ! " ${EXTRA_ARGS[*]} " =~ " --install-only " ]]; then
       y "  Detectado: .deb em Install/ mas Haveno não instalado — usando --install-only."
       AUTO_ARGS+=(--install-only)
     fi
     bash "$HAVENO_INSTALL" "${AUTO_ARGS[@]}"
     SKIP_BACKUP=0
-    [[ " ${EXTRA_ARGS[*]:-} " =~ " --skip-backup " ]] && SKIP_BACKUP=1
+    [[ " ${EXTRA_ARGS[*]} " =~ " --skip-backup " ]] && SKIP_BACKUP=1
     if [ "$SKIP_BACKUP" = "0" ] && haveno_pkg_installed_ok; then
       echo
       y "Recomendado: backup cifrado antes do 1º depósito."
@@ -243,18 +243,18 @@ case "$CMD" in
     ;;
 
   backup)
-    bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]:-}"
+    bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}"
     ;;
 
   update)
     sudo_one_password_start
-    bash "$HAVENO_UPDATE" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]:-}"
+    bash "$HAVENO_UPDATE" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}"
     echo
     g "update concluído. Confirme o VERDE na janela do Haveno."
     ;;
 
   feather)
-    bash "$FEATHER_INSTALL" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]:-}"
+    bash "$FEATHER_INSTALL" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}"
     ;;
 
   qa)

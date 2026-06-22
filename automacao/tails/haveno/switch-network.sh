@@ -31,26 +31,7 @@ done
 
 [ -n "$URL" ] && [ -n "$PGP" ] || die "Uso: $0 --url URL_DO_DEB --pgp FINGERPRINT_DA_MESMA_REDE"
 
-# ---- Guarda cruzada URL↔PGP contra fingerprint configurado em config.sh -----
-_url_reto=0; _pgp_reto=0
-echo "$URL" | grep -q "retoaccess1/haveno-reto" && _url_reto=1
-[ "$PGP" = "${HAVENO_PGP_FPR:-}" ] && _pgp_reto=1
-
-if [ "$_url_reto" = "1" ] && [ "$_pgp_reto" = "0" ]; then
-  r "CRITICO: a URL e da rede RetoSwap mas o PGP fornecido NAO e o fingerprint RetoSwap."
-  r "  RetoSwap (config.sh): ${HAVENO_PGP_FPR:-N/A}"
-  r "  PGP informado:        ${PGP}"
-  y "  Se voce verificou essa chave manualmente (nova release com TOFU), confirme."
-  printf "  Digite CONFIRMO para prosseguir mesmo assim: "
-  read -r _chk
-  [ "${_chk:-}" = "CONFIRMO" ] || die "Abortado. Verifique URL e PGP — mesma rede, mesmo release."
-elif [ "$_url_reto" = "0" ] && [ "$_pgp_reto" = "1" ]; then
-  r "AVISO: a URL nao e da rede RetoSwap mas o PGP e o fingerprint RetoSwap."
-  r "  Confirme que URL e PGP sao da MESMA rede antes de prosseguir."
-  printf "  Continuar mesmo assim? (s/N): "
-  read -r _chk2
-  case "${_chk2:-N}" in s|S|sim|SIM) ;; *) die "Abortado."; esac
-fi
+haveno_guard_deb_url_pgp "$URL" "$PGP"
 
 echo
 b "haveno-switch-network.sh — trocar rede (backup + reinstall)"

@@ -23,7 +23,7 @@
 | `hub.sh install` deu erro | **`steps/run-all.sh`** — descobre onde parou |
 | Quero re-testar só o download | **`steps/02-download-deb.sh`** |
 | Quero re-testar só a assinatura PGP | **`steps/05-verify-sig.sh`** |
-| Download completo mas install falhou | **`steps/07-install-deb.sh`** (ou `hub.sh install --install-only`) |
+| Download completo mas install falhou | **`steps/05-verify-sig.sh`** depois **`steps/07-install-deb.sh`** (ou `hub.sh install --install-only`) |
 | Não sei onde falhou | **`steps/run-all.sh`** — mostra o FAIL exato |
 
 ---

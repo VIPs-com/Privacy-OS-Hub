@@ -4,6 +4,27 @@
 
 ---
 
+## 2026-06-21 — Rodada 6: fixes auditoria (Tails 7.8.1 · RetoSwap 1.6.0-reto)
+
+> **Auditoria:** 7 agentes · relatório `Hub-equipe-dev/auditoria-repo/AUDITORIA-RODADA-6-21062026.md`
+
+### Scripts (8 fixes)
+
+| Fix | Arquivo | Detalhe |
+|-----|---------|---------|
+| **AUD-R6-01** | `hub.sh:246,251,257` | `"${EXTRA_ARGS[@]}"` sem `:-` — corrige `hub.sh feather` que abortava |
+| **AUD-R6-02** | `lib/common.sh` + `switch-network.sh` + `update.sh` | `haveno_guard_deb_url_pgp()` — URL não-Reto exige `CONFIRMO` |
+| **AUD-R6-03** | `steps/07-install-deb.sh` | `fail` se `.sig` ausente (exige `./05-verify-sig.sh` antes) |
+| **AUD-R6-04** | `haveno/backup.sh` | `--no-encrypt` exige confirmação `sim` |
+| **AUD-R6-07** | `haveno/update.sh` | `haveno_check_install_script_hash` após download do install script |
+| **AUD-RESTORE** | `haveno/backup.sh` | `--restore` sem `.sha256` exige confirmação `s/N` |
+| **AUD-STEPS-LOG** | `steps/04-import-key.sh` | Confirmação humana do fingerprint antes de PASS |
+| **Docs** | canônico · `MANUAL.md` · `TRES-PASSOS` | Comandos QA via `hub.sh qa` · prompts pós-install documentados |
+
+> **Pendente (release futuro):** bump `1.8.0-reto` — `@release-watcher` checklist; não alterado nesta versão.
+
+---
+
 ## 2026-06-21 — senha de admin pedida 1× por padrão (sem `--one-password` nas docs)
 
 > **Commit:** `39d8adb`

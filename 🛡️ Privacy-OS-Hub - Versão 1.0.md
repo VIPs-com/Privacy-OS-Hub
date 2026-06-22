@@ -251,7 +251,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │
 │   ├── 📋 PASSO 4 — Backup Seed
 │   │   ├── ▸ COMANDO 4.1: backup cifrado da Data/ (hub.sh backup)
-│   │   ├── ▸ COMANDO 4.2: seed em papel (qa/confirm-seed.sh)
+│   │   ├── ▸ COMANDO 4.2: seed em papel (`hub.sh qa confirm-seed`)
 │   │   ├── 🔴 NUNCA: seed em arquivo digital, foto, nuvem ou e-mail
 │   │   └── ✅ OK SE: seed física legível + backup cifrado em pendrive separado
 │   │
@@ -289,10 +289,10 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: trilha escolhida conscientemente (pode trocar depois)
 │   │
 │   ├── 📋 PASSO 9 — Ritual Seed (2× Cópias Físicas)
-│   │   ├── ▸ COMANDO 9.1: qa/confirm-step9.sh (validação ritual completa)
+│   │   ├── ▸ COMANDO 9.1: `hub.sh qa ritual-seed` (validação ritual completa)
 │   │   ├── 📎 Regra inviolável: 2 cópias · 2 locais físicos separados
 │   │   ├── 📎 Tor OK neste passo (ainda online)
-│   │   └── ✅ OK SE: qa/confirm-step9.sh → PASS
+│   │   └── ✅ OK SE: `hub.sh qa ritual-seed` → PASS
 │   │
 │   ├── 📋 PASSO 10 — Whonix PGP + Import VMs
 │   │   ├── ▸ COMANDO 10.1: baixar Whonix-LXQt-18.1.4.2.ova + .asc
@@ -314,7 +314,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   ├── ▸ COMANDO 12A.3: construir + assinar transação (TXID pendente)
 │   │   ├── ▸ COMANDO 12A.4: exportar tx assinada → pendrive USB
 │   │   ├── ▸ COMANDO 12A.5: importar pendrive no Whonix (hot) + broadcast
-│   │   └── ✅ OK SE: qa/confirm-step12.sh PASS · tx confirmada na rede
+│   │   └── ✅ OK SE: `hub.sh qa cold-sign` PASS · tx confirmada na rede
 │   │
 │   ├── 📋 PASSO 12B — CLI Offline (Trilha B — avançado)
 │   │   ├── ▸ COMANDO 12B.1: monero-wallet-cli --offline (Tails sem rede)
@@ -326,7 +326,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   └── 🏁 CHECKPOINT 2 — Cold-Signing ao Vivo
 │       ├── ✅ Tails offline (sem rede) · carteira aberta · tx assinada
 │       ├── ✅ Transmissão confirmada via Whonix (hot)
-│       ├── ✅ qa/confirm-step12.sh → PASS
+│       ├── ✅ `hub.sh qa cold-sign` → PASS
 │       └── ✅ Modelo frio↔quente executado do início ao fim
 │
 └── 📚 APÊNDICES
@@ -668,7 +668,7 @@ ls ~/Persistent/haveno/Install/
 
 ### 📋 PASSO 4 — Backup e Seed em Papel
 
-**Rede:** Online (Tor) | **Ferramentas:** hub.sh backup, qa/confirm-seed.sh | **Tempo:** 20 min
+**Rede:** Online (Tor) | **Ferramentas:** `hub.sh backup`, `hub.sh qa confirm-seed` | **Tempo:** 20 min
 
 **Contexto:** A seed (25 palavras) recupera os fundos. O backup cifrado de Data/ recupera histórico, contas e trades. São coisas diferentes — você precisa dos dois.
 
@@ -738,7 +738,7 @@ Após restaurar: rode `hub.sh boot` → confirme o verde → abra o Feather → 
 
 ```bash
 # Após anotar a seed no papel (Account → Wallet seed no Haveno):
-~/Persistent/hub-scripts/qa/confirm-seed.sh
+~/Persistent/hub-scripts/hub.sh qa confirm-seed
 ```
 
 **Ritual da seed:**
@@ -1007,7 +1007,7 @@ Antes de continuar para a Parte 2, confirme cada item:
 - [ ] **Segunda cópia** da seed em local físico separado
 - [ ] **Restore height** anotado junto com a seed
 - [ ] Backup cifrado de `Data/` feito (`04-haveno-backup-*.txt` → PASS)
-- [ ] `qa/confirm-seed.sh` → 3× SIM
+- [ ] `hub.sh qa confirm-seed` → 3× SIM
 - [ ] Feather Wallet instalado, PGP verificado (`8185E158…CEFBA71C`)
 - [ ] Folheto lido — regras de ouro e golpes memorizados
 - [ ] `hub.sh boot` funciona em nova sessão
@@ -1095,7 +1095,7 @@ Ao criar a conta (já feito no Passo 4):
 #### 9.2 — Confirmação com script
 
 ```bash
-~/Persistent/hub-scripts/qa/confirm-step9.sh
+~/Persistent/hub-scripts/hub.sh qa ritual-seed
 ```
 
 **OK se:** `09-seed-confirmacao-*.txt` → 3× SIM · duas cópias em locais separados.
@@ -1404,7 +1404,7 @@ Saldo antigo não aparece? Restore height muito alto — recrie com a altura cor
 #### Após assinar offline
 
 ```bash
-~/Persistent/hub-scripts/qa/confirm-step12.sh
+~/Persistent/hub-scripts/hub.sh qa cold-sign
 ```
 
 **OK se:** Tails sem rede antes de abrir carteira · `12-cold-signing-*.txt` → `tails_offline_airgap=SIM`.
@@ -1504,7 +1504,7 @@ submit_transfer
 #### Após assinar offline
 
 ```bash
-~/Persistent/hub-scripts/qa/confirm-step12.sh
+~/Persistent/hub-scripts/hub.sh qa cold-sign
 ```
 
 **OK se:** mesmo critério do 12A — air-gap real · `12-cold-signing-*.txt` → `tails_offline_airgap=SIM`.
@@ -1570,9 +1570,9 @@ Antes de considerar a trilha principal concluída:
 │   └── qa-validate.sh       (validação de qualidade — tela + log · hub.sh qa validate)
 │
 ├── qa/                      (Validação / QA)
-│   ├── confirm-seed.sh      (confirma seed no papel — sem gravar palavras)
-│   ├── confirm-step9.sh     (confirma 2 cópias físicas separadas)
-│   ├── confirm-step12.sh    (confirma cold-signing offline)
+│   ├── confirm-seed.sh      (via `hub.sh qa confirm-seed` — sem gravar palavras)
+│   ├── confirm-step9.sh     (via `hub.sh qa ritual-seed`)
+│   ├── confirm-step12.sh    (via `hub.sh qa cold-sign`)
 │   └── export-logs.sh       (copia qa-logs/ para pendrive)
 │
 ├── steps/                   ★ FALLBACK atômico (passo 2 em pedaços — avançado)
@@ -1614,9 +1614,9 @@ Antes de considerar a trilha principal concluída:
 | `haveno/switch-network.sh` | — | Trocar rede Haveno (backup + update) | Mudar para outra rede | Cuidado — feche trades antes |
 | `system/preflight.sh` | 1–4 | Valida Tails/Tor/persistência/admin | Antes de qualquer script | Seguro (só leitura) |
 | `system/post-session.sh` | 7 | Tor + onion-grater pós-upgrade Tails | Após atualizar o SO Tails | Seguro |
-| `qa/confirm-seed.sh` | 4 | Confirma seed no papel (sem gravar palavras) | Após passo 4 | Seguro |
-| `qa/confirm-step9.sh` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
-| `qa/confirm-step12.sh` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
+| `hub.sh qa confirm-seed` | 4 | Confirma seed no papel (sem gravar palavras) | Após passo 4 | Seguro |
+| `hub.sh qa ritual-seed` | 9 | Confirma 2 cópias físicas separadas | Passo 9 | Seguro |
+| `hub.sh qa cold-sign` | 12 | Confirma cold-signing offline | Após passo 12 | Seguro |
 | `qa/export-logs.sh --usb` | — | Copia qa-logs/ para pendrive | Entregar evidências | Seguro |
 
 #### Flags do hub.sh install

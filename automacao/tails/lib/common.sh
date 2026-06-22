@@ -472,6 +472,31 @@ haveno_hub_download_and_promote_deb() {
   haveno_finalize_verified_deb_in_cwd "$deb_url" "$pgp_fpr"
 }
 
+haveno_guard_deb_url_pgp() {
+  local url="$1" pgp="$2"
+  local _url_reto=0 _pgp_reto=0
+  echo "$url" | grep -q "retoaccess1/haveno-reto" && _url_reto=1
+  [ "$pgp" = "${HAVENO_PGP_FPR:-}" ] && _pgp_reto=1
+
+  if [ "$_url_reto" = "1" ] && [ "$_pgp_reto" = "0" ]; then
+    r "CRITICO: a URL e da rede RetoSwap mas o PGP fornecido NAO e o fingerprint RetoSwap."
+    r "  RetoSwap (config.sh): ${HAVENO_PGP_FPR:-N/A}"
+    r "  PGP informado:        ${pgp}"
+    y "  Se voce verificou essa chave manualmente (nova release com TOFU), confirme."
+    printf "  Digite CONFIRMO para prosseguir mesmo assim: "
+    read -r _chk
+    [ "${_chk:-}" = "CONFIRMO" ] || die "Abortado. Verifique URL e PGP — mesma rede, mesmo release."
+  elif [ "$_url_reto" = "0" ]; then
+    r "AVISO: a URL NAO e do repositorio oficial RetoSwap (retoaccess1/haveno-reto)."
+    r "  URL: ${url}"
+    r "  PGP: ${pgp}"
+    y "  Verifique URL e PGP na MESMA rede/fonte oficial antes de prosseguir."
+    printf "  Digite CONFIRMO para prosseguir com URL customizada: "
+    read -r _chk2
+    [ "${_chk2:-}" = "CONFIRMO" ] || die "Abortado. Use URL e PGP da mesma rede verificada."
+  fi
+}
+
 haveno_check_install_script_hash() {
   local script_path="${1:-./haveno-install.sh}"
   [ -f "$script_path" ] || die "haveno-install.sh nao encontrado para verificacao de hash."
