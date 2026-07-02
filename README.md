@@ -5,7 +5,7 @@ segurança operacional.
 
 `tails` · `whonix` · `tor` · `monero` · `haveno` · `privacy` · `cold-wallet` · `pgp`
 
-> **v1.0 canônica** · release [`v1.0.8`](https://github.com/VIPs-com/Privacy-OS-Hub/releases/tag/v1.0.8) · Nível B+ ✅ (Tails 7.8.1 · RetoSwap **v1.8.0-reto** baseline) · [CHANGELOG](docs/CHANGELOG.md)
+> **v1.0 canônica** · release [`v1.0.8`](https://github.com/VIPs-com/Privacy-OS-Hub/releases/tag/v1.0.8) · B+ ✅ (validado **Tails 7.8.1**) · **Baseline teste: Tails 7.9.1** (2026-07-01) + RetoSwap **v1.8.0-reto** · [CHANGELOG](docs/CHANGELOG.md)
 
 > ⚠️ **Uso educacional.** Não é aconselhamento financeiro. **Instalar ≠ tradear.** Verifique sempre PGP e fontes oficiais.
 

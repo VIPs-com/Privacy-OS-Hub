@@ -68,7 +68,7 @@ Pré-req passo 8: passos 1–7 (Feather no 5). Passo 9: Tor OK. Passo 12: **air-
 
 | Item | Valor |
 |------|-------|
-| Tails mínimo | **7.8.1+** |
+| Tails mínimo | **7.9.1+** |
 | Haveno (turma) | RetoSwap **`1.6.0-reto`** |
 | PGP Reto | `DAA24D878B8D36C90120A897CA02DAC12DAE2D0F` |
 | Feather PGP | `8185E158A33330C7FD61BC0D1F76E155CEFBA71C` |

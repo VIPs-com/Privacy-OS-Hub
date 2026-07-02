@@ -1,6 +1,6 @@
 # 🛡️ Privacy-OS-Hub – VERSÃO 1.0 (canônica)
 
-**Software de referência:** Tails **7.8.1+** · Haveno / RetoSwap **v1.8.0-reto** · Feather Wallet (AppImage Tails, versão atual) · Whonix **18.1.4.2 LXQt**
+**Software de referência:** Tails **7.9.1** (2026-07-01) · Haveno / RetoSwap **v1.8.0-reto** · Feather Wallet (AppImage Tails, versão atual) · Whonix **18.1.4.2 LXQt**
 
 **Metodologia:** Execute. Veja a mágica. Depois entenda.
 - Comandos primeiro, teoria depois
@@ -115,7 +115,7 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 
 | Ferramenta | Versão | Onde obter | Obrigatório |
 |-----------|:------:|------------|:-----------:|
-| Tails | 7.8.1+ | https://tails.net (só aqui) | Sim |
+| Tails | 7.9.1+ | https://tails.net (só aqui) | Sim |
 | Haveno / RetoSwap | v1.8.0-reto | GitHub retoaccess1/haveno-reto | Sim |
 | Feather Wallet | atual | https://featherwallet.org/download | Sim (M2) |
 | Whonix LXQt | 18.1.4.2+ | https://www.whonix.org/wiki/Download | Sim (M2) |
@@ -331,7 +331,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: Haveno verde em < 5 min após boot
 │   │
 │   └── 🏁 CHECKPOINT 1 — Haveno Verde + Seed Salva
-│       ├── ✅ Tails 7.8.1+ · Tor ativo · Persistência configurada
+│       ├── ✅ Tails 7.9.1+ · Tor ativo · Persistência configurada
 │       ├── ✅ Haveno ● VERDE · .deb verificado por PGP
 │       ├── ✅ Seed em papel (2 vias) · backup cifrado em pendrive
 │       └── ✅ Feather instalado e verificado · scripts em ~/Persistent/
@@ -454,7 +454,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 
 ### 📋 PASSO 1 — Bootstrap Tails (USB · Tor · Persistência · Admin)
 
-**Rede:** Online (Tor) | **Ferramenta:** Tails 7.8.1+ | **Tempo:** 1–2h
+**Rede:** Online (Tor) | **Ferramenta:** Tails 7.9.1+ | **Tempo:** 1–2h
 
 **Contexto:** O Tails é um sistema operacional amnésico — esquece tudo ao desligar. Só o Armazenamento Persistente (no USB, criptografado) guarda dados entre sessões. O Haveno precisa de persistência (carteira) e senha admin (instalar e configurar).
 
@@ -464,6 +464,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 
 ```bash
 # Baixe SOMENTE de: https://tails.net/install/
+# Versão de referência (jul/2026): Tails 7.9.1 — confira "Latest version" em tails.net
 # Use o Tails Installer (Windows/macOS/Linux) — não use imagens de fóruns ou Telegram
 # Pendrive 8GB+ será completamente apagado
 # Tails Installer -> Instalar no USB -> aguarde 100%
@@ -1143,7 +1144,7 @@ sudo /home/amnesia/Persistent/haveno/App/utils/install.sh
 
 Antes de continuar para a Parte 2, confirme cada item:
 
-- [ ] Tails 7.8.1+ gravado e bootando corretamente
+- [ ] Tails 7.9.1+ gravado e bootando corretamente
 - [ ] Armazenamento persistente criado com **Dotfiles** ativado
 - [ ] Haveno instalado — ícone no menu e indicador **verde**
 - [ ] `loaded filter: haveno` nos logs do onion-grater

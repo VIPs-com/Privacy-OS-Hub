@@ -77,6 +77,9 @@ gpg --fingerprint NOME_OU_ID_DA_CHAVE
   ```
 
 ### 3.2 Testar no Tails real (obrigatório antes de publicar)
+
+**Baseline de teste atual:** Tails **7.9.1** (2026-07-01) — confira em https://tails.net
+
 - [ ] Atualizar `hub-scripts/` no Tails de teste:
   ```bash
   cd ~/Persistent/Privacy-OS-Hub-main/automacao/tails

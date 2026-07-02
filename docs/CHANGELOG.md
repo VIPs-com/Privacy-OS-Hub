@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-07-02 — baseline Tails 7.9.1 (validação em campo)
+
+| Item | Detalhe |
+|------|---------|
+| **Tails turma** | **7.9.1** (2026-07-01) — substitui 7.8.1+ como referência operacional |
+| **B+ histórico** | Mantido em **7.8.1** (jun/2026) — revalidação em 7.9.1 ⏳ |
+| **Docs** | README · canônico Passo 1 · MANUAL |
+
+Teste de campo combinado: Tails **7.9.1** + RetoSwap **v1.8.0-reto** (`hub.sh update --qa-log`).
+
+---
+
 ## 2026-07-02 — release v1.0.8 (RetoSwap v1.8.0-reto + fix versionamento)
 
 | Item | Detalhe |
