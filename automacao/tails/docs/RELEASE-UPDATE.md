@@ -7,10 +7,16 @@
 
 ## 1. Único arquivo a editar: `lib/config.sh`
 
+**Antes de editar manualmente**, no Tails:
+
+```bash
+hub.sh check-release    # compara com Latest GitHub + testa HTTP da .sig
+```
+
 ```bash
 # lib/config.sh — editar SOMENTE estas duas linhas:
-HAVENO_VERSION="X.Y.Z-reto"          # ← nova versão
-HAVENO_PGP_FPR="FINGERPRINT_NOVO"    # ← fingerprint da nova chave PGP
+HAVENO_VERSION="X.Y.Z-reto"          # ← tag EXATA do GitHub (pode ter prefixo v)
+HAVENO_PGP_FPR="FINGERPRINT_NOVO"    # ← fingerprint da chave PGP (conferir manualmente)
 ```
 
 Tudo o mais é derivado automaticamente:

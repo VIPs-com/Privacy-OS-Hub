@@ -35,6 +35,9 @@
 #   hub.sh update       Novo release: backup automático → baixa novo .deb
 #                               → verifica PGP → reinstala → abre
 #
+#   hub.sh check-release  Compara HAVENO_VERSION com Latest GitHub (Tor)
+#                               → valida URL da .sig antes do download grande
+#
 #   hub.sh feather      Instala Feather Wallet (passo 5)
 #                               → baixa AppImage, verifica PGP, abre
 #                               → --no-launch  só re-verifica PGP (sem abrir janela)
@@ -116,6 +119,7 @@ usage() {
   b "  boot          cada sessão — abre Haveno (sem re-download)"
   b "  backup        backup cifrado (rápido = Data/; --full = hub + my-locker)"
   b "  update        atualiza para novo release (faz backup antes)"
+  b "  check-release compara config com Latest GitHub (tag + .sig URL)"
   b "  feather       instala e verifica Feather Wallet"
   b "  qa <cmd>      relatórios QA e confirmações humanas:"
   b "    validate      valida scripts (sintaxe, PGP, YAML) — tela + log"
@@ -205,7 +209,7 @@ case "$CMD" in
 
   install)
     sudo_one_password_start
-    bash "$PREFLIGHT" "${QA_ARGS[@]}"
+    bash "$PREFLIGHT" "${QA_ARGS[@]}" || exit $?
     AUTO_ARGS=("${QA_ARGS[@]}")
     for a in "${EXTRA_ARGS[@]}"; do
       [ "$a" = "--install-only" ] && AUTO_ARGS+=(--install-only)
@@ -214,7 +218,7 @@ case "$CMD" in
       y "  Detectado: .deb em Install/ mas Haveno não instalado — usando --install-only."
       AUTO_ARGS+=(--install-only)
     fi
-    bash "$HAVENO_INSTALL" "${AUTO_ARGS[@]}"
+    bash "$HAVENO_INSTALL" "${AUTO_ARGS[@]}" || exit $?
     SKIP_BACKUP=0
     [[ " ${EXTRA_ARGS[*]} " =~ " --skip-backup " ]] && SKIP_BACKUP=1
     if [ "$SKIP_BACKUP" = "0" ] && haveno_pkg_installed_ok; then
@@ -253,25 +257,29 @@ case "$CMD" in
 
   boot)
     sudo_one_password_start
-    bash "$PREFLIGHT" "${QA_ARGS[@]}"
-    bash "$HAVENO_BOOT" --watch 8 "${QA_ARGS[@]}"
+    bash "$PREFLIGHT" "${QA_ARGS[@]}" || exit $?
+    bash "$HAVENO_BOOT" --watch 8 "${QA_ARGS[@]}" || exit $?
     echo
     g "boot concluído. Confirme o VERDE na janela do Haveno."
     ;;
 
   backup)
-    bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}"
+    bash "$HAVENO_BACKUP" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}" || exit $?
     ;;
 
   update)
     sudo_one_password_start
-    bash "$HAVENO_UPDATE" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}"
+    bash "$HAVENO_UPDATE" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}" || exit $?
     echo
     g "update concluído. Confirme o VERDE na janela do Haveno."
     ;;
 
   feather)
-    bash "$FEATHER_INSTALL" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}"
+    bash "$FEATHER_INSTALL" "${QA_ARGS[@]}" "${EXTRA_ARGS[@]}" || exit $?
+    ;;
+
+  check-release)
+    haveno_check_update || exit $?
     ;;
 
   qa)

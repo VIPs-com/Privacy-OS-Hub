@@ -1,6 +1,23 @@
 # CHANGELOG — Privacy-OS-Hub
 
-> **v1.0 canônica** · jun/2026 · branch `main`
+> **v1.0 canônica** · jul/2026 · branch `main`
+
+---
+
+## 2026-07-02 — release v1.0.8 (RetoSwap v1.8.0-reto + fix versionamento)
+
+| Item | Detalhe |
+|------|---------|
+| **Baseline turma** | `HAVENO_VERSION="v1.8.0-reto"` em `lib/config.sh` |
+| **`hub.sh check-release`** | Compara config com Latest GitHub + valida HTTP da `.sig` antes do download |
+| **`haveno_resolve_latest_tag()`** | API GitHub via Tor, regex fail-closed, sem `jq` |
+| **Erro `.sig` 404** | Mensagem distingue tag errada vs rede (TROUBLESHOOTING Erro 9) |
+| **`haveno_run_install`** | Tolera falha GDBus/notificação se `dpkg` instalou o pacote (Erro 10) |
+| **`hub.sh`** | Propaga exit code de install/boot/update/backup |
+| **`install.sh`** | Banner lê `$HAVENO_VERSION` dinamicamente |
+| **docs** | `pgp-check-log.md` · RELEASE-UPDATE · TROUBLESHOOTING 9–10 |
+
+`HAVENO_PGP_FPR` inalterado (`DAA24D87…DAE2D0F`) · `INSTALL_SCRIPT_HASH` inalterado (commit `9a14d55`).
 
 ---
 

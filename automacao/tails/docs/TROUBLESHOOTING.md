@@ -275,6 +275,66 @@ hub.sh backup --full --usb
 
 ---
 
+### Erro 9 — `.sig` com 0 bytes ou HTTP 404 (tag `HAVENO_VERSION` errada)
+
+**Sintoma:**
+```
+ERRO: Assinatura .sig invalida (0 bytes) — rede/Tor ou URL incorreta
+# ou
+ERRO: Assinatura .sig nao encontrada (HTTP 404) — tag HAVENO_VERSION incorreta
+URL: .../download/1.8.0-reto/haveno-v1.8.0-...deb.sig
+```
+
+**Causa:** A tag do GitHub **não segue um padrão fixo** entre releases. Ex.: `1.6.0-reto` (sem `v`) vs `v1.8.0-reto` (com `v`). URL com tag inexistente → 404 → `.sig` vazia.
+
+**Solução:**
+```bash
+# 1. Checar tag Latest e URL da .sig ANTES do download grande:
+hub.sh check-release
+
+# 2. Confirmar no Tails qual config está em uso:
+source ~/Persistent/hub-scripts/lib/common.sh
+echo "$HAVENO_VERSION"
+echo "$HAVENO_SIG_URL"
+
+# 3. Sync após editar config no repo:
+~/Persistent/hub-scripts/sync-hub-scripts.sh
+
+# 4. Retomar install:
+hub.sh install --qa-log
+```
+
+**Checkpoint:** se o log já mostrou `Assinatura .sig pronta (..., 119 bytes)` e `Haveno binaries have been successfully verified`, **não** é problema de `config.sh` — veja Erro 10.
+
+---
+
+### Erro 10 — `install.sh falhou` com `GDBus` / Notifications (pacote já instalado)
+
+**Sintoma:**
+```
+GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Notifications was not provided...
+Setting up haveno (1.8.0-1) ...
+install.sh falhou.
+RESULTADO: FAIL
+```
+
+**Causa:** O `install.sh` upstream tenta notificar a UI (D-Bus) num contexto sem serviço de notificações (`pkexec`/automação). O `dpkg` pode ter **concluído** mesmo assim.
+
+**Solução:**
+```bash
+# Verificar se o pacote está instalado:
+dpkg-query -W -f='${Status}' haveno
+
+# Se "install ok installed":
+hub.sh install --install-only --qa-log
+# ou
+hub.sh boot --qa-log
+```
+
+**Não** reeditar `HAVENO_VERSION` se o log já passou por verificação PGP do `.deb`.
+
+---
+
 ## 4. Referência rápida — steps/ e quando usar cada um
 
 | Step | Arquivo | Quando usar |
@@ -291,4 +351,4 @@ hub.sh backup --full --usb
 
 ---
 
-*docs/TROUBLESHOOTING.md · Privacy-OS-Hub · atualizado 2026-06-20*
+*docs/TROUBLESHOOTING.md · Privacy-OS-Hub · atualizado 2026-07-02*

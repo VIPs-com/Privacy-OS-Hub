@@ -123,7 +123,7 @@ sudo_one_password_start() {
     die "Nao ativei o modo uma-senha (sudoers invalido). Tente: HAVENO_ONE_PASSWORD=0 hub.sh install"
   fi
   export HAVENO_SUDO_SESSION=1
-  HAVENO_SUDO_OWNER=1
+  export HAVENO_SUDO_OWNER=1
   trap 'sudo_one_password_stop' EXIT INT TERM
   g "  Modo uma-senha ativo: os proximos comandos nao pedem senha ate o fim."
 }
@@ -724,9 +724,90 @@ haveno_deb_download_failed_msg() {
   exit 1
 }
 
+haveno_http_head_status() {
+  local url="$1"
+  curl -sI --socks5-hostname 127.0.0.1:9050 --max-time 60 "$url" 2>/dev/null \
+    | awk 'toupper($1) ~ /^HTTP/ {print $2; exit}'
+}
+
+haveno_tag_to_deb_urls() {
+  local tag="$1" ver_num
+  ver_num="${tag%-*}"
+  ver_num="${ver_num#v}"
+  HAVENO_RESOLVED_DEB_URL="https://github.com/retoaccess1/haveno-reto/releases/download/${tag}/haveno-v${ver_num}-linux-x86_64-installer.deb"
+  HAVENO_RESOLVED_SIG_URL="${HAVENO_RESOLVED_DEB_URL}.sig"
+}
+
+# Resolve tag exata do release Latest (API GitHub) — sem jq (Tails).
+haveno_resolve_latest_tag() {
+  local api="https://api.github.com/repos/retoaccess1/haveno-reto/releases/latest"
+  local raw tag
+  raw="$(curl -fsSL --socks5-hostname 127.0.0.1:9050 --max-time 90 "$api" 2>/dev/null)" || return 1
+  tag="$(printf '%s' "$raw" | grep -m1 '"tag_name"' \
+    | sed -E 's/.*"tag_name"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/')"
+  if [[ "$tag" =~ ^v?[0-9]+(\.[0-9]+){1,3}(-[A-Za-z0-9]+)*$ ]]; then
+    printf '%s\n' "$tag"
+    return 0
+  fi
+  return 1
+}
+
+# Compara config local com Latest upstream; opcionalmente atualiza HAVENO_VERSION (nao PGP).
+haveno_check_update() {
+  local latest current="${HAVENO_VERSION}" cfg="${LIB_DIR}/config.sh" http_st
+  b "Checando release Latest (retoaccess1/haveno-reto) via Tor..."
+  latest="$(haveno_resolve_latest_tag)" || die "Nao consegui ler tag Latest (Tor, rate limit ou API indisponivel)."
+  g "  HAVENO_VERSION local: ${current}"
+  g "  GitHub Latest:        ${latest}"
+  haveno_tag_to_deb_urls "$latest"
+  http_st="$(haveno_http_head_status "$HAVENO_RESOLVED_SIG_URL")"
+  case "$http_st" in
+    200) g "  .sig URL OK (HTTP 200)." ;;
+    404)
+      r "  .sig retornou HTTP 404 — tag ou nome do .deb incorreto."
+      y "  URL: ${HAVENO_RESOLVED_SIG_URL}"
+      y "  Convencao de tag varia (1.6.0-reto vs v1.8.0-reto). Confira a pagina de releases."
+      return 1
+      ;;
+    *)
+      y "  .sig HTTP ${http_st:-?} — Tor instavel ou rate limit; tente de novo."
+      ;;
+  esac
+  if [ "$current" = "$latest" ]; then
+    g "  config.sh ja aponta para ${latest}."
+    return 0
+  fi
+  y "  Release mais nova: ${latest}"
+  y "  HAVENO_PGP_FPR NAO sera alterado — confira fingerprint manualmente (RELEASE-UPDATE.md)."
+  [ -t 0 ] || {
+    y "Modo nao interativo — edite HAVENO_VERSION em ${cfg}."
+    return 0
+  }
+  printf "Atualizar HAVENO_VERSION para '%s' em config.sh? (s/N): " "$latest"
+  read -r ans
+  case "${ans:-N}" in s|S|sim|SIM) ;;
+  *) y "Cancelado."; return 0 ;;
+  esac
+  cp -f "$cfg" "${cfg}.bak-$(date +%Y%m%d-%H%M%S)"
+  sed -i "s/^HAVENO_VERSION=\".*\"/HAVENO_VERSION=\"${latest}\"/" "$cfg"
+  # shellcheck source=/dev/null
+  source "$cfg"
+  g "  config.sh atualizado. Rode sync-hub-scripts.sh e hub.sh update --qa-log"
+  return 0
+}
+
 haveno_sig_download_failed_msg() {
-  local sz="${1:-0}" sig_url="${2:-}"
-  r "ERRO: Assinatura .sig invalida (${sz} bytes) — provavel erro de rede/GitHub, nao PGP."
+  local sz="${1:-0}" sig_url="${2:-}" http_st=""
+  [ -n "$sig_url" ] && http_st="$(haveno_http_head_status "$sig_url")"
+  if [ "$http_st" = "404" ]; then
+    r "ERRO: Assinatura .sig nao encontrada (HTTP 404) — tag HAVENO_VERSION ou nome do .deb incorreto."
+    y "  Tags variam: 1.6.0-reto (sem v) vs v1.8.0-reto (com v). Rode: hub.sh check-release"
+  elif [ "${sz:-0}" -eq 0 ]; then
+    r "ERRO: Assinatura .sig invalida (0 bytes) — rede/Tor ou URL incorreta (nao e falha PGP ainda)."
+    y "  Teste rapido: hub.sh check-release"
+  else
+    r "ERRO: Assinatura .sig invalida (${sz} bytes) — provavel erro de rede/GitHub, nao PGP."
+  fi
   y "  Scripts .sh no pendrive/W11 estao OK — o .deb e a .sig baixam NO Tails via Tor."
   y "  · Aguarde 2-3 min e rode: hub.sh install --qa-log"
   y "  · Fallback atomico: steps/02-download-deb.sh"
@@ -957,6 +1038,12 @@ haveno_run_install() {
   b "Rodando install.sh (pkexec — pode pedir senha admin)..."
   chmod +x "${utils}/install.sh" 2>/dev/null || true
   if ! sudo "${utils}/install.sh"; then
+    # install.sh upstream pode falhar por D-Bus/notificacao (GDBus) mesmo com dpkg OK.
+    if dpkg-query -W -f='${Status}' haveno 2>/dev/null | grep -q "install ok installed"; then
+      y "  install.sh retornou erro mas haveno esta instalado (D-Bus/notificacao — comum no pkexec)."
+      y "  Continuando. Se o app nao abrir: hub.sh install --install-only --qa-log"
+      return 0
+    fi
     # Deps com nome Ubuntu inexistentes no Debian (DIV-20260610-02).
     # Fallback validado em campo: --force-depends + reconfigure.
     if [ "${HAVENO_DEPS_MISSING:-0}" = "1" ] && [ -f "${HAVENO_DIR}/Install/haveno.deb" ]; then

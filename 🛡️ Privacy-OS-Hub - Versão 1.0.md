@@ -1,6 +1,6 @@
 # 🛡️ Privacy-OS-Hub – VERSÃO 1.0 (canônica)
 
-**Software de referência:** Tails **7.8.1+** · Haveno / RetoSwap **1.6.0-reto** · Feather Wallet (AppImage Tails, versão atual) · Whonix **18.1.4.2 LXQt**
+**Software de referência:** Tails **7.8.1+** · Haveno / RetoSwap **v1.8.0-reto** · Feather Wallet (AppImage Tails, versão atual) · Whonix **18.1.4.2 LXQt**
 
 **Metodologia:** Execute. Veja a mágica. Depois entenda.
 - Comandos primeiro, teoria depois
@@ -116,7 +116,7 @@ Este material foi auditado em múltiplas rodadas (red team + blue team + equipe 
 | Ferramenta | Versão | Onde obter | Obrigatório |
 |-----------|:------:|------------|:-----------:|
 | Tails | 7.8.1+ | https://tails.net (só aqui) | Sim |
-| Haveno / RetoSwap | 1.6.0-reto | GitHub retoaccess1/haveno-reto | Sim |
+| Haveno / RetoSwap | v1.8.0-reto | GitHub retoaccess1/haveno-reto | Sim |
 | Feather Wallet | atual | https://featherwallet.org/download | Sim (M2) |
 | Whonix LXQt | 18.1.4.2+ | https://www.whonix.org/wiki/Download | Sim (M2) |
 | **Pendrive Tails** | **8 GB mín. · 16–64 GB ideal USB 3.0+** | — | Sim |
@@ -639,7 +639,7 @@ Depois do Haveno abrir, três prompts interativos (pressione Enter ou responda):
 # Rede Reto (turma — pronto para usar):
 curl -fsSLO https://github.com/haveno-dex/haveno/raw/master/scripts/install_tails/haveno-install.sh \
   && bash haveno-install.sh \
-  "https://github.com/retoaccess1/haveno-reto/releases/download/1.6.0-reto/haveno-v1.6.0-linux-x86_64-installer.deb" \
+  "https://github.com/retoaccess1/haveno-reto/releases/download/v1.8.0-reto/haveno-v1.8.0-linux-x86_64-installer.deb" \
   "DAA24D878B8D36C90120A897CA02DAC12DAE2D0F"
 ```
 

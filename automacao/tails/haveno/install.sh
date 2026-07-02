@@ -150,8 +150,8 @@ _fetch_http_date() {
 
 echo
 b "==============================================================="
-b "  haveno/install.sh — Haveno no Tails (Reto 1.6.0-reto)  "
-b "  Exploit 20/05 CORRIGIDO na 1.6.0-reto · tradear com cautela"
+b "  haveno/install.sh — Haveno no Tails (Reto ${HAVENO_VERSION})  "
+b "  Exploit 20/05 CORRIGIDO na 1.6.0-reto+ · tradear com cautela"
 b "==============================================================="
 echo
 

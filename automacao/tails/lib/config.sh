@@ -6,8 +6,8 @@
 # Não há mais URL/PGP hardcoded em haveno-auto.sh, haveno-update.sh, etc.
 ###############################################################################
 
-# ----- Release da rede (RetoSwap 1.6.0-reto) — EDITE AQUI no próximo release -
-HAVENO_VERSION="1.6.0-reto"
+# ----- Release da rede (RetoSwap v1.8.0-reto) — EDITE AQUI no próximo release -
+HAVENO_VERSION="v1.8.0-reto"
 HAVENO_PGP_FPR="DAA24D878B8D36C90120A897CA02DAC12DAE2D0F"
 RETO_KEY_URL="https://retoswap.com/reto_public.asc"
 
