@@ -6,17 +6,30 @@
 
 | Script | Passo hub | Função |
 |--------|-----------|--------|
-| [`whonix-verify-image.sh`](whonix-verify-image.sh) | **10** | PGP da imagem `.ova` ou `.libvirt.xz` |
+| [`whonix-install-virtualbox.sh`](whonix-install-virtualbox.sh) | **10** (prep) | Oracle VirtualBox + GPG + DKMS (+ Extension Pack com `-e`) |
+| [`whonix-verify-image.sh`](whonix-verify-image.sh) | **10** | PGP da imagem `.ova` ou `.libvirt.xz` (só verificação) |
+| [`whonix-import-ova.sh`](whonix-import-ova.sh) | **10** | Verify + `VBoxManage import` (+ boot opcional `-b`) |
 
-**Ainda manual:** importar VM (VirtualBox/KVM), Kleopatra no Windows/macOS, USB passthrough, cold-signing (passos 9/12).
+**Referência ZTC (mesmo fluxo, nomenclatura `ztc-whonix-*`):** [Zero-Trust-Core/whonix](https://github.com/VIPs-com/Zero-Trust-Core/tree/main/whonix)
+
+**Ainda manual:** Anon Connection Wizard, `systemcheck`, cold-signing (passos 11–12).
+
+### Fluxo recomendado (Linux)
 
 ```bash
-chmod +x whonix-verify-image.sh
+cd automacao/whonix-host
+chmod +x whonix-install-virtualbox.sh whonix-verify-image.sh whonix-import-ova.sh
+
+# 1) VirtualBox verificado
+sudo ./whonix-install-virtualbox.sh -e -y
+
+# 2a) Só verificar PGP (evidência QA)
 ./whonix-verify-image.sh --qa-log /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
-./whonix-verify-image.sh --qa-log --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
-# Log em: ~/whonix-download/qa-logs/10-whonix-verify-*.txt
+
+# 2b) Verificar + importar (fingerprint Hub padrão; override com -f)
+sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.asc --qa-log -b
 ```
 
-Validação: [COMO-LER-SEUS-LOGS.md](../../automacao/docs-aluno/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
+Validação: [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
 
 *Módulo 2 · Privacy-OS-Hub*

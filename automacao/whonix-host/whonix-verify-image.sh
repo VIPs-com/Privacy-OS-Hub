@@ -90,7 +90,7 @@ echo
 g "==============================================================="
 g "  Good signature — confira o fingerprint com SEUS OLHOS: ${WHONIX_FPR}"
 g "  Formato: ${FORMAT}"
-g "  Proximo passo MANUAL: importar no VirtualBox/KVM (Instalar por SO)"
+g "  Proximo passo: whonix-import-ova.sh ou import manual no VirtualBox/KVM"
 g "==============================================================="
 
 if [ "$QA_LOG" = "1" ]; then

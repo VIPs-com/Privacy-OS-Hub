@@ -58,7 +58,7 @@ PARTE 1 (1–7)                         PARTE 2 (8–12)
 | | **Passos 8–12 — Custódia fria** | | |
 | 8 | Porteiro: Trilha A ou B | — | Trilha escolhida conscientemente |
 | 9 | Ritual Seed | `hub.sh qa ritual-seed` | 2 cópias físicas em locais separados |
-| 10 | Whonix + PGP | VirtualBox/KVM | "Tor Connected" no Workstation |
+| 10 | Whonix + PGP | VirtualBox/KVM + scripts host | "Tor Connected" no Workstation |
 | 11 | Modelo frio↔quente | — | Air-gap internalizado |
 | 12A | Feather Offline *(Trilha A)* | Feather (air-gap) | Cold-signing completo |
 | 12B | CLI Offline *(Trilha B)* | monero-wallet-cli | Cold-signing via terminal |
@@ -79,7 +79,8 @@ Privacy-OS-Hub/
 │   │                                    ·  haveno/ · feather/ · system/ · qa/ · lib/ · steps/
 │   │                                    ·  hub-aliases/ → aliases/ (parte-1/ · parte-2/ · manutencao/)
 │   │                                    ·  atalhos GNOME: haveno-boot.desktop · haveno-backup.desktop
-│   ├── whonix-host/                     ·  whonix-verify-image.sh
+│   ├── whonix-host/                     ·  whonix-install-virtualbox.sh
+│   │                                    ·  whonix-verify-image.sh · whonix-import-ova.sh
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
 │   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md · TRES-PASSOS-HAVENO-TAILS.md
 │

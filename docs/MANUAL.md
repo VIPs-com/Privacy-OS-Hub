@@ -446,20 +446,45 @@ Ordem oficial: [canônico](../🛡️%20Privacy-OS-Hub%20-%20Versão%201.0.md) �
 
 Rode no **computador onde você vai instalar VirtualBox/KVM** — Debian, Ubuntu, etc.
 
-### `whonix-verify-image.sh` (passo 10)
+### `whonix-install-virtualbox.sh` (passo 10 — prep)
+
+```bash
+chmod +x whonix-install-virtualbox.sh
+sudo ./whonix-install-virtualbox.sh -e -y   # -e = Extension Pack (USB passthrough)
+```
+
+| O quê | Detalhe |
+|-------|---------|
+| **Faz** | Oracle repo + GPG + `virtualbox-7.2` + grupo `vboxusers` |
+| **Referência ZTC** | [W00 VirtualBox](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/whonix/playbooks/W00-instalar-configurar-virtualbox.md) |
+
+### `whonix-verify-image.sh` (passo 10 — só PGP)
 
 ```bash
 chmod +x whonix-verify-image.sh
 ./whonix-verify-image.sh /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
 ./whonix-verify-image.sh --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
+./whonix-verify-image.sh --qa-log /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
 ```
 
 | O quê | Detalhe |
 |-------|---------|
 | **Faz** | Baixa `derivative.asc`, confere fingerprint, `gpg --verify` da imagem |
-| **Não faz** | Importar `.ova` no VirtualBox (manual) |
-| **Rodar 2×** | **Sim** — só verifica de novo; não altera a imagem |
-| **OK se** | `Good signature` (ou `Assinatura válida` em PT-BR) + fingerprint `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` com seus olhos |
+| **Não faz** | Importar `.ova` no VirtualBox |
+| **OK se** | `VALIDSIG` + fingerprint `916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA` com seus olhos |
+
+### `whonix-import-ova.sh` (passo 10 — verify + import)
+
+```bash
+chmod +x whonix-import-ova.sh
+sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.asc --qa-log -b
+```
+
+| O quê | Detalhe |
+|-------|---------|
+| **Faz** | Mesma verificação PGP + `VBoxManage import` (+ `-b` inicia Gateway/Workstation) |
+| **Fingerprint** | Padrão Hub (tabela acima); override com `-f` se a Whonix rotacionar a chave |
+| **Ainda manual** | Anon Connection Wizard, `systemcheck`, updates dentro das VMs |
 
 Detalhe: [automacao/whonix-host/README.md](../automacao/whonix-host/README.md)
 
@@ -566,7 +591,9 @@ hub-scripts/
 └── sync-hub-scripts.sh      Instala/atualiza hub-scripts/ (rodar no repo)
 
 automacao/whonix-host/       (outro módulo — host Linux, não o pendrive)
-└── whonix-verify-image.sh
+├── whonix-install-virtualbox.sh
+├── whonix-verify-image.sh
+└── whonix-import-ova.sh
 
 automacao/homelab/           ✗ Outro PC (Debian/Ubuntu) — não use no Tails
 ```
@@ -803,6 +830,14 @@ cd ~/Persistent/hub-scripts/steps
 
 ### Whonix — host Linux (não está em `automacao/tails/`)
 
+#### `whonix-install-virtualbox.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Passo hub** | **10** (prep) |
+| **O que faz** | Oracle VirtualBox verificado (repo + GPG + DKMS) |
+| **Comando** | `sudo ./whonix-install-virtualbox.sh -e -y` |
+
 #### `whonix-verify-image.sh`
 
 | Campo | Detalhe |
@@ -816,6 +851,15 @@ cd ~/Persistent/hub-scripts/steps
 | **Comando** | `./whonix-verify-image.sh --qa-log imagem.ova imagem.ova.asc` |
 | **Rodar 2×** | **Sim** — só verifica de novo |
 | **Detalhe** | [Seção Whonix](#whonix-host-linux--não-é-no-tails) |
+
+#### `whonix-import-ova.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Passo hub** | **10** |
+| **O que faz** | Verify PGP + `VBoxManage import` (+ `-b` boot VMs) |
+| **Comando** | `sudo ./whonix-import-ova.sh -i imagem.ova -s imagem.ova.asc --qa-log` |
+| **Alternativa** | `whonix-verify-image.sh` + import manual na GUI |
 
 ---
 
@@ -875,7 +919,9 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 | `hub.sh qa cold-sign` | **Sim** (após passo 12) |
 | `hub.sh qa export-logs` | Opcional (entregar logs) |
 | `feather/backup.sh` | **Sim** (após carteira Feather) |
-| `whonix-verify-image.sh` | **Sim** (passo 10, no PC host) |
+| `whonix-install-virtualbox.sh` | **Sim** (passo 10 prep, `sudo`) |
+| `whonix-verify-image.sh` | **Sim** (passo 10 verify, no PC host) |
+| `whonix-import-ova.sh` | **Sim** (passo 10 verify+import, `sudo`) |
 | `system/post-session.sh` | Só após atualizar o SO Tails |
 | `haveno/verify-deb.sh` | Só se desconfiar do `.deb` (avançado) |
 | `haveno/switch-network.sh` | Só ao trocar de rede Haveno (avançado) |
