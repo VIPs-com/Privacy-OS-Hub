@@ -456,7 +456,7 @@ sudo ./whonix-install-virtualbox.sh -e -y   # -e = Extension Pack (USB passthrou
 | O quê | Detalhe |
 |-------|---------|
 | **Faz** | Oracle repo + GPG + `virtualbox-7.2` + grupo `vboxusers` |
-| **Referência ZTC** | [W00 VirtualBox](https://github.com/VIPs-com/Zero-Trust-Core/blob/main/whonix/playbooks/W00-instalar-configurar-virtualbox.md) |
+| **Doc** | [`automacao/whonix-host/README.md`](../automacao/whonix-host/README.md) |
 
 ### `whonix-verify-image.sh` (passo 10 — só PGP)
 
@@ -484,7 +484,22 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 |-------|---------|
 | **Faz** | Mesma verificação PGP + `VBoxManage import` (+ `-b` inicia Gateway/Workstation) |
 | **Fingerprint** | Padrão Hub (tabela acima); override com `-f` se a Whonix rotacionar a chave |
-| **Ainda manual** | Anon Connection Wizard, `systemcheck`, updates dentro das VMs |
+| **Ainda manual** | Anon Connection Wizard, updates dentro das VMs |
+
+### `whonix-verificar-tor.sh` (passo 10 — Workstation)
+
+Copie para a Whonix-Workstation após Gateway com Tor conectado:
+
+```bash
+chmod +x whonix-verificar-tor.sh
+./whonix-verificar-tor.sh
+```
+
+| O quê | Detalhe |
+|-------|---------|
+| **Onde** | **Dentro** da Whonix-Workstation (não no host, não no Tails) |
+| **Faz** | `systemcheck` + confirmação em check.torproject.org |
+| **OK se** | Tor operacional antes do passo 11 |
 
 Detalhe: [automacao/whonix-host/README.md](../automacao/whonix-host/README.md)
 
@@ -922,6 +937,7 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 | `whonix-install-virtualbox.sh` | **Sim** (passo 10 prep, `sudo`) |
 | `whonix-verify-image.sh` | **Sim** (passo 10 verify, no PC host) |
 | `whonix-import-ova.sh` | **Sim** (passo 10 verify+import, `sudo`) |
+| `whonix-verificar-tor.sh` | **Sim** (passo 10 pós-boot, dentro da Workstation) |
 | `system/post-session.sh` | Só após atualizar o SO Tails |
 | `haveno/verify-deb.sh` | Só se desconfiar do `.deb` (avançado) |
 | `haveno/switch-network.sh` | Só ao trocar de rede Haveno (avançado) |

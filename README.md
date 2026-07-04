@@ -81,6 +81,7 @@ Privacy-OS-Hub/
 │   │                                    ·  atalhos GNOME: haveno-boot.desktop · haveno-backup.desktop
 │   ├── whonix-host/                     ·  whonix-install-virtualbox.sh
 │   │                                    ·  whonix-verify-image.sh · whonix-import-ova.sh
+│   │                                    ·  whonix-verificar-tor.sh (Workstation)
 │   ├── homelab/                         ·  nó Monero (Debian/Ubuntu — NÃO Tails)
 │   └── docs-aluno/                      ·  COMO-LER-SEUS-LOGS.md · TRES-PASSOS-HAVENO-TAILS.md
 │
