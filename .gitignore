@@ -7,6 +7,9 @@ CLAUDE.md
 Hub-equipe-dev/
 MANIFEST.txt
 
+# Mantenedor off remoto (jul/2026)
+/docs/pgp-check-log.md
+
 # --- Agentes internos Claude Code (ficam só no disco local) ---
 agents/
 

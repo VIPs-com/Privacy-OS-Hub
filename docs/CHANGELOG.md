@@ -27,7 +27,7 @@ Teste de campo combinado: Tails **7.9.1** + RetoSwap **v1.8.0-reto** (`hub.sh up
 | **`haveno_run_install`** | Tolera falha GDBus/notificação se `dpkg` instalou o pacote (Erro 10) |
 | **`hub.sh`** | Propaga exit code de install/boot/update/backup |
 | **`install.sh`** | Banner lê `$HAVENO_VERSION` dinamicamente |
-| **docs** | `pgp-check-log.md` · RELEASE-UPDATE · TROUBLESHOOTING 9–10 |
+| **docs** | `pgp-check-log` (mantenedor, local) · RELEASE-UPDATE · TROUBLESHOOTING 9–10 |
 
 `HAVENO_PGP_FPR` inalterado (`DAA24D87…DAE2D0F`) · `INSTALL_SCRIPT_HASH` inalterado (commit `9a14d55`).
 
