@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-07-04 — Whonix passo 10 completo (host + Workstation)
+
+| Item | Detalhe |
+|------|---------|
+| **`whonix-verificar-tor.sh`** | Novo — `systemcheck` + check.torproject.org na Workstation |
+| **Docs** | MANUAL passo 10 · `automacao/whonix-host/README.md` — autocontido (sem link ZTC) |
+| **Commit** | `1e664cb` |
+
+Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-import-ova` → `whonix-verificar-tor` (guest).
+
+---
+
 ## 2026-07-02 — baseline Tails 7.9.1 (validação em campo)
 
 | Item | Detalhe |
