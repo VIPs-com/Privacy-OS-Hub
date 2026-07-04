@@ -3,8 +3,7 @@
 # whonix-import-ova.sh — Privacy-OS-Hub (host Linux)
 #
 # Passo 10 — verificar .ova + importar Gateway/Workstation no VirtualBox.
-# Complementa whonix-verify-image.sh (só PGP). Espelha W01 ZTC:
-# https://github.com/VIPs-com/Zero-Trust-Core/tree/main/whonix/playbooks/W01-instalar-whonix.md
+# Complementa whonix-verify-image.sh (só PGP). Ver §10.3–10.7 do curso Hub.
 #
 # Fingerprint padrão Hub (revalidar em whonix.org/wiki/Verify_the_images):
 #   916B 8D99 C38E AF5E 8ADC  7A2A 8D66 066A 2EEA CCDA

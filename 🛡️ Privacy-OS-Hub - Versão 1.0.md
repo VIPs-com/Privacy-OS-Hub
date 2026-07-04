@@ -351,12 +351,14 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: `hub.sh qa ritual-seed` → PASS
 │   │
 │   ├── 📋 PASSO 10 — Whonix PGP + Import VMs
-│   │   ├── ▸ COMANDO 10.1: baixar Whonix-LXQt-18.1.4.2.ova + .asc
+│   │   ├── ▸ COMANDO 10.0: whonix-install-virtualbox.sh -e (host Debian)
+│   │   ├── ▸ COMANDO 10.1: baixar Whonix-LXQt + .asc + derivative.asc
 │   │   ├── ▸ COMANDO 10.2: whonix-verify-image.sh --qa-log (fail-closed)
-│   │   ├── ▸ COMANDO 10.3: import .ova no VirtualBox ou KVM
-│   │   ├── ▸ COMANDO 10.4: iniciar Gateway → Workstation
-│   │   ├── 📎 FPR Whonix: 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA
-│   │   └── ✅ OK SE: "Tor Connected" no Whonix Workstation
+│   │   ├── ▸ COMANDO 10.3: whonix-import-ova.sh ou import manual GUI
+│   │   ├── ▸ COMANDO 10.4: Gateway → Workstation → whonix-verificar-tor.sh
+│   │   ├── 📎 Scripts: automacao/whonix-host/ (prefixo whonix-* · autocontidos)
+│   │   ├── 📎 FPR Whonix: 916B8D99…2EEACCDA (revalidar em whonix.org/wiki/Verify_the_images)
+│   │   └── ✅ OK SE: Tor confirmado na Workstation + snapshot tirado
 │   │
 │   ├── 📋 PASSO 11 — Modelo Frio-Quente (teoria)
 │   │   ├── 📎 Cold = Tails sem rede (assinar) · Hot = Whonix online (transmitir)
@@ -1270,6 +1272,16 @@ Ao criar a conta (já feito no Passo 4):
 | Windows / macOS | VirtualBox |
 | Linux | VirtualBox (mais fácil) ou KVM (mais seguro) |
 
+**Scripts (host Debian):** `automacao/whonix-host/` — rode na pasta do clone, não no Tails.
+
+```bash
+cd automacao/whonix-host
+chmod +x whonix-*.sh
+sudo ./whonix-install-virtualbox.sh -e -y   # Extension Pack = pastas compartilhadas/USB
+```
+
+Windows/macOS: instalador oficial em virtualbox.org + Extension Pack da mesma versão.
+
 ---
 
 #### 10.2 — Baixar 3 arquivos (qualquer SO)
@@ -1283,12 +1295,21 @@ Em https://www.whonix.org/wiki/Download, baixe para a **mesma pasta**:
 
 #### 10.3 — Verificar a imagem (Linux — atalho com script)
 
+Pasta: `automacao/whonix-host/`
+
 ```bash
 chmod +x whonix-verify-image.sh
 ./whonix-verify-image.sh /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
 # KVM: ./whonix-verify-image.sh --kvm Whonix-*.libvirt.xz Whonix-*.libvirt.xz.asc
 # Com log de evidência:
 ./whonix-verify-image.sh --qa-log /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
+```
+
+**Import automatizado (opcional, após verify OK):**
+
+```bash
+sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.asc --qa-log -b
+# -b = inicia Gateway e Workstation após import
 ```
 
 Manualmente (Linux):
@@ -1357,8 +1378,23 @@ gpg --verify-options show-notations --verify Whonix-*.ova.asc Whonix-*.ova
 3. Aguarde a importação completa
 4. Inicie Whonix-Gateway → espere Tor conectar (ícone "Tor Connection")
 5. SÓ ENTÃO inicie Whonix-Workstation
-Login padrão: usuário 'user', sem senha (passwordless)
+Login padrão: usuário `user` / senha `changeme` (trocar imediatamente)
 ```
+
+Alternativa Linux: `sudo ./whonix-import-ova.sh -i … -s … --qa-log -b` (verify + import + boot).
+
+---
+
+#### 10.7b — Confirmar Tor na Workstation
+
+Copie `whonix-verificar-tor.sh` para a VM ou rode na Workstation:
+
+```bash
+chmod +x whonix-verificar-tor.sh
+./whonix-verificar-tor.sh
+```
+
+**OK se:** `systemcheck` sem erro + check.torproject.org confirma saída via Tor.
 
 ---
 
@@ -1669,7 +1705,7 @@ Antes de considerar a trilha principal concluída:
 
 - [ ] Passo 8: trilha escolhida (A ou B) e anotada
 - [ ] Passo 9: duas cópias físicas da seed em locais separados · `09-seed-confirmacao-*.txt` → 3× SIM
-- [ ] Passo 10: Whonix verificado com PGP (`916B8D99…2EEACCDA`) · Gateway conecta ao Tor · Workstation só via Gateway · snapshot tirado
+- [ ] Passo 10: Whonix verificado com PGP · `whonix-verificar-tor.sh` OK · Gateway → Workstation · snapshot tirado
 - [ ] Passo 11: respondeu as 4 perguntas do modelo frio↔quente
 - [ ] Passo 12A ou 12B: cold-signing ao vivo com **valor mínimo** · `12-cold-signing-*.txt` → `tails_offline_airgap=SIM`
 - [ ] Tails estava **sem Wi-Fi/cabo** durante o passo 12

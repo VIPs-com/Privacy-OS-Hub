@@ -3,7 +3,7 @@
 # whonix-install-virtualbox.sh — Privacy-OS-Hub (host Linux)
 #
 # Passo 10 — pré-requisito: Oracle VirtualBox verificado no Debian/Ubuntu.
-# Espelha o W00 do Zero-Trust-Core: https://github.com/VIPs-com/Zero-Trust-Core/tree/main/whonix/playbooks
+# Playbook: 🛡️ Privacy-OS-Hub - Versão 1.0.md §10.1 · automacao/whonix-host/README.md
 #
 # Uso:
 #   sudo ./whonix-install-virtualbox.sh [-v VERSAO] [-e] [-y]
