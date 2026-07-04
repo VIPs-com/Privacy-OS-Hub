@@ -2,6 +2,8 @@
 
 > **v1.0 canônica** · jul/2026 · branch `main`
 
+> **Nota (jul/2026):** entradas históricas podem citar `Hub-equipe-dev/` — pasta renomeada para **`Hub-equipe-dev/`** (camada local gitignored).
+
 ---
 
 ## 2026-07-02 — baseline Tails 7.9.1 (validação em campo)
@@ -523,14 +525,14 @@ chmod +x ~/Persistent/*.sh
 ## Publicação pós-Rodada 20
 
 - **Publicação:** `git pull origin main` — cadeia `79f6d3e` (FIG-4/FIG-1) · `104a751`+ (fechamento P1–P2) · `f32b735` (HEAD)
-- **Veredito:** LIBERADO para piloto B+ — ver `Privacy-OS-Hub-equipe-dev/validacao/HANDOFF-EQUIPE-DEV.md` (local)
+- **Veredito:** LIBERADO para piloto B+ — ver `Hub-equipe-dev/validacao/HANDOFF-EQUIPE-DEV.md` (local)
 
 ---
 
 ## Diagramas v2 (FIG-1…4)
 
 - **`79f6d3e`** — FIG-4 (4 camadas + jornada 1–12 no README); FIG-1 reescrito (P01–P12, tabela rede); índice `diagramas-indice.md`; âncoras FIG-3/FIG-4
-- **`104a751`** — fechamento P1–P2: cartões passo FIG-1/2/3; MANUAL-EXPERT `#arquitetura-do-repositorio`; índices; roadmap interno `Privacy-OS-Hub-equipe-dev/ROADMAP-FECHAMENTO-DIAGRAMAS-V2.md`
+- **`104a751`** — fechamento P1–P2: cartões passo FIG-1/2/3; MANUAL-EXPERT `#arquitetura-do-repositorio`; índices; roadmap interno `Hub-equipe-dev/ROADMAP-FECHAMENTO-DIAGRAMAS-V2.md`
 
 ---
 
@@ -540,7 +542,7 @@ chmod +x ~/Persistent/*.sh
 - **M2 README** coluna Comandos → `processos/` P08–P12
 - **MANUAL-SCRIPTS** fluxo visual ↔ passos/P0x · **Playbooks Vol II** banner P05
 - **Âncoras** Vol II caps 4–17 · Whonix §4 · `#trilha-script-first`
-- Roadmap interno: `Privacy-OS-Hub-equipe-dev/ROADMAP-ALINHAMENTO-DOCUMENTACAO-V2.md`
+- Roadmap interno: `Hub-equipe-dev/ROADMAP-ALINHAMENTO-DOCUMENTACAO-V2.md`
 
 ---
 
@@ -556,7 +558,7 @@ chmod +x ~/Persistent/*.sh
 
 - Índice público: [trilha/referencia/stubs-v1-indice.md](trilha/referencia/stubs-v1-indice.md)
 - Stub criado: `Whonix-Online/Scripts/README.md` → `automacao/whonix-host/`
-- Pacote equipe-dev: `Privacy-OS-Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md`
+- Pacote equipe-dev: `Hub-equipe-dev/validacao/PACOTE-PILOTO-B+-PRONTO.md`
 
 ---
 
@@ -575,7 +577,7 @@ chmod +x ~/Persistent/*.sh
 - **Scripts:** `feather-install-verify.sh` · `haveno-verify-deb.sh` — PGP `--status-fd 1` + `VALIDSIG` (locale-independente); `haveno-switch-network.sh` — `die` em opção inválida
 - **Doc manual PGP (P-3):** Vol II §3.3/§4.1 · Playbooks §2–3 · `P05-feather.md` — exigem fingerprint do signatário
 - **README:** passos online **1–9** (alinha passo 9 em Tails com Tor)
-- Gate local (gitignored): `Privacy-OS-Hub-equipe-dev/checkers/` — ver `Auditoria/Rodada-24-Correcoes-Doc-e-Gate-Links.md`
+- Gate local (gitignored): `Hub-equipe-dev/checkers/` — ver `Auditoria/Rodada-24-Correcoes-Doc-e-Gate-Links.md`
 
 ---
 
