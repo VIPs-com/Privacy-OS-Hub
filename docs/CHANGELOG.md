@@ -6,6 +6,18 @@
 
 ---
 
+## 2026-07-04 — release v1.0.9 (Whonix passo 10 — curso canônico)
+
+| Item | Detalhe |
+|------|---------|
+| **Curso canônico** | Passo 10: install VB · verify · import · `whonix-verificar-tor.sh` |
+| **Scripts** | Cabeçalhos autocontidos (sem link ZTC) |
+| **Commits** | `1e664cb` · `4f96e6a` · `c3e1fe0` |
+
+Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-import-ova` → `whonix-verificar-tor`.
+
+---
+
 ## 2026-07-04 — Whonix passo 10 completo (host + Workstation)
 
 | Item | Detalhe |
