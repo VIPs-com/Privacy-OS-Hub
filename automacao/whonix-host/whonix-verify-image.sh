@@ -60,7 +60,16 @@ trap 'rm -rf "$WORKDIR"' EXIT
 cd "$WORKDIR" || die "mktemp falhou"
 
 b "[1/3] Baixando derivative.asc..."
-curl -fsSL "$DERIVATIVE_URL" -o derivative.asc || die "Falha ao baixar derivative.asc"
+_FETCH_OK=0
+for _try in 1 2 3; do
+  if curl -fsSL --max-time 120 "$DERIVATIVE_URL" -o derivative.asc && [ -s derivative.asc ]; then
+    _FETCH_OK=1
+    break
+  fi
+  y "  Tentativa ${_try}/3 falhou — aguardando 5s..."
+  sleep 5
+done
+[ "$_FETCH_OK" = "1" ] || die "Falha ao baixar derivative.asc após 3 tentativas"
 
 b "[2/3] Importando chave + fingerprint..."
 gpg --import derivative.asc 2>/dev/null || true

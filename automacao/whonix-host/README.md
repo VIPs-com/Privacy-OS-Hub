@@ -19,7 +19,7 @@
 cd automacao/whonix-host
 chmod +x whonix-install-virtualbox.sh whonix-verify-image.sh whonix-import-ova.sh whonix-verificar-tor.sh
 
-# 1) VirtualBox verificado
+# 1) VirtualBox verificado (Debian 13/trixie suportado)
 sudo ./whonix-install-virtualbox.sh -e -y
 
 # 2a) Só verificar PGP (evidência QA)
@@ -29,6 +29,12 @@ sudo ./whonix-install-virtualbox.sh -e -y
 sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.asc --qa-log -b
 ```
 
+### Notas (jul/2026)
+
+- **PGP fail-closed:** `whonix-verify-image.sh` e `whonix-import-ova.sh` usam `VALIDSIG` + fingerprint — não dependem de `Good signature` / locale PT-BR.
+- **`whonix-verificar-tor.sh`:** copie para a Workstation com finais de linha **LF** (Unix). CRLF (`\r\n`) quebra o shebang no Linux (`bad interpreter`). O repositório força `*.sh eol=lf` via `.gitattributes`.
+- **Debian 13 (trixie):** se `whonix-install-virtualbox.sh` falhar com módulos vbox, verifique conflito KVM + Secure Boot no log `/var/log/virtualbox-install.log`.
+
 Validação: [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
 
-*Módulo 2 · Privacy-OS-Hub*
+*Módulo 2 · Privacy-OS-Hub · atualizado jul/2026*

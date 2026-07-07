@@ -30,6 +30,17 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-07 — release v1.0.9.1 (fixes Whonix / VirtualBox host)
+
+| Script | Fix |
+|--------|-----|
+| `whonix-install-virtualbox.sh` | `log()` → stderr (bug `$CODENAME` corrompido); `apt-get update` exit real; `check_repo_availability`; escrita atômica; fetch retry |
+| `whonix-import-ova.sh` | `VALIDSIG` + FPR (locale PT-BR); `EXPKEYSIG`; download derivative com retry |
+| `whonix-verify-image.sh` | retry derivative.asc |
+| `whonix-verificar-tor.sh` | CRLF→LF; retry/timeout check Tor |
+
+---
+
 ## 2026-07-02 — baseline Tails 7.9.1 (validação em campo)
 
 | Item | Detalhe |

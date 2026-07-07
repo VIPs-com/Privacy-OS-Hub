@@ -872,9 +872,18 @@ cd ~/Persistent/hub-scripts/steps
 | Campo | Detalhe |
 |-------|---------|
 | **Passo hub** | **10** |
-| **O que faz** | Verify PGP + `VBoxManage import` (+ `-b` boot VMs) |
+| **O que faz** | Verify PGP (`VALIDSIG` + FPR, imune a locale PT-BR) + `VBoxManage import` (+ `-b` boot VMs) |
 | **Comando** | `sudo ./whonix-import-ova.sh -i imagem.ova -s imagem.ova.asc --qa-log` |
 | **Alternativa** | `whonix-verify-image.sh` + import manual na GUI |
+
+#### `whonix-verificar-tor.sh`
+
+| Campo | Detalhe |
+|-------|---------|
+| **Passo hub** | **10** (pós-boot Workstation) |
+| **Onde** | Dentro da Whonix-Workstation (copie o script com finais de linha **LF**) |
+| **O que faz** | `systemcheck` + check.torproject.org via SOCKS (retry/timeout) |
+| **Comando** | `./whonix-verificar-tor.sh` ou `--skip-systemcheck` |
 
 ---
 

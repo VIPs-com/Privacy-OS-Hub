@@ -37,8 +37,22 @@ DOWNLOADED_KEY=0
 
 # ------------------------------- Funções ----------------------------------
 
+# stderr: não poluir stdout em capturas $(...)
 log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE" >&2
+}
+
+fetch_url() {
+    local url="$1" dest="$2" tries="${3:-3}"
+    local n
+    for ((n=1; n<=tries; n++)); do
+        if curl -fsSL --max-time 120 -o "$dest" "$url" && [[ -s "$dest" ]]; then
+            return 0
+        fi
+        log "AVISO: download falhou (tentativa ${n}/${tries}): $url"
+        sleep 5
+    done
+    return 1
 }
 
 fail() {
@@ -85,7 +99,7 @@ validate_inputs() {
     if [[ -z "$KEY_FILE" ]]; then
         KEY_FILE="$(mktemp)"
         DOWNLOADED_KEY=1
-        curl -fsSL "$DERIVATIVE_URL" -o "$KEY_FILE" || fail "Falha ao baixar derivative.asc"
+        fetch_url "$DERIVATIVE_URL" "$KEY_FILE" || fail "Falha ao baixar derivative.asc após 3 tentativas"
     fi
     [[ -f "$KEY_FILE" ]] || fail "Arquivo de chave não encontrado: $KEY_FILE"
 }
@@ -132,7 +146,7 @@ import_key() {
     chmod 700 "$GNUPGHOME_DIR"
     export GNUPGHOME="$GNUPGHOME_DIR"
 
-    gpg --quiet --import "$KEY_FILE" 2>&1 | tee -a "$LOG_FILE"
+    gpg --quiet --import "$KEY_FILE" 2>&1 | tee -a "$LOG_FILE" >&2
 }
 
 # Verificação do fingerprint contra o valor informado pelo operador
@@ -162,31 +176,39 @@ verify_fingerprint() {
 }
 
 # Passo 3 do playbook: verificar a assinatura do .ova (OBRIGATÓRIO)
+# Fail-closed: VALIDSIG + fingerprint (imune a locale PT-BR "Assinatura válida")
 verify_signature() {
     log "[Passo 3/5] Verificando assinatura do arquivo .ova (OBRIGATÓRIO)..."
-    local gpg_output
-    if ! gpg_output="$(gpg --verify "$SIG_FILE" "$OVA_FILE" 2>&1)"; then
-        log "$gpg_output"
-        fail "Assinatura INVÁLIDA (BAD signature ou erro de verificação). NÃO importe este arquivo. Apague e baixe novamente."
-    fi
+    local fpr_norm gpg_log
+    fpr_norm="$(echo "$EXPECTED_FPR" | tr -d ' ' | tr '[:lower:]' '[:upper:]')"
+    gpg_log="$(mktemp)"
+    gpg --status-fd 1 --verify-options show-notations --verify "$SIG_FILE" "$OVA_FILE" \
+        >"$gpg_log" 2>&1 || true
 
-    if ! echo "$gpg_output" | grep -qi "Good signature"; then
-        log "$gpg_output"
-        fail "gpg não retornou 'Good signature' explicitamente. Trate como inválida e não prossiga."
+    if grep -q "^\[GNUPG:\] VALIDSIG .*${fpr_norm}" "$gpg_log"; then
+        log "Assinatura verificada (VALIDSIG + fingerprint esperado)."
+        cat "$gpg_log" | tee -a "$LOG_FILE" >&2
+        rm -f "$gpg_log"
+        return 0
     fi
-
-    log "$gpg_output"
-    log "Assinatura verificada com sucesso: Good signature."
+    if grep -qi "EXPKEYSIG" "$gpg_log"; then
+        cat "$gpg_log" | tee -a "$LOG_FILE" >&2
+        rm -f "$gpg_log"
+        fail "EXPKEYSIG — chave expirada. Reimporte derivative.asc de whonix.org e confira fingerprint em Verify_the_images."
+    fi
+    cat "$gpg_log" | tee -a "$LOG_FILE" >&2
+    rm -f "$gpg_log"
+    fail "Assinatura INVÁLIDA. NÃO importe este arquivo. Apague e baixe novamente."
 }
 
 # Passo 4 do playbook: importar no VirtualBox
 import_ova() {
     log "[Passo 4/5] Importando appliance no VirtualBox..."
-    VBoxManage import "$OVA_FILE" | tee -a "$LOG_FILE"
+    VBoxManage import "$OVA_FILE" | tee -a "$LOG_FILE" >&2
 
     local vms
     vms="$(VBoxManage list vms)"
-    echo "$vms" | tee -a "$LOG_FILE"
+    echo "$vms" | tee -a "$LOG_FILE" >&2
 
     echo "$vms" | grep -qi "Whonix-Gateway" || log "AVISO: 'Whonix-Gateway' não encontrada na lista de VMs — confira o nome manualmente."
     echo "$vms" | grep -qi "Whonix-Workstation" || log "AVISO: 'Whonix-Workstation' não encontrada na lista de VMs — confira o nome manualmente."
