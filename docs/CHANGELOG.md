@@ -30,6 +30,14 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-07 — release v1.0.9.2 (sanitize virtualbox.list corrompido)
+
+| Script | Fix |
+|--------|-----|
+| `whonix-install-virtualbox.sh` | `sanitize_stale_repo_file()` — remove `virtualbox.list` malformado **antes** do Passo 1 `apt-get update` (sobra de execução antiga com bug de `log`/stdout); traps + resumo de avisos |
+
+---
+
 ## 2026-07-07 — release v1.0.9.1 (fixes Whonix / VirtualBox host)
 
 | Script | Fix |

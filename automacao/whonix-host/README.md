@@ -33,6 +33,7 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 
 - **PGP fail-closed:** `whonix-verify-image.sh` e `whonix-import-ova.sh` usam `VALIDSIG` + fingerprint — não dependem de `Good signature` / locale PT-BR.
 - **`whonix-verificar-tor.sh`:** copie para a Workstation com finais de linha **LF** (Unix). CRLF (`\r\n`) quebra o shebang no Linux (`bad interpreter`). O repositório força `*.sh eol=lf` via `.gitattributes`.
+- **`whonix-install-virtualbox.sh`:** se uma execução **anterior** (versão antiga, de qualquer pasta) deixou `/etc/apt/sources.list.d/virtualbox.list` corrompido, o script atual remove o arquivo malformado **antes** do primeiro `apt-get update`. Desbloqueio manual: `sudo rm /etc/apt/sources.list.d/virtualbox.list`.
 - **Debian 13 (trixie):** se `whonix-install-virtualbox.sh` falhar com módulos vbox, verifique conflito KVM + Secure Boot no log `/var/log/virtualbox-install.log`.
 
 Validação: [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
