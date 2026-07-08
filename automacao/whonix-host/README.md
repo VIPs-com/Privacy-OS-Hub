@@ -7,6 +7,7 @@
 | Script | Passo hub | Função |
 |--------|-----------|--------|
 | [`whonix-install-virtualbox.sh`](whonix-install-virtualbox.sh) | **10** (prep) | Assistente: Oracle VirtualBox + GPG + DKMS + Extension Pack + MOK (Secure Boot) |
+| [`whonix-verify-virtualbox-host.sh`](whonix-verify-virtualbox-host.sh) | **10** (pós-MOK) | Valida host: Secure Boot · MOK · vboxdrv · VBoxManage · `--qa-log` |
 | [`whonix-verify-image.sh`](whonix-verify-image.sh) | **10** | PGP da imagem `.ova` ou `.libvirt.xz` (só verificação) |
 | [`whonix-import-ova.sh`](whonix-import-ova.sh) | **10** | Verify + `VBoxManage import` (+ boot opcional `-b`) |
 | [`whonix-verificar-tor.sh`](whonix-verificar-tor.sh) | **10** (pós-boot) | `systemcheck` + check.torproject.org na Workstation |
@@ -45,7 +46,7 @@ O script detecta em qual **fase** você está e retoma sozinho (não repete `apt
 cd ~/Downloads/Privacy-OS-Hub   # ou seu clone do repo
 git pull
 cd automacao/whonix-host
-chmod +x whonix-install-virtualbox.sh whonix-verify-image.sh whonix-import-ova.sh whonix-verificar-tor.sh
+chmod +x whonix-install-virtualbox.sh whonix-verify-virtualbox-host.sh whonix-verify-image.sh whonix-import-ova.sh whonix-verificar-tor.sh
 ```
 
 > **Cole só comandos no terminal** — não cole texto/markdown de análises ou chats.
@@ -75,14 +76,16 @@ O que `--reset-mok --new-mok-keys` faz:
 
 `Enroll MOK` → `Continue` → `Yes` → senha MOK → `Reboot`
 
-**Após login:**
+> **View key 0** pode aparecer **vazio** — isso é normal no firmware. Escolha **Continue**, não `key from disk`.
+
+**Após login — validar:**
 
 ```bash
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
 sudo ./whonix-install-virtualbox.sh -y
-lsmod | grep vbox
 ```
 
-Esperado: `RESULTADO: PASS` · `exit 0`
+Esperado: `RESULTADO: PASS` · `exit 0` · `vboxdrv` no `lsmod`.
 
 ---
 
@@ -145,10 +148,11 @@ Se a tela azul **não aparecer**, o enroll não foi feito — o `vboxdrv` contin
 ```bash
 cd ~/Downloads/Privacy-OS-Hub/automacao/whonix-host
 git pull
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
 sudo ./whonix-install-virtualbox.sh -y
 ```
 
-Fase esperada: **PÓS-REBOOT** (`post_reboot_sign`). O script **pula** passos 1–7, assina módulos com a chave enrolada e carrega `vboxdrv`.
+Fase esperada do instalador: **PÓS-REBOOT** (`post_reboot_sign`). O script **pula** passos 1–7, assina módulos com a chave enrolada e carrega `vboxdrv`.
 
 **Confirme:**
 
@@ -157,7 +161,21 @@ lsmod | grep vbox
 echo "exit=$?"
 ```
 
-Esperado: `vboxdrv` (e possivelmente `vboxnetflt`, `vboxnetadp`) listados · `RESULTADO: PASS` · `exit=0`.
+Esperado: `vboxdrv` listado · validador `RESULTADO: PASS` · instalador `exit=0`.
+
+### 3b) Só validar (sem reinstalar)
+
+```bash
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
+```
+
+Gera `qa-logs/10-virtualbox-host-*.txt` com todos os checks — envie este arquivo como evidência de campo.
+
+| `RESULTADO` | `exit` | Significado |
+|-------------|--------|-------------|
+| `PASS` | `0` | Tudo OK — pode importar Whonix |
+| `PASS_PARCIAL` | `2` | Pacote OK; falta MOK ou módulos |
+| `FAIL` | `1` | Corrija itens `[FAIL]` e rode de novo |
 
 ### 4) Importar Whonix
 
@@ -212,6 +230,9 @@ Se a tela azul **não aparecer** ou passar rápido demais, você **não** enrolo
 ## Diagnóstico rápido
 
 ```bash
+# Validação completa (recomendado)
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
+
 # Chave MOK enrolada no firmware?
 sudo mokutil --test-key /root/module-signing/MOK.der
 

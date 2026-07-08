@@ -24,6 +24,10 @@
 #
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 #
+# Changelog jul/2026 v3.4:
+#   - UX MOK: banner colorido antes da senha; CN/fingerprint do certificado
+#   - Card tela azul: View key 0 vazio é normal → escolha Continue
+#   - Fase pending: avisa que senha MOK já foi definida
 # Changelog jul/2026 v3.3:
 #   - --reset-mok / --new-mok-keys: refazer fluxo MOK do zero
 #   - -y: reboot pós-import [S/n] — Enter reinicia (systemctl reboot -i)
@@ -88,6 +92,11 @@ WIZARD_PHASE=""
 #   complete             — vboxdrv já carregado
 
 # ------------------------------- Funções ----------------------------------
+
+_b() { echo -e "\033[1;34m$*\033[0m" >&2; }
+_g() { echo -e "\033[1;32m$*\033[0m" >&2; }
+_y() { echo -e "\033[1;33m$*\033[0m" >&2; }
+_m() { echo -e "\033[1;35m$*\033[0m" >&2; }
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE" >&2
@@ -259,23 +268,24 @@ print_wizard_intro() {
             phase_msg="Fase: INSTALAÇÃO — download Oracle verificado + pacote + MOK se necessário."
             ;;
     esac
-    cat >&2 <<EOF
-
-===================================================================
-  Assistente VirtualBox — Privacy-OS-Hub (Passo 10)
-===================================================================
-  ${phase_msg}
-
-  Automático (script): repo Oracle · GPG · apt · DKMS · Extension Pack
-  Interativo (você):   senha MOK · tela AZUL no boot · confirmação visual
-                       da fingerprint Oracle (pula com -y)
-
-  Limite do Linux: a tela azul "Enroll MOK" NÃO pode ser scriptada —
-  é proteção do Secure Boot (diferente do .exe no Windows).
-
-  Log: ${LOG_FILE}
-===================================================================
-EOF
+    _m ""
+    _m "==================================================================="
+    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.4"
+    _m "==================================================================="
+    _b "  ${phase_msg}"
+    echo "" >&2
+    _g "  Automático: repo Oracle · GPG · apt · DKMS · Extension Pack"
+    _y "  Você faz:   senha MOK · tela AZUL no boot (Enroll MOK)"
+    if [[ "$WIZARD_PHASE" == "pending_mok_reboot" ]]; then
+        _y "  Senha MOK já foi definida — use a MESMA na tela azul."
+        _y "  Próximo: reboot → Enroll MOK → Continue → Yes → senha → Reboot"
+    elif [[ "$WIZARD_PHASE" == "installed_need_mok" ]]; then
+        _y "  ATENÇÃO: em breve o script pedirá senha MOK (nada aparece ao digitar)."
+    fi
+    echo "" >&2
+    _b "  Validação pós-MOK: ./whonix-verify-virtualbox-host.sh --qa-log"
+    _b "  Log: ${LOG_FILE}"
+    _m "==================================================================="
     log "Assistente: ${phase_msg}"
 }
 
@@ -307,6 +317,7 @@ offer_reboot_now() {
     echo "│  Comando:  sudo systemctl reboot -i" >&2
     echo "│  ERRADO:   sudo systemctl -i   (só lista serviços!)" >&2
     echo "│  Na tela azul: Enroll MOK → Continue → Yes → senha → Reboot" >&2
+    echo "│  (View key 0 vazio é normal — escolha Continue)" >&2
     echo "│  A tela azul some RÁPIDO — reaja assim que o PC reiniciar." >&2
     echo "└──────────────────────────────────────────────────────────────" >&2
     local resp=""
@@ -518,11 +529,12 @@ print_mok_reboot_card() {
 
   2) No boot, tela AZUL "MOK Management" (só neste reboot):
        Enroll MOK → Continue → Yes → senha MOK → Reboot
+     View key 0 pode aparecer VAZIO — isso é normal; escolha Continue.
 
-  3) De volta ao Debian, rode ESTE SCRIPT DE NOVO (só comandos, não texto):
+  3) De volta ao Debian, valide (recomendado):
        cd ~/Downloads/Privacy-OS-Hub/automacao/whonix-host
+       sudo ./whonix-verify-virtualbox-host.sh --qa-log
        sudo ./whonix-install-virtualbox.sh -y
-       lsmod | grep vbox
 
   Esperado: RESULTADO: PASS · exit 0 · vboxdrv listado.
 
@@ -538,6 +550,24 @@ print_mok_reboot_card() {
 EOF
 }
 
+print_mok_password_banner() {
+    local cn fp
+    cn="$(openssl x509 -inform DER -in "$MOK_DER" -noout -subject 2>/dev/null \
+        | sed 's/subject= *//' || echo 'CN=VirtualBox MOK Privacy-OS-Hub')"
+    fp="$(openssl x509 -inform DER -in "$MOK_DER" -noout -fingerprint -sha256 2>/dev/null \
+        | cut -d= -f2 || echo '?')"
+    _m ""
+    _m "╔══════════════════════════════════════════════════════════════╗"
+    _m "║  AÇÃO HUMANA — defina senha MOK (Secure Boot)               ║"
+    _m "╠══════════════════════════════════════════════════════════════╣"
+    _m "║  Certificado: ${cn}"
+    _m "║  SHA256:      ${fp}"
+    _y "║  Nada aparece ao digitar — é normal (senha oculta).          ║"
+    _y "║  Use a MESMA senha na tela azul: Enroll MOK → Continue       ║"
+    _m "╚══════════════════════════════════════════════════════════════╝"
+    _m ""
+}
+
 enroll_mok_key() {
     local pw1 pw2 import_out import_rc=0
     log "Registrando chave MOK no firmware (mokutil --import)..."
@@ -549,10 +579,11 @@ enroll_mok_key() {
         MOK_REBOOT_NEEDED=1
         return 1
     fi
-    echo "" >&2
-    echo "=== Secure Boot: defina senha MOK (mesma senha na tela AZUL do boot) ===" >&2
+    print_mok_password_banner
+    _y "Digite a senha MOK agora (cursor piscando = aguardando input):" >&2
     read -r -s -p "Senha MOK: " pw1; echo >&2
     read -r -s -p "Confirme senha MOK: " pw2; echo >&2
+    _g "Senhas capturadas — registrando no firmware (mokutil --import)..." >&2
     [[ "$pw1" == "$pw2" && -n "$pw1" ]] || fail "Senhas MOK não conferem ou vazias."
     # mokutil --import pede senha duas vezes (input password / input password again)
     import_out="$(printf '%s\n%s\n' "$pw1" "$pw2" | mokutil --import "$MOK_DER" 2>&1)" || import_rc=$?

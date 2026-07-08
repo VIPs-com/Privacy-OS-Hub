@@ -30,6 +30,16 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-08 — whonix-host v3.4 (validação host + UX MOK)
+
+| Item | Detalhe |
+|------|---------|
+| **`whonix-verify-virtualbox-host.sh`** | Novo — 8 checks: SB · MOK · pacote · VBoxManage · vboxdrv · extpack · log · vboxusers; `--qa-log` |
+| `whonix-install-virtualbox.sh` | Banner colorido v3.4; senha MOK com aviso visual; View key 0 documentado |
+| `automacao/whonix-host/README.md` | Seção validação pós-MOK; tabela exit codes do validador |
+
+---
+
 ## 2026-07-07 — whonix-install v3.3 (reset MOK + reboot Enter com -y)
 
 | Item | Detalhe |
