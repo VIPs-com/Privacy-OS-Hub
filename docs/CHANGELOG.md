@@ -46,6 +46,18 @@ Sem reboot MOK. Se `sign` falhar, leia o bloco **Diagnóstico automático** em `
 
 ---
 
+## 2026-07-08 — whonix-host v3.5.2 (sync MOK → shim-signed)
+
+| Item | Detalhe |
+|------|---------|
+| `sync_mok_to_shim_signed()` | Copia MOK Hub (`/root/module-signing/`) → `/var/lib/shim-signed/mok/` antes de `vboxconfig` |
+| `whonix-install-virtualbox.sh` | Chama sync em `ensure_mok_keypair()` |
+| `whonix-sign-virtualbox-modules.sh` | Chama sync em `run_vboxconfig()` |
+| Campo | Fix confirmado no piloto **bloodyroar** (Debian 13 trixie · SB ON · VBox 7.2.12) |
+| `README.md` | Sintoma *"does not provide tools for automatic generation of keys"* |
+
+---
+
 ## 2026-07-08 — whonix-host v3.5.1 (diagnóstico modprobe + vboxpci)
 
 | Item | Detalhe |

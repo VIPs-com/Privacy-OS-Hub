@@ -30,6 +30,16 @@
 #     automaticamente blacklist em /etc/modprobe.d, vermagic do módulo vs.
 #     kernel rodando, e as últimas linhas do dmesg — em vez de só dizer
 #     "não apareceu no lsmod" sem nenhuma pista de causa.
+#   - v3.5.2: publicado sync_mok_to_shim_signed (campo bloodyroar jul/2026)
+#   - FIX CRÍTICO (confirmado por evidência de campo): vboxdrv.sh (chamado
+#     por /sbin/vboxconfig) procura a chave MOK em
+#     /var/lib/shim-signed/mok/, um caminho DIFERENTE do ${MOK_DIR} do Hub.
+#     Isso fazia seu auto-sign nativo falhar em TODO rebuild ("does not
+#     provide tools for automatic generation of keys"), impedindo o módulo
+#     de completar o load pelo mecanismo do próprio pacote — nosso
+#     modprobe manual por fora ficava brigando com esse ciclo quebrado.
+#     sync_mok_to_shim_signed() copia a mesma chave (já enrolada) para o
+#     caminho nativo antes de cada vboxconfig.
 # ---------------------------------------------------------------------------
 
 set -euo pipefail
@@ -144,8 +154,24 @@ ensure_kernel_headers() {
         || fail "sign-file ausente em ${hdr}/scripts/sign-file"
 }
 
+# BUG CONFIRMADO (jul/2026): vboxdrv.sh (dentro de /sbin/vboxconfig) procura
+# a MOK em /var/lib/shim-signed/mok/, não em ${MOK_DIR}. Sem isso, seu
+# auto-sign falha sempre e o módulo nunca completa o load pelo mecanismo
+# nativo do pacote — ver whonix-install-virtualbox.sh para o mesmo fix.
+sync_mok_to_shim_signed() {
+    local shim_dir="/var/lib/shim-signed/mok"
+    [[ -f "$MOK_PRIV" && -f "$MOK_DER" ]] || return 0
+    install -d -m 0700 "$shim_dir" 2>/dev/null || return 0
+    if ! cmp -s "$MOK_DER" "${shim_dir}/MOK.der" 2>/dev/null; then
+        install -m 0600 "$MOK_PRIV" "${shim_dir}/MOK.priv" 2>/dev/null \
+            && install -m 0644 "$MOK_DER" "${shim_dir}/MOK.der" 2>/dev/null \
+            && log "Chave MOK sincronizada para ${shim_dir} (caminho nativo do vboxdrv.sh)."
+    fi
+}
+
 run_vboxconfig() {
     log "[1/4] Recompilando módulos para kernel $(uname -r)..."
+    sync_mok_to_shim_signed
     if [[ -x /sbin/vboxconfig ]]; then
         /sbin/vboxconfig 2>&1 | tee -a "$LOG_FILE" >&2 \
             || warn "vboxconfig retornou erro — tentando assinar módulos existentes."

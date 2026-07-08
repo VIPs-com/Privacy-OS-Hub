@@ -302,7 +302,8 @@ sudo tail -30 /var/log/virtualbox-install.log
 |---------|----------------|------|
 | `is not enrolled` no `test-key` | Tela azul não feita | `systemctl reboot -i` → Enroll MOK |
 | `Key was rejected` | MOK OK; kernel novo ou módulos não assinados | `sudo ./whonix-sign-virtualbox-modules.sh -y` |
-| `modprobe` sem erro mas `lsmod` vazio | Falha silenciosa (blacklist / vermagic) | v3.5.1+ mostra diagnóstico no sign log; `sudo dmesg \| grep -i vbox` |
+| `modprobe` sem erro mas `lsmod` vazio | v3.5.1: blacklist/vermagic; **v3.5.2:** MOK em caminho errado | v3.5.2+ sincroniza Hub → `/var/lib/shim-signed/mok/`; se persistir: `dmesg \| grep vbox` |
+| `does not provide tools for automatic generation of keys` | `vboxdrv.sh` não acha MOK em `/var/lib/shim-signed/mok/` | **v3.5.2+** — `git pull` e rode `sign` de novo |
 | `vboxpci não encontrado` | **Normal** — módulo descontinuado desde VBox 6.1 | Ignorar (v3.5.1+ não avisa mais) |
 | `FAIL_SIGN` no verify | Idem | `whonix-sign-virtualbox-modules.sh -y --qa-log` |
 | Install pede reboot mas MOK já enrolada | Estado `.mok-import-requested` obsoleto | `sudo rm -f /root/module-signing/.mok-import-requested` + `sign` |
@@ -355,8 +356,9 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 
 ---
 
-## Notas técnicas (jul/2026 · v3.5.1)
+## Notas técnicas (jul/2026 · v3.5.2)
 
+- **MOK em dois caminhos:** Hub gera em `/root/module-signing/`; `vboxdrv.sh` (Oracle) exige `/var/lib/shim-signed/mok/`. v3.5.2+ copia a **mesma** chave enrolada antes de cada `vboxconfig` (`sync_mok_to_shim_signed`).
 - **Módulos assinados (VBox 7.2):** `vboxdrv`, `vboxnetflt`, `vboxnetadp` — **`vboxpci` não existe mais** (removido na série 6.1).
 - **Três scripts + três logs:** install · sign · verify — não misture responsabilidades.
 - **Falha silenciosa:** se `modprobe` não imprime erro mas `vboxdrv` não carrega, o `sign` v3.5.1+ checa blacklist, vermagic e `dmesg`.
@@ -366,4 +368,4 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 - **`mokutil --test-key`:** parseia mensagem, não só exit code (Debian trixie).
 - **Progresso:** `/root/module-signing/.hub-vbox-progress` — consulte se perdeu o rumo.
 
-*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5.1 · jul/2026*
+*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5.2 · jul/2026*

@@ -26,6 +26,9 @@
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 # Assinatura de módulos: whonix-sign-virtualbox-modules.sh (log separado)
 #
+# Changelog jul/2026 v3.5.2:
+#   - sync_mok_to_shim_signed(): copia MOK Hub → /var/lib/shim-signed/mok/
+#     (caminho que vboxdrv.sh nativo exige — fix campo bloodyroar)
 # Changelog jul/2026 v3.5.1:
 #   - vboxpci removido (descontinuado desde VBox 6.1)
 # Changelog jul/2026 v3.5:
@@ -301,7 +304,7 @@ print_wizard_intro() {
     esac
     _m ""
     _m "==================================================================="
-    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.1"
+    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.2"
     _m "==================================================================="
     _b "  ${phase_msg}"
     echo "" >&2
@@ -493,6 +496,7 @@ ensure_mok_keypair() {
     if [[ -f "$MOK_PRIV" && -f "$MOK_DER" ]]; then
         log "Par MOK já existe em ${MOK_DIR}."
         chmod 600 "$MOK_PRIV"
+        sync_mok_to_shim_signed
         return 0
     fi
     log "Gerando par de chaves MOK em ${MOK_DIR}..."
@@ -504,6 +508,29 @@ ensure_mok_keypair() {
     chmod 600 "$MOK_PRIV"
     chmod 644 "$MOK_DER"
     log "Par MOK gerado (MOK.priv + MOK.der)."
+    sync_mok_to_shim_signed
+}
+
+# BUG CONFIRMADO (jul/2026): o vboxdrv.sh do pacote Debian (chamado por
+# /sbin/vboxconfig) tenta assinar os módulos SOZINHO em toda execução, mas
+# procura a chave em /var/lib/shim-signed/mok/ — um caminho DIFERENTE do
+# nosso ${MOK_DIR}. Isso faz seu auto-sign falhar sempre (mensagem própria
+# dele: "does not provide tools for automatic generation of keys"), e o
+# módulo nunca termina de subir pelo mecanismo nativo — ficamos brigando
+# com o próprio pacote a cada rebuild. Copiar (não symlink — algumas
+# distros validam se é arquivo regular) a MESMA chave para o caminho nativo
+# resolve isso na raiz: o vboxdrv.sh passa a assinar e carregar sozinho,
+# sem precisarmos mais do nosso modprobe manual por fora do fluxo do pacote.
+sync_mok_to_shim_signed() {
+    local shim_dir="/var/lib/shim-signed/mok"
+    [[ -f "$MOK_PRIV" && -f "$MOK_DER" ]] || return 0
+    install -d -m 0700 "$shim_dir" 2>/dev/null || { warn "Não consegui criar ${shim_dir} — vboxconfig pode continuar falhando o auto-sign (não fatal, nosso script assina por fora mesmo assim)."; return 0; }
+    if ! cmp -s "$MOK_DER" "${shim_dir}/MOK.der" 2>/dev/null; then
+        install -m 0600 "$MOK_PRIV" "${shim_dir}/MOK.priv" 2>/dev/null \
+            && install -m 0644 "$MOK_DER" "${shim_dir}/MOK.der" 2>/dev/null \
+            && log "Chave MOK sincronizada para ${shim_dir} (caminho nativo do vboxdrv.sh) — evita a falha de auto-sign do pacote a cada rebuild." \
+            || warn "Falha ao sincronizar chave MOK para ${shim_dir}."
+    fi
 }
 
 mok_test_key_output() {
