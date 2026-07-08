@@ -30,6 +30,18 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-08 — whonix-host v3.5 (sign separado + fluxo 4 etapas)
+
+| Item | Detalhe |
+|------|---------|
+| **`whonix-sign-virtualbox-modules.sh`** | Novo — vboxconfig + sign-file + modprobe; SB off passa direto; `--sign-only` · `--qa-log` |
+| `whonix-install-virtualbox.sh` | Assinatura delegada ao sign; fase `needs_sign`; fix MOK enrolada antes de pending |
+| `whonix-verify-virtualbox-host.sh` | `FAIL_SIGN` exit 3 · `FAIL_MOK` exit 2 · parsing log corrigido · progresso |
+| `README.md` | Fluxo install → tela azul → sign → verify; logs; kernel novo |
+| Progresso | `/root/module-signing/.hub-vbox-progress` |
+
+---
+
 ## 2026-07-08 — whonix-host v3.4 (validação host + UX MOK)
 
 | Item | Detalhe |

@@ -4,13 +4,15 @@
 
 > **Rode no host** (Debian/Ubuntu etc.) — **não** no Tails e **não** dentro das VMs.
 
-| Script | Passo hub | Função |
-|--------|-----------|--------|
-| [`whonix-install-virtualbox.sh`](whonix-install-virtualbox.sh) | **10** (prep) | Assistente: Oracle VirtualBox + GPG + DKMS + Extension Pack + MOK (Secure Boot) |
-| [`whonix-verify-virtualbox-host.sh`](whonix-verify-virtualbox-host.sh) | **10** (pós-MOK) | Valida host: Secure Boot · MOK · vboxdrv · VBoxManage · `--qa-log` |
-| [`whonix-verify-image.sh`](whonix-verify-image.sh) | **10** | PGP da imagem `.ova` ou `.libvirt.xz` (só verificação) |
-| [`whonix-import-ova.sh`](whonix-import-ova.sh) | **10** | Verify + `VBoxManage import` (+ boot opcional `-b`) |
-| [`whonix-verificar-tor.sh`](whonix-verificar-tor.sh) | **10** (pós-boot) | `systemcheck` + check.torproject.org na Workstation |
+| Script | Etapa | Função |
+|--------|-------|--------|
+| [`whonix-install-virtualbox.sh`](whonix-install-virtualbox.sh) | **1 — install** | Repo Oracle · GPG · pacote · Extension Pack · MOK import |
+| *(tela azul)* | **2 — firmware** | Enroll MOK (só se Secure Boot ON) — **manual** |
+| [`whonix-sign-virtualbox-modules.sh`](whonix-sign-virtualbox-modules.sh) | **3 — sign** | `vboxconfig` + assinar módulos + `modprobe` (repita após kernel novo) |
+| [`whonix-verify-virtualbox-host.sh`](whonix-verify-virtualbox-host.sh) | **4 — verify** | Validação read-only · `--qa-log` · não instala nem assina |
+| [`whonix-verify-image.sh`](whonix-verify-image.sh) | **5** | PGP da imagem `.ova` |
+| [`whonix-import-ova.sh`](whonix-import-ova.sh) | **6** | Verify + import Whonix |
+| [`whonix-verificar-tor.sh`](whonix-verificar-tor.sh) | **7** | Tor na Workstation (dentro da VM) |
 
 **Ainda manual:** Anon Connection Wizard, cold-signing (passos 11–12).
 
@@ -22,11 +24,23 @@ No Windows, o instalador assina tudo sozinho. No **Debian/Ubuntu com Secure Boot
 
 | Quem faz | O quê |
 |----------|--------|
-| **Script (automático)** | Repo Oracle · chave GPG (fail-closed) · `apt` · DKMS · Extension Pack · `mokutil --import` · assinar módulos **após** enroll |
-| **Aluno (interativo)** | Senha MOK (1×) · **tela azul** no boot (Enroll MOK) · opcional: conferir fingerprint Oracle visualmente |
-| **Impossível scriptar** | Tela azul **MOK Management** no firmware — proteção do Secure Boot |
+| **`install`** | Repo Oracle · GPG · `apt` · Extension Pack · `mokutil --import` |
+| **`sign`** | `vboxconfig` + `sign-file` com chave MOK + `modprobe` |
+| **`verify`** | 9 checks read-only + QA log — **não altera o sistema** |
+| **Aluno** | Senha MOK · tela azul Enroll MOK |
+| **Impossível scriptar** | Tela azul MOK no firmware |
 
-O script detecta em qual **fase** você está e retoma sozinho (não repete `apt install` se o pacote já existe).
+Cada script grava `RESULTADO:` no seu log. Um arquivo de **progresso** evita perder o rumo:
+
+`/root/module-signing/.hub-vbox-progress` — marcas: `INSTALL_OK`, `MOK_IMPORTED`, `MOK_ENROLLED`, `MODULES_SIGNED`, `MODULES_LOADED`
+
+| Log | Caminho |
+|-----|---------|
+| Instalação | `/var/log/virtualbox-install.log` |
+| Assinatura | `/var/log/virtualbox-sign.log` |
+| QA (evidência) | `./qa-logs/10-virtualbox-*.txt` |
+
+O instalador detecta a **fase** e retoma (não repete `apt install` se o pacote já existe).
 
 ---
 
@@ -46,7 +60,7 @@ O script detecta em qual **fase** você está e retoma sozinho (não repete `apt
 cd ~/Downloads/Privacy-OS-Hub   # ou seu clone do repo
 git pull
 cd automacao/whonix-host
-chmod +x whonix-install-virtualbox.sh whonix-verify-virtualbox-host.sh whonix-verify-image.sh whonix-import-ova.sh whonix-verificar-tor.sh
+chmod +x whonix-install-virtualbox.sh whonix-sign-virtualbox-modules.sh whonix-verify-virtualbox-host.sh whonix-verify-image.sh whonix-import-ova.sh whonix-verificar-tor.sh
 ```
 
 > **Cole só comandos no terminal** — não cole texto/markdown de análises ou chats.
@@ -78,14 +92,45 @@ O que `--reset-mok --new-mok-keys` faz:
 
 > **View key 0** pode aparecer **vazio** — isso é normal no firmware. Escolha **Continue**, não `key from disk`.
 
-**Após login — validar:**
+**Após login — ordem recomendada:**
 
 ```bash
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log
 sudo ./whonix-verify-virtualbox-host.sh --qa-log
-sudo ./whonix-install-virtualbox.sh -y
+sudo ./whonix-install-virtualbox.sh -y    # Extension Pack se WARN
 ```
 
-Esperado: `RESULTADO: PASS` · `exit 0` · `vboxdrv` no `lsmod`.
+Esperado: verify `RESULTADO: PASS` · `vboxdrv` no `lsmod`.
+
+---
+
+## Fluxo completo — primeira instalação (Secure Boot ON)
+
+```text
+┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐
+│ 1 install│ →  │2 tela azul│ →  │ 3 sign   │ →  │ 4 verify │ →  │ 5 Whonix │
+│  script  │    │ (manual) │    │  script  │    │  script  │    │ import   │
+└──────────┘    └──────────┘    └──────────┘    └──────────┘    └──────────┘
+```
+
+```bash
+# Etapa 1 — instalar pacote + MOK import
+sudo ./whonix-install-virtualbox.sh -y
+# → exit 2: reboot + tela azul
+
+# Etapa 2 — tela azul (só neste reboot)
+# Enroll MOK → Continue → Yes → senha → Reboot
+
+# Etapa 3 — assinar módulos (kernel atual)
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log
+
+# Etapa 4 — validar
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
+```
+
+**Secure Boot OFF:** pule a etapa 2; `sign` faz só `vboxconfig` + `modprobe`.
+
+**Kernel novo** (`apt upgrade` trocou o kernel): repita **só a etapa 3** (`sign`), depois `verify`.
 
 ---
 
@@ -110,10 +155,10 @@ O assistente mostra a **fase** no início. Na 1ª vez costuma ser **INSTALAÇÃO
 
 | `RESULTADO` no log | `exit` | Significado | Próximo passo |
 |--------------------|--------|-------------|---------------|
-| `PASS` | `0` | `vboxdrv` carregado — VMs podem ligar | Ir para [passo 4](#4-importar-whonix) |
-| `PASS_PENDING_MOK_REBOOT` | `2` | Pacote OK; falta reboot + tela azul | [Passo 2](#2-reboot--enroll-mok-tela-azul) |
-| `PASS_MODULES_MISSING` | `2` | Pacote OK; módulos ainda não carregaram | Ver [Diagnóstico](#diagnóstico-rápido) |
-| `FAIL` | `1` | Erro fatal | Log: `/var/log/virtualbox-install.log` |
+| `PASS` | `0` | `vboxdrv` carregado | [verify](#3b-só-validar) → [Whonix](#4-importar-whonix) |
+| `PASS_PENDING_MOK_REBOOT` | `2` | Falta tela azul | [Passo 2](#2-reboot--enroll-mok-tela-azul) |
+| `PASS_NEEDS_SIGN` | `3` | Pacote OK; falta assinar | `whonix-sign-virtualbox-modules.sh -y` |
+| `FAIL` | `1` | Erro fatal | `/var/log/virtualbox-install.log` |
 
 Log completo: `/var/log/virtualbox-install.log` (última linha: `RESULTADO:`).
 
@@ -125,7 +170,6 @@ Com `-y`, ao perguntar reboot use **`[S/n]`** — **Enter = reinicia** em 8 segu
 
 ```bash
 sudo systemctl reboot -i
-```
 ```
 
 > **Atenção:** o comando correto é `systemctl **reboot** -i`.  
@@ -143,39 +187,39 @@ Se o GNOME bloquear reboot simples (`Operation inhibited`), use `systemctl reboo
 
 Se a tela azul **não aparecer**, o enroll não foi feito — o `vboxdrv` continuará bloqueado.
 
-### 3) Segunda execução (pós-reboot)
+### 3) Assinar módulos (pós-tela azul ou SB off)
 
 ```bash
-cd ~/Downloads/Privacy-OS-Hub/automacao/whonix-host
-git pull
-sudo ./whonix-verify-virtualbox-host.sh --qa-log
-sudo ./whonix-install-virtualbox.sh -y
-```
-
-Fase esperada do instalador: **PÓS-REBOOT** (`post_reboot_sign`). O script **pula** passos 1–7, assina módulos com a chave enrolada e carrega `vboxdrv`.
-
-**Confirme:**
-
-```bash
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log
 lsmod | grep vbox
-echo "exit=$?"
 ```
 
-Esperado: `vboxdrv` listado · validador `RESULTADO: PASS` · instalador `exit=0`.
+Fase esperada do **install** após MOK enrolada: `needs_sign` — o install pode delegar ao `sign` automaticamente, mas você pode rodar `sign` diretamente.
 
-### 3b) Só validar (sem reinstalar)
+**Após cada `apt upgrade` que troca o kernel**, repita só este comando.
+
+### 3b) Validar
 
 ```bash
 sudo ./whonix-verify-virtualbox-host.sh --qa-log
 ```
 
-Gera `qa-logs/10-virtualbox-host-*.txt` com todos os checks — envie este arquivo como evidência de campo.
+Gera `qa-logs/10-virtualbox-host-*.txt` — envie como evidência de campo.
 
 | `RESULTADO` | `exit` | Significado |
 |-------------|--------|-------------|
-| `PASS` | `0` | Tudo OK — pode importar Whonix |
-| `PASS_PARCIAL` | `2` | Pacote OK; falta MOK ou módulos |
-| `FAIL` | `1` | Corrija itens `[FAIL]` e rode de novo |
+| `PASS` | `0` | Tudo OK — importar Whonix |
+| `FAIL_MOK` | `2` | Falta tela azul Enroll MOK |
+| `FAIL_SIGN` | `3` | MOK OK; rode `whonix-sign-virtualbox-modules.sh` |
+| `FAIL` | `1` | Outro problema |
+
+### 3c) Extension Pack (opcional — WARN no verify)
+
+```bash
+sudo ./whonix-install-virtualbox.sh -y
+```
+
+Só instala Extension Pack se faltar; não repete passos 1–7.
 
 ### 4) Importar Whonix
 
@@ -191,16 +235,17 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 
 ---
 
-## Fases do assistente (detecção automática)
+## Fases do assistente (`whonix-install-virtualbox.sh`)
 
-| Fase | Quando | O que o script faz |
-|------|--------|-------------------|
-| `fresh_install` | VirtualBox não instalado | Instalação completa (passos 1–11) |
-| `installed_need_mok` | VB instalado; chave MOK não registrada | Pede senha MOK + `mokutil --import` |
-| `pending_mok_reboot` | Import OK; falta reboot | Mostra card MOK + oferece `systemctl reboot -i` |
-| `post_reboot_sign` | Chave enrolada no firmware | Assina módulos + `modprobe` |
-| `installed_no_modules` | SB off ou `--skip-mok` | `vboxconfig` + carregar módulos |
-| `complete` | `vboxdrv` já carregado | Verificação rápida → `PASS` |
+| Fase | Quando | O que faz |
+|------|--------|-----------|
+| `fresh_install` | VB não instalado | Instalação completa |
+| `installed_need_mok` | Falta `mokutil --import` | Pede senha MOK |
+| `pending_mok_reboot` | Import OK; falta tela azul | Card MOK + reboot |
+| `needs_sign` | MOK enrolada ou SB off | Delega ao `sign` (ou rode sign manualmente) |
+| `complete` | `vboxdrv` carregado | Verificação rápida |
+
+Assinatura de módulos: sempre **`whonix-sign-virtualbox-modules.sh`** (log em `/var/log/virtualbox-sign.log`).
 
 ---
 
@@ -256,7 +301,9 @@ sudo tail -30 /var/log/virtualbox-install.log
 | Sintoma | Causa provável | Ação |
 |---------|----------------|------|
 | `is not enrolled` no `test-key` | Tela azul não feita | `systemctl reboot -i` → Enroll MOK |
-| `Key was rejected by service` | Chave não enrolada ou kernel novo | Reboot MOK ou rodar script de novo |
+| `Key was rejected` | MOK OK; kernel novo ou módulos não assinados | `sudo ./whonix-sign-virtualbox-modules.sh -y` |
+| `FAIL_SIGN` no verify | Idem | `whonix-sign-virtualbox-modules.sh -y --qa-log` |
+| Install pede reboot mas MOK já enrolada | Estado `.mok-import-requested` obsoleto | `sudo rm -f /root/module-signing/.mok-import-requested` + `sign` |
 | `already in the enrollment request` | Import OK; falta reboot | `systemctl reboot -i` |
 | Perdeu tela azul MOK | Enroll não feito | `--reset-mok --new-mok-keys -y` ou `mokutil --import` + reboot imediato |
 | `password doesn't match` no import | Script antigo (senha 1×) | `git pull` (v3.2.1+) |
@@ -269,20 +316,17 @@ sudo tail -30 /var/log/virtualbox-install.log
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  AUTOMÁTICO (script)                                        │
-│  · HTTP 200 no repo Oracle trixie/bookworm                  │
-│  · GPG fingerprint B9F8D658297AF3EFC18D5CDFA2F683C52980AECF │
-│  · apt install virtualbox-7.2 + DKMS build                  │
-│  · Extension Pack (download oracle + install)               │
-│  · Retomada por fase (não reinstala se já instalado)       │
-│  · Assinar módulos APÓS chave MOK enrolada                  │
+│  AUTOMÁTICO                                                 │
+│  · install: repo · GPG · apt · Extension Pack · MOK import │
+│  · sign: vboxconfig + sign-file + modprobe                  │
+│  · verify: 9 checks read-only + qa-log                      │
 ├─────────────────────────────────────────────────────────────┤
-│  INTERATIVO (aluno) — obrigatório                           │
-│  · Senha MOK (terminal, 2×)                                 │
+│  INTERATIVO (aluno)                                         │
+│  · Senha MOK (terminal)                                     │
 │  · Tela azul: Enroll MOK → Continue → Yes → senha → Reboot  │
+│  · View key 0 vazio = normal → escolha Continue             │
 ├─────────────────────────────────────────────────────────────┤
-│  INTERATIVO (aluno) — opcional com -y                       │
-│  · Confirmar fingerprint Oracle visualmente no site oficial │
+│  REPITA sign após apt upgrade que troca o kernel            │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -296,9 +340,11 @@ Fingerprint Oracle oficial: [Linux Downloads](https://www.virtualbox.org/wiki/Li
 cd automacao/whonix-host
 chmod +x *.sh
 
-# A) VirtualBox (este README)
-sudo ./whonix-install-virtualbox.sh -y
-# → se exit 2: reboot MOK → rodar de novo até PASS
+# A) VirtualBox — fluxo v3.5
+sudo ./whonix-install-virtualbox.sh -y          # 1 install
+# → tela azul se SB ON
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log   # 3 sign
+sudo ./whonix-verify-virtualbox-host.sh --qa-log       # 4 verify
 
 # B) Whonix
 ./whonix-verify-image.sh --qa-log /caminho/Whonix-*.ova /caminho/Whonix-*.ova.asc
@@ -307,14 +353,13 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 
 ---
 
-## Notas técnicas (jul/2026 · v3.2)
+## Notas técnicas (jul/2026 · v3.5)
 
-- **PGP fail-closed:** `whonix-verify-image.sh` e `whonix-import-ova.sh` usam `VALIDSIG` + fingerprint — não dependem de `Good signature` / locale PT-BR.
-- **`whonix-verificar-tor.sh`:** finais de linha **LF** (Unix). CRLF quebra o shebang. O repo força `*.sh eol=lf` via `.gitattributes`.
-- **`mokutil --test-key` no Debian trixie:** pode imprimir `is not enrolled` e ainda sair com exit `0` — o script v3.1+ parseia a **mensagem**, não só o exit code.
-- **Debian 13 + KVM:** se `kvm` estiver carregado, pode conflitar com VirtualBox — aviso no log.
-- **`sanitize_stale_repo_file`:** remove `virtualbox.list` corrompido antes do primeiro `apt-get update`.
+- **Três scripts + três logs:** install · sign · verify — não misture responsabilidades.
+- **VirtualBox manual §2.3.2.1:** com Secure Boot, assine vboxdrv/vboxnetflt/vboxnetadp/vboxpci — [docs.virtualbox.org](https://www.virtualbox.org/manual/ch02.html#idm93).
+- **Kernel novo:** `sign` roda `vboxconfig` + `sign-file` de novo — **não** precisa re-enrolar MOK.
+- **PGP fail-closed:** `whonix-verify-image.sh` usa `VALIDSIG` + fingerprint.
+- **`mokutil --test-key`:** parseia mensagem, não só exit code (Debian trixie).
+- **Progresso:** `/root/module-signing/.hub-vbox-progress` — consulte se perdeu o rumo.
 
-Validação: [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
-
-*Módulo 2 · Privacy-OS-Hub · assistente VirtualBox v3.3 · jul/2026*
+*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5 · jul/2026*

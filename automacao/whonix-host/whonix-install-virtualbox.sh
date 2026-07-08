@@ -18,13 +18,18 @@
 #   -e              Legado: força Extension Pack (redundante — já é padrão)
 #
 # Exit codes:
-#   0 — sucesso; módulos vbox carregados (VMs podem ligar)
-#   2 — pacote OK; falta reboot + Enroll MOK na tela azul (não é falha fatal)
+#   0 — pacote instalado; módulos OK ou não aplicável
+#   2 — pacote OK; falta reboot + Enroll MOK na tela azul
+#   3 — pacote OK; falta whonix-sign-virtualbox-modules.sh
 #   1 — erro fatal
 #
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
+# Assinatura de módulos: whonix-sign-virtualbox-modules.sh (log separado)
 #
-# Changelog jul/2026 v3.4:
+# Changelog jul/2026 v3.5:
+#   - Assinatura separada: whonix-sign-virtualbox-modules.sh
+#   - Fase needs_sign; MOK enrolada antes de pending (fix falso reboot)
+#   - Arquivo de progresso: /root/module-signing/.hub-vbox-progress
 #   - UX MOK: banner colorido antes da senha; CN/fingerprint do certificado
 #   - Card tela azul: View key 0 vazio é normal → escolha Continue
 #   - Fase pending: avisa que senha MOK já foi definida
@@ -70,6 +75,9 @@ MOK_DIR="/root/module-signing"
 MOK_PRIV="${MOK_DIR}/MOK.priv"
 MOK_DER="${MOK_DIR}/MOK.der"
 MOK_STATE_FILE="${MOK_DIR}/.mok-import-requested"
+PROGRESS_FILE="${MOK_DIR}/.hub-vbox-progress"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SIGN_SCRIPT="${SCRIPT_DIR}/whonix-sign-virtualbox-modules.sh"
 EXTPL_LICENSE="eb31505e56e9b4d0fbca139104da41ac6f6b98f8e78968bdf01b1f3da3c4f9ae"
 NET_RETRIES=3
 NET_TIMEOUT=15
@@ -85,10 +93,10 @@ MOK_REBOOT_NEEDED=0
 WIZARD_PHASE=""
 
 # Fases do assistente (detecção automática):
-#   fresh_install        — primeira vez; instala tudo
+#   fresh_install        — primeira vez; instala pacote + MOK import
 #   pending_mok_reboot   — mokutil --import OK; falta reboot + tela azul
-#   post_reboot_sign     — chave enrolada; assinar módulos e carregar
-#   installed_no_modules — pacote OK, SB off ou --skip-mok
+#   needs_sign           — pacote OK; falta assinar/carregar módulos (script sign)
+#   installed_need_mok   — falta registrar chave MOK
 #   complete             — vboxdrv já carregado
 
 # ------------------------------- Funções ----------------------------------
@@ -231,18 +239,41 @@ detect_wizard_phase() {
         return
     fi
     if secure_boot_enabled && [[ "$SKIP_MOK" -eq 0 ]]; then
-        [[ -f "$MOK_DER" ]] || WIZARD_PHASE="installed_need_mok"
-        if [[ -z "$WIZARD_PHASE" ]]; then
-            if mok_enrollment_pending; then
-                WIZARD_PHASE="pending_mok_reboot"
-            elif mok_key_enrolled; then
-                WIZARD_PHASE="post_reboot_sign"
-            else
-                WIZARD_PHASE="installed_need_mok"
-            fi
+        [[ -f "$MOK_DER" ]] || { WIZARD_PHASE="installed_need_mok"; return; }
+        if mok_key_enrolled; then
+            WIZARD_PHASE="needs_sign"
+        elif mok_enrollment_pending; then
+            WIZARD_PHASE="pending_mok_reboot"
+        else
+            WIZARD_PHASE="installed_need_mok"
         fi
     else
-        WIZARD_PHASE="installed_no_modules"
+        WIZARD_PHASE="needs_sign"
+    fi
+}
+
+invoke_sign_script() {
+    local sign_rc=0
+    if [[ ! -x "$SIGN_SCRIPT" ]]; then
+        warn "whonix-sign-virtualbox-modules.sh ausente em ${SIGN_SCRIPT}"
+        warn "Rode: sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log"
+        return 1
+    fi
+    log "Delegando assinatura → whonix-sign-virtualbox-modules.sh"
+    set +e
+    "$SIGN_SCRIPT" -y 2>&1 | tee -a "$LOG_FILE" >&2
+    sign_rc=${PIPESTATUS[0]}
+    set -e
+    if [[ "$sign_rc" -eq 0 ]]; then
+        log "Assinatura OK (whonix-sign-virtualbox-modules.sh)."
+        return 0
+    elif [[ "$sign_rc" -eq 2 ]]; then
+        warn "Assinatura: FAIL_MOK — falta tela azul Enroll MOK."
+        MOK_REBOOT_NEEDED=1
+        return 2
+    else
+        warn "Assinatura falhou (exit ${sign_rc}) — veja /var/log/virtualbox-sign.log"
+        return 1
     fi
 }
 
@@ -255,14 +286,11 @@ print_wizard_intro() {
         pending_mok_reboot)
             phase_msg="Fase: AGUARDANDO REBOOT — Enroll MOK na tela azul (1 ação humana no firmware)."
             ;;
-        post_reboot_sign)
-            phase_msg="Fase: PÓS-REBOOT — assinando módulos com chave MOK enrolada."
+        needs_sign)
+            phase_msg="Fase: ASSINAR MÓDULOS — MOK OK ou SB off; rode whonix-sign-virtualbox-modules.sh."
             ;;
         installed_need_mok)
             phase_msg="Fase: MOK — VirtualBox instalado; falta registrar chave Secure Boot."
-            ;;
-        installed_no_modules)
-            phase_msg="Fase: MÓDULOS — VirtualBox instalado; compilando/carregando drivers."
             ;;
         *)
             phase_msg="Fase: INSTALAÇÃO — download Oracle verificado + pacote + MOK se necessário."
@@ -270,21 +298,24 @@ print_wizard_intro() {
     esac
     _m ""
     _m "==================================================================="
-    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.4"
+    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5"
     _m "==================================================================="
     _b "  ${phase_msg}"
     echo "" >&2
-    _g "  Automático: repo Oracle · GPG · apt · DKMS · Extension Pack"
-    _y "  Você faz:   senha MOK · tela AZUL no boot (Enroll MOK)"
+    _g "  [1] install  →  [2] tela azul (SB)  →  [3] sign  →  [4] verify"
+    _g "  Este script: instala pacote + MOK import. Assinatura = script sign."
     if [[ "$WIZARD_PHASE" == "pending_mok_reboot" ]]; then
-        _y "  Senha MOK já foi definida — use a MESMA na tela azul."
+        _y "  Senha MOK já definida — use a MESMA na tela azul."
         _y "  Próximo: reboot → Enroll MOK → Continue → Yes → senha → Reboot"
     elif [[ "$WIZARD_PHASE" == "installed_need_mok" ]]; then
-        _y "  ATENÇÃO: em breve o script pedirá senha MOK (nada aparece ao digitar)."
+        _y "  ATENÇÃO: em breve pedirá senha MOK (nada aparece ao digitar)."
+    elif [[ "$WIZARD_PHASE" == "needs_sign" ]]; then
+        _y "  Próximo: sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log"
     fi
     echo "" >&2
-    _b "  Validação pós-MOK: ./whonix-verify-virtualbox-host.sh --qa-log"
-    _b "  Log: ${LOG_FILE}"
+    _b "  Validar: ./whonix-verify-virtualbox-host.sh --qa-log"
+    _b "  Progresso: ${PROGRESS_FILE}"
+    _b "  Log install: ${LOG_FILE}"
     _m "==================================================================="
     log "Assistente: ${phase_msg}"
 }
@@ -420,6 +451,8 @@ install_virtualbox() {
         || fail "${pkg} não disponível no repo Oracle para este codename."
     apt-get install -y "$pkg" || fail "apt-get install ${pkg} falhou."
     log "Pacote ${pkg} instalado."
+    install -d -m 0700 "$MOK_DIR"
+    echo "INSTALL_OK=$(date -Iseconds)" >>"$PROGRESS_FILE"
 }
 
 run_full_install_pipeline() {
@@ -531,12 +564,12 @@ print_mok_reboot_card() {
        Enroll MOK → Continue → Yes → senha MOK → Reboot
      View key 0 pode aparecer VAZIO — isso é normal; escolha Continue.
 
-  3) De volta ao Debian, valide (recomendado):
-       cd ~/Downloads/Privacy-OS-Hub/automacao/whonix-host
+  3) De volta ao Debian (ordem recomendada):
+       sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log
        sudo ./whonix-verify-virtualbox-host.sh --qa-log
-       sudo ./whonix-install-virtualbox.sh -y
+       sudo ./whonix-install-virtualbox.sh -y    # Extension Pack se faltar
 
-  Esperado: RESULTADO: PASS · exit 0 · vboxdrv listado.
+  Esperado: verify RESULTADO: PASS · vboxdrv no lsmod.
 
   PERDEU a tela azul? (passou rápido / não interagiu)
   · sudo mokutil --list-new     → se VAZIO, enroll não está pendente
@@ -598,110 +631,37 @@ enroll_mok_key() {
     fi
     log "mokutil --import OK — reboot necessário para Enroll MOK."
     mark_mok_import_pending
+    echo "MOK_IMPORTED=$(date -Iseconds)" >>"$PROGRESS_FILE"
     MOK_REBOOT_NEEDED=1
 }
 
-sign_vbox_kernel_modules() {
-    local kernelver signfile mod m modpath signed=0
-    kernelver="$(uname -r)"
-    signfile="/usr/src/linux-headers-${kernelver}/scripts/sign-file"
-    [[ -x "$signfile" ]] || fail "sign-file ausente: ${signfile}"
-
-    log "Assinando módulos DKMS VirtualBox com chave MOK..."
-    for m in "${VBOX_KMODS[@]}"; do
-        modpath="$(modinfo -F filename "$m" 2>/dev/null || true)"
-        if [[ -n "$modpath" && -f "$modpath" ]]; then
-            "$signfile" sha256 "$MOK_PRIV" "$MOK_DER" "$modpath" \
-                && log "  Assinado: $m → $modpath" \
-                || warn "Falha ao assinar $m"
-            signed=1
-        fi
-    done
-    [[ "$signed" -eq 1 ]] || warn "Nenhum módulo vbox encontrado para assinar — rode /sbin/vboxconfig primeiro."
-    depmod -a
-}
-
-run_vboxconfig() {
-    if [[ -x /sbin/vboxconfig ]]; then
-        log "Executando /sbin/vboxconfig..."
-        /sbin/vboxconfig 2>&1 | tee -a "$LOG_FILE" >&2 || warn "vboxconfig retornou erro."
-    elif [[ -x /usr/lib/virtualbox/vboxdrv.sh ]]; then
-        /usr/lib/virtualbox/vboxdrv.sh setup 2>&1 | tee -a "$LOG_FILE" >&2 \
-            || warn "vboxdrv.sh setup retornou erro."
-    else
-        warn "vboxconfig não encontrado — módulos podem já estar compilados."
-    fi
-}
-
-load_vbox_modules() {
-    local err
-    if ! err="$(modprobe vboxdrv 2>&1)"; then
-        if echo "$err" | grep -qi 'Key was rejected'; then
-            warn "vboxdrv: assinatura rejeitada (Secure Boot) — falta Enroll MOK no reboot."
-            MOK_REBOOT_NEEDED=1
-        else
-            warn "modprobe vboxdrv: ${err:-falhou}"
-        fi
-    fi
-    modprobe vboxnetflt 2>/dev/null || true
-    modprobe vboxnetadp 2>/dev/null || true
-    modprobe vboxpci 2>/dev/null || true
-}
-
 handle_secure_boot_modules() {
-    log "[Passo 8/11] Módulos kernel (DKMS / Secure Boot / MOK)..."
+    log "[Passo 8/11] Módulos kernel — delegado ao whonix-sign-virtualbox-modules.sh"
 
     if vbox_modules_loaded; then
         log "Módulos vbox já carregados — OK."
         return 0
     fi
 
-    if [[ "$SKIP_MOK" -eq 1 ]]; then
-        run_vboxconfig
-        load_vbox_modules
-        if ! vbox_modules_loaded; then
-            warn "Módulos vbox ausentes (--skip-mok). Desabilite Secure Boot ou rode sem --skip-mok."
-        fi
-        return 0
-    fi
-
-    if ! secure_boot_enabled; then
-        log "Secure Boot desligado — vboxconfig + modprobe."
-        run_vboxconfig
-        load_vbox_modules
-        vbox_modules_loaded || warn "vboxdrv ainda não carregou — verifique DKMS/dmesg."
+    if [[ "$SKIP_MOK" -eq 1 ]] || ! secure_boot_enabled; then
+        invoke_sign_script || true
         return 0
     fi
 
     log "Secure Boot HABILITADO — fluxo MOK (Linux ≠ .exe do Windows)."
     ensure_mok_keypair
 
+    if mok_key_enrolled; then
+        rm -f "$MOK_STATE_FILE"
+        invoke_sign_script || true
+        return 0
+    fi
+
     if mok_enrollment_pending; then
         warn "Enroll MOK pendente — falta reboot + confirmação na tela azul."
         print_mok_reboot_card
         MOK_REBOOT_NEEDED=1
         offer_reboot_now
-        return 0
-    fi
-
-    run_vboxconfig
-
-    if mok_key_enrolled; then
-        log "Chave MOK enrolada no firmware — assinando módulos..."
-        sign_vbox_kernel_modules
-        load_vbox_modules
-        if vbox_modules_loaded; then
-            log "Módulos vbox carregados após assinatura MOK."
-            return 0
-        fi
-        if ! mok_key_enrolled; then
-            warn "Chave MOK não enrolada no firmware — falta reboot + tela azul Enroll MOK."
-            MOK_REBOOT_NEEDED=1
-            print_mok_reboot_card
-            offer_reboot_now
-            return 0
-        fi
-        warn "Módulos ainda não carregaram após assinatura — kernel novo? Rode o script de novo."
         return 0
     fi
 
@@ -760,12 +720,16 @@ print_summary() {
     log "===== Resumo [11/11] ====="
     if vbox_modules_loaded; then
         log "Módulos kernel: OK (vboxdrv carregado)"
+        next_action="sudo ./whonix-verify-virtualbox-host.sh --qa-log → whonix-import-ova.sh"
     elif [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
         log "Módulos kernel: PENDENTE_REBOOT_MOK"
-        next_action="sudo systemctl reboot -i → Enroll MOK (tela azul) → rode este script de novo"
+        next_action="sudo systemctl reboot -i → Enroll MOK → whonix-sign-virtualbox-modules.sh -y"
+    elif virtualbox_pkg_installed; then
+        log "Módulos kernel: PENDENTE_SIGN"
+        next_action="sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log"
     else
-        log "Módulos kernel: AUSENTE (verifique Secure Boot / DKMS)"
-        next_action="Revise avisos acima ou use --skip-mok + desabilite SB na BIOS"
+        log "Módulos kernel: AUSENTE"
+        next_action="Revise avisos acima"
     fi
     if [[ "${#WARNINGS[@]}" -gt 0 ]]; then
         log "Avisos (${#WARNINGS[@]}):"
@@ -832,7 +796,15 @@ case "$WIZARD_PHASE" in
         verify_installation
         print_summary
         ;;
-    post_reboot_sign|installed_need_mok|installed_no_modules)
+    needs_sign)
+        check_repo_availability "$CODENAME" 2>/dev/null || true
+        run_resume_pipeline
+        invoke_sign_script || true
+        [[ "$INSTALL_EXTPACK" -eq 1 ]] && install_extpack
+        verify_installation
+        print_summary
+        ;;
+    installed_need_mok)
         check_repo_availability "$CODENAME" 2>/dev/null || true
         run_resume_pipeline
         handle_secure_boot_modules
@@ -851,6 +823,8 @@ if vbox_modules_loaded; then
     write_result "PASS" 0
 elif [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
     write_result "PASS_PENDING_MOK_REBOOT" 2
+elif virtualbox_pkg_installed; then
+    write_result "PASS_NEEDS_SIGN" 3
 else
     write_result "PASS_MODULES_MISSING" 2
 fi
