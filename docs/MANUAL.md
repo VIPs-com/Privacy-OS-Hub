@@ -450,12 +450,15 @@ Rode no **computador onde você vai instalar VirtualBox/KVM** — Debian, Ubuntu
 
 ```bash
 chmod +x whonix-install-virtualbox.sh
-sudo ./whonix-install-virtualbox.sh -e -y   # -e = Extension Pack (USB passthrough)
+sudo ./whonix-install-virtualbox.sh -y   # Extension Pack incluso; MOK auto se Secure Boot
+# exit 2 = pacote OK — falta reboot + Enroll MOK (tela azul) → rode de novo após reboot
 ```
 
 | O quê | Detalhe |
 |-------|---------|
-| **Faz** | Oracle repo + GPG + `virtualbox-7.2` + grupo `vboxusers` |
+| **Faz** | Oracle repo + GPG + `virtualbox-7.2` + Extension Pack + grupo `vboxusers` + fluxo MOK se Secure Boot |
+| **Exit** | `0` = módulos OK · `2` = falta reboot MOK · `1` = erro fatal |
+| **Log** | `/var/log/virtualbox-install.log` — linha `RESULTADO:` |
 | **Doc** | [`automacao/whonix-host/README.md`](../automacao/whonix-host/README.md) |
 
 ### `whonix-verify-image.sh` (passo 10 — só PGP)
@@ -850,8 +853,8 @@ cd ~/Persistent/hub-scripts/steps
 | Campo | Detalhe |
 |-------|---------|
 | **Passo hub** | **10** (prep) |
-| **O que faz** | Oracle VirtualBox verificado (repo + GPG + DKMS) |
-| **Comando** | `sudo ./whonix-install-virtualbox.sh -e -y` |
+| **O que faz** | Oracle VirtualBox verificado (repo + GPG + DKMS + Extension Pack + MOK se SB) |
+| **Comando** | `sudo ./whonix-install-virtualbox.sh -y` (`--no-extpack` · `--skip-mok`) |
 
 #### `whonix-verify-image.sh`
 

@@ -6,66 +6,58 @@
 # Playbook: 🛡️ Privacy-OS-Hub - Versão 1.0.md §10.1 · automacao/whonix-host/README.md
 #
 # Uso:
-#   sudo ./whonix-install-virtualbox.sh [-v VERSAO] [-e] [-y]
+#   sudo ./whonix-install-virtualbox.sh [-v VERSAO] [-y] [--no-extpack] [--skip-mok]
 #
-#   -v VERSAO   Série do VirtualBox a instalar (padrão: 7.2)
-#   -e          Também baixa e instala o Extension Pack correspondente
-#   -y          Não pede confirmação (modo não-interativo, para CI/automação)
+#   -v VERSAO       Série do VirtualBox (padrão: 7.2)
+#   -y              Não pede confirmação (senha MOK ainda exige TTY interativo)
+#   --no-extpack    Não instala Extension Pack (padrão: instala)
+#   --skip-mok      Não tenta enroll/assinatura MOK (só avisa Secure Boot)
+#   -e              Legado: força Extension Pack (redundante — já é padrão)
 #
-# Log: /var/log/virtualbox-install.log
+# Exit codes:
+#   0 — sucesso; módulos vbox carregados (VMs podem ligar)
+#   2 — pacote OK; falta reboot + Enroll MOK na tela azul (não é falha fatal)
+#   1 — erro fatal
 #
-# ---------------------------------------------------------------------------
-# CHANGELOG de tratamento de erros (revisão):
-#   - FIX CRÍTICO: log() agora escreve em stderr, não em stdout. Antes,
-#     funções que retornavam valor via `echo` + `$(...)` (ex.:
-#     check_arch_and_codename) tinham as linhas de log misturadas ao valor
-#     de retorno, corrompendo $CODENAME e quebrando add_repo() silenciosamente.
-#   - FIX: verify_repo_signature() agora checa o código de saída REAL do
-#     `apt-get update` (via PIPESTATUS) em vez de depender só do grep de
-#     NO_PUBKEY/BADSIG, que mascarava outras falhas (404, timeout, DNS).
-#   - Novo: trap centralizado (ERR + EXIT) com contexto de linha/comando e
-#     limpeza garantida de arquivos temporários.
-#   - Novo: checagem prévia de que o repositório publica Release para o
-#     codename/série antes de configurar e instalar (evita "quebrar" o
-#     apt do usuário com um repo inválido).
-#   - Novo: downloads (chave, extpack) com retry/timeout e validação de
-#     conteúdo não vazio antes de usar.
-#   - Novo: escrita atômica de /etc/apt/sources.list.d/virtualbox.list e do
-#     keyring (grava em tmp, só substitui o arquivo real se tudo validar).
-#   - Novo: resumo final claro (sucesso/aviso/erro) em vez de só logs soltos.
-#   - Novo (jul/2026): sanitize_stale_repo_file() — auto-cura se uma
-#     execução anterior (de uma cópia/versão mais antiga deste script, de
-#     qualquer pasta — o caminho é global do sistema) deixou
-#     /etc/apt/sources.list.d/virtualbox.list corrompido. Sem isso, o
-#     apt-get update do Passo 1 quebra ANTES de add_repo() (Passo 4) ter
-#     a chance de reescrever o arquivo corretamente.
-# ---------------------------------------------------------------------------
+# Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
+#
+# Changelog jul/2026 v3:
+#   - Extension Pack ON por padrão; --no-extpack para pular
+#   - MOK: gera chave, mokutil --import, assina módulos pós-enroll
+#   - Tela azul MOK no boot continua manual (por design do firmware)
+#   - RESULTADO + exit_code estruturados no log
 
 set -euo pipefail
 
 # ----------------------------- Configuração ------------------------------
 
 VBOX_SERIES="7.2"
-INSTALL_EXTPACK=0
+INSTALL_EXTPACK=1
 ASSUME_YES=0
+SKIP_MOK=0
 KEYRING="/usr/share/keyrings/oracle-virtualbox.gpg"
 REPO_FILE="/etc/apt/sources.list.d/virtualbox.list"
 KEY_URL="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
 EXPECTED_FPR="B9F8D658297AF3EFC18D5CDFA2F683C52980AECF"
 LOG_FILE="/var/log/virtualbox-install.log"
 DL_BASE="https://download.virtualbox.org/virtualbox/debian"
+MOK_DIR="/root/module-signing"
+MOK_PRIV="${MOK_DIR}/MOK.priv"
+MOK_DER="${MOK_DIR}/MOK.der"
 NET_RETRIES=3
 NET_TIMEOUT=15
 
 SUPPORTED_CODENAMES=("trixie" "bookworm" "bullseye")
+VBOX_KMODS=(vboxdrv vboxnetflt vboxnetadp vboxpci)
 
-# Rastreamento de avisos não-fatais para o resumo final
 WARNINGS=()
 TMP_PATHS=()
+FINAL_RESULT=""
+FINAL_EXIT=0
+MOK_REBOOT_NEEDED=0
 
 # ------------------------------- Funções ----------------------------------
 
-# IMPORTANTE: log() escreve em stderr (fd 2), NUNCA em stdout.
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE" >&2
 }
@@ -77,27 +69,32 @@ warn() {
 
 fail() {
     log "ERRO: $*"
-    exit 1
+    write_result "FAIL" 1
+}
+
+write_result() {
+    FINAL_RESULT="$1"
+    FINAL_EXIT="$2"
+    log "RESULTADO: ${FINAL_RESULT}"
+    log "exit_code: ${FINAL_EXIT}"
+    exit "$FINAL_EXIT"
 }
 
 usage() {
-    grep '^#' "$0" | sed -e 's/^#//' -e '1d'
+    grep '^#' "$0" | sed -e 's/^# \?//' -e '1,/^$/d' | head -n 28
     exit 1
 }
 
 require_root() {
-    if [[ "${EUID}" -ne 0 ]]; then
-        fail "Este script precisa ser executado como root (use sudo)."
-    fi
+    [[ "${EUID}" -ne 0 ]] && fail "Este script precisa ser executado como root (use sudo)."
 }
 
-# Auto-cura: virtualbox.list corrompido por execução anterior com bug de log/stdout
 sanitize_stale_repo_file() {
     if [[ -f "$REPO_FILE" ]]; then
         local n_lines
         n_lines="$(wc -l < "$REPO_FILE" 2>/dev/null || echo 0)"
         if [[ "$n_lines" -ne 1 ]] || ! grep -q '^deb \[' "$REPO_FILE" 2>/dev/null; then
-            warn "${REPO_FILE} existente está corrompido/malformado (provavelmente sobra de uma execução anterior com bug) — removendo para evitar que o apt-get update quebre antes mesmo de reconfigurar o repositório. Conteúdo removido: $(cat "$REPO_FILE" 2>/dev/null | tr '\n' '|')"
+            warn "${REPO_FILE} corrompido/malformado — removendo antes do apt-get update. Conteúdo: $(cat "$REPO_FILE" 2>/dev/null | tr '\n' '|')"
             rm -f "$REPO_FILE"
         fi
     fi
@@ -106,9 +103,9 @@ sanitize_stale_repo_file() {
 on_error() {
     local exit_code=$1 line_no=$2 command=$3
     log "ERRO: comando '${command}' falhou (código ${exit_code}) na linha ${line_no}."
-    log "Consulte ${LOG_FILE} para o histórico completo desta execução."
+    log "Consulte ${LOG_FILE} para o histórico completo."
     cleanup_tmp
-    exit "$exit_code"
+    write_result "FAIL" "$exit_code"
 }
 
 cleanup_tmp() {
@@ -121,21 +118,25 @@ trap 'on_error $? $LINENO "$BASH_COMMAND"' ERR
 trap cleanup_tmp EXIT
 
 fetch() {
-    local url="$1" out="$2"
-    local attempt=1
+    local url="$1" out="$2" attempt=1
     while (( attempt <= NET_RETRIES )); do
-        if wget -q --timeout="$NET_TIMEOUT" --tries=1 -O "$out" "$url"; then
-            if [[ -s "$out" ]]; then
-                return 0
-            fi
-            warn "Download de '$url' retornou arquivo vazio (tentativa ${attempt}/${NET_RETRIES})."
-        else
-            warn "Falha ao baixar '$url' (tentativa ${attempt}/${NET_RETRIES})."
+        if wget -q --timeout="$NET_TIMEOUT" --tries=1 -O "$out" "$url" && [[ -s "$out" ]]; then
+            return 0
         fi
+        warn "Download falhou (tentativa ${attempt}/${NET_RETRIES}): $url"
         ((attempt++))
         sleep 2
     done
     return 1
+}
+
+secure_boot_enabled() {
+    command -v mokutil >/dev/null 2>&1 \
+        && mokutil --sb-state 2>/dev/null | grep -qi "enabled"
+}
+
+vbox_modules_loaded() {
+    lsmod | grep -qE '^vbox| vbox'
 }
 
 check_arch_and_codename() {
@@ -145,22 +146,14 @@ check_arch_and_codename() {
     . /etc/os-release
     codename="${VERSION_CODENAME:-}"
 
-    if [[ "$arch" != "amd64" ]]; then
-        fail "Arquitetura não suportada: $arch (esperado: amd64)."
-    fi
+    [[ "$arch" == "amd64" ]] || fail "Arquitetura não suportada: $arch (esperado: amd64)."
+    [[ -n "$codename" ]] || fail "VERSION_CODENAME ausente em /etc/os-release."
 
-    if [[ -z "$codename" ]]; then
-        fail "Não foi possível determinar VERSION_CODENAME em /etc/os-release."
-    fi
-
-    local supported=0
+    local supported=0 c
     for c in "${SUPPORTED_CODENAMES[@]}"; do
         [[ "$codename" == "$c" ]] && supported=1 && break
     done
-
-    if [[ "$supported" -ne 1 ]]; then
-        fail "Codename '$codename' não está na lista suportada (${SUPPORTED_CODENAMES[*]})."
-    fi
+    [[ "$supported" -eq 1 ]] || fail "Codename '$codename' não suportado (${SUPPORTED_CODENAMES[*]})."
 
     log "Sistema validado: arch=$arch codename=$codename"
     echo "$codename"
@@ -169,250 +162,358 @@ check_arch_and_codename() {
 check_repo_availability() {
     local codename="$1"
     local release_url="${DL_BASE}/dists/${codename}/Release"
-    log "Verificando disponibilidade do repositório para '${codename}'..."
-
     local http_code
+    log "Verificando repositório Oracle para '${codename}'..."
     http_code="$(curl -s -o /dev/null -w '%{http_code}' --max-time "$NET_TIMEOUT" "$release_url" || echo "000")"
-
-    if [[ "$http_code" != "200" ]]; then
-        fail "O repositório Oracle ainda não publica pacotes para '${codename}' (HTTP ${http_code} em ${release_url}). Verifique https://www.virtualbox.org/wiki/Linux_Downloads para o status mais recente ou tente uma série/codename diferente com -v."
-    fi
-
-    log "Repositório disponível para '${codename}' (${release_url} respondeu 200)."
+    [[ "$http_code" == "200" ]] || fail "Repositório sem Release para '${codename}' (HTTP ${http_code})."
+    log "Release OK (HTTP 200)."
 }
 
 confirm() {
-    if [[ "$ASSUME_YES" -eq 1 ]]; then
-        return 0
-    fi
+    [[ "$ASSUME_YES" -eq 1 ]] && return 0
     read -r -p "$1 [s/N] " resp
     [[ "$resp" =~ ^[sSyY]$ ]]
 }
 
 install_build_deps() {
-    log "[Passo 1/9] Atualizando índice de pacotes e instalando dependências de build..."
-    if ! apt-get update -qq; then
-        fail "Falha ao atualizar o índice de pacotes (apt-get update). Verifique conectividade e os repositórios já configurados em /etc/apt/sources.list.d/."
-    fi
-
-    if ! apt-get install -y -qq \
-        "linux-headers-$(uname -r)" dkms build-essential gcc make perl curl wget gnupg2; then
-        fail "Falha ao instalar dependências de build. Alguns pacotes podem não existir para seu kernel/versão (verifique 'linux-headers-$(uname -r)')."
-    fi
-
-    if [[ ! -d "/usr/src/linux-headers-$(uname -r)" ]]; then
-        fail "Headers do kernel em execução não encontrados. Verifique linux-headers-$(uname -r)."
-    fi
-    log "Dependências de build OK."
+    log "[Passo 1/11] apt update + dependências de build (DKMS, headers, openssl)..."
+    apt-get update -qq || fail "apt-get update falhou — verifique /etc/apt/sources.list.d/."
+    apt-get install -y -qq \
+        "linux-headers-$(uname -r)" dkms build-essential gcc make perl \
+        curl wget gnupg2 openssl mokutil \
+        || fail "Falha ao instalar dependências (headers/DKMS/openssl/mokutil)."
+    [[ -d "/usr/src/linux-headers-$(uname -r)" ]] \
+        || fail "Headers do kernel ausentes: linux-headers-$(uname -r)."
+    log "Dependências OK."
 }
 
 install_and_verify_key() {
-    log "[Passo 2/9] Baixando a chave pública da Oracle..."
+    log "[Passo 2/11] Baixando chave Oracle..."
+    local tmp_key tmp_keyring fpr
+    tmp_key="$(mktemp)"; TMP_PATHS+=("$tmp_key")
+    fetch "$KEY_URL" "$tmp_key" || fail "Falha ao baixar chave Oracle."
 
-    local tmp_key
-    tmp_key="$(mktemp)"
-    TMP_PATHS+=("$tmp_key")
+    tmp_keyring="$(mktemp)"; TMP_PATHS+=("$tmp_keyring")
+    gpg --dearmor --yes -o "$tmp_keyring" "$tmp_key" || fail "gpg --dearmor falhou."
 
-    if ! fetch "$KEY_URL" "$tmp_key"; then
-        fail "Não foi possível baixar a chave da Oracle em ${KEY_URL} após ${NET_RETRIES} tentativas. Verifique sua conexão."
-    fi
-
-    local tmp_keyring
-    tmp_keyring="$(mktemp)"
-    TMP_PATHS+=("$tmp_keyring")
-
-    if ! gpg --dearmor --yes -o "$tmp_keyring" "$tmp_key"; then
-        fail "Falha ao processar a chave baixada com gpg --dearmor."
-    fi
-
-    log "[Passo 3/9] Verificando fingerprint da chave (OBRIGATÓRIO)..."
-    local fpr
-    fpr="$(gpg --show-keys --with-colons --fingerprint "$tmp_keyring" \
-        | awk -F: '/^fpr:/ {print $10; exit}')"
-
-    if [[ "$fpr" != "$EXPECTED_FPR" ]]; then
-        fail "Fingerprint NÃO confere. Esperado: $EXPECTED_FPR | Obtido: ${fpr:-<vazio>}. Abortando por segurança — chave não confiável."
-    fi
-
+    log "[Passo 3/11] Verificando fingerprint Oracle (OBRIGATÓRIO)..."
+    fpr="$(gpg --show-keys --with-colons --fingerprint "$tmp_keyring" | awk -F: '/^fpr:/ {print $10; exit}')"
+    [[ "$fpr" == "$EXPECTED_FPR" ]] \
+        || fail "Fingerprint Oracle inválida. Esperado: $EXPECTED_FPR | Obtido: ${fpr:-<vazio>}."
     install -m 0644 "$tmp_keyring" "$KEYRING"
-    log "Fingerprint verificada com sucesso: $fpr"
-    log "Keyring instalado em ${KEYRING}."
+    log "Fingerprint Oracle OK: $fpr"
 }
 
 add_repo() {
-    local codename="$1"
-    log "[Passo 4/9] Configurando repositório oficial para codename '$codename'..."
-
-    local tmp_repo
-    tmp_repo="$(mktemp)"
-    TMP_PATHS+=("$tmp_repo")
-
-    echo "deb [arch=amd64 signed-by=${KEYRING}] ${DL_BASE} ${codename} contrib" > "$tmp_repo"
-
-    if [[ "$(wc -l < "$tmp_repo")" -ne 1 ]] || ! grep -q '^deb \[' "$tmp_repo"; then
-        fail "Linha de repositório gerada é inválida — \$codename pode estar corrompido. Conteúdo: $(cat "$tmp_repo")"
-    fi
-
+    local codename="$1" tmp_repo
+    log "[Passo 4/11] Configurando repositório para '$codename'..."
+    tmp_repo="$(mktemp)"; TMP_PATHS+=("$tmp_repo")
+    echo "deb [arch=amd64 signed-by=${KEYRING}] ${DL_BASE} ${codename} contrib" >"$tmp_repo"
+    [[ "$(wc -l <"$tmp_repo")" -eq 1 ]] && grep -q '^deb \[' "$tmp_repo" \
+        || fail "Linha de repo inválida: $(cat "$tmp_repo")"
     install -m 0644 "$tmp_repo" "$REPO_FILE"
-    log "Repositório configurado em ${REPO_FILE}: $(cat "$REPO_FILE")"
+    log "Repo: $(cat "$REPO_FILE")"
 }
 
 verify_repo_signature() {
-    log "[Passo 5/9] Atualizando índice e verificando assinatura do repositório..."
-
-    local update_out
-    update_out="$(mktemp)"
-    TMP_PATHS+=("$update_out")
-
+    log "[Passo 5/11] apt-get update + verificação de assinatura do repo..."
+    local update_out apt_status
+    update_out="$(mktemp)"; TMP_PATHS+=("$update_out")
     set +e
-    apt-get update 2>&1 | tee -a "$LOG_FILE" > "$update_out"
-    local apt_status=${PIPESTATUS[0]}
+    apt-get update 2>&1 | tee -a "$LOG_FILE" >"$update_out"
+    apt_status=${PIPESTATUS[0]}
     set -e
-
-    if [[ "$apt_status" -ne 0 ]]; then
-        fail "apt-get update falhou (código ${apt_status}) após configurar o repositório VirtualBox. Saída relevante: $(tail -n 5 "$update_out")"
-    fi
-
-    if grep -qiE "NO_PUBKEY|BADSIG" "$update_out"; then
-        fail "Falha na verificação de assinatura do repositório (NO_PUBKEY/BADSIG detectado). Abortando — não instale."
-    fi
-
-    log "apt-get update concluído sem erros e sem NO_PUBKEY/BADSIG."
+    [[ "$apt_status" -eq 0 ]] || fail "apt-get update falhou (exit ${apt_status}): $(tail -n 5 "$update_out")"
+    grep -qiE "NO_PUBKEY|BADSIG" "$update_out" \
+        && fail "NO_PUBKEY/BADSIG no repositório VirtualBox."
+    log "Índice apt OK; sem NO_PUBKEY/BADSIG."
 }
 
 install_virtualbox() {
     local pkg="virtualbox-${VBOX_SERIES}"
-    log "[Passo 6/9] Verificando candidato do pacote ${pkg}..."
+    log "[Passo 6/11] Instalando ${pkg}..."
+    apt-cache policy "$pkg" | grep -q "download.virtualbox.org" \
+        || fail "${pkg} não disponível no repo Oracle para este codename."
+    apt-get install -y "$pkg" || fail "apt-get install ${pkg} falhou."
+    log "Pacote ${pkg} instalado."
+}
 
-    if ! apt-cache policy "$pkg" | grep -q "download.virtualbox.org"; then
-        fail "Candidato de ${pkg} não vem do repositório da Oracle (ou o pacote não existe para esta série/codename)."
-    fi
-
-    log "Instalando ${pkg}..."
-    if ! apt-get install -y "$pkg"; then
-        fail "Falha ao instalar ${pkg}. Rode 'apt-get install -y ${pkg}' manualmente para ver o erro completo."
-    fi
-
-    modprobe vboxdrv 2>/dev/null || warn "não foi possível carregar vboxdrv via modprobe (verifique DKMS/Secure Boot)."
-
-    if lsmod | grep -q vbox; then
-        log "Módulos do VirtualBox carregados com sucesso."
+configure_vboxusers() {
+    log "[Passo 7/11] Grupo vboxusers..."
+    local target_user="${SUDO_USER:-$USER}"
+    if [[ "$target_user" == "root" ]]; then
+        warn "usuário root — pulei vboxusers."
+    elif usermod -aG vboxusers "$target_user"; then
+        log "Usuário '$target_user' → vboxusers (relogin necessário)."
     else
-        warn "módulos vbox não aparecem em lsmod. Verifique Secure Boot (passo 7 do playbook)."
+        warn "Falha ao adicionar '$target_user' ao grupo vboxusers."
+    fi
+    if command -v kvm-ok >/dev/null 2>&1 || lsmod | grep -qE '^kvm_intel|^kvm_amd'; then
+        warn "KVM carregado — pode conflitar com VirtualBox em Debian 13+."
     fi
 }
 
-configure_group_and_secureboot_notice() {
-    log "[Passo 7/9] Configurando grupo vboxusers..."
-    local target_user="${SUDO_USER:-$USER}"
-    if [[ "$target_user" == "root" ]]; then
-        warn "usuário alvo é root; pulei adição ao grupo vboxusers."
-    else
-        if usermod -aG vboxusers "$target_user"; then
-            log "Usuário '$target_user' adicionado ao grupo vboxusers (relogin necessário)."
-        else
-            warn "Falha ao adicionar '$target_user' ao grupo vboxusers."
+ensure_mok_keypair() {
+    if [[ -f "$MOK_PRIV" && -f "$MOK_DER" ]]; then
+        log "Par MOK já existe em ${MOK_DIR}."
+        chmod 600 "$MOK_PRIV"
+        return 0
+    fi
+    log "Gerando par de chaves MOK em ${MOK_DIR}..."
+    install -d -m 0700 "$MOK_DIR"
+    openssl req -new -x509 -newkey rsa:2048 \
+        -keyout "$MOK_PRIV" -outform DER -out "$MOK_DER" \
+        -nodes -days 36500 -subj "/CN=VirtualBox MOK Privacy-OS-Hub/" \
+        || fail "openssl falhou ao gerar par MOK."
+    chmod 600 "$MOK_PRIV"
+    chmod 644 "$MOK_DER"
+    log "Par MOK gerado (MOK.priv + MOK.der)."
+}
+
+mok_enrollment_pending() {
+    command -v mokutil >/dev/null 2>&1 \
+        && mokutil --list-new 2>/dev/null | grep -q .
+}
+
+mok_key_enrolled() {
+    [[ -f "$MOK_DER" ]] && mokutil --test-key "$MOK_DER" >/dev/null 2>&1
+}
+
+print_mok_reboot_card() {
+    cat >&2 <<'EOF'
+
+===================================================================
+  REBOOT OBRIGATÓRIO — Enroll MOK (ação humana no firmware)
+===================================================================
+  O pacote VirtualBox está instalado, mas o kernel bloqueia vboxdrv
+  porque Secure Boot está ON e o módulo precisa da sua chave MOK.
+
+  1) sudo reboot
+  2) Na tela AZUL "MOK Management" (só aparece neste boot):
+       Enroll MOK → Continue → Yes → digite a senha MOK → Reboot
+  3) Após voltar ao sistema, rode ESTE SCRIPT DE NOVO:
+       sudo ./whonix-install-virtualbox.sh -y
+     (ele assinará os módulos e carregará vboxdrv automaticamente)
+
+  Não é possível automatizar a tela azul — exige confirmação física.
+===================================================================
+EOF
+}
+
+enroll_mok_key() {
+  local pw1 pw2
+  log "Registrando chave MOK no firmware (mokutil --import)..."
+  if [[ ! -t 0 ]]; then
+      warn "Sem TTY — não consigo pedir senha MOK. Rode manualmente:"
+      warn "  sudo mokutil --import ${MOK_DER}"
+      warn "  sudo reboot  →  Enroll MOK na tela azul  →  rode este script de novo"
+      MOK_REBOOT_NEEDED=1
+      return 1
+  fi
+  echo "Defina uma senha para o enroll MOK (você digitará a MESMA na tela azul do boot):" >&2
+  read -r -s -p "Senha MOK: " pw1; echo >&2
+  read -r -s -p "Confirme senha MOK: " pw2; echo >&2
+  [[ "$pw1" == "$pw2" && -n "$pw1" ]] || fail "Senhas MOK não conferem ou vazias."
+  echo -n "$pw1" | mokutil --import "$MOK_DER" || fail "mokutil --import falhou."
+  log "mokutil --import OK — reboot necessário para Enroll MOK."
+  MOK_REBOOT_NEEDED=1
+}
+
+sign_vbox_kernel_modules() {
+    local kernelver signfile mod m modpath signed=0
+    kernelver="$(uname -r)"
+    signfile="/usr/src/linux-headers-${kernelver}/scripts/sign-file"
+    [[ -x "$signfile" ]] || fail "sign-file ausente: ${signfile}"
+
+    log "Assinando módulos DKMS VirtualBox com chave MOK..."
+    for m in "${VBOX_KMODS[@]}"; do
+        modpath="$(modinfo -F filename "$m" 2>/dev/null || true)"
+        if [[ -n "$modpath" && -f "$modpath" ]]; then
+            "$signfile" sha256 "$MOK_PRIV" "$MOK_DER" "$modpath" \
+                && log "  Assinado: $m → $modpath" \
+                || warn "Falha ao assinar $m"
+            signed=1
         fi
+    done
+    [[ "$signed" -eq 1 ]] || warn "Nenhum módulo vbox encontrado para assinar — rode /sbin/vboxconfig primeiro."
+    depmod -a
+}
+
+run_vboxconfig() {
+    if [[ -x /sbin/vboxconfig ]]; then
+        log "Executando /sbin/vboxconfig..."
+        /sbin/vboxconfig 2>&1 | tee -a "$LOG_FILE" >&2 || warn "vboxconfig retornou erro."
+    elif [[ -x /usr/lib/virtualbox/vboxdrv.sh ]]; then
+        /usr/lib/virtualbox/vboxdrv.sh setup 2>&1 | tee -a "$LOG_FILE" >&2 \
+            || warn "vboxdrv.sh setup retornou erro."
+    else
+        warn "vboxconfig não encontrado — módulos podem já estar compilados."
+    fi
+}
+
+load_vbox_modules() {
+    modprobe vboxdrv 2>/dev/null || true
+    modprobe vboxnetflt 2>/dev/null || true
+    modprobe vboxnetadp 2>/dev/null || true
+}
+
+handle_secure_boot_modules() {
+    log "[Passo 8/11] Módulos kernel (DKMS / Secure Boot / MOK)..."
+
+    if vbox_modules_loaded; then
+        log "Módulos vbox já carregados — OK."
+        return 0
     fi
 
-    if command -v mokutil >/dev/null 2>&1 && mokutil --sb-state 2>/dev/null | grep -qi "enabled"; then
-        warn "Secure Boot está HABILITADO. Módulos não assinados podem ser bloqueados."
+    if [[ "$SKIP_MOK" -eq 1 ]]; then
+        run_vboxconfig
+        load_vbox_modules
+        if ! vbox_modules_loaded; then
+            warn "Módulos vbox ausentes (--skip-mok). Desabilite Secure Boot ou rode sem --skip-mok."
+        fi
+        return 0
     fi
 
-    if command -v kvm-ok >/dev/null 2>&1 || lsmod | grep -qE '^kvm_intel|^kvm_amd'; then
-        warn "Módulo KVM detectado. Em kernels recentes (Debian 13+) pode causar conflito com VirtualBox."
+    if ! secure_boot_enabled; then
+        log "Secure Boot desligado — vboxconfig + modprobe."
+        run_vboxconfig
+        load_vbox_modules
+        vbox_modules_loaded || warn "vboxdrv ainda não carregou — verifique DKMS/dmesg."
+        return 0
+    fi
+
+    log "Secure Boot HABILITADO — fluxo MOK."
+    ensure_mok_keypair
+    run_vboxconfig
+
+    if mok_key_enrolled; then
+        log "Chave MOK já enrolada no firmware — assinando módulos..."
+        sign_vbox_kernel_modules
+        load_vbox_modules
+        if vbox_modules_loaded; then
+            log "Módulos vbox carregados após assinatura MOK."
+            return 0
+        fi
+        warn "Módulos ainda não carregaram após assinatura — kernel novo? Rode o script de novo."
+        return 0
+    fi
+
+    if mok_enrollment_pending; then
+        warn "Enroll MOK pendente — falta reboot + confirmação na tela azul."
+        print_mok_reboot_card
+        MOK_REBOOT_NEEDED=1
+        return 0
+    fi
+
+    enroll_mok_key || true
+    if [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
+        print_mok_reboot_card
     fi
 }
 
 install_extpack() {
-    local pkg="virtualbox-${VBOX_SERIES}"
-    local full_version tmp_dir extpack_file
-
-    log "[Passo 8/9] Instalando Extension Pack (opcional)..."
+    local pkg="virtualbox-${VBOX_SERIES}" full_version tmp_dir extpack_file extpack_url
+    log "[Passo 9/11] Extension Pack (padrão ON)..."
     full_version="$(dpkg-query -W -f='${Version}' "$pkg" 2>/dev/null | cut -d: -f2 | cut -d- -f1)"
+    [[ -n "$full_version" ]] || { warn "Versão do pacote ausente — pulando Extension Pack."; return; }
 
-    if [[ -z "$full_version" ]]; then
-        warn "Não foi possível determinar a versão instalada de ${pkg}; pulando Extension Pack."
-        return
-    fi
-
-    tmp_dir="$(mktemp -d)"
-    TMP_PATHS+=("$tmp_dir")
+    tmp_dir="$(mktemp -d)"; TMP_PATHS+=("$tmp_dir")
     extpack_file="Oracle_VirtualBox_Extension_Pack-${full_version}.vbox-extpack"
-    local extpack_url="https://download.virtualbox.org/virtualbox/${full_version}/${extpack_file}"
+    extpack_url="https://download.virtualbox.org/virtualbox/${full_version}/${extpack_file}"
 
-    if ! fetch "$extpack_url" "${tmp_dir}/${extpack_file}"; then
-        warn "não foi possível baixar o Extension Pack (${extpack_url})."
-        return
-    fi
-
-    if ! echo y | VBoxManage extpack install --replace "${tmp_dir}/${extpack_file}"; then
-        warn "instalação do Extension Pack retornou erro."
+    if fetch "$extpack_url" "${tmp_dir}/${extpack_file}"; then
+        if echo y | VBoxManage extpack install --replace "${tmp_dir}/${extpack_file}"; then
+            log "Extension Pack ${full_version} instalado."
+        else
+            warn "VBoxManage extpack install retornou erro."
+        fi
+    else
+        warn "Download do Extension Pack falhou: ${extpack_url}"
     fi
 }
 
 verify_installation() {
-    log "[Passo 9/9] Verificação final..."
-    if ! VBoxManage --version 2>&1 | tee -a "$LOG_FILE" >&2; then
-        warn "VBoxManage não respondeu — instalação pode estar incompleta."
-    fi
-    if ! lsmod | grep vbox | tee -a "$LOG_FILE" >&2; then
-        warn "nenhum módulo vbox carregado — pode ser necessário relogin ou reboot."
+    log "[Passo 10/11] Verificação final..."
+    VBoxManage --version 2>&1 | tee -a "$LOG_FILE" >&2 || warn "VBoxManage não respondeu."
+    if vbox_modules_loaded; then
+        lsmod | grep vbox | tee -a "$LOG_FILE" >&2
+        log "lsmod: módulos vbox presentes."
+    else
+        warn "lsmod: módulos vbox AUSENTES — VMs não ligam até resolver MOK/SB."
     fi
 }
 
 print_summary() {
+    local next_action="Relogin (vboxusers) → whonix-import-ova.sh"
     echo "" >&2
-    log "===== Resumo ====="
-    if [[ "${#WARNINGS[@]}" -eq 0 ]]; then
-        log "Instalação concluída sem avisos."
+    log "===== Resumo [11/11] ====="
+    if vbox_modules_loaded; then
+        log "Módulos kernel: OK (vboxdrv carregado)"
+    elif [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
+        log "Módulos kernel: PENDENTE_REBOOT_MOK"
+        next_action="sudo reboot → Enroll MOK (tela azul) → rode este script de novo"
     else
-        log "Instalação concluída com ${#WARNINGS[@]} aviso(s):"
-        for w in "${WARNINGS[@]}"; do
-            log "  - $w"
-        done
+        log "Módulos kernel: AUSENTE (verifique Secure Boot / DKMS)"
+        next_action="Revise avisos acima ou use --skip-mok + desabilite SB na BIOS"
     fi
+    if [[ "${#WARNINGS[@]}" -gt 0 ]]; then
+        log "Avisos (${#WARNINGS[@]}):"
+        for w in "${WARNINGS[@]}"; do log "  - $w"; done
+    fi
+    log "Próximo passo: ${next_action}"
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -v) VBOX_SERIES="${2:?}"; shift 2 ;;
+            -y) ASSUME_YES=1; shift ;;
+            -e) INSTALL_EXTPACK=1; shift ;;
+            --no-extpack) INSTALL_EXTPACK=0; shift ;;
+            --skip-mok) SKIP_MOK=1; shift ;;
+            -h|--help) usage ;;
+            *)
+                echo "Opção desconhecida: $1" >&2
+                usage
+                ;;
+        esac
+    done
 }
 
 # -------------------------------- Main -------------------------------------
 
-while getopts ":v:eyh" opt; do
-    case "$opt" in
-        v) VBOX_SERIES="$OPTARG" ;;
-        e) INSTALL_EXTPACK=1 ;;
-        y) ASSUME_YES=1 ;;
-        h) usage ;;
-        *) usage ;;
-    esac
-done
+parse_args "$@"
 
 require_root
 sanitize_stale_repo_file
 touch "$LOG_FILE"
-log "===== Iniciando W00 — Instalar e Configurar o VirtualBox (série ${VBOX_SERIES}) ====="
+log "===== Hub Passo 10 — VirtualBox (série ${VBOX_SERIES}) extpack=${INSTALL_EXTPACK} skip_mok=${SKIP_MOK} ====="
 
 CODENAME="$(check_arch_and_codename)"
-log "Codename detectado (limpo): '${CODENAME}'"
-
+log "Codename: '${CODENAME}'"
 check_repo_availability "$CODENAME"
 
-if ! confirm "Prosseguir com a instalação do virtualbox-${VBOX_SERIES} no Debian '${CODENAME}'?"; then
-    log "Cancelado pelo usuário."
-    exit 0
-fi
+confirm "Instalar virtualbox-${VBOX_SERIES} no Debian '${CODENAME}'?" || { log "Cancelado."; exit 0; }
 
 install_build_deps
 install_and_verify_key
 add_repo "$CODENAME"
 verify_repo_signature
 install_virtualbox
-configure_group_and_secureboot_notice
+configure_vboxusers
+handle_secure_boot_modules
 
-if [[ "$INSTALL_EXTPACK" -eq 1 ]]; then
-    install_extpack
-fi
+[[ "$INSTALL_EXTPACK" -eq 1 ]] && install_extpack
 
 verify_installation
 print_summary
 
-log "===== Hub Passo 10 — VirtualBox instalado. Relogin vboxusers. Próximo: whonix-import-ova.sh ====="
+log "===== Hub Passo 10 — pacote instalado. Ver RESULTADO abaixo. ====="
+
+if vbox_modules_loaded; then
+    write_result "PASS" 0
+elif [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
+    write_result "PASS_PENDING_MOK_REBOOT" 2
+else
+    write_result "PASS_MODULES_MISSING" 2
+fi

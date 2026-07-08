@@ -30,6 +30,15 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-07 — whonix-install v3 (MOK + Extension Pack padrão) ⏳ campo
+
+| Item | Detalhe |
+|------|---------|
+| `whonix-install-virtualbox.sh` | Extension Pack ON por padrão (`--no-extpack`); fluxo MOK (gerar chave, `mokutil --import`, assinar módulos); `RESULTADO` + exit `0`/`2`/`1` |
+| Validação | Pendente host Debian 13 + Secure Boot antes de release `v1.0.9.3` |
+
+---
+
 ## 2026-07-07 — release v1.0.9.2 (sanitize virtualbox.list corrompido)
 
 | Script | Fix |
