@@ -6,6 +6,20 @@
 
 ---
 
+## 2026-07-08 — release v1.0.10 (Passo 10 host validado em campo)
+
+| Item | Detalhe |
+|------|---------|
+| **Suíte `whonix-host/` v3.5.4** | install + sign + verify — MOK/Secure Boot validados no piloto **bloodyroar** (Debian 13 trixie · SB ON · VBox 7.2.12) |
+| **Campo** | `whonix-verify-virtualbox-host.sh` **PASS 10/0/0** (08/07 04:25) — QA logs arquivados na camada equipe |
+| **Curso canônico** | Passo 10.1: senha MOK + tela azul (Enroll MOK) documentados; repetir sign a cada kernel novo |
+| **Commits** | `bcbcbe8` (v3.5.1) · `1e1bb09` (v3.5.2) · `5b867f9` (v3.5.3) · `0fc288f` (v3.5.4) · `c658a22` (docs) |
+| **Ecossistema** | Suíte portada para Zero-Trust-Core (`ztc-*`), Guardião-Soberano (`gs-*`) e OpenPGP-GPG (`pgp-*`) |
+
+Fluxo host: `install` → reboot (tela azul Enroll MOK) → `sign` → `verify` → `verify-image` → `import-ova`.
+
+---
+
 ## 2026-07-04 — release v1.0.9 (Whonix passo 10 — curso canônico)
 
 | Item | Detalhe |
