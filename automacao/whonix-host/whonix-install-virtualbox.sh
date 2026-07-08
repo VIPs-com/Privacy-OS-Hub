@@ -86,7 +86,9 @@ usage() {
 }
 
 require_root() {
-    [[ "${EUID}" -ne 0 ]] && fail "Este script precisa ser executado como root (use sudo)."
+    # Com set -e + trap ERR: [[ ... ]] && fail quebra quando a condição é falsa
+    # (ex.: EUID=0 com sudo). Usar || fail.
+    [[ "${EUID}" -eq 0 ]] || fail "Este script precisa ser executado como root (use sudo)."
 }
 
 sanitize_stale_repo_file() {
@@ -224,8 +226,9 @@ verify_repo_signature() {
     apt_status=${PIPESTATUS[0]}
     set -e
     [[ "$apt_status" -eq 0 ]] || fail "apt-get update falhou (exit ${apt_status}): $(tail -n 5 "$update_out")"
-    grep -qiE "NO_PUBKEY|BADSIG" "$update_out" \
-        && fail "NO_PUBKEY/BADSIG no repositório VirtualBox."
+    if grep -qiE "NO_PUBKEY|BADSIG" "$update_out"; then
+        fail "NO_PUBKEY/BADSIG no repositório VirtualBox."
+    fi
     log "Índice apt OK; sem NO_PUBKEY/BADSIG."
 }
 
