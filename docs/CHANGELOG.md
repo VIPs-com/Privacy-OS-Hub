@@ -30,6 +30,14 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-07 — whonix-install v3.2.1 (mokutil import senha 2×)
+
+| Item | Detalhe |
+|------|---------|
+| `whonix-install-virtualbox.sh` | `mokutil --import` recebe senha duplicada no stdin (`printf` 2×) — corrige `password doesn't match` em campo |
+
+---
+
 ## 2026-07-07 — whonix-install v3.2 (assistente em fases + MOK fix Debian)
 
 | Item | Detalhe |

@@ -194,7 +194,7 @@ sudo tail -30 /var/log/virtualbox-install.log
 | `is not enrolled` no `test-key` | Tela azul não feita | `systemctl reboot -i` → Enroll MOK |
 | `Key was rejected by service` | Chave não enrolada ou kernel novo | Reboot MOK ou rodar script de novo |
 | `already in the enrollment request` | Import OK; falta reboot | `systemctl reboot -i` |
-| Extension Pack pede `y/n` com `-y` | Script desatualizado | `git pull` no repo |
+| `password doesn't match` no `mokutil --import` | Script antigo enviava senha 1× | `git pull` (v3.2.1+) ou `sudo mokutil --import` manual |
 | Passos 1–7 repetem toda vez | Script antigo (sem assistente) | `git pull` |
 | `virtualbox.list` corrompido | Run antigo com bug | Script v3+ remove automaticamente |
 

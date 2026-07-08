@@ -21,6 +21,8 @@
 #
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 #
+# Changelog jul/2026 v3.2.1:
+#   - mokutil --import: envia senha 2× no stdin (mokutil pede confirmação)
 # Changelog jul/2026 v3.2:
 #   - Assistente em fases (fresh / pendente MOK / pós-reboot / completo)
 #   - Retomada: pula passos 1–7 se VirtualBox já instalado
@@ -508,7 +510,8 @@ enroll_mok_key() {
     read -r -s -p "Senha MOK: " pw1; echo >&2
     read -r -s -p "Confirme senha MOK: " pw2; echo >&2
     [[ "$pw1" == "$pw2" && -n "$pw1" ]] || fail "Senhas MOK não conferem ou vazias."
-    import_out="$(echo -n "$pw1" | mokutil --import "$MOK_DER" 2>&1)" || import_rc=$?
+    # mokutil --import pede senha duas vezes (input password / input password again)
+    import_out="$(printf '%s\n%s\n' "$pw1" "$pw2" | mokutil --import "$MOK_DER" 2>&1)" || import_rc=$?
     if [[ "$import_rc" -ne 0 ]]; then
         if echo "$import_out" | grep -qiE 'already in the enrollment request|already enrolled'; then
             log "Chave MOK já agendada para enroll — falta reboot + tela azul."
