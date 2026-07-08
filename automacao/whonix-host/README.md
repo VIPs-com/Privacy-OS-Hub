@@ -369,4 +369,4 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 - **`mokutil --test-key`:** parseia mensagem, não só exit code (Debian trixie).
 - **Progresso:** `/root/module-signing/.hub-vbox-progress` — consulte se perdeu o rumo.
 
-*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5.3 · jul/2026*
+*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5.4 · jul/2026 · Passo 10 validado em campo (Debian 13 trixie · Secure Boot ON · VBox 7.2.12)*

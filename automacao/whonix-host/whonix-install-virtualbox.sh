@@ -26,6 +26,9 @@
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 # Assinatura de módulos: whonix-sign-virtualbox-modules.sh (log separado)
 #
+# Changelog jul/2026 v3.5.4:
+#   - Extension Pack: check 'Usable: true' sem -A2 (ficava ~7 linhas após o
+#     nome e nunca casava — reinstalava toda vez / WARN falso no verify)
 # Changelog jul/2026 v3.5.3:
 #   - FIX falso negativo: checagem de módulo via /proc/modules (grep direto);
 #     'lsmod | grep -q' sob pipefail morria com SIGPIPE quando o módulo
@@ -310,7 +313,7 @@ print_wizard_intro() {
     esac
     _m ""
     _m "==================================================================="
-    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.3"
+    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.4"
     _m "==================================================================="
     _b "  ${phase_msg}"
     echo "" >&2
@@ -714,11 +717,14 @@ install_extpack() {
     full_version="$(dpkg-query -W -f='${Version}' "$pkg" 2>/dev/null | cut -d: -f2 | cut -d- -f1)"
     [[ -n "$full_version" ]] || { warn "Versão do pacote ausente — pulando Extension Pack."; return; }
 
-    if VBoxManage list extpacks 2>/dev/null | grep -q "Oracle VirtualBox Extension Pack"; then
-        if VBoxManage list extpacks 2>/dev/null | grep -A2 "Oracle VirtualBox Extension Pack" | grep -q "Usable"; then
-            log "Extension Pack ${full_version} já instalado — pulando."
-            return
-        fi
+    # 'Usable: true' fica ~7 linhas após o nome do pack — grep -A2 não
+    # alcançava e reinstalava o extpack toda vez (falso "ausente").
+    local extlist
+    extlist="$(VBoxManage list extpacks 2>/dev/null || true)"
+    if grep -q "Oracle VirtualBox Extension Pack" <<<"$extlist" \
+        && grep -qE '^Usable: *true' <<<"$extlist"; then
+        log "Extension Pack já instalado e utilizável — pulando."
+        return
     fi
 
     tmp_dir="$(mktemp -d)"; TMP_PATHS+=("$tmp_dir")

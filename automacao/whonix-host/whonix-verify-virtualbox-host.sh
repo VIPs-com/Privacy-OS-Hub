@@ -214,7 +214,12 @@ check_extpack() {
         record_check SKIP "Extension Pack" "VBoxManage ausente"
         return
     fi
-    if VBoxManage list extpacks 2>/dev/null | grep -A3 "Oracle VirtualBox Extension Pack" | grep -q "Usable"; then
+    # 'Usable: true' fica ~7 linhas após o nome do pack — grep -A3 nunca
+    # alcançava e dava WARN falso com extpack instalado (bloodyroar 08/jul).
+    local extlist
+    extlist="$(VBoxManage list extpacks 2>/dev/null || true)"
+    if grep -q "Oracle VirtualBox Extension Pack" <<<"$extlist" \
+        && grep -qE '^Usable: *true' <<<"$extlist"; then
         record_check PASS "Extension Pack" "instalado e utilizável"
     else
         record_check WARN "Extension Pack" "ausente — rode install -y (USB 2.0 etc.)"
@@ -231,7 +236,11 @@ check_logs() {
     elif [[ "$ir" == "PASS_PENDING_MOK_REBOOT" ]]; then
         record_check WARN "install log" "PASS_PENDING_MOK_REBOOT"
     elif [[ "$ir" == "PASS_NEEDS_SIGN" ]]; then
-        record_check WARN "install log" "PASS_NEEDS_SIGN — falta sign"
+        if [[ "$sr" == "PASS" ]]; then
+            record_check PASS "install log" "PASS_NEEDS_SIGN (superado — sign PASS)"
+        else
+            record_check WARN "install log" "PASS_NEEDS_SIGN — falta sign"
+        fi
     elif [[ -n "$ir" ]]; then
         record_check WARN "install log" "RESULTADO: ${ir}"
     else

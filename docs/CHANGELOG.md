@@ -46,6 +46,16 @@ Sem reboot MOK. Se `sign` falhar, leia o bloco **Diagnóstico automático** em `
 
 ---
 
+## 2026-07-08 — whonix-host v3.5.4 (polish pós-PASS bloodyroar)
+
+| Item | Detalhe |
+|------|---------|
+| Extension Pack | `Usable: true` fica ~7 linhas após o nome — `grep -A2/-A3` nunca alcançava: verify dava WARN falso e install reinstalava toda vez |
+| install log | `PASS_NEEDS_SIGN` + sign PASS → agora PASS "superado" (era WARN contraditório) |
+| Campo | Passo 10 **PASS 8/0/2** no bloodyroar 08/07 04:17 (Debian 13 · SB ON · VBox 7.2.12) |
+
+---
+
 ## 2026-07-08 — whonix-host v3.5.3 (fix falso negativo lsmod/pipefail)
 
 | Item | Detalhe |
