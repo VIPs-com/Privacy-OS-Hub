@@ -21,6 +21,15 @@
 #
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 #
+# Changelog jul/2026 v3.2:
+#   - Assistente em fases (fresh / pendente MOK / pós-reboot / completo)
+#   - Retomada: pula passos 1–7 se VirtualBox já instalado
+#   - Confirmação visual fingerprint Oracle (auto com -y)
+#   - Oferta interativa: systemctl reboot -i (não confundir com systemctl -i)
+# Changelog jul/2026 v3.1:
+#   - mok_key_enrolled: parseia saída mokutil (Debian: exit 0 + "not enrolled")
+#   - Extension Pack: --accept-license com -y; pula se já instalado
+#   - Estado .mok-import-requested; reboot via systemctl -i no card MOK
 # Changelog jul/2026 v3:
 #   - Extension Pack ON por padrão; --no-extpack para pular
 #   - MOK: gera chave, mokutil --import, assina módulos pós-enroll
@@ -38,12 +47,15 @@ SKIP_MOK=0
 KEYRING="/usr/share/keyrings/oracle-virtualbox.gpg"
 REPO_FILE="/etc/apt/sources.list.d/virtualbox.list"
 KEY_URL="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
+ORACLE_FPR_URL="https://www.virtualbox.org/wiki/Linux_Downloads"
 EXPECTED_FPR="B9F8D658297AF3EFC18D5CDFA2F683C52980AECF"
 LOG_FILE="/var/log/virtualbox-install.log"
 DL_BASE="https://download.virtualbox.org/virtualbox/debian"
 MOK_DIR="/root/module-signing"
 MOK_PRIV="${MOK_DIR}/MOK.priv"
 MOK_DER="${MOK_DIR}/MOK.der"
+MOK_STATE_FILE="${MOK_DIR}/.mok-import-requested"
+EXTPL_LICENSE="eb31505e56e9b4d0fbca139104da41ac6f6b98f8e78968bdf01b1f3da3c4f9ae"
 NET_RETRIES=3
 NET_TIMEOUT=15
 
@@ -55,6 +67,14 @@ TMP_PATHS=()
 FINAL_RESULT=""
 FINAL_EXIT=0
 MOK_REBOOT_NEEDED=0
+WIZARD_PHASE=""
+
+# Fases do assistente (detecção automática):
+#   fresh_install        — primeira vez; instala tudo
+#   pending_mok_reboot   — mokutil --import OK; falta reboot + tela azul
+#   post_reboot_sign     — chave enrolada; assinar módulos e carregar
+#   installed_no_modules — pacote OK, SB off ou --skip-mok
+#   complete             — vboxdrv já carregado
 
 # ------------------------------- Funções ----------------------------------
 
@@ -177,6 +197,116 @@ confirm() {
     [[ "$resp" =~ ^[sSyY]$ ]]
 }
 
+virtualbox_pkg_installed() {
+    dpkg -l "virtualbox-${VBOX_SERIES}" 2>/dev/null | grep -q '^ii'
+}
+
+detect_wizard_phase() {
+    if vbox_modules_loaded; then
+        WIZARD_PHASE="complete"
+        return
+    fi
+    if ! virtualbox_pkg_installed; then
+        WIZARD_PHASE="fresh_install"
+        return
+    fi
+    if secure_boot_enabled && [[ "$SKIP_MOK" -eq 0 ]]; then
+        [[ -f "$MOK_DER" ]] || WIZARD_PHASE="installed_need_mok"
+        if [[ -z "$WIZARD_PHASE" ]]; then
+            if mok_enrollment_pending; then
+                WIZARD_PHASE="pending_mok_reboot"
+            elif mok_key_enrolled; then
+                WIZARD_PHASE="post_reboot_sign"
+            else
+                WIZARD_PHASE="installed_need_mok"
+            fi
+        fi
+    else
+        WIZARD_PHASE="installed_no_modules"
+    fi
+}
+
+print_wizard_intro() {
+    local phase_msg
+    case "$WIZARD_PHASE" in
+        complete)
+            phase_msg="Fase: COMPLETO — módulos vbox já carregados."
+            ;;
+        pending_mok_reboot)
+            phase_msg="Fase: AGUARDANDO REBOOT — Enroll MOK na tela azul (1 ação humana no firmware)."
+            ;;
+        post_reboot_sign)
+            phase_msg="Fase: PÓS-REBOOT — assinando módulos com chave MOK enrolada."
+            ;;
+        installed_need_mok)
+            phase_msg="Fase: MOK — VirtualBox instalado; falta registrar chave Secure Boot."
+            ;;
+        installed_no_modules)
+            phase_msg="Fase: MÓDULOS — VirtualBox instalado; compilando/carregando drivers."
+            ;;
+        *)
+            phase_msg="Fase: INSTALAÇÃO — download Oracle verificado + pacote + MOK se necessário."
+            ;;
+    esac
+    cat >&2 <<EOF
+
+===================================================================
+  Assistente VirtualBox — Privacy-OS-Hub (Passo 10)
+===================================================================
+  ${phase_msg}
+
+  Automático (script): repo Oracle · GPG · apt · DKMS · Extension Pack
+  Interativo (você):   senha MOK · tela AZUL no boot · confirmação visual
+                       da fingerprint Oracle (pula com -y)
+
+  Limite do Linux: a tela azul "Enroll MOK" NÃO pode ser scriptada —
+  é proteção do Secure Boot (diferente do .exe no Windows).
+
+  Log: ${LOG_FILE}
+===================================================================
+EOF
+    log "Assistente: ${phase_msg}"
+}
+
+confirm_fingerprint_visual() {
+    local fpr="$1"
+    local grouped expected_grouped
+    grouped="$(echo "$fpr" | sed 's/\(..\)/\1:/g; s/:$//')"
+    expected_grouped="$(echo "$EXPECTED_FPR" | sed 's/\(..\)/\1:/g; s/:$//')"
+    echo "" >&2
+    echo "┌─ Confirmação visual — chave Oracle (fonte oficial) ─────────" >&2
+    echo "│  Site:  ${ORACLE_FPR_URL}" >&2
+    echo "│  Chave: ${KEY_URL}" >&2
+    echo "│  FPR obtida:  ${grouped}" >&2
+    echo "│  FPR esperada: ${expected_grouped}" >&2
+    echo "└─ Script já validou com GPG (fail-closed). Confira se quiser." >&2
+    if [[ "$ASSUME_YES" -eq 1 ]]; then
+        log "Fingerprint Oracle aceita automaticamente (-y)."
+        return 0
+    fi
+    read -r -p "Fingerprint confere com o site oficial? [S/n] " resp
+    [[ ! "$resp" =~ ^[nN]$ ]]
+}
+
+offer_reboot_now() {
+    [[ "$MOK_REBOOT_NEEDED" -eq 1 ]] || return 0
+    [[ -t 0 ]] || return 0
+    echo "" >&2
+    echo "┌─ Reiniciar agora? ───────────────────────────────────────────" >&2
+    echo "│  Comando CORRETO:  sudo systemctl reboot -i" >&2
+    echo "│  ERRADO:           sudo systemctl -i   (só lista serviços!)" >&2
+    echo "│  Na tela azul: Enroll MOK → Continue → Yes → senha → Reboot" >&2
+    echo "└──────────────────────────────────────────────────────────────" >&2
+    read -r -p "Reiniciar agora com systemctl reboot -i? [s/N] " resp
+    if [[ "$resp" =~ ^[sSyY]$ ]]; then
+        log "Reiniciando em 5 segundos (systemctl reboot -i)..."
+        sleep 5
+        systemctl reboot -i
+    else
+        log "Reboot adiado — rode quando estiver pronto: sudo systemctl reboot -i"
+    fi
+}
+
 install_build_deps() {
     log "[Passo 1/11] apt update + dependências de build (DKMS, headers, openssl)..."
     apt-get update -qq || fail "apt-get update falhou — verifique /etc/apt/sources.list.d/."
@@ -202,6 +332,7 @@ install_and_verify_key() {
     fpr="$(gpg --show-keys --with-colons --fingerprint "$tmp_keyring" | awk -F: '/^fpr:/ {print $10; exit}')"
     [[ "$fpr" == "$EXPECTED_FPR" ]] \
         || fail "Fingerprint Oracle inválida. Esperado: $EXPECTED_FPR | Obtido: ${fpr:-<vazio>}."
+    confirm_fingerprint_visual "$fpr" || fail "Instalação cancelada — fingerprint Oracle não confirmada."
     install -m 0644 "$tmp_keyring" "$KEYRING"
     log "Fingerprint Oracle OK: $fpr"
 }
@@ -241,6 +372,23 @@ install_virtualbox() {
     log "Pacote ${pkg} instalado."
 }
 
+run_full_install_pipeline() {
+    local codename="$1"
+    confirm "Instalar virtualbox-${VBOX_SERIES} no Debian '${codename}'?" \
+        || { log "Cancelado."; exit 0; }
+    install_build_deps
+    install_and_verify_key
+    add_repo "$codename"
+    verify_repo_signature
+    install_virtualbox
+    configure_vboxusers
+}
+
+run_resume_pipeline() {
+    log "Retomada automática: VirtualBox já instalado — pulando passos 1–7."
+    configure_vboxusers
+}
+
 configure_vboxusers() {
     log "[Passo 7/11] Grupo vboxusers..."
     local target_user="${SUDO_USER:-$USER}"
@@ -273,13 +421,45 @@ ensure_mok_keypair() {
     log "Par MOK gerado (MOK.priv + MOK.der)."
 }
 
+mok_test_key_output() {
+    # Debian trixie: mokutil --test-key imprime "is not enrolled" mas sai com exit 0.
+    # Nunca confiar só no exit code — parsear a mensagem.
+    [[ -f "$MOK_DER" ]] || return 1
+    command -v mokutil >/dev/null 2>&1 || return 1
+    mokutil --test-key "$MOK_DER" 2>&1
+}
+
 mok_enrollment_pending() {
+    [[ -f "$MOK_STATE_FILE" ]] && return 0
     command -v mokutil >/dev/null 2>&1 \
         && mokutil --list-new 2>/dev/null | grep -q .
 }
 
 mok_key_enrolled() {
-    [[ -f "$MOK_DER" ]] && mokutil --test-key "$MOK_DER" >/dev/null 2>&1
+    local out fp_der
+    [[ -f "$MOK_DER" ]] || return 1
+    out="$(mok_test_key_output 2>/dev/null || true)"
+    if echo "$out" | grep -qiE 'not enrolled|is not enrolled'; then
+        return 1
+    fi
+    if echo "$out" | grep -qiE 'is enrolled|already enrolled'; then
+        rm -f "$MOK_STATE_FILE"
+        return 0
+    fi
+    # Fallback: SHA1 do nosso .der aparece em --list-enrolled
+    fp_der="$(openssl x509 -inform DER -in "$MOK_DER" -noout -fingerprint -sha1 2>/dev/null \
+        | cut -d= -f2 | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]:')"
+    [[ -n "$fp_der" ]] \
+        && mokutil --list-enrolled 2>/dev/null \
+            | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]:' \
+            | grep -q "$fp_der" \
+        && { rm -f "$MOK_STATE_FILE"; return 0; }
+    return 1
+}
+
+mark_mok_import_pending() {
+    install -d -m 0700 "$MOK_DIR"
+    date -Iseconds >"$MOK_STATE_FILE"
 }
 
 print_mok_reboot_card() {
@@ -288,38 +468,59 @@ print_mok_reboot_card() {
 ===================================================================
   REBOOT OBRIGATÓRIO — Enroll MOK (ação humana no firmware)
 ===================================================================
-  O pacote VirtualBox está instalado, mas o kernel bloqueia vboxdrv
-  porque Secure Boot está ON e o módulo precisa da sua chave MOK.
+  VirtualBox no Linux com Secure Boot ≠ .exe do Windows: o kernel só
+  aceita módulos assinados com SUA chave MOK enrolada no firmware.
 
-  1) sudo reboot
-  2) Na tela AZUL "MOK Management" (só aparece neste boot):
-       Enroll MOK → Continue → Yes → digite a senha MOK → Reboot
-  3) Após voltar ao sistema, rode ESTE SCRIPT DE NOVO:
+  O pacote já está instalado. Falta 1 reboot + confirmação na tela azul.
+
+  1) Reinicie (GNOME pode bloquear "sudo reboot" — use uma destas):
+       sudo systemctl reboot -i
+     ou feche apps e: sudo reboot
+
+  2) No boot, tela AZUL "MOK Management" (só neste reboot):
+       Enroll MOK → Continue → Yes → senha MOK → Reboot
+
+  3) De volta ao Debian, rode ESTE SCRIPT DE NOVO (só comandos, não texto):
+       cd ~/Downloads/Privacy-OS-Hub/automacao/whonix-host
        sudo ./whonix-install-virtualbox.sh -y
-     (ele assinará os módulos e carregará vboxdrv automaticamente)
+       lsmod | grep vbox
 
-  Não é possível automatizar a tela azul — exige confirmação física.
+  Esperado: RESULTADO: PASS · exit 0 · vboxdrv listado.
+
+  A tela azul não pode ser automatizada — é proteção do Secure Boot.
 ===================================================================
 EOF
 }
 
 enroll_mok_key() {
-  local pw1 pw2
-  log "Registrando chave MOK no firmware (mokutil --import)..."
-  if [[ ! -t 0 ]]; then
-      warn "Sem TTY — não consigo pedir senha MOK. Rode manualmente:"
-      warn "  sudo mokutil --import ${MOK_DER}"
-      warn "  sudo reboot  →  Enroll MOK na tela azul  →  rode este script de novo"
-      MOK_REBOOT_NEEDED=1
-      return 1
-  fi
-  echo "Defina uma senha para o enroll MOK (você digitará a MESMA na tela azul do boot):" >&2
-  read -r -s -p "Senha MOK: " pw1; echo >&2
-  read -r -s -p "Confirme senha MOK: " pw2; echo >&2
-  [[ "$pw1" == "$pw2" && -n "$pw1" ]] || fail "Senhas MOK não conferem ou vazias."
-  echo -n "$pw1" | mokutil --import "$MOK_DER" || fail "mokutil --import falhou."
-  log "mokutil --import OK — reboot necessário para Enroll MOK."
-  MOK_REBOOT_NEEDED=1
+    local pw1 pw2 import_out import_rc=0
+    log "Registrando chave MOK no firmware (mokutil --import)..."
+    if [[ ! -t 0 ]]; then
+        warn "Sem TTY — não consigo pedir senha MOK. Rode manualmente:"
+        warn "  sudo mokutil --import ${MOK_DER}"
+        warn "  sudo systemctl reboot -i  →  Enroll MOK na tela azul  →  rode este script de novo"
+        mark_mok_import_pending
+        MOK_REBOOT_NEEDED=1
+        return 1
+    fi
+    echo "" >&2
+    echo "=== Secure Boot: defina senha MOK (mesma senha na tela AZUL do boot) ===" >&2
+    read -r -s -p "Senha MOK: " pw1; echo >&2
+    read -r -s -p "Confirme senha MOK: " pw2; echo >&2
+    [[ "$pw1" == "$pw2" && -n "$pw1" ]] || fail "Senhas MOK não conferem ou vazias."
+    import_out="$(echo -n "$pw1" | mokutil --import "$MOK_DER" 2>&1)" || import_rc=$?
+    if [[ "$import_rc" -ne 0 ]]; then
+        if echo "$import_out" | grep -qiE 'already in the enrollment request|already enrolled'; then
+            log "Chave MOK já agendada para enroll — falta reboot + tela azul."
+            mark_mok_import_pending
+            MOK_REBOOT_NEEDED=1
+            return 0
+        fi
+        fail "mokutil --import falhou: ${import_out}"
+    fi
+    log "mokutil --import OK — reboot necessário para Enroll MOK."
+    mark_mok_import_pending
+    MOK_REBOOT_NEEDED=1
 }
 
 sign_vbox_kernel_modules() {
@@ -355,9 +556,18 @@ run_vboxconfig() {
 }
 
 load_vbox_modules() {
-    modprobe vboxdrv 2>/dev/null || true
+    local err
+    if ! err="$(modprobe vboxdrv 2>&1)"; then
+        if echo "$err" | grep -qi 'Key was rejected'; then
+            warn "vboxdrv: assinatura rejeitada (Secure Boot) — falta Enroll MOK no reboot."
+            MOK_REBOOT_NEEDED=1
+        else
+            warn "modprobe vboxdrv: ${err:-falhou}"
+        fi
+    fi
     modprobe vboxnetflt 2>/dev/null || true
     modprobe vboxnetadp 2>/dev/null || true
+    modprobe vboxpci 2>/dev/null || true
 }
 
 handle_secure_boot_modules() {
@@ -385,47 +595,67 @@ handle_secure_boot_modules() {
         return 0
     fi
 
-    log "Secure Boot HABILITADO — fluxo MOK."
+    log "Secure Boot HABILITADO — fluxo MOK (Linux ≠ .exe do Windows)."
     ensure_mok_keypair
+
+    if mok_enrollment_pending; then
+        warn "Enroll MOK pendente — falta reboot + confirmação na tela azul."
+        print_mok_reboot_card
+        MOK_REBOOT_NEEDED=1
+        offer_reboot_now
+        return 0
+    fi
+
     run_vboxconfig
 
     if mok_key_enrolled; then
-        log "Chave MOK já enrolada no firmware — assinando módulos..."
+        log "Chave MOK enrolada no firmware — assinando módulos..."
         sign_vbox_kernel_modules
         load_vbox_modules
         if vbox_modules_loaded; then
             log "Módulos vbox carregados após assinatura MOK."
             return 0
         fi
+        if ! mok_key_enrolled; then
+            warn "Chave MOK não enrolada no firmware — falta reboot + tela azul Enroll MOK."
+            MOK_REBOOT_NEEDED=1
+            print_mok_reboot_card
+            offer_reboot_now
+            return 0
+        fi
         warn "Módulos ainda não carregaram após assinatura — kernel novo? Rode o script de novo."
-        return 0
-    fi
-
-    if mok_enrollment_pending; then
-        warn "Enroll MOK pendente — falta reboot + confirmação na tela azul."
-        print_mok_reboot_card
-        MOK_REBOOT_NEEDED=1
         return 0
     fi
 
     enroll_mok_key || true
     if [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
         print_mok_reboot_card
+        offer_reboot_now
     fi
 }
 
 install_extpack() {
     local pkg="virtualbox-${VBOX_SERIES}" full_version tmp_dir extpack_file extpack_url
+    local extpack_args=(extpack install --replace)
     log "[Passo 9/11] Extension Pack (padrão ON)..."
     full_version="$(dpkg-query -W -f='${Version}' "$pkg" 2>/dev/null | cut -d: -f2 | cut -d- -f1)"
     [[ -n "$full_version" ]] || { warn "Versão do pacote ausente — pulando Extension Pack."; return; }
+
+    if VBoxManage list extpacks 2>/dev/null | grep -q "Oracle VirtualBox Extension Pack"; then
+        if VBoxManage list extpacks 2>/dev/null | grep -A2 "Oracle VirtualBox Extension Pack" | grep -q "Usable"; then
+            log "Extension Pack ${full_version} já instalado — pulando."
+            return
+        fi
+    fi
 
     tmp_dir="$(mktemp -d)"; TMP_PATHS+=("$tmp_dir")
     extpack_file="Oracle_VirtualBox_Extension_Pack-${full_version}.vbox-extpack"
     extpack_url="https://download.virtualbox.org/virtualbox/${full_version}/${extpack_file}"
 
+    [[ "$ASSUME_YES" -eq 1 ]] && extpack_args+=(--accept-license="$EXTPL_LICENSE")
+
     if fetch "$extpack_url" "${tmp_dir}/${extpack_file}"; then
-        if echo y | VBoxManage extpack install --replace "${tmp_dir}/${extpack_file}"; then
+        if VBoxManage "${extpack_args[@]}" "${tmp_dir}/${extpack_file}"; then
             log "Extension Pack ${full_version} instalado."
         else
             warn "VBoxManage extpack install retornou erro."
@@ -454,7 +684,7 @@ print_summary() {
         log "Módulos kernel: OK (vboxdrv carregado)"
     elif [[ "$MOK_REBOOT_NEEDED" -eq 1 ]]; then
         log "Módulos kernel: PENDENTE_REBOOT_MOK"
-        next_action="sudo reboot → Enroll MOK (tela azul) → rode este script de novo"
+        next_action="sudo systemctl reboot -i → Enroll MOK (tela azul) → rode este script de novo"
     else
         log "Módulos kernel: AUSENTE (verifique Secure Boot / DKMS)"
         next_action="Revise avisos acima ou use --skip-mok + desabilite SB na BIOS"
@@ -494,22 +724,45 @@ log "===== Hub Passo 10 — VirtualBox (série ${VBOX_SERIES}) extpack=${INSTALL
 
 CODENAME="$(check_arch_and_codename)"
 log "Codename: '${CODENAME}'"
-check_repo_availability "$CODENAME"
+detect_wizard_phase
+print_wizard_intro
 
-confirm "Instalar virtualbox-${VBOX_SERIES} no Debian '${CODENAME}'?" || { log "Cancelado."; exit 0; }
-
-install_build_deps
-install_and_verify_key
-add_repo "$CODENAME"
-verify_repo_signature
-install_virtualbox
-configure_vboxusers
-handle_secure_boot_modules
-
-[[ "$INSTALL_EXTPACK" -eq 1 ]] && install_extpack
-
-verify_installation
-print_summary
+case "$WIZARD_PHASE" in
+    complete)
+        log "Retomada: sistema já pronto — verificação rápida."
+        verify_installation
+        print_summary
+        write_result "PASS" 0
+        ;;
+    pending_mok_reboot)
+        check_repo_availability "$CODENAME" 2>/dev/null || true
+        print_mok_reboot_card
+        MOK_REBOOT_NEEDED=1
+        verify_installation
+        print_summary
+        offer_reboot_now
+        write_result "PASS_PENDING_MOK_REBOOT" 2
+        ;;
+    fresh_install)
+        check_repo_availability "$CODENAME"
+        run_full_install_pipeline "$CODENAME"
+        handle_secure_boot_modules
+        [[ "$INSTALL_EXTPACK" -eq 1 ]] && install_extpack
+        verify_installation
+        print_summary
+        ;;
+    post_reboot_sign|installed_need_mok|installed_no_modules)
+        check_repo_availability "$CODENAME" 2>/dev/null || true
+        run_resume_pipeline
+        handle_secure_boot_modules
+        [[ "$INSTALL_EXTPACK" -eq 1 ]] && install_extpack
+        verify_installation
+        print_summary
+        ;;
+    *)
+        fail "Fase do assistente desconhecida: ${WIZARD_PHASE}"
+        ;;
+esac
 
 log "===== Hub Passo 10 — pacote instalado. Ver RESULTADO abaixo. ====="
 

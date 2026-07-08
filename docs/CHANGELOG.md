@@ -30,6 +30,16 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-07 — whonix-install v3.2 (assistente em fases + MOK fix Debian)
+
+| Item | Detalhe |
+|------|---------|
+| `whonix-install-virtualbox.sh` | Assistente em fases (`fresh_install` / `pending_mok_reboot` / `post_reboot_sign` / `complete`); retomada pula passos 1–7; `mok_key_enrolled` parseia saída mokutil (Debian: exit 0 + "not enrolled"); Extension Pack `--accept-license` com `-y`; oferta `systemctl reboot -i` |
+| `automacao/whonix-host/README.md` | Passo a passo detalhado: MOK, tela azul, diagnóstico, fases do assistente |
+| Validação | Piloto campo Debian 13 trixie + Secure Boot ⏳ |
+
+---
+
 ## 2026-07-07 — whonix-install v3 (MOK + Extension Pack padrão) ⏳ campo
 
 | Item | Detalhe |
