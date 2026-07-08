@@ -356,8 +356,9 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 
 ---
 
-## Notas técnicas (jul/2026 · v3.5.2)
+## Notas técnicas (jul/2026 · v3.5.3)
 
+- **Checagem de módulo via `/proc/modules`:** nunca `lsmod | grep -q` em script com `pipefail` — o `grep -q` fecha o pipe no 1º match e o `lsmod` morre com SIGPIPE (exit 141), gerando falso "não carregado" justamente quando o módulo está no topo do `lsmod` (recém-carregado).
 - **MOK em dois caminhos:** Hub gera em `/root/module-signing/`; `vboxdrv.sh` (Oracle) exige `/var/lib/shim-signed/mok/`. v3.5.2+ copia a **mesma** chave enrolada antes de cada `vboxconfig` (`sync_mok_to_shim_signed`).
 - **Módulos assinados (VBox 7.2):** `vboxdrv`, `vboxnetflt`, `vboxnetadp` — **`vboxpci` não existe mais** (removido na série 6.1).
 - **Três scripts + três logs:** install · sign · verify — não misture responsabilidades.
@@ -368,4 +369,4 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 - **`mokutil --test-key`:** parseia mensagem, não só exit code (Debian trixie).
 - **Progresso:** `/root/module-signing/.hub-vbox-progress` — consulte se perdeu o rumo.
 
-*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5.2 · jul/2026*
+*Módulo 2 · Privacy-OS-Hub · fluxo VirtualBox v3.5.3 · jul/2026*

@@ -26,6 +26,10 @@
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 # Assinatura de módulos: whonix-sign-virtualbox-modules.sh (log separado)
 #
+# Changelog jul/2026 v3.5.3:
+#   - FIX falso negativo: checagem de módulo via /proc/modules (grep direto);
+#     'lsmod | grep -q' sob pipefail morria com SIGPIPE quando o módulo
+#     estava carregado (campo bloodyroar — FAIL com vboxdrv Live no kernel)
 # Changelog jul/2026 v3.5.2:
 #   - sync_mok_to_shim_signed(): copia MOK Hub → /var/lib/shim-signed/mok/
 #     (caminho que vboxdrv.sh nativo exige — fix campo bloodyroar)
@@ -192,7 +196,9 @@ secure_boot_enabled() {
 }
 
 vbox_modules_loaded() {
-    lsmod | grep -qE '^vbox| vbox'
+    # /proc/modules direto — 'lsmod | grep -q' sob pipefail dá falso negativo
+    # (SIGPIPE no lsmod quando grep -q casa cedo). Campo bloodyroar 08/jul/2026.
+    grep -qE '^vbox' /proc/modules 2>/dev/null
 }
 
 check_arch_and_codename() {
@@ -304,7 +310,7 @@ print_wizard_intro() {
     esac
     _m ""
     _m "==================================================================="
-    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.2"
+    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.3"
     _m "==================================================================="
     _b "  ${phase_msg}"
     echo "" >&2
@@ -487,7 +493,7 @@ configure_vboxusers() {
     else
         warn "Falha ao adicionar '$target_user' ao grupo vboxusers."
     fi
-    if command -v kvm-ok >/dev/null 2>&1 || lsmod | grep -qE '^kvm_intel|^kvm_amd'; then
+    if command -v kvm-ok >/dev/null 2>&1 || grep -qE '^kvm_intel|^kvm_amd' /proc/modules 2>/dev/null; then
         warn "KVM carregado — pode conflitar com VirtualBox em Debian 13+."
     fi
 }
@@ -736,10 +742,10 @@ verify_installation() {
     log "[Passo 10/11] Verificação final..."
     VBoxManage --version 2>&1 | tee -a "$LOG_FILE" >&2 || warn "VBoxManage não respondeu."
     if vbox_modules_loaded; then
-        lsmod | grep vbox | tee -a "$LOG_FILE" >&2
-        log "lsmod: módulos vbox presentes."
+        grep '^vbox' /proc/modules | tee -a "$LOG_FILE" >&2 || true
+        log "Módulos vbox presentes (/proc/modules)."
     else
-        warn "lsmod: módulos vbox AUSENTES — VMs não ligam até resolver MOK/SB."
+        warn "Módulos vbox AUSENTES — VMs não ligam até resolver MOK/SB."
     fi
 }
 

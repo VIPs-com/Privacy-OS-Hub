@@ -46,6 +46,17 @@ Sem reboot MOK. Se `sign` falhar, leia o bloco **Diagnóstico automático** em `
 
 ---
 
+## 2026-07-08 — whonix-host v3.5.3 (fix falso negativo lsmod/pipefail)
+
+| Item | Detalhe |
+|------|---------|
+| Causa | `lsmod \| grep -q` sob `set -o pipefail`: grep fecha o pipe no 1º match → lsmod morre com SIGPIPE (141) → falso "não carregado" com módulo Live no kernel |
+| Fix | `vbox_modules_loaded()` lê `/proc/modules` direto (install · sign · verify) |
+| Campo | bloodyroar 08/07 04:01 — sign/verify FAIL enquanto `vboxdrv.service` active e `/dev/vboxdrv` presente |
+| Extra | check KVM e verificação final também migrados para `/proc/modules` |
+
+---
+
 ## 2026-07-08 — whonix-host v3.5.2 (sync MOK → shim-signed)
 
 | Item | Detalhe |

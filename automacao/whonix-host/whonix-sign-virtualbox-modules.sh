@@ -30,6 +30,9 @@
 #     automaticamente blacklist em /etc/modprobe.d, vermagic do módulo vs.
 #     kernel rodando, e as últimas linhas do dmesg — em vez de só dizer
 #     "não apareceu no lsmod" sem nenhuma pista de causa.
+#   - v3.5.3: vbox_modules_loaded() lê /proc/modules direto — 'lsmod |
+#     grep -q' sob pipefail dava falso negativo por SIGPIPE quando o módulo
+#     estava carregado (campo bloodyroar: FAIL com vboxdrv Live no kernel)
 #   - v3.5.2: publicado sync_mok_to_shim_signed (campo bloodyroar jul/2026)
 #   - FIX CRÍTICO (confirmado por evidência de campo): vboxdrv.sh (chamado
 #     por /sbin/vboxconfig) procura a chave MOK em
@@ -109,7 +112,11 @@ secure_boot_enabled() {
 }
 
 vbox_modules_loaded() {
-    lsmod 2>/dev/null | grep -q '^vboxdrv '
+    # /proc/modules direto — NUNCA 'lsmod | grep -q' aqui: sob pipefail,
+    # grep -q fecha o pipe no 1º match e lsmod morre com SIGPIPE (exit 141),
+    # gerando falso "não carregado" justamente quando o módulo ESTÁ no topo
+    # do lsmod (recém-carregado). Bug de campo bloodyroar 08/jul/2026.
+    grep -q '^vboxdrv ' /proc/modules 2>/dev/null
 }
 
 mok_key_enrolled() {
@@ -339,7 +346,7 @@ main() {
 
     load_modules
     log "[4/4] Verificação..."
-    lsmod | grep '^vbox' | tee -a "$LOG_FILE" >&2
+    grep '^vbox' /proc/modules | tee -a "$LOG_FILE" >&2 || true
     _g "vboxdrv carregado com sucesso."
     _b "Próximo: sudo ./whonix-verify-virtualbox-host.sh --qa-log"
 

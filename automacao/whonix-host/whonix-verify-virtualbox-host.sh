@@ -79,7 +79,9 @@ mok_key_enrolled() {
 }
 
 vbox_modules_loaded() {
-    lsmod 2>/dev/null | grep -q '^vboxdrv '
+    # /proc/modules direto — 'lsmod | grep -q' sob pipefail dá falso negativo
+    # (SIGPIPE no lsmod quando grep -q casa cedo). Campo bloodyroar 08/jul/2026.
+    grep -q '^vboxdrv ' /proc/modules 2>/dev/null
 }
 
 grep_log_resultado() {
