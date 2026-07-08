@@ -50,7 +50,43 @@ chmod +x whonix-install-virtualbox.sh whonix-verify-image.sh whonix-import-ova.s
 
 > **Cole só comandos no terminal** — não cole texto/markdown de análises ou chats.
 
-### 1) Primeira execução
+### Refazer do zero (piloto / perdeu tela azul MOK)
+
+Use quando testes anteriores falharam, `mokutil --list-new` está vazio, ou você **perdeu** a tela azul sem fazer Enroll MOK:
+
+```bash
+cd ~/Downloads/Privacy-OS-Hub/automacao/whonix-host
+git pull
+chmod +x whonix-install-virtualbox.sh
+
+# Limpa enroll pendente + chaves MOK antigas + reinstala fluxo completo
+sudo ./whonix-install-virtualbox.sh --reset-mok --new-mok-keys -y
+```
+
+O que `--reset-mok --new-mok-keys` faz:
+
+1. `mokutil --reset` — cancela enroll pendente antigo no firmware
+2. Apaga `/root/module-signing/MOK.{priv,der}` — gera par novo
+3. Continua instalação/retomada normalmente
+
+**Depois do `mokutil --import` OK**, com `-y` o reboot pergunta `[S/n]` — **Enter = reinicia** (`systemctl reboot -i` em 8 s).
+
+**Na tela azul** (logo após reiniciar — reaja rápido):
+
+`Enroll MOK` → `Continue` → `Yes` → senha MOK → `Reboot`
+
+**Após login:**
+
+```bash
+sudo ./whonix-install-virtualbox.sh -y
+lsmod | grep vbox
+```
+
+Esperado: `RESULTADO: PASS` · `exit 0`
+
+---
+
+### 1) Primeira execução (ou após reset)
 
 ```bash
 sudo ./whonix-install-virtualbox.sh -y
@@ -82,8 +118,11 @@ Log completo: `/var/log/virtualbox-install.log` (última linha: `RESULTADO:`).
 
 Só necessário se o script indicou `PASS_PENDING_MOK_REBOOT` ou pediu reboot.
 
+Com `-y`, ao perguntar reboot use **`[S/n]`** — **Enter = reinicia** em 8 segundos.
+
 ```bash
 sudo systemctl reboot -i
+```
 ```
 
 > **Atenção:** o comando correto é `systemctl **reboot** -i`.  
@@ -157,9 +196,13 @@ sudo ./whonix-install-virtualbox.sh -y --skip-mok   # não tenta MOK (SB deve es
 sudo ./whonix-install-virtualbox.sh -h              # ajuda
 ```
 
+Se a tela azul **não aparecer** ou passar rápido demais, você **não** enrolou — volte à seção [Refazer do zero](#refazer-do-zero-piloto--perdeu-tela-azul-mok).
+
 | Flag | Efeito |
 |------|--------|
-| `-y` | Aceita instalação, licença PUEL e fingerprint Oracle sem prompt extra |
+| `-y` | Menos prompts; licença PUEL auto; reboot pós-MOK **`[S/n]`** (Enter = sim) |
+| `--reset-mok` | `mokutil --reset` antes de instalar (limpa enroll pendente) |
+| `--new-mok-keys` | Com `--reset-mok`: apaga e regera chaves em `/root/module-signing/` |
 | `--no-extpack` | Não instala Oracle Extension Pack |
 | `--skip-mok` | Ignora fluxo MOK (use só com Secure Boot desligado na BIOS) |
 | `-v VERSAO` | Série VirtualBox (padrão: `7.2`) |
@@ -194,7 +237,8 @@ sudo tail -30 /var/log/virtualbox-install.log
 | `is not enrolled` no `test-key` | Tela azul não feita | `systemctl reboot -i` → Enroll MOK |
 | `Key was rejected by service` | Chave não enrolada ou kernel novo | Reboot MOK ou rodar script de novo |
 | `already in the enrollment request` | Import OK; falta reboot | `systemctl reboot -i` |
-| `password doesn't match` no `mokutil --import` | Script antigo enviava senha 1× | `git pull` (v3.2.1+) ou `sudo mokutil --import` manual |
+| Perdeu tela azul MOK | Enroll não feito | `--reset-mok --new-mok-keys -y` ou `mokutil --import` + reboot imediato |
+| `password doesn't match` no import | Script antigo (senha 1×) | `git pull` (v3.2.1+) |
 | Passos 1–7 repetem toda vez | Script antigo (sem assistente) | `git pull` |
 | `virtualbox.list` corrompido | Run antigo com bug | Script v3+ remove automaticamente |
 
@@ -252,4 +296,4 @@ sudo ./whonix-import-ova.sh -i /caminho/Whonix-*.ova -s /caminho/Whonix-*.ova.as
 
 Validação: [COMO-LER-SEUS-LOGS.md](../docs-aluno/COMO-LER-SEUS-LOGS.md) (tabela passo 10).
 
-*Módulo 2 · Privacy-OS-Hub · assistente VirtualBox v3.2 · jul/2026*
+*Módulo 2 · Privacy-OS-Hub · assistente VirtualBox v3.3 · jul/2026*

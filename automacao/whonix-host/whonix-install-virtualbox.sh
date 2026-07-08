@@ -7,11 +7,14 @@
 #
 # Uso:
 #   sudo ./whonix-install-virtualbox.sh [-v VERSAO] [-y] [--no-extpack] [--skip-mok]
+#                                      [--reset-mok] [--new-mok-keys]
 #
 #   -v VERSAO       Série do VirtualBox (padrão: 7.2)
-#   -y              Não pede confirmação (senha MOK ainda exige TTY interativo)
+#   -y              Menos prompts; reboot pós-MOK padrão [S] (Enter = sim)
 #   --no-extpack    Não instala Extension Pack (padrão: instala)
 #   --skip-mok      Não tenta enroll/assinatura MOK (só avisa Secure Boot)
+#   --reset-mok     Limpa enroll MOK pendente (mokutil --reset) antes de instalar
+#   --new-mok-keys  Com --reset-mok: apaga chaves em /root/module-signing/ e regera
 #   -e              Legado: força Extension Pack (redundante — já é padrão)
 #
 # Exit codes:
@@ -21,6 +24,10 @@
 #
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 #
+# Changelog jul/2026 v3.3:
+#   - --reset-mok / --new-mok-keys: refazer fluxo MOK do zero
+#   - -y: reboot pós-import [S/n] — Enter reinicia (systemctl reboot -i)
+#   - Card MOK: recuperação se perdeu tela azul
 # Changelog jul/2026 v3.2.1:
 #   - mokutil --import: envia senha 2× no stdin (mokutil pede confirmação)
 # Changelog jul/2026 v3.2:
@@ -46,6 +53,8 @@ VBOX_SERIES="7.2"
 INSTALL_EXTPACK=1
 ASSUME_YES=0
 SKIP_MOK=0
+RESET_MOK=0
+RESET_MOK_KEYS=0
 KEYRING="/usr/share/keyrings/oracle-virtualbox.gpg"
 REPO_FILE="/etc/apt/sources.list.d/virtualbox.list"
 KEY_URL="https://www.virtualbox.org/download/oracle_vbox_2016.asc"
@@ -294,19 +303,47 @@ offer_reboot_now() {
     [[ "$MOK_REBOOT_NEEDED" -eq 1 ]] || return 0
     [[ -t 0 ]] || return 0
     echo "" >&2
-    echo "┌─ Reiniciar agora? ───────────────────────────────────────────" >&2
-    echo "│  Comando CORRETO:  sudo systemctl reboot -i" >&2
-    echo "│  ERRADO:           sudo systemctl -i   (só lista serviços!)" >&2
+    echo "┌─ Reiniciar AGORA para a tela azul MOK? ──────────────────────" >&2
+    echo "│  Comando:  sudo systemctl reboot -i" >&2
+    echo "│  ERRADO:   sudo systemctl -i   (só lista serviços!)" >&2
     echo "│  Na tela azul: Enroll MOK → Continue → Yes → senha → Reboot" >&2
+    echo "│  A tela azul some RÁPIDO — reaja assim que o PC reiniciar." >&2
     echo "└──────────────────────────────────────────────────────────────" >&2
-    read -r -p "Reiniciar agora com systemctl reboot -i? [s/N] " resp
+    local resp=""
+    if [[ "$ASSUME_YES" -eq 1 ]]; then
+        read -r -p "Reiniciar com systemctl reboot -i? [S/n] " resp
+        resp="${resp:-S}"
+    else
+        read -r -p "Reiniciar com systemctl reboot -i? [s/N] " resp
+    fi
     if [[ "$resp" =~ ^[sSyY]$ ]]; then
-        log "Reiniciando em 5 segundos (systemctl reboot -i)..."
-        sleep 5
+        log "Reiniciando em 8 segundos (systemctl reboot -i) — prepare-se para a tela azul..."
+        sleep 8
         systemctl reboot -i
     else
         log "Reboot adiado — rode quando estiver pronto: sudo systemctl reboot -i"
+        warn "Se perdeu a tela azul antes: sudo mokutil --list-new (vazio = --reset-mok --new-mok-keys -y)"
     fi
+}
+
+reset_mok_state() {
+    log "===== Reset MOK (teste do zero) ====="
+    rm -f "$MOK_STATE_FILE"
+    if command -v mokutil >/dev/null 2>&1; then
+        set +e
+        mokutil --reset 2>&1 | tee -a "$LOG_FILE" >&2
+        set -e
+        log "mokutil --reset executado (limpa enroll pendente no firmware)."
+    fi
+    if [[ "$RESET_MOK_KEYS" -eq 1 ]]; then
+        rm -f "$MOK_PRIV" "$MOK_DER"
+        log "Chaves removidas de ${MOK_DIR} — nova par será gerada neste run."
+    fi
+    modprobe -r vboxnetadp 2>/dev/null || true
+    modprobe -r vboxnetflt 2>/dev/null || true
+    modprobe -r vboxpci 2>/dev/null || true
+    modprobe -r vboxdrv 2>/dev/null || true
+    log "Reset MOK concluído — continuando instalação."
 }
 
 install_build_deps() {
@@ -488,6 +525,13 @@ print_mok_reboot_card() {
        lsmod | grep vbox
 
   Esperado: RESULTADO: PASS · exit 0 · vboxdrv listado.
+
+  PERDEU a tela azul? (passou rápido / não interagiu)
+  · sudo mokutil --list-new     → se VAZIO, enroll não está pendente
+  · Refaça do zero:
+      sudo ./whonix-install-virtualbox.sh --reset-mok --new-mok-keys -y
+  · Ou manual: sudo mokutil --import /root/module-signing/MOK.der
+              → sudo systemctl reboot -i  (logo em seguida!)
 
   A tela azul não pode ser automatizada — é proteção do Secure Boot.
 ===================================================================
@@ -707,6 +751,8 @@ parse_args() {
             -e) INSTALL_EXTPACK=1; shift ;;
             --no-extpack) INSTALL_EXTPACK=0; shift ;;
             --skip-mok) SKIP_MOK=1; shift ;;
+            --reset-mok) RESET_MOK=1; shift ;;
+            --new-mok-keys) RESET_MOK=1; RESET_MOK_KEYS=1; shift ;;
             -h|--help) usage ;;
             *)
                 echo "Opção desconhecida: $1" >&2
@@ -723,7 +769,8 @@ parse_args "$@"
 require_root
 sanitize_stale_repo_file
 touch "$LOG_FILE"
-log "===== Hub Passo 10 — VirtualBox (série ${VBOX_SERIES}) extpack=${INSTALL_EXTPACK} skip_mok=${SKIP_MOK} ====="
+[[ "$RESET_MOK" -eq 1 ]] && reset_mok_state
+log "===== Hub Passo 10 — VirtualBox (série ${VBOX_SERIES}) extpack=${INSTALL_EXTPACK} skip_mok=${SKIP_MOK} reset_mok=${RESET_MOK} ====="
 
 CODENAME="$(check_arch_and_codename)"
 log "Codename: '${CODENAME}'"

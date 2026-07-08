@@ -30,6 +30,15 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+## 2026-07-07 — whonix-install v3.3 (reset MOK + reboot Enter com -y)
+
+| Item | Detalhe |
+|------|---------|
+| `whonix-install-virtualbox.sh` | `--reset-mok` / `--new-mok-keys`; `-y` → reboot `[S/n]` (Enter reinicia); card recuperação tela azul |
+| `automacao/whonix-host/README.md` | Seção **Refazer do zero** (piloto / perdeu MOK) |
+
+---
+
 ## 2026-07-07 — whonix-install v3.2.1 (mokutil import senha 2×)
 
 | Item | Detalhe |
