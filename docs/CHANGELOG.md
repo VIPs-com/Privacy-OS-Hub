@@ -30,6 +30,33 @@ Trilha host: `whonix-install-virtualbox` → `whonix-verify-image` → `whonix-i
 
 ---
 
+### Reteste rápido (MOK já enrolada — ex.: bloodyroar)
+
+```bash
+cd ~/Downloads/Privacy-OS-Hub
+git pull
+cd automacao/whonix-host
+chmod +x whonix-sign-virtualbox-modules.sh whonix-verify-virtualbox-host.sh
+sudo rm -f /root/module-signing/.mok-import-requested
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
+```
+
+Sem reboot MOK. Se `sign` falhar, leia o bloco **Diagnóstico automático** em `/var/log/virtualbox-sign.log`.
+
+---
+
+## 2026-07-08 — whonix-host v3.5.1 (diagnóstico modprobe + vboxpci)
+
+| Item | Detalhe |
+|------|---------|
+| `whonix-sign-virtualbox-modules.sh` | Remove `vboxpci`; `diagnose_silent_load_failure()` (blacklist · vermagic · dmesg) |
+| `whonix-verify-virtualbox-host.sh` | FAIL com detalhe em falha silenciosa de `modprobe` |
+| `whonix-install-virtualbox.sh` | `vboxpci` removido do reset unload |
+| `README.md` | Reteste rápido; nota vboxpci descontinuado |
+
+---
+
 ## 2026-07-08 — whonix-host v3.5 (sign separado + fluxo 4 etapas)
 
 | Item | Detalhe |

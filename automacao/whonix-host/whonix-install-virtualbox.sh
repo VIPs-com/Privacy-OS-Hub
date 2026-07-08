@@ -26,6 +26,8 @@
 # Log: /var/log/virtualbox-install.log (linha RESULTADO: no final)
 # Assinatura de módulos: whonix-sign-virtualbox-modules.sh (log separado)
 #
+# Changelog jul/2026 v3.5.1:
+#   - vboxpci removido (descontinuado desde VBox 6.1)
 # Changelog jul/2026 v3.5:
 #   - Assinatura separada: whonix-sign-virtualbox-modules.sh
 #   - Fase needs_sign; MOK enrolada antes de pending (fix falso reboot)
@@ -83,7 +85,8 @@ NET_RETRIES=3
 NET_TIMEOUT=15
 
 SUPPORTED_CODENAMES=("trixie" "bookworm" "bullseye")
-VBOX_KMODS=(vboxdrv vboxnetflt vboxnetadp vboxpci)
+# vboxpci removido desde VirtualBox 6.1 — só reset unload dos 3 módulos atuais
+VBOX_KMODS_UNLOAD=(vboxdrv vboxnetflt vboxnetadp)
 
 WARNINGS=()
 TMP_PATHS=()
@@ -298,7 +301,7 @@ print_wizard_intro() {
     esac
     _m ""
     _m "==================================================================="
-    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5"
+    _m "  Assistente VirtualBox — Privacy-OS-Hub (Passo 10) · v3.5.1"
     _m "==================================================================="
     _b "  ${phase_msg}"
     echo "" >&2
@@ -381,10 +384,9 @@ reset_mok_state() {
         rm -f "$MOK_PRIV" "$MOK_DER"
         log "Chaves removidas de ${MOK_DIR} — nova par será gerada neste run."
     fi
-    modprobe -r vboxnetadp 2>/dev/null || true
-    modprobe -r vboxnetflt 2>/dev/null || true
-    modprobe -r vboxpci 2>/dev/null || true
-    modprobe -r vboxdrv 2>/dev/null || true
+    for m in "${VBOX_KMODS_UNLOAD[@]}"; do
+        modprobe -r "$m" 2>/dev/null || true
+    done
     log "Reset MOK concluído — continuando instalação."
 }
 

@@ -17,6 +17,20 @@
 #   1 — FAIL (erro fatal)
 #
 # Log: /var/log/virtualbox-sign.log
+#
+# ---------------------------------------------------------------------------
+# CHANGELOG (jul/2026):
+#   - FIX: removido 'vboxpci' da lista de módulos esperados — esse módulo
+#     foi descontinuado pela Oracle desde a série 6.1 (PCI passthrough
+#     removido) e não existe em nenhuma instalação atual, incluindo 7.2.
+#     Gerava um AVISO alarmante e sem sentido em toda execução.
+#   - Novo: diagnose_silent_load_failure() — quando `modprobe vboxdrv`
+#     retorna sucesso mas o módulo não aparece no lsmod (falha silenciosa:
+#     sem "Key was rejected", sem nada), o script agora checa
+#     automaticamente blacklist em /etc/modprobe.d, vermagic do módulo vs.
+#     kernel rodando, e as últimas linhas do dmesg — em vez de só dizer
+#     "não apareceu no lsmod" sem nenhuma pista de causa.
+# ---------------------------------------------------------------------------
 
 set -euo pipefail
 
@@ -24,7 +38,12 @@ ASSUME_YES=0
 QA_LOG=0
 QA_LOG_DIR=""
 SIGN_ONLY=0
-VBOX_KMODS=(vboxdrv vboxnetflt vboxnetadp vboxpci)
+# NOTA (jul/2026): vboxpci foi REMOVIDO do VirtualBox a partir da série 6.1
+# (suporte a PCI passthrough descontinuado pela Oracle). Não existe mais em
+# nenhuma versão atual, incluindo a 7.2 — não é um módulo "faltando por
+# erro", é esperado que não exista. Mantê-lo na lista de módulos esperados
+# gerava um AVISO alarmante e sem sentido a cada execução.
+VBOX_KMODS=(vboxdrv vboxnetflt vboxnetadp)
 MOK_DIR="/root/module-signing"
 MOK_PRIV="${MOK_DIR}/MOK.priv"
 MOK_DER="${MOK_DIR}/MOK.der"
@@ -166,6 +185,37 @@ sign_modules() {
     progress_mark "MODULES_SIGNED"
 }
 
+diagnose_silent_load_failure() {
+    local m="$1" modpath vermagic_mod vermagic_run blacklist_hits dmesg_tail
+    modpath="$(find_module_path "$m" || true)"
+
+    log "--- Diagnóstico automático para '$m' (modprobe retornou 0, mas não carregou) ---"
+
+    blacklist_hits="$(grep -rHn "blacklist[[:space:]]\+${m}\b" /etc/modprobe.d/ /etc/modules-load.d/ 2>/dev/null || true)"
+    if [[ -n "$blacklist_hits" ]]; then
+        log "CAUSA PROVÁVEL: '$m' está na blacklist do modprobe (isso faz modprobe retornar sucesso sem carregar nada):"
+        log "$blacklist_hits"
+    fi
+
+    if [[ -n "$modpath" ]]; then
+        vermagic_mod="$(modinfo -F vermagic "$modpath" 2>/dev/null | awk '{print $1}')"
+        vermagic_run="$(uname -r)"
+        if [[ -n "$vermagic_mod" && "$vermagic_mod" != "$vermagic_run" ]]; then
+            log "CAUSA PROVÁVEL: vermagic do módulo ('$vermagic_mod') não bate com o kernel rodando ('$vermagic_run') — módulo foi compilado para outro kernel. Rode vboxconfig de novo (sem --sign-only)."
+        fi
+    else
+        log "AVISO: não encontrei o arquivo .ko de '$m' em /lib/modules/$(uname -r)/ — pode não ter sido (re)compilado para este kernel."
+    fi
+
+    dmesg_tail="$(dmesg 2>/dev/null | grep -i "$m" | tail -10 || true)"
+    if [[ -n "$dmesg_tail" ]]; then
+        log "Últimas linhas do dmesg mencionando '$m':"
+        log "$dmesg_tail"
+    else
+        log "Nenhuma linha sobre '$m' no dmesg (ou sem permissão para lê-lo aqui) — rode 'sudo dmesg | grep -i $m' manualmente."
+    fi
+}
+
 load_modules() {
     local err
     log "[3/4] Carregando módulos..."
@@ -184,8 +234,10 @@ load_modules() {
     fi
     modprobe vboxnetflt 2>/dev/null || true
     modprobe vboxnetadp 2>/dev/null || true
-    modprobe vboxpci 2>/dev/null || true
-    vbox_modules_loaded || fail "vboxdrv não apareceu no lsmod após modprobe."
+    if ! vbox_modules_loaded; then
+        diagnose_silent_load_failure "vboxdrv"
+        fail "vboxdrv não apareceu no lsmod após modprobe (ver diagnóstico automático acima)."
+    fi
     progress_mark "MODULES_LOADED"
 }
 

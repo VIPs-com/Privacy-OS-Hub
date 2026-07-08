@@ -159,6 +159,29 @@ check_vbox_modules() {
             record_check FAIL "vboxdrv" "Key was rejected — falta Enroll MOK"
             FAIL_MOK_DETECTED=1
         fi
+    elif [[ -z "$err" ]]; then
+        # modprobe "teve sucesso" (sem stderr) mas o módulo não carregou —
+        # falha silenciosa. Sem isso, o operador só vê "não carregado" sem
+        # nenhuma pista real de causa (blacklist? vermagic? outro motivo?).
+        local blacklist_hit vermagic_mod vermagic_run modpath detail
+        blacklist_hit="$(grep -rHn 'blacklist[[:space:]]\+vboxdrv\b' /etc/modprobe.d/ /etc/modules-load.d/ 2>/dev/null | head -1 || true)"
+        modpath="$(modinfo -F filename vboxdrv 2>/dev/null || true)"
+        detail="modprobe retornou sucesso mas vboxdrv não entrou no kernel (falha silenciosa)."
+        if [[ -n "$blacklist_hit" ]]; then
+            detail="${detail} Provável causa: entrada de blacklist em ${blacklist_hit}"
+        elif [[ -n "$modpath" ]]; then
+            vermagic_mod="$(modinfo -F vermagic "$modpath" 2>/dev/null | awk '{print $1}')"
+            vermagic_run="$(uname -r)"
+            if [[ -n "$vermagic_mod" && "$vermagic_mod" != "$vermagic_run" ]]; then
+                detail="${detail} Provável causa: vermagic '${vermagic_mod}' != kernel rodando '${vermagic_run}' (recompile com whonix-sign-virtualbox-modules.sh)."
+            else
+                detail="${detail} Rode: sudo dmesg | grep -i vbox"
+            fi
+        else
+            detail="${detail} .ko não encontrado para $(uname -r) — rode whonix-sign-virtualbox-modules.sh."
+        fi
+        record_check FAIL "vboxdrv" "$detail"
+        FAIL_SIGN_DETECTED=1
     elif secure_boot_enabled && mok_key_enrolled; then
         record_check FAIL "vboxdrv" "não carregado — rode whonix-sign-virtualbox-modules.sh -y"
         FAIL_SIGN_DETECTED=1
