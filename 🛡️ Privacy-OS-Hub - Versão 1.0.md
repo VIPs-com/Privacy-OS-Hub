@@ -351,7 +351,7 @@ O hub separa ensino de execução: teoria no módulo, comandos no processo, scri
 │   │   └── ✅ OK SE: `hub.sh qa ritual-seed` → PASS
 │   │
 │   ├── 📋 PASSO 10 — Whonix PGP + Import VMs
-│   │   ├── ▸ COMANDO 10.0: whonix-install-virtualbox.sh -e (host Debian)
+│   │   ├── ▸ COMANDO 10.0: install-virtualbox → (tela azul MOK se SB) → sign → verify (host Debian)
 │   │   ├── ▸ COMANDO 10.1: baixar Whonix-LXQt + .asc + derivative.asc
 │   │   ├── ▸ COMANDO 10.2: whonix-verify-image.sh --qa-log (fail-closed)
 │   │   ├── ▸ COMANDO 10.3: whonix-import-ova.sh ou import manual GUI
@@ -1277,8 +1277,17 @@ Ao criar a conta (já feito no Passo 4):
 ```bash
 cd automacao/whonix-host
 chmod +x whonix-*.sh
-sudo ./whonix-install-virtualbox.sh -e -y   # Extension Pack = pastas compartilhadas/USB
+sudo ./whonix-install-virtualbox.sh -y        # pacote + Extension Pack + MOK (se Secure Boot)
 ```
+
+**Com Secure Boot ligado** (comum em notebooks novos), o install pede uma senha MOK e um reboot — na tela azul do boot: `Enroll MOK → Continue → Yes → senha → Reboot`. De volta ao Debian:
+
+```bash
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log   # assina + carrega o driver
+sudo ./whonix-verify-virtualbox-host.sh --qa-log       # 9 checks — esperado: RESULTADO: PASS
+```
+
+Repita só o `sign` após cada atualização de kernel (`apt upgrade`) — a tela azul MOK é **uma vez só**. Fluxo validado em campo (jul/2026): Debian 13 trixie + Secure Boot + VirtualBox 7.2.
 
 Windows/macOS: instalador oficial em virtualbox.org + Extension Pack da mesma versão.
 
