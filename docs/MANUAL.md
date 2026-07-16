@@ -461,6 +461,30 @@ sudo ./whonix-install-virtualbox.sh -y   # Extension Pack incluso; MOK auto se S
 | **Log** | `/var/log/virtualbox-install.log` — linha `RESULTADO:` |
 | **Doc** | [`automacao/whonix-host/README.md`](../automacao/whonix-host/README.md) |
 
+### `whonix-sign-virtualbox-modules.sh` (passo 10 — pós-MOK / pós-kernel)
+
+```bash
+sudo ./whonix-sign-virtualbox-modules.sh -y --qa-log
+```
+
+| O quê | Detalhe |
+|-------|---------|
+| **Faz** | `vboxconfig` + assinatura MOK dos módulos + `modprobe` |
+| **Quando** | Depois da tela azul Enroll MOK; **repita** após cada `apt upgrade` de kernel |
+| **Log** | `/var/log/virtualbox-sign.log` |
+
+### `whonix-verify-virtualbox-host.sh` (passo 10 — validação host)
+
+```bash
+sudo ./whonix-verify-virtualbox-host.sh --qa-log
+# esperado: RESULTADO: PASS
+```
+
+| O quê | Detalhe |
+|-------|---------|
+| **Faz** | 9 checks read-only (Secure Boot, MOK, pacotes, `vboxdrv`, …) |
+| **Não faz** | Instalar nem assinar |
+
 ### `whonix-verify-image.sh` (passo 10 — só PGP)
 
 ```bash
@@ -947,6 +971,8 @@ Guia completo: [COMO-LER-SEUS-LOGS.md](../automacao/docs-aluno/COMO-LER-SEUS-LOG
 | `hub.sh qa export-logs` | Opcional (entregar logs) |
 | `feather/backup.sh` | **Sim** (após carteira Feather) |
 | `whonix-install-virtualbox.sh` | **Sim** (passo 10 prep, `sudo`) |
+| `whonix-sign-virtualbox-modules.sh` | **Sim** (passo 10 pós-MOK / pós-kernel, `sudo`) |
+| `whonix-verify-virtualbox-host.sh` | **Sim** (passo 10 validação host, `sudo`) |
 | `whonix-verify-image.sh` | **Sim** (passo 10 verify, no PC host) |
 | `whonix-import-ova.sh` | **Sim** (passo 10 verify+import, `sudo`) |
 | `whonix-verificar-tor.sh` | **Sim** (passo 10 pós-boot, dentro da Workstation) |
